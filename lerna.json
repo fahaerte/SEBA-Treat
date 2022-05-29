@@ -1,0 +1,7 @@
+{
+  "lerna": "3.4.2",
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "ignoreChanges": ["**/test/**", "**/demo/**", "**/*.md"]
+}

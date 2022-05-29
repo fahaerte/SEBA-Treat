@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^16.11.10",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^25.2.4",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^7.0.2",
+    "jest": "^27.3.1",
+    "lerna": "^4.0.0",
+    "prettier": "^2.4.1",
+    "typescript": "~4.4.4"
+  },
+  "scripts": {
+    "build:all": "lerna run build --stream",
+    "build:lib": "lerna run build:lib --stream",
+    "build:prepack": "lerna run prepack",
+    "test:all": "lerna run test --stream",
+    "start:all": "lerna run start --stream",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --ext .ts,.tsx",
+    "postinstall": "husky install"
+  },
+  "packageManager": "yarn@3.1.0"
+}

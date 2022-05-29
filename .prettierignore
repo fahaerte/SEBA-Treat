@@ -1,0 +1,13 @@
+*.log
+.idea
+.vscode
+lib
+dist
+umd
+build
+coverage
+node_modules
+__snapshots__
+dev
+.yarn/*
+.pnp.*

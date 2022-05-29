@@ -1,0 +1,52 @@
+.grid-app {
+  display: grid;
+  grid-template-columns: minmax(200px, 15%) 1fr;
+  grid-template-rows: minmax(80px, 5%) 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "header header"
+    "explorer main";
+  height: 100%;
+}
+.header {
+  grid-area: header;
+}
+.explorer {
+  grid-area: explorer;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "nav-breadcrumb"
+    "content";
+  grid-area: main;
+  overflow-y: auto;
+}
+.nav-breadcrumb {
+  grid-area: nav-breadcrumb;
+}
+.content {
+  grid-area: content;
+  overflow-y: auto;
+}
+
+.explorer,
+header .navbar {
+  background-color: #fff !important; // TODO use background-primary
+}
+
+header .container-fluid {
+  padding: 0 1rem;
+}
+
+.widget-box {
+  border: 1px solid #eee;
+  padding: 20px;
+  border-radius: 0.25rem;
+}
