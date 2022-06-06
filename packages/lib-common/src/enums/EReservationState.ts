@@ -1,5 +1,5 @@
 export enum EReservationState {
-  PENDING= "pending",
+  PENDING = "pending",
   ACCEPTED = "accepted",
-  REJECTED = "rejected"
+  REJECTED = "rejected",
 }

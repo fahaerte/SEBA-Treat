@@ -7,6 +7,4 @@ export interface IUser {
   birthdate: string;
   profilePicture: File;
   rating: number;
-
-
 }

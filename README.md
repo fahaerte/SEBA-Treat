@@ -21,7 +21,6 @@ The first step is to get your node sources and build all dependency libraries.
 1. `yarn install`
 2. `yarn build:lib`
 
-
 ### Backend
 
 ### Frontend
