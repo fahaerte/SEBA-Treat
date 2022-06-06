@@ -4,6 +4,7 @@ import { SCDropzone } from "./styles";
 import { useDropzone } from "react-dropzone";
 import Icon from "../../Icon/Icon";
 import Button from "../../Button/Button";
+import Typography from "../../Typography/Typography";
 
 const ControlledDropzone = ({
   dropzoneLabel = "Drop file here for upload",
