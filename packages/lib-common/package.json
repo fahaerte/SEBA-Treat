@@ -8,7 +8,7 @@
   "scripts": {
     "build": "yarn run build:types && yarn run build:js",
     "build:lib": "yarn run build",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:types": "tsc --build",
     "build:js": "babel src --out-dir lib --extensions \".ts\" --source-maps inline",
     "clean": "rimraf lib",
     "test": "jest",
@@ -18,7 +18,8 @@
     "prepublish": "yarn run type-check && yarn run lint"
   },
   "dependencies": {
-    "@hapi/joi": "^17.1.1"
+    "dotenv": "^16.0.1",
+    "mongoose": "^6.3.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",

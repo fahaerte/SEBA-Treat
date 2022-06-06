@@ -7,6 +7,13 @@ import { Provider } from "react-redux";
 import { AppRouter } from "./app/router";
 import { BrowserRouter } from "react-router-dom";
 
+/**
+ * TODO:
+ * - Authenticator
+ * - UI-Components (general)
+ * - Installation and usage of lib-common, API implementation
+ */
+
 class Root extends Component {
   render() {
     return (

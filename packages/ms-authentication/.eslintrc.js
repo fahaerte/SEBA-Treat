@@ -30,4 +30,7 @@ module.exports = {
       },
     },
   ],
+  rules: {
+    "@typescript-eslint/restrict-template-expressions": "off",
+  },
 };
