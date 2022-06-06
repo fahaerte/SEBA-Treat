@@ -3,7 +3,6 @@ import { IDropzone } from "./IDropzone";
 import { SCDropzone } from "./styles";
 import { useDropzone } from "react-dropzone";
 import Icon from "../../Icon/Icon";
-import Typography from "../../Typography/Typography";
 import Button from "../../Button/Button";
 
 const ControlledDropzone = ({
