@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "../../..";
+import Typography from "../../Typography/Typography";
 import { ICardTitle } from "./ICardTitle";
 
 const CardTitle = ({ className = "", children }: ICardTitle) => {

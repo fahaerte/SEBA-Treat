@@ -1,7 +1,7 @@
 import React from "react";
 import { IDropzoneForm } from "./IDropzone";
 import { SCInput } from "../styles";
-import { Typography } from "../../..";
+import Typography from "../../Typography/Typography";
 import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
 
 const Dropzone = <TFormValues extends Record<string, unknown>>({

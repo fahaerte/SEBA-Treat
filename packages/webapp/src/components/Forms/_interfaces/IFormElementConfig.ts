@@ -6,7 +6,6 @@ import { ITextAreaConfig } from "../TextArea/ITextArea";
 import { IRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { ITagSelectConfig } from "../TagSelect/ITagSelect";
-import { IRichTextConfig } from "../RichText/IRichText";
 
 export type IFormElementConfig<TFormValues> = (
   | IFormSelectConfig<TFormValues>
@@ -17,7 +16,6 @@ export type IFormElementConfig<TFormValues> = (
   | ITextAreaConfig<TFormValues>
   | IRadioCheckSwitchGroupConfig<TFormValues>
   | ITagSelectConfig<TFormValues>
-  | IRichTextConfig<TFormValues>
 ) & {
   elementType:
     | "input"
@@ -27,8 +25,7 @@ export type IFormElementConfig<TFormValues> = (
     | "file"
     | "datepicker"
     | "radioCheckSwitch"
-    | "radioCheckSwitchGroup"
-    | "richText";
+    | "radioCheckSwitchGroup";
 };
 export type IFormRow<TFormValues> =
   | IFormElementConfig<TFormValues>[]

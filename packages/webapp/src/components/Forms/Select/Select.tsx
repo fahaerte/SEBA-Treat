@@ -1,8 +1,8 @@
 import React from "react";
 import { IFormSelect } from "./ISelect";
 import { SCFloatingForm, SCSelect } from "../styles";
-import { Typography } from "../../..";
 import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
+import Typography from "../../Typography/Typography";
 
 const Select = <TFormValues extends Record<string, unknown>>({
   children,

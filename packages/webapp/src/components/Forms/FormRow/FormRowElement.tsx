@@ -17,8 +17,6 @@ import {
 } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { TagSelect } from "../";
 import { ITagSelectProps } from "../TagSelect/ITagSelect";
-import { RichText } from "../";
-import { IRichTextProps } from "../RichText/IRichText";
 
 interface IFormRowElement<T> {
   config: IFormElementConfig<T>;
@@ -73,15 +71,6 @@ const FormRowElement = <TFormValues extends FieldValues>({
           {...config}
           {...commonParams()}
           {...config.props}
-          register={register}
-        />
-      );
-    case "richText":
-      return (
-        <RichText
-          {...config}
-          {...commonParams()}
-          {...(config.props as IRichTextProps)}
           register={register}
         />
       );

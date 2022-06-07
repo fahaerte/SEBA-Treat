@@ -6,5 +6,4 @@ export * from "./RadioCheckSwitch";
 export { default as TextArea } from "./TextArea/TextArea";
 export { default as Datepicker } from "./Datepicker/Datepicker";
 export * from "./Dropzone";
-export { default as DropzoneFilePreviewer } from "./DropzoneFilePreviewer/DropzoneFilePreviewer";
 export * from "./TagSelect";

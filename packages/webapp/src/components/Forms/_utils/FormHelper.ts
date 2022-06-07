@@ -7,7 +7,6 @@ import { ITextAreaConfig } from "../TextArea/ITextArea";
 import { IRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { ITagSelectConfig } from "../TagSelect/ITagSelect";
-import { IRichTextConfig } from "../RichText/IRichText";
 
 abstract class FormHelper {
   public static createInput = <T>(
@@ -63,13 +62,6 @@ abstract class FormHelper {
     config: ITagSelectConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "tagSelect",
-    ...config,
-  });
-
-  public static createRichText = <T>(
-    config: IRichTextConfig<T>
-  ): IFormElementConfig<T> => ({
-    elementType: "richText",
     ...config,
   });
 }
