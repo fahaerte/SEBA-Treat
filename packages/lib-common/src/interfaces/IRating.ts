@@ -1,10 +1,8 @@
-import { Document } from "mongoose";
+import { Types } from "mongoose";
 
-import { IUser } from "./IUser";
-
-export interface IRating extends Document {
+export interface IRating {
   stars: number;
   mealTransaction: number;
-  author: IUser;
-  receiver: IUser;
+  author: Types.ObjectId;
+  receiver: Types.ObjectId;
 }

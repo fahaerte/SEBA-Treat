@@ -1,6 +1,6 @@
-import { Document, Schema } from "mongoose";
+import { Model, model, Schema } from "mongoose";
 
-export interface IAddress extends Document {
+export interface IAddress {
   userId: string;
   street: string;
   housenumber: string;
@@ -10,3 +10,5 @@ export interface IAddress extends Document {
 }
 
 export const SAddress = new Schema<IAddress>({});
+
+export const MAddress: Model<IAddress> = model("Address", SAddress);

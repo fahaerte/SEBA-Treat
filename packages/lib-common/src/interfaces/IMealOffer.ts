@@ -1,8 +1,8 @@
-import { Document } from "mongoose";
 import { IMealCategory } from "./IMealCategory";
 import { IAllergens } from "./IAllergens";
+import { model, Model, Schema, Types } from "mongoose";
 
-export interface IMealOffer extends Document {
+export interface IMealOffer {
   title: string;
   description: string;
   categories: IMealCategory[];
@@ -16,4 +16,12 @@ export interface IMealOffer extends Document {
   transactionFee: string;
   allergens?: IAllergens;
   allergenVerified: boolean;
+  author: Types.ObjectId;
 }
+
+export const SMealOffer = new Schema({
+  categories: { type: [Schema.Types.ObjectId], ref: "MealCategory" },
+  author: { type: Schema.Types.ObjectId, ref: "User" },
+});
+
+export const MMealOffer: Model<IMealOffer> = model("MealOffer", SMealOffer);

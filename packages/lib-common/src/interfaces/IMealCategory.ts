@@ -1,6 +1,14 @@
-import { Document } from "mongoose";
+import { Model, model, Schema } from "mongoose";
 
-export interface IMealCategory extends Document {
-  id: string;
+export interface IMealCategory {
   label: string;
 }
+
+export const SMealCategory = new Schema({
+  label: { type: String, required: true },
+});
+
+export const MMealCategory: Model<IMealCategory> = model(
+  "MealCategory",
+  SMealCategory
+);
