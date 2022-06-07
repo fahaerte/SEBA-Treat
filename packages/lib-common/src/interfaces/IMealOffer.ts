@@ -1,7 +1,8 @@
+import { Document } from "mongoose";
 import { IMealCategory } from "./IMealCategory";
 import { IAllergens } from "./IAllergens";
 
-export interface IMealOffer {
+export interface IMealOffer extends Document {
   title: string;
   description: string;
   categories: IMealCategory[];

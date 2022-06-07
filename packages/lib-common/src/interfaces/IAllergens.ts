@@ -1,3 +1,4 @@
+// TODO: Will it stay as an object schema or will we need to create a DB collection for it?
 export interface IAllergens {
   egg: boolean;
   peanut: boolean;

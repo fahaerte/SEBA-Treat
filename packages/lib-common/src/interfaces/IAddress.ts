@@ -1,4 +1,6 @@
-export interface IAddress {
+import { Document, Schema } from "mongoose";
+
+export interface IAddress extends Document {
   userId: string;
   street: string;
   housenumber: string;
@@ -6,3 +8,5 @@ export interface IAddress {
   city: string;
   country: string;
 }
+
+export const SAddress = new Schema<IAddress>({});
