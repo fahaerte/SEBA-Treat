@@ -6,9 +6,12 @@ Introduction
 
 This project currently consists of the following container:
 
-- Frontend Customer React (Node)
-  - packages/webapp-customer
+- Frontend React (Node)
+  - packages/webapp
   - http://localhost:3000/
+- Backend Express (Node)
+  - packages/backend
+  - http://localhost:5000/
 
 ## Requirements
 
