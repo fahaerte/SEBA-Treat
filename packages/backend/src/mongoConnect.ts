@@ -1,16 +1,22 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { config } from "./config";
+import { startServer } from "./server";
+import express from "express";
 
-export const dbConnector = async () => {
-  dotenv.config();
+export const mongoConnect = async (app: express.Application) => {
   await mongoose
-    .connect(`${process.env.DB_CONNECTOR}`, { dbName: "Treat" })
+    .connect(`${config.db.connector}`, { dbName: `${config.db.name}` })
     .then(async (m: mongoose.Mongoose) => {
       console.log("Successfully connected to " + m.connection.db.databaseName);
       await m.connection.db
         .collections()
         .then((res) =>
-          res.forEach((collection) => console.log(collection.collectionName))
+          // Log collections within the database
+          {
+            res.forEach((collection) => console.log(collection.collectionName));
+            // CONNECT TO SERVER
+            startServer(app);
+          }
         )
         .catch((error) =>
           console.log("Error when fetching collection names ", error)
@@ -19,7 +25,7 @@ export const dbConnector = async () => {
     .catch((error) => console.log(error));
 };
 
-export const dbDisconnector = async () => {
+export const mongoDisconnect = async () => {
   try {
     await mongoose
       .disconnect()

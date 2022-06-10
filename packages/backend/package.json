@@ -1,5 +1,5 @@
 {
-  "name": "@treat/ms-authentication",
+  "name": "@treat/backend",
   "version": "1.0.0",
   "description": "",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "http": "^0.0.1-security",
+    "joi": "^17.6.0",
     "mongoose": "^6.3.5",
     "ts-node": "^10.8.0"
   },
