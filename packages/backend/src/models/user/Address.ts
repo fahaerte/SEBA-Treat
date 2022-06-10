@@ -1,4 +1,4 @@
-import { model, Model, Schema, Document } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 import { IAddress } from "@treat/lib-common";
 
 interface IAddressModel extends IAddress, Document {}

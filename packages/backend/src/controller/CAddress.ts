@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Address from "../models/user/Address";
 
 // CREATE
-const createAddress = (req: Request, res: Response, next: NextFunction) => {
+const createAddress = (req: Request, res: Response) => {
   const { street, housenumber, postalcode, city, country } = req.body;
 
   const address = new Address({
@@ -22,7 +22,7 @@ const createAddress = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // GET
-const getAddress = (req: Request, res: Response, next: NextFunction) => {
+const getAddress = (req: Request, res: Response) => {
   const addressId = req.params.addressId;
 
   return Address.findById(addressId)
@@ -35,7 +35,7 @@ const getAddress = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // UPDATE
-const updateAddress = (req: Request, res: Response, next: NextFunction) => {
+const updateAddress = (req: Request, res: Response) => {
   const addressId = req.params.addressId;
 
   return Address.findById(addressId)
@@ -55,7 +55,7 @@ const updateAddress = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // DELETE
-const deleteAddress = (req: Request, res: Response, next: NextFunction) => {
+const deleteAddress = (req: Request, res: Response) => {
   const addressId = req.params.addressId;
   return Address.findByIdAndDelete(addressId)
     .then((address) =>

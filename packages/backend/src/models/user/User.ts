@@ -1,4 +1,4 @@
-import { model, Model, Schema, Document } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 import { IUser } from "@treat/lib-common";
 
 interface IUserModel extends IUser, Document {}

@@ -1,4 +1,4 @@
-import { Types, Schema, Model, model } from "mongoose";
+import { Types } from "mongoose";
 
 // Interface
 export interface IUser {

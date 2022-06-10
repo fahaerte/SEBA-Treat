@@ -12,9 +12,7 @@ export const startServer = (app: express.Application) => {
   // ROUTER
   assembleRoutes(app);
   // SERVER HEALTHCHECK
-  app.get("/", (req, res, next) =>
-    res.status(200).send("Treat Backend Service")
-  );
+  app.get("/", (req, res) => res.status(200).send("Treat Backend Service"));
 
   // ERROR HANDLING
   errorHandling(app);

@@ -9,7 +9,7 @@ AddressRouter.post(
   ValidateSchema(schema.address.create),
   CAddress.createAddress
 );
-AddressRouter.get("/get/:addressUd", CAddress.getAddress);
+AddressRouter.get("/get/:addressId", CAddress.getAddress);
 AddressRouter.patch(
   "/update/:addressId",
   ValidateSchema(schema.address.update),

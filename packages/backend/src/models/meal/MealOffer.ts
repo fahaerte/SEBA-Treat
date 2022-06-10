@@ -1,4 +1,4 @@
-import { model, Model, Schema, Document } from "mongoose";
+import { model, Schema, Document } from "mongoose";
 import { IMealOffer } from "@treat/lib-common";
 
 interface IMealOfferModel extends IMealOffer, Document {}
