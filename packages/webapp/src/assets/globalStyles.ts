@@ -67,6 +67,17 @@ export const SCHelper = createGlobalStyle`
     color: ${({ theme }) => theme.typography.color.primary};
     letter-spacing: ${({ theme }) => theme.typography.body.letterSpacing};
     font-family: ${({ theme }) => theme.typography.body.family};
+    font-weight: ${({ theme }) => theme.typography.body.weights.regular};
+    position: fixed;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    height: 100%;
   }
   
   .text {

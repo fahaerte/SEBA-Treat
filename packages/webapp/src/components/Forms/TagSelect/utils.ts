@@ -1,6 +1,6 @@
 import { GroupBase, StylesConfig } from "react-select";
-import { defaultTheme } from "../../../assets/themes/defaultTheme";
 import { ITagSelectOption } from "./ITagSelect";
+import { defaultTheme } from "../../../assets/theme/defaultTheme";
 
 export const customStyles: (
   color: string,

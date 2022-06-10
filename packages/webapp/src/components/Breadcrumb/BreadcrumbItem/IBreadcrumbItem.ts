@@ -1,9 +1,9 @@
 import React from "react";
 import { ILink } from "../../Link/ILink";
 
-export interface IBreadcrumbItem extends ILink {
+export interface IBreadcrumbItem extends Omit<ILink, "route"> {
   /**
-   * This stresses the BreadcrumbItem visually and deactivates the link
+   * Is current item active?
    */
   active?: boolean;
   /**

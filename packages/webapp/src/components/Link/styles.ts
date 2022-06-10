@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLinkProps } from "react-router-dom";
-import { SCButton } from "../Button/styles";
-import { ILink } from "./ILink";
 
-interface ICustomLink extends NavLinkProps, Pick<ILink, "underline"> {
+interface ICustomLink extends NavLinkProps {
   href: React.AnchorHTMLAttributes<HTMLAnchorElement>["href"];
+  $underline: boolean;
 }
 
-export const SCLink = styled(SCButton)<ICustomLink>`
+export const SCLink = styled.a<ICustomLink>`
+  color: ${({ theme, color }) => theme.palette[color as string].main};
+
   &.link {
     &-sm {
       font-size: ${({ theme }) => theme.typography.size.xxs};
@@ -22,11 +23,9 @@ export const SCLink = styled(SCButton)<ICustomLink>`
       font-size: ${({ theme }) => theme.typography.size.sm};
     }
   }
-  &:active {
-    text-decoration: ${({ underline }) => (underline ? "underline" : "none")};
-  }
 
+  &:active,
   &:hover {
-    text-decoration: ${({ underline }) => (underline ? "underline" : "none")};
+    text-decoration: ${({ $underline }) => ($underline ? "underline" : "none")};
   }
 `;

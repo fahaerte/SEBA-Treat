@@ -5,7 +5,6 @@ import { IBadge } from "./IBadge";
 const Badge = ({
   children,
   className = "",
-  rounded = false,
   color = "primary",
   outlined = false,
   ...props
@@ -16,7 +15,7 @@ const Badge = ({
       className,
       "badge",
       outlined ? "outlined" : "",
-      `${rounded ? "rounded-pill" : ""}`,
+      "rounded-pill",
     ].join(" ")}
     {...props}
   >

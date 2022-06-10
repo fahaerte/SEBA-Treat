@@ -4,15 +4,15 @@ export const defaultTheme: DefaultTheme = {
   name: "defaultTheme",
   palette: {
     primary: {
-      main: "#04969B", //
-      hover: "#04969B8A", // main 50%
-      active: "#04969B1A", // main 10%
+      main: "#BFD0CD",
+      hover: "#a9bab7",
+      active: "#8e9e9b",
       contrastText: "#FFF",
     },
     secondary: {
-      main: "#097DA3",
-      hover: "#c7c7c7",
-      active: "#525252",
+      main: "#8A8A8A",
+      hover: "#CFCFCF",
+      active: "#D5D5D5",
       contrastText: "#FFF",
     },
     danger: {
@@ -66,8 +66,8 @@ export const defaultTheme: DefaultTheme = {
       family: "Lato, sans-serif",
       lineHeight: 1.5,
       weights: {
-        thin: 200,
-        regular: 400,
+        thin: 100,
+        regular: 300,
         bold: 700,
       },
       spacing: "0.35em",
@@ -88,7 +88,7 @@ export const defaultTheme: DefaultTheme = {
     backgroundSecondary: "#f8f8f8",
     backgroundBody: "#f8f8f8",
     border: {
-      radius: "4px",
+      radius: "50px",
       width: "1px",
     },
   },
@@ -130,6 +130,8 @@ export const defaultTheme: DefaultTheme = {
       height: "calc(3rem + 2px)",
       lineHeight: 1.25,
       color: "#495057",
+      padding: "10px 15px",
+
       borderColor: "#ced4da",
       labelColor: "",
       fontSize: "",

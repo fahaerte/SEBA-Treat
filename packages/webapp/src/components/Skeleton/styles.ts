@@ -4,7 +4,7 @@ import styled, {
   ThemeProps,
   keyframes,
 } from "styled-components";
-import { ABootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { ABootstrapPalette } from "../../assets/theme/interfaces/TBootstrapPalette";
 import { ISkeletonCircle, ISkeletonSquare } from "./ISkeleton";
 
 const wave = (props: ThemeProps<DefaultTheme>) => keyframes`

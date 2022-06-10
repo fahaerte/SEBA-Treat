@@ -1,19 +1,28 @@
 import { NavLinkProps } from "react-router-dom";
 import { IButton } from "../Button/IButton";
 import { MouseEvent } from "react";
+import { IComponentColorBase } from "../../assets/theme/types/IComponentColorBase";
 
-type TExcludeButtonProps = "type" | "disabled" | "htmlType" | "onClick";
+type TExcludeButtonProps =
+  | "disabled"
+  | "htmlType"
+  | "onClick"
+  | "size"
+  | "color";
 
 /**
  * Since anchor tags should not be used to trigger and handle events,
  * the onClick event from IButton will be excluded.
  */
-export interface ILink extends Omit<IButton, TExcludeButtonProps> {
+export interface ILink extends IComponentColorBase {
   /**
    * In which style the link should be represented as
-   * Additional value "link" to display the children as plain text
    */
-  type?: IButton["type"] | "link";
+  display?: "text" | "button";
+  /**
+   * Size of the link
+   */
+  size?: "lg" | "md" | "sm";
   /**
    * Target to where the user should be redirected.
    * Has the same types as to-prop of RouterLink.
@@ -24,10 +33,6 @@ export interface ILink extends Omit<IButton, TExcludeButtonProps> {
    */
   route?: boolean;
   /**
-   * Inline styling
-   */
-  style?: React.AnchorHTMLAttributes<HTMLAnchorElement | NavLinkProps>["style"];
-  /**
    * onClick Handler
    */
   onClick?: (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => void;
@@ -35,4 +40,8 @@ export interface ILink extends Omit<IButton, TExcludeButtonProps> {
    * Whether default text decoration on hover and active for link is displayed
    */
   underline?: boolean;
+  /**
+   * If `display: button` is selected, additional button props can be set
+   */
+  buttonProps?: Omit<IButton, TExcludeButtonProps>;
 }

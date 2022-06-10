@@ -1,15 +1,7 @@
-import React from "react";
 import { ILink } from "../../Link/ILink";
+import { IComponentBase } from "../../../assets/theme/types/IComponentBase";
 
-export interface IListItem {
-  /**
-   * Children of this component.
-   */
-  children: React.ReactNode;
-  /**
-   * Additional CSS classes that can be applied
-   */
-  className?: string;
+export interface IListItem extends IComponentBase {
   /**
    * how the content of the list item is to be aligned
    */

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 import { SCButton } from "./styles";
 import { IButton } from "./IButton";
 
@@ -11,13 +11,14 @@ import { IButton } from "./IButton";
  */
 const Button = ({
   color = "primary",
-  type = "default",
+  outline = false,
   size = "md",
   className = "",
   disabled = false,
   htmlType = "button",
   onClick = () => undefined,
   isLoading = false,
+  as = "button",
   children,
 }: IButton) => (
   <SCButton
@@ -25,12 +26,13 @@ const Button = ({
     className={[
       "btn",
       size === "md" ? "" : `btn-${size}`,
-      type === "default" ? `btn-${color}` : "",
-      type === "outline" ? `btn-outline-${color}` : "",
+      outline ? `btn-outline-${color}` : `btn-${color}`,
       className,
     ].join(" ")}
-    onClick={(event) => onClick(event)}
+    color={color}
+    onClick={(event: MouseEvent<HTMLButtonElement>) => onClick(event)}
     disabled={disabled}
+    as={as}
   >
     {isLoading && (
       <>

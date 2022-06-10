@@ -1,5 +1,5 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
-import { TBootstrapPalette } from "../../../assets/themes/interfaces/TBootstrapPalette";
+import { TBootstrapPalette } from "../../../assets/theme/interfaces/TBootstrapPalette";
 
 export type TOption = {
   id?: string;

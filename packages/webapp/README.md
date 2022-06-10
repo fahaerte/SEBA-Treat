@@ -1,17 +1,16 @@
-# Webapp Customer
+# Webapp 
 
-## API Generation
+## Start Scripts
+- First, you need to execute ``yarn install`` and `yarn build:lib` from the root directory
+- Run ``yarn start`` to start your application in the packages/webapp directory
+- Webapp is available on [http://localhost:3000](http://localhost:3000)
 
-```bash
-npx @rtk-query/codegen-openapi openapi-config.ts
-```
+## Technologies
+**UI Components and Styling**
+- Styled-Components
+- Sass
+- Bootstrap
 
-## Usage
-
-```js
-import React from "react";
-import ReactDom from "react-dom";
-import DevToolsApp from "@redux-devtools/app";
-
-ReactDom.render(<App />, document.getElementById("root"));
-```
+**Webapp Logic**
+- Redux Toolkit
+- React Router v6

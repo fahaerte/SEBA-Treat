@@ -1,19 +1,6 @@
-import React from "react";
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { IComponentColorBase } from "../../assets/theme/types/IComponentColorBase";
 
-export interface IBadge {
-  /**
-   * Children of this component
-   */
-  children: React.ReactNode;
-  /**
-   * Additional CSS classes that can be applied
-   */
-  className?: string;
-  /**
-   * Colors of the badge
-   */
-  color?: TBootstrapPalette;
+export interface IBadge extends IComponentColorBase {
   /**
    * If true, the badge is rounded
    */

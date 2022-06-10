@@ -1,7 +1,7 @@
 import React from "react";
 import { SCToastContainer } from "./styles";
 import { IToastContainer } from "./IToastContainer";
-import { EDelay } from "../../../assets/themes/interfaces/EDelay";
+import { EDelay } from "../../../assets/theme/interfaces/EDelay";
 import { Slide } from "react-toastify";
 
 const ToastContainer = ({

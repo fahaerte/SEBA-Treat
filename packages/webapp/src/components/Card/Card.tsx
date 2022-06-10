@@ -4,13 +4,13 @@ import { SCCard } from "./styles";
 
 const Card = ({
   color,
-  cardHover = false,
+  hoverable = false,
   className = "",
   children,
 }: ICard) => (
   <SCCard
     color={color}
-    className={["card", cardHover ? "card-hover" : "", className].join(" ")}
+    className={["card", hoverable ? "card-hover" : "", className].join(" ")}
   >
     {children}
   </SCCard>

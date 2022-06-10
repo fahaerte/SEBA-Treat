@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app/app.scss";
-import CustomThemeProvider from "./assets/themes/CustomThemeProvider";
+import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import { Provider } from "react-redux";
 // import { store } from "./app/store";
 import { AppRouter } from "./app/router";

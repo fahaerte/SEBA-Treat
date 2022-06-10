@@ -3,15 +3,14 @@ import { IBadge } from "./IBadge";
 
 export const SCBadge = styled.span<IBadge>`
   margin-left: ${({ theme }) => theme.typography.body.spacing};
-  background: ${({ theme, color = "primary" }) => theme.palette[color].main};
-  color: ${({ theme, color = "primary" }) => theme.palette[color].contrastText};
+  background: ${({ theme, color }) => theme.palette[color as string].main};
+  color: ${({ theme, color }) => theme.palette[color as string].contrastText};
 
   &.outlined {
-    border-color: ${({ theme, color = "primary" }) =>
-      theme.palette[color].main};
+    border-color: ${({ theme, color }) => theme.palette[color as string].main};
     border-width: ${({ theme }) => theme.general.border.width};
     border-style: solid;
-    color: ${({ theme, color = "primary" }) => theme.palette[color].main};
+    color: ${({ theme, color }) => theme.palette[color as string].main};
     background: none;
   }
 `;

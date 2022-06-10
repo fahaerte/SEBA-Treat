@@ -1,6 +1,6 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
-import { TBootstrapPalette } from "../../../assets/themes/interfaces/TBootstrapPalette";
 import { ChangeEvent } from "react";
+import { TBootstrapPalette } from "../../../assets/theme/interfaces/TBootstrapPalette";
 
 export const ACheckTypes = ["radio", "checkbox", "switch"] as const;
 

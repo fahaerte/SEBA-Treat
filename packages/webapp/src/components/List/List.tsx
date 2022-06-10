@@ -3,7 +3,7 @@ import { SCList } from "./styles";
 import { IList, TListType } from "./IList";
 import { ListItem } from "./";
 import { SkeletonSquare } from "../Skeleton";
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { TBootstrapPalette } from "../../assets/theme/interfaces/TBootstrapPalette";
 
 const ListColorContext = React.createContext<{
   color: TBootstrapPalette;

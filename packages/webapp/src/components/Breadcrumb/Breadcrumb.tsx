@@ -29,7 +29,7 @@ const Breadcrumb = ({
         assignableItemsBeforeCollapse
       );
       const ellipsis = (
-        <li className="breadcrumb-item ellipsis">
+        <li className="breadcrumb-item ellipsis" key={"breadcrumb-ellipsis"}>
           <button onClick={expandBreadcrumb} type="button">
             ...
           </button>
@@ -68,7 +68,7 @@ const Breadcrumb = ({
   }
 
   return (
-    <nav className="breadcrumbWrapper">
+    <nav>
       <SCBreadcrumb
         className={["breadcrumb", className].join(" ")}
         separator={separator}

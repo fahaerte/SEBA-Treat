@@ -30,7 +30,3 @@ export type IFormElementConfig<TFormValues> = (
 export type IFormRow<TFormValues> =
   | IFormElementConfig<TFormValues>[]
   | IFormElementConfig<TFormValues>;
-
-export type TFormFieldStories = {
-  test: string;
-};

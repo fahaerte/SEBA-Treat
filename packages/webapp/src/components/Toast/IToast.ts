@@ -1,6 +1,6 @@
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
-import { TPosition } from "../../assets/themes/interfaces/TPosition";
-import { EDelay } from "../../assets/themes/interfaces/EDelay";
+import { TBootstrapPalette } from "../../assets/theme/interfaces/TBootstrapPalette";
+import { TPosition } from "../../assets/theme/interfaces/TPosition";
+import { EDelay } from "../../assets/theme/interfaces/EDelay";
 import { AIconType } from "../Icon/IIcon";
 
 export interface IToast {

@@ -1,4 +1,4 @@
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { TBootstrapPalette } from "../../assets/theme/interfaces/TBootstrapPalette";
 
 // Interface which will be injected as a prop for components with loading prop
 export interface ISkeletonConfig {

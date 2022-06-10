@@ -19,12 +19,8 @@ export const CustomValueContext = React.createContext<{
     value: UnpackNestedValue<PathValue<FieldValues, any>>
   ) => void;
 }>({
-  setCustomizedReset: () => {
-    return;
-  },
-  setValue: () => {
-    return;
-  },
+  setCustomizedReset: () => undefined,
+  setValue: () => undefined,
 });
 
 const Form = <TFormValues extends FieldValues>({
@@ -41,6 +37,7 @@ const Form = <TFormValues extends FieldValues>({
   formTitle = "",
   resetOnSubmit = true,
   isLoading = false,
+  invalidFeedback,
   ...props
 }: IForm<TFormValues>) => {
   const {
@@ -58,16 +55,12 @@ const Form = <TFormValues extends FieldValues>({
 
   const submitHandler: SubmitHandler<TFormValues> = (data) => {
     if (resetOnSubmit) {
-      customizedResets.forEach((customizedReset) => {
-        customizedReset();
-      });
-      reset();
+      resetForm();
     }
     return onSubmit(data);
   };
 
   const resetForm = () => {
-    abortButton?.onClick?.();
     customizedResets.forEach((customizedReset) => {
       customizedReset();
     });
@@ -99,18 +92,23 @@ const Form = <TFormValues extends FieldValues>({
           <FormRowList rows={elements} register={register} errors={errors} />
         </CustomValueContext.Provider>
         {abortButton ? (
-          <>
-            <Button htmlType="reset" {...abortButton} onClick={resetForm} />
-          </>
-        ) : (
-          <></>
-        )}
+          <Button htmlType="reset" {...abortButton} onClick={resetForm}>
+            {abortButton.children}
+          </Button>
+        ) : null}
+        {invalidFeedback ? (
+          <Typography variant="p" color={"danger"}>
+            {invalidFeedback}
+          </Typography>
+        ) : null}
         <Button
           htmlType="submit"
           disabled={isLoading}
           isLoading={isLoading}
           {...submitButton}
-        />
+        >
+          {submitButton?.children}
+        </Button>
       </form>
     </>
   );

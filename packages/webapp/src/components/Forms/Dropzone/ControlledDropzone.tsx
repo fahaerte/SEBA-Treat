@@ -3,8 +3,8 @@ import { IDropzone } from "./IDropzone";
 import { SCDropzone } from "./styles";
 import { useDropzone } from "react-dropzone";
 import Icon from "../../Icon/Icon";
-import Button from "../../Button/Button";
 import Typography from "../../Typography/Typography";
+import Button from "../../Button/Button";
 
 const ControlledDropzone = ({
   dropzoneLabel = "Drop file here for upload",
@@ -29,7 +29,7 @@ const ControlledDropzone = ({
           <Icon type={"upload"} size={"lg"} />
         </div>
         <Typography>{dropzoneLabel}</Typography>
-        <Button size={"lg"} type={"outline"} color={"info"}>
+        <Button size={"lg"} outline color={"info"}>
           {buttonLabel}
         </Button>
       </div>

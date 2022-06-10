@@ -1,15 +1,11 @@
-import React, { MouseEvent } from "react";
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { MouseEvent } from "react";
+import { IComponentColorBase } from "../../assets/theme/types/IComponentColorBase";
 
-export interface IButton {
+export interface IButton extends IComponentColorBase {
   /**
-   * This describes the color of the button.
+   * Show button as outline
    */
-  color?: TBootstrapPalette;
-  /**
-   * Here we describe the type of button.
-   */
-  type?: "default" | "outline";
+  outline?: boolean;
   /**
    * Whether the component is disabled.
    */
@@ -19,17 +15,9 @@ export interface IButton {
    */
   size?: "lg" | "md" | "sm";
   /**
-   * Button contents
-   */
-  children: React.ReactNode;
-  /**
-   * Additional styling
-   */
-  className?: string;
-  /**
    * onClick event
    */
-  onClick?: (event?: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   /**
    * Defines the HTML attribute type for the button
    */
@@ -38,4 +26,8 @@ export interface IButton {
    * If user wants to pass loading state variable, this button will show loading spinner while true
    */
   isLoading?: boolean;
+  /**
+   * DOM-element button will be rendered as
+   */
+  as?: "button" | "div";
 }

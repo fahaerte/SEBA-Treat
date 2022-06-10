@@ -1,39 +1,16 @@
-import styled, { css, DefaultTheme, ThemeProps } from "styled-components";
-import { ABootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import styled from "styled-components";
 
-const cssCustom = (props: ThemeProps<DefaultTheme>) => {
-  let tmp = "";
-  ABootstrapPalette.forEach(() => {
-    tmp += `
-      &.breadcrumb {
-          & > li a {  
-            color: ${props.theme.palette.primary.main};
-          }
-          & .active a {
-            color: ${props.theme.palette.primary.main};
-            pointer-events: none;
-          }
-          & button:hover {
-            text-decoration: underline;
-            cursor: pointer;
-          }
-          & button {
-            background: none;
-            border: none;
-            padding: 0;
-          }
-      }
-        `;
-  });
-  return css`
-    ${tmp}
-  `;
-};
+export const SCBreadcrumb = styled.ol<{ separator: string }>`
+  --bs-breadcrumb-divider: "${({ separator }) => separator}";
 
-export const SCBreadcrumb = styled.ol`
-  ${(props: { separator: string; theme: DefaultTheme }) => cssCustom(props)}
-  &.breadcrumb {
-    font-size: ${({ theme }) => theme.typography.size.xs};
-    --bs-breadcrumb-divider: "${({ separator }) => separator}";
+  & .ellipsis button {
+    background: none;
+    border: none;
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 `;

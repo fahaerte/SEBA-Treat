@@ -3,36 +3,35 @@ import { IBreadcrumbItem } from "./BreadcrumbItem/IBreadcrumbItem";
 
 export type TBreadcrumbChildren =
   | React.ReactElement<IBreadcrumbItem>[]
-  | React.ReactElement<IBreadcrumbItem>
-  | undefined;
+  | React.ReactElement<IBreadcrumbItem>;
 
 export interface IBreadcrumb {
   /**
-   * This describes the character used to sseperate the different breadcrumbs
+   * Content
+   */
+  children: TBreadcrumbChildren;
+  /**
+   * Character used to separate breadcrumb items
    */
   separator?: string;
   /**
-   * This describes the maximum number of items that will be displayed next to each other
+   * Maximum number of items that will be displayed next to each other
    */
-  maxItems: number;
+  maxItems?: number;
   /**
-   * This describes the number of items before some breadcrumbs will be hidden
+   * Number of items before some breadcrumbs will be hidden
    */
   itemsBeforeCollapse?: number;
   /**
-   * This describes the number of items that will be shown after the hidden breadcrumbs
+   * Number of items that will be shown after the hidden breadcrumbs
    */
   itemsAfterCollapse?: number;
   /**
-   * By clicking the three dots, the Breadcrumb expands
+   * Shows three dots, that expand the breadcrumb items
    */
   expandable?: boolean;
   /**
-   * This describes additional classes added to the html element
+   * Additional classes
    */
   className?: string;
-  /**
-   * Table contents
-   */
-  children: TBreadcrumbChildren;
 }

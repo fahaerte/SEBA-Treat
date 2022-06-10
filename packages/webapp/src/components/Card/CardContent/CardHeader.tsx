@@ -1,7 +1,7 @@
 import React from "react";
-import { ICardHeader } from "./ICardHeader";
+import { IComponentBase } from "../../../assets/theme/types/IComponentBase";
 
-const CardHeader = ({ className = "", children }: ICardHeader) => (
+const CardHeader = ({ className = "", children }: IComponentBase) => (
   <div
     className={`card-header d-flex align-items-center justify-content-between ${className}`}
   >

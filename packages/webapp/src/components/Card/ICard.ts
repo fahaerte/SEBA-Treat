@@ -1,13 +1,8 @@
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
-import { ICardElement } from "./ICardElement";
+import { IComponentColorBase } from "../../assets/theme/types/IComponentColorBase";
 
-export interface ICard extends ICardElement {
+export interface ICard extends IComponentColorBase {
   /**
-   * Sets card's background color.
+   * Activate hover effect
    */
-  color?: TBootstrapPalette;
-  /**
-   * Sets hover effect on Card
-   */
-  cardHover?: boolean;
+  hoverable?: boolean;
 }

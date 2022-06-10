@@ -21,7 +21,7 @@ export const SCCard = styled.div<ICard>`
       background-color: ${({ theme, color }) =>
         color ? theme.palette[color].hover : theme.card.background.hover};
       transform: scale(1.01);
-      box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
     }
   }
 `;

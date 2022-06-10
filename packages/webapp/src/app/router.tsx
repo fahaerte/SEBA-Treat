@@ -1,5 +1,6 @@
 import React from "react";
 import { Navigate, useRoutes } from "react-router-dom";
+import Button from "../components/Button/Button";
 
 export const AppRouter = () => {
   const mainRoutes = {};
@@ -12,9 +13,7 @@ export const AppRouter = () => {
     <>
       Hallo :-I
       <br />
-      <button type={"button"} className={"btn btn-primary"}>
-        asdf
-      </button>
+      <Button>asdf</Button>
     </>
   );
 };

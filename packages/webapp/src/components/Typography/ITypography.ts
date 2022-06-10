@@ -1,6 +1,6 @@
-import React from "react";
 import { ISkeletonConfig } from "../Skeleton/ISkeleton";
-import { ABootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { ABootstrapPalette } from "../../assets/theme/interfaces/TBootstrapPalette";
+import { IComponentBase } from "../../assets/theme/types/IComponentBase";
 
 export const ABootstrapPaletteTypography = [
   ...ABootstrapPalette,
@@ -25,8 +25,7 @@ export const ATypoComponents = [
 
 export const ATypoVariants = [...ATypoComponents, "psmall"] as const;
 
-export interface ITypography {
-  children: React.ReactNode;
+export interface ITypography extends IComponentBase {
   /**
    * Defines the type of the typography (h1-h6, p, div)
    */
@@ -47,10 +46,6 @@ export interface ITypography {
    * Whether the text should be wrapped or not
    */
   noWrap?: boolean;
-  /**
-   * Additional CSS-classes that can be added.
-   */
-  className?: string;
   /**
    * Determines, whether there is a margin-bottom or not
    */

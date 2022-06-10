@@ -1,7 +1,7 @@
 import React from "react";
 import { IListItem } from "./ListItem/IListItem";
 import { ISkeletonConfig } from "../Skeleton/ISkeleton";
-import { TBootstrapPalette } from "../../assets/themes/interfaces/TBootstrapPalette";
+import { IComponentColorBase } from "../../assets/theme/types/IComponentColorBase";
 
 export const AListType = ["list", "link"] as const;
 export type TListType = typeof AListType[number];
@@ -11,11 +11,7 @@ export type TListChildren =
   | React.ReactElement<IListItem>
   | undefined;
 
-export interface IList {
-  /**
-   * Additoinal CSS classes that can be added.
-   */
-  className?: string;
+export interface IList extends Omit<IComponentColorBase, "children"> {
   /**
    * Children of the component
    * defined to prevent errors if List has only one or no item
@@ -33,10 +29,6 @@ export interface IList {
    * If true, the list is wrapped with an outer border
    */
   outerBorder?: boolean;
-  /**
-   * Color of the list
-   */
-  color?: TBootstrapPalette;
   /**
    * Whether the content is loading
    */

@@ -51,6 +51,7 @@ export interface IDefaultTheme {
       height: string;
       lineHeight: number;
       color: string;
+      padding: string;
       borderColor: string;
       labelColor: string;
       fontSize: string;

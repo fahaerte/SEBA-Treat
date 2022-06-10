@@ -1,7 +1,7 @@
 import styled, { css, DefaultTheme, ThemeProps } from "styled-components";
 import { ToastContainer } from "react-toastify";
 import { IToastContainer } from "./IToastContainer";
-import { ABootstrapPalette } from "../../../assets/themes/interfaces/TBootstrapPalette";
+import { ABootstrapPalette } from "../../../assets/theme/interfaces/TBootstrapPalette";
 
 const toastClasses = (props: ThemeProps<DefaultTheme>) => {
   let tmp = "";

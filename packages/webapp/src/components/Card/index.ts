@@ -1,8 +1,8 @@
 export { default as Card } from "./Card";
-export { default as CardHeader } from "./CardHeader/CardHeader";
-export { default as CardImage } from "./CardImage/CardImage";
-export { default as CardBody } from "./CardBody/CardBody";
-export { default as CardTitle } from "./CardTitle/CardTitle";
-export { default as CardText } from "./CardText/CardText";
-export { default as CardExpander } from "./CardExpander/CardExpander";
-export { default as CardFooter } from "./CardFooter/CardFooter";
+export { default as CardHeader } from "./CardContent/CardHeader";
+export { default as CardImage } from "./CardContent/CardImage";
+export { default as CardBody } from "./CardContent/CardBody/CardBody";
+export { default as CardTitle } from "./CardContent/CardBody/CardTitle";
+export { default as CardText } from "./CardContent/CardBody/CardText";
+export { default as CardExpander } from "./CardContent/CardExpander";
+export { default as CardFooter } from "./CardContent/CardFooter";

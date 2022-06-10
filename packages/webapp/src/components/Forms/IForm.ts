@@ -32,7 +32,7 @@ export interface IForm<TFormValues> {
    */
   hookProps?: UseFormProps<TFormValues>;
   /**
-   * form Title
+   * Headline title
    */
   formTitle?: string;
   /**
@@ -43,4 +43,8 @@ export interface IForm<TFormValues> {
    * If user wants to pass loading state variable, submit button will show loading spinner while this is true
    */
   isLoading?: boolean;
+  /**
+   * Shows error message between last element and submit button
+   */
+  invalidFeedback?: string;
 }
