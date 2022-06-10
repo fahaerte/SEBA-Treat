@@ -1,7 +1,9 @@
 import Joi from "joi";
 import { IAddress } from "@treat/lib-common";
+import j2s from "joi-to-swagger";
+import { Schema } from "swagger-jsdoc";
 
-export const addressSchema = {
+export const AddressDTO = {
   create: Joi.object<IAddress>({
     street: Joi.string().required(),
     housenumber: Joi.string().required(),
@@ -16,4 +18,9 @@ export const addressSchema = {
     city: Joi.string(),
     country: Joi.string(),
   }),
+};
+
+export const SwaggerAddressDTO = {
+  CreateAddressDTO: j2s(AddressDTO.create).swagger,
+  UpdateAddressDTO: j2s(AddressDTO.update).swagger,
 };

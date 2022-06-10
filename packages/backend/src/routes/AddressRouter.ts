@@ -4,17 +4,91 @@ import { schema, ValidateSchema } from "../middleware";
 
 const AddressRouter = express.Router();
 
+/**
+ * @swagger
+ * /address:
+ *  post:
+ *    tags:
+ *    - address
+ *    description: Create new address
+ *    parameters:
+ *    - name: address
+ *      description: A new address object
+ *      in: body
+ *      required: true
+ *      schema:
+ *        $ref: '#/definitions/CreateAddressDTO'
+ *    responses:
+ *      201:
+ *        description: Created
+ *      500:
+ *        description: Error
+ */
 AddressRouter.post(
-  "/create",
+  "/",
   ValidateSchema(schema.address.create),
   CAddress.createAddress
 );
-AddressRouter.get("/get/:addressId", CAddress.getAddress);
+
+/**
+ * @swagger
+ * /address/{addressId}:
+ *  get:
+ *    tags:
+ *    - address
+ *    description: Get address by ID
+ *    produces:
+ *    - application/json
+ *    parameters:
+ *    - name: addressId
+ *      description: mongoDB object id of the address
+ *      in: path
+ *      required: true
+ *      type: string
+ *    responses:
+ *      200:
+ *        description: Returns an address
+ *
+ *      404:
+ *        description: Not found
+ *      500:
+ *        description: Error
+ */
+AddressRouter.get("/:addressId", CAddress.getAddress);
+
+/**
+ * @swagger
+ * /address/{addressId}:
+ *  patch:
+ *    tags:
+ *    - address
+ *    description: Update address by ID
+ *    parameters:
+ *    - name: addressId
+ *      description: mongoDB object id of the address
+ *      in: path
+ *      required: true
+ *      type: string
+ *    - name: body
+ *      description: Updated address attributes
+ *      in: body
+ *      required: true
+ *      schema:
+ *        $ref: "#/definitions/UpdateAddressDTO"
+ *    responses:
+ *      200:
+ *        description: Returns an address
+ *      404:
+ *        description: Not found
+ *      500:
+ *        description: Error
+ */
 AddressRouter.patch(
-  "/update/:addressId",
+  "/:addressId",
   ValidateSchema(schema.address.update),
   CAddress.updateAddress
 );
-AddressRouter.delete("/delete/:addressId", CAddress.deleteAddress);
+
+AddressRouter.delete("/:addressId", CAddress.deleteAddress);
 
 export = AddressRouter;

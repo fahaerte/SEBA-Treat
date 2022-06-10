@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, useRoutes } from "react-router-dom";
-import Button from "../components/Button/Button";
+import { Button, Icon } from "../components";
 
 export const AppRouter = () => {
   const mainRoutes = {};
@@ -11,9 +11,12 @@ export const AppRouter = () => {
 
   return (
     <>
-      Hallo :-I
+      Hallo :-D
       <br />
-      <Button>asdf</Button>
+      <Button>
+        <Icon type={"download"} /> asdf
+      </Button>
+      <br />
     </>
   );
 };

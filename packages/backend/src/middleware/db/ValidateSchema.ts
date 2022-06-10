@@ -1,6 +1,6 @@
 import { ObjectSchema } from "joi";
 import { Request, Response, NextFunction } from "express";
-import { addressSchema } from "./rules/addressSchema";
+import { AddressDTO } from "./rules/AddressDTO";
 
 export const ValidateSchema = (schema: ObjectSchema) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -17,5 +17,5 @@ export const ValidateSchema = (schema: ObjectSchema) => {
 };
 
 export const schema = {
-  address: addressSchema,
+  address: AddressDTO,
 };

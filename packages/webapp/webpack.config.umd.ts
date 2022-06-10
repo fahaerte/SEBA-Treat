@@ -3,18 +3,18 @@ import * as webpack from "webpack";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
 module.exports = (env: { production?: boolean } = {}) => ({
-  mode: env.production ? "production" : "development",
+  mode: "development",
   entry: {
     app: ["./src/index"],
   },
   output: {
-    library: "ReduxDevTools",
+    // library: "ReduxDevTools",
     libraryExport: "default",
     libraryTarget: "umd",
-    path: path.resolve(__dirname, "umd"),
-    filename: env.production
-      ? "redux-devtools-app.min.js"
-      : "redux-devtools-app.js",
+    // path: path.resolve(__dirname, "umd"),
+    // filename: env.production
+    //   ? "redux-devtools-app.min.js"
+    //   : "redux-devtools-app.js",
   },
   module: {
     rules: [

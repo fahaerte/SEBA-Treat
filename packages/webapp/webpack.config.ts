@@ -8,7 +8,7 @@ import DotenvWebpackPlugin from "dotenv-webpack";
 module.exports = (
   env: { development?: boolean; platform?: string; dotenv?: boolean } = {}
 ) => ({
-  mode: env.development ? "development" : "production",
+  mode: "development",
   entry: {
     app: "./demo/index",
   },
@@ -89,15 +89,5 @@ module.exports = (
   performance: {
     hints: false,
   },
-  devServer: {
-    port: 3000,
-    historyApiFallback: true,
-    proxy: {
-      "/auth": {
-        target: "http://localhost",
-        changeOrigin: true,
-      },
-    },
-  },
-  devtool: env.development ? "eval-cheap-source-map" : "source-map", // TODO setting this to false or "source-map" solves the warning overload bug on console.. why?
+  devtool: "eval-cheap-source-map", // TODO setting this to false or "source-map" solves the warning overload bug on console.. why?
 });

@@ -7,7 +7,8 @@ export const ABootstrapPaletteTypography = [
   "muted",
   "white",
 ] as const;
-type TBootstrapPaletteTypography = typeof ABootstrapPaletteTypography[number];
+export type TBootstrapPaletteTypography =
+  typeof ABootstrapPaletteTypography[number];
 
 /**
  * Declaring array here to allow the select-control in stories

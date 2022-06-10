@@ -1,3 +1,5 @@
+import { TBootstrapPaletteTypography } from "../Typography/ITypography";
+
 /**
  * Declaring array here to allow the select-control in stories
  */
@@ -81,4 +83,8 @@ export interface IIcon {
    * Size of icon
    */
   size?: "sm" | "md" | "lg";
+  /**
+   * color of the icon
+   */
+  color?: TBootstrapPaletteTypography;
 }

@@ -5,9 +5,10 @@ import { SCIcon } from "./styles";
 /**
  * Default Values from Bootstrap Icon Svg Example
  */
-const Icon = ({ type, size = "md" }: IIcon) => (
+const Icon = ({ type, size = "md", color }: IIcon) => (
   <>
     <SCIcon
+      color={color}
       fill="currentColor"
       className={[`bi`, `bi-${type}`, `svg-${size}`].join(" ")}
     >

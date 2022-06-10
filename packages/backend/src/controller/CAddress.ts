@@ -17,7 +17,7 @@ const createAddress = (req: Request, res: Response) => {
 
   return address
     .save()
-    .then((address) => res.status(201).json({ address }))
+    .then((address) => res.status(201).json(address))
     .catch((error) => res.status(500).json({ error }));
 };
 
@@ -28,7 +28,7 @@ const getAddress = (req: Request, res: Response) => {
   return Address.findById(addressId)
     .then((address) =>
       address
-        ? res.status(200).json({ address })
+        ? res.status(200).json(address)
         : res.status(404).json({ message: "not found" })
     )
     .catch((error) => res.status(500).json({ error }));
@@ -45,7 +45,7 @@ const updateAddress = (req: Request, res: Response) => {
 
         return address
           .save()
-          .then((address) => res.status(201).json({ address }))
+          .then((address) => res.status(201).json(address))
           .catch((error) => res.status(500).json({ error }));
       } else {
         return res.status(404).json({ message: "not found" });
@@ -60,7 +60,7 @@ const deleteAddress = (req: Request, res: Response) => {
   return Address.findByIdAndDelete(addressId)
     .then((address) =>
       address
-        ? res.status(201).json({ address, message: "Deleted" })
+        ? res.status(201).json({ message: "Deleted" })
         : res.status(404).json({ message: "not found" })
     )
     .catch((error) => res.status(500).json({ error }));
