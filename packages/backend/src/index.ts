@@ -1,8 +1,8 @@
 import express from "express";
-import { mongoConnect } from "./mongoConnect";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import { SwaggerAddressDTO } from "./middleware";
+import { mongoConnect } from "./loader";
 
 const app: express.Application = express();
 

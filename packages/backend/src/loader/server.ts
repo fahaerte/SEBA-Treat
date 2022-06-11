@@ -1,8 +1,10 @@
 import express from "express";
 import http from "http";
-import { logger, errorHandling, apiConfig } from "./middleware";
-import { config } from "./config";
-import { assembleRoutes } from "./routes/assembleRoutes";
+import { config } from "../config";
+import { assembleRoutes } from "../routes/assembleRoutes";
+import { logger } from "./logger";
+import { apiConfig } from "./apiConfig";
+import { errorHandling } from "./errorHandling";
 
 export const startServer = (app: express.Application) => {
   // LOG REQUESTS

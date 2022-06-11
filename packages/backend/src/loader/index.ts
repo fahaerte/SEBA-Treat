@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { config } from "./config";
+import { config } from "../config";
 import { startServer } from "./server";
 import express from "express";
 
@@ -23,14 +23,4 @@ export const mongoConnect = async (app: express.Application) => {
         );
     })
     .catch((error) => console.log(error));
-};
-
-export const mongoDisconnect = async () => {
-  try {
-    await mongoose
-      .disconnect()
-      .then(() => console.log("Successfully disconnected from MongODB"));
-  } catch (error: unknown) {
-    console.log(error);
-  }
 };
