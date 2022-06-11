@@ -13,6 +13,7 @@ Run `yarn start` to start the server on [http://localhost:5000]().
   [http://localhost:5000/api-docs]()
 
 ## File Structure:
+
 - Controller: controllers for each component, executing business logic and DB functions
 - Loader: all functionalities and configs that are executed during application startup
 - Middleware: For data validation with Joi, ensures that in/output follows defined collection scheme
