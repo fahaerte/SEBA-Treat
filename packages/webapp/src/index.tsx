@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { render } from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app/app.scss";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
@@ -30,6 +31,15 @@ class Root extends Component {
   }
 }
 export default Root;
+
+render(<Root />, document.getElementById("root"));
+
+if (module.hot) {
+  // https://github.com/webpack/webpack/issues/418#issuecomment-53398056
+  module.hot.accept((err) => {
+    if (err) console.error(err.message); // eslint-disable-line no-console
+  });
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

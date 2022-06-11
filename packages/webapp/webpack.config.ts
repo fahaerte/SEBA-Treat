@@ -10,7 +10,7 @@ module.exports = (
 ) => ({
   mode: "development",
   entry: {
-    app: "./demo/index",
+    app: "./src/index",
   },
   output: {
     path: path.resolve(__dirname, `build/${env.platform as string}`),
@@ -88,6 +88,10 @@ module.exports = (
   },
   performance: {
     hints: false,
+  },
+  devServer: {
+    port: 3000,
+    historyApiFallback: true,
   },
   devtool: "eval-cheap-source-map", // TODO setting this to false or "source-map" solves the warning overload bug on console.. why?
 });

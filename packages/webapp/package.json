@@ -12,7 +12,6 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "webpack serve --hot --env development --env dotenv --env platform=web --progress",
-    "start:prod": "node server.js prod",
     "build": "yarn run build:types && yarn run build:js && yarn run build:web && yarn run build:umd && yarn run build:umd:min",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
