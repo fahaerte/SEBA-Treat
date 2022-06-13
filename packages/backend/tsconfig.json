@@ -3,7 +3,13 @@
   "compilerOptions": {
     "outDir": "lib",
     "rootDir": "./src",
-    "moduleResolution": "node"
+    "baseUrl": "./src",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["@types"]
   },
   "include": ["src"]
 }

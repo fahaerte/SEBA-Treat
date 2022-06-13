@@ -1,31 +1,10 @@
-import express from "express";
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUI from "swagger-ui-express";
-import { SwaggerAddressDTO } from "./middleware";
-import { mongoConnect } from "./loader";
+import "dotenv/config";
+import validateEnv from "./utils/validateEnv";
+import App from "./app";
+import UserController from "./resources/user/user.controller";
 
-const app: express.Application = express();
+validateEnv();
 
-// SWAGGER DOCS
-const swaggerOptions = {
-  swaggerDefinition: {
-    definitions: { ...SwaggerAddressDTO },
-    info: {
-      title: "Treat API",
-      version: "1.0.0",
-      basePath: "http:/localhost:5000",
-      tags: [
-        {
-          name: "Address",
-          description: "All user addresses",
-        },
-      ],
-    },
-  },
-  apis: ["./src/routes/AddressRouter.ts"],
-};
+const app = new App([new UserController()], Number(process.env.PORT));
 
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-
-void mongoConnect(app);
+app.listen();
