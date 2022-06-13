@@ -6,5 +6,5 @@ interface IMealCategoryModel extends IMealCategory, Document {}
 const SMealCategory = new Schema<IMealCategoryModel>({
   label: { type: String, required: true },
 });
-
+//Testcommit Fabian
 export default model("MealCategory", SMealCategory);
