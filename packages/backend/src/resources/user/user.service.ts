@@ -20,7 +20,7 @@ class UserService {
       });
       return token.createToken(user);
     } catch (error: any) {
-        throw new Error(error.message as string);
+      throw new Error(error.message as string);
     }
   }
 
