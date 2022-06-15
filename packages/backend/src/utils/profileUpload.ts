@@ -1,6 +1,6 @@
 import { Request } from "express";
 import multer, { FileFilterCallback } from "multer";
-import HttpException from "../../lib/utils/exceptions/http.exception";
+import HttpException from "../utils/exceptions/http.exception";
 import path from "path";
 
 type DestinationCallback = (error: Error | null, destination: string) => void;
