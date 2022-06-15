@@ -11,9 +11,9 @@
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["@types"],
     "paths": {
-        "@/resources/*" : ["resources/*"],
-        "@/utils/*" : ["utils/*"],
-        "@/middleware/*" : ["middleware/*"],
+      "@/resources/*": ["resources/*"],
+      "@/utils/*": ["utils/*"],
+      "@/middleware/*": ["middleware/*"]
     }
   },
   "include": ["src"]

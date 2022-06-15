@@ -52,11 +52,16 @@ class UserService {
    * @param userid
    */
   public getProfilePicturePath(userid: string): string {
-    const profilePicturesPath = path.resolve(__dirname, "../../../profilePictures");
+    const profilePicturesPath = path.resolve(
+      __dirname,
+      "../../../profilePictures"
+    );
     const picturesList = fs.readdirSync(profilePicturesPath);
-    const pictureForId = picturesList.find(element => element.includes(userid));
-    if(!pictureForId) {
-      throw new Error("User has no profile picture")
+    const pictureForId = picturesList.find((element) =>
+      element.includes(userid)
+    );
+    if (!pictureForId) {
+      throw new Error("User has no profile picture");
     }
     return path.join(profilePicturesPath, pictureForId);
   }
