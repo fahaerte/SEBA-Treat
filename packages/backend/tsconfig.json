@@ -9,7 +9,12 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["@types"]
+    "typeRoots": ["@types"],
+    "paths": {
+        "@/resources/*" : ["resources/*"],
+        "@/utils/*" : ["utils/*"],
+        "@/middleware/*" : ["middleware/*"],
+    }
   },
   "include": ["src"]
 }

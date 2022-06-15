@@ -1,5 +1,7 @@
 import UserModel from "../user/user.model";
 import token from "../../utils/token";
+import path from "path";
+import * as fs from "fs";
 
 class UserService {
   private user = UserModel;
@@ -43,6 +45,20 @@ class UserService {
     } catch (error) {
       throw new Error("Unable to create user");
     }
+  }
+
+  /**
+   * Attempt to get path to profile picture
+   * @param userid
+   */
+  public getProfilePicturePath(userid: string): string {
+    const profilePicturesPath = path.resolve(__dirname, "../../../profilePictures");
+    const picturesList = fs.readdirSync(profilePicturesPath);
+    const pictureForId = picturesList.find(element => element.includes(userid));
+    if(!pictureForId) {
+      throw new Error("User has no profile picture")
+    }
+    return path.join(profilePicturesPath, pictureForId);
   }
 }
 
