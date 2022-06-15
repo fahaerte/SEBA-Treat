@@ -6,9 +6,10 @@ import morgan from "morgan";
 
 import Controller from "./utils/interfaces/controller.interface";
 import ErrorMiddleware from "./middleware/error.middleware";
-
 import helmet from "helmet";
-import multer from "multer";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUI from "swagger-ui-express";
+import { UserDTO } from "./resources/user/user.validation";
 
 class App {
   public express: Application;
@@ -22,6 +23,7 @@ class App {
     this.initialiseMiddleware();
     this.initialiseControllers(controllers);
     this.initialiseErrorHandling();
+    this.initializeSwagger();
   }
 
   private initialiseMiddleware(): void {
@@ -47,6 +49,34 @@ class App {
     const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
     void mongoose.connect(
       `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_PATH}.ar7en.mongodb.net`
+    );
+  }
+
+  // SWAGGER DOCS
+  private initializeSwagger(): void {
+    const swaggerOptions = {
+      swaggerDefinition: {
+        definitions: { ...UserDTO },
+        info: {
+          title: "Treat API",
+          version: "1.0.0",
+          basePath: "http:/localhost:5000",
+          tags: [
+            {
+              name: "UserDTO",
+              description: "register and login user",
+            },
+          ],
+        },
+      },
+      apis: ["resources/user/user.controller.ts"],
+    };
+
+    const swaggerDocs = swaggerJSDoc(swaggerOptions);
+    this.express.use(
+      "/api-docs",
+      swaggerUI.serve,
+      swaggerUI.setup(swaggerDocs)
     );
   }
 

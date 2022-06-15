@@ -6,7 +6,6 @@ import UserService from "../../resources/user/user.service";
 import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
-import userService from "../../resources/user/user.service";
 
 class UserController implements Controller {
   public path = "/users";
@@ -14,27 +13,140 @@ class UserController implements Controller {
   private UserService = new UserService();
 
   constructor() {
-    this.initialiseRoutes();
+    this.initializeRoutes();
   }
 
-  private initialiseRoutes(): void {
+  private initializeRoutes(): void {
+    /**
+     * @swagger
+     * /users/register:
+     *  post:
+     *    tags:
+     *    - register
+     *    description: Register an user
+     *    parameters:
+     *    - name: username
+     *      description: username
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUserDTO'
+     *    - name: email
+     *      description: email
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUserDTO'
+     *    - name: password
+     *      description: password
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUserDTO'
+     *    responses:
+     *      201:
+     *        description: Created
+     *      500:
+     *        description: Error
+     */
     this.router.post(
       `${this.path}/register`,
       validationMiddleware(validate.register),
       this.register
     );
+
+    /**
+     * @swagger
+     * /users/login:
+     *  post:
+     *    tags:
+     *    - login
+     *    description: Login user
+     *    parameters:
+     *    - name: email
+     *      description: email
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/LoginUserDTO'
+     *    - name: password
+     *      description: password
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/LoginUserDTO'
+     *    responses:
+     *      201:
+     *        description: LoggedIn
+     *      500:
+     *        description: Error
+     */
     this.router.post(
       `${this.path}/login`,
       validationMiddleware(validate.login),
       this.login
     );
+
+    /**
+     * @swagger
+     * /users/profile-picture:
+     *  get:
+     *    tags:
+     *    - user
+     *    description: Get current user
+     *    produces:
+     *    - application/json
+     *    responses:
+     *      200:
+     *        description: Returns current user
+     *      404:
+     *        description: Not found
+     */
     this.router.get(`${this.path}`, authenticated, this.getUser);
+
+    /**
+     * @swagger
+     * /users/profile-picture:
+     *  post:
+     *    consumes:
+     *     - multipart/form-data
+     *    tags:
+     *    - get profile-picture
+     *    description: Upload profile picture
+     *    parameters:
+     *    - name: photo
+     *      description: email
+     *      in: formData
+     *      type: file
+     *      required: true
+     *    responses:
+     *      201:
+     *        description: LoggedIn
+     *      500:
+     *        description: Error
+     */
     this.router.post(
       `${this.path}/profile-picture`,
       authenticated,
       profileFileUpload.single("profilePicture"),
       this.uploadProfilePicture
     );
+
+    /**
+     * @swagger
+     * /users/profile-picture/:userid:
+     *  get:
+     *    tags:
+     *    - profile-picture
+     *    description: Get profile picture of user
+     *    produces:
+     *    - application/json
+     *    responses:
+     *      200:
+     *        description: Returns current user
+     *      404:
+     *        description: Not found
+     */
     this.router.get(
       `${this.path}/profile-picture/:userid?`,
       authenticated,
