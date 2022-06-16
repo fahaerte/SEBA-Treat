@@ -61,14 +61,15 @@ class App {
           title: "Treat API",
           version: "1.0.0",
           basePath: "http:/localhost:5000/api/",
-          tags: [
-            {
-              name: "UserDTO",
-              description: "register and login user",
-            },
-          ],
         },
+        tags: [
+          {
+            name: "User",
+            description: "User functions including authentication",
+          },
+        ],
       },
+
       apis: ["./src/resources/user/user.controller.ts"],
     };
 

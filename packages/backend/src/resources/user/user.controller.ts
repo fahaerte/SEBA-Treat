@@ -22,8 +22,8 @@ class UserController implements Controller {
      * /users/register:
      *  post:
      *    tags:
-     *    - UserDTO
-     *    description: Register an user
+     *    - User
+     *    summary: Register an user
      *    parameters:
      *    - name: username
      *      description: username
@@ -60,8 +60,8 @@ class UserController implements Controller {
      * /users/login:
      *  post:
      *    tags:
-     *    - UserDTO
-     *    description: Login user
+     *    - User
+     *    summary: Login user
      *    parameters:
      *    - name: email
      *      description: email
@@ -92,8 +92,8 @@ class UserController implements Controller {
      * /users/profile-picture:
      *  get:
      *    tags:
-     *    - UserDTO
-     *    description: Get current user
+     *    - User
+     *    summary: Get current user
      *    produces:
      *    - application/json
      *    responses:
@@ -111,8 +111,8 @@ class UserController implements Controller {
      *    consumes:
      *     - multipart/form-data
      *    tags:
-     *    - UserDTO
-     *    description: Upload profile picture
+     *    - User
+     *    summary: Upload profile picture
      *    parameters:
      *    - name: photo
      *      description: email
@@ -137,8 +137,8 @@ class UserController implements Controller {
      * /users/profile-picture/:userid:
      *  get:
      *    tags:
-     *    - UserDTO
-     *    description: Get profile picture of user
+     *    - User
+     *    summary: Get profile picture of user
      *    produces:
      *    - application/json
      *    responses:
