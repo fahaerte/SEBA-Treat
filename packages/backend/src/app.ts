@@ -60,7 +60,7 @@ class App {
         info: {
           title: "Treat API",
           version: "1.0.0",
-          basePath: "http:/localhost:5000",
+          basePath: "http:/localhost:5000/api/",
           tags: [
             {
               name: "UserDTO",
@@ -69,7 +69,7 @@ class App {
           ],
         },
       },
-      apis: ["resources/user/user.controller.ts"],
+      apis: ["./src/resources/user/user.controller.ts"],
     };
 
     const swaggerDocs = swaggerJSDoc(swaggerOptions);
