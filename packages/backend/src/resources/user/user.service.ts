@@ -2,6 +2,7 @@ import UserModel from "../user/user.model";
 import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
+import User from "../../../lib/resources/user/user.interface";
 
 class UserService {
   private user = UserModel;
@@ -9,17 +10,9 @@ class UserService {
   /**
    * Register a new user
    */
-  public async register(
-    name: string,
-    email: string,
-    password: string
-  ): Promise<string | Error> {
+  public async register(newUser: User): Promise<string | Error> {
     try {
-      const user = await this.user.create({
-        name,
-        email,
-        password,
-      });
+      const user = await this.user.create(newUser);
       return token.createToken(user);
     } catch (error: any) {
       throw new Error(error.message as string);

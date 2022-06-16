@@ -6,7 +6,7 @@ import UserService from "../../resources/user/user.service";
 import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
-import userService from "../../resources/user/user.service";
+import User from "../../../lib/resources/user/user.interface";
 
 class UserController implements Controller {
   public path = "/users";
@@ -48,8 +48,8 @@ class UserController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { name, email, password } = req.body;
-      const token = await this.UserService.register(name, email, password);
+      const newUser = req.body as User;
+      const token = await this.UserService.register(newUser);
 
       res.status(201).json({ token });
     } catch (error: any) {
