@@ -1,9 +1,9 @@
-import {Document} from "mongoose";
+import { Document } from "mongoose";
 
 export default interface User extends Document {
-    email: string;
-    name: string;
-    password: string;
+  email: string;
+  name: string;
+  password: string;
 
-    isValidPassword(password: string): Promise<Error | boolean>;
+  isValidPassword(password: string): Promise<Error | boolean>;
 }

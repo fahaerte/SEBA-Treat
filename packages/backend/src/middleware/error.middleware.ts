@@ -12,7 +12,7 @@ function errorMiddleware(
   let status = error.status || 500;
   const message = error.message || "Something went wrong";
 
-  if(errorName === "BSONTypeError") {
+  if (errorName === "BSONTypeError") {
     status = 400;
   }
 

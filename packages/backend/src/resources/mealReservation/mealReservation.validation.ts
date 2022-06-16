@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const create = Joi.object({
-    mealOfferId: Joi.string().required(),
-})
+  mealOfferId: Joi.string().required(),
+});
 
-export default {create}
+export default { create };
