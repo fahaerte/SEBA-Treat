@@ -9,8 +9,8 @@ const AddressRouter = express.Router();
  * /address:
  *  post:
  *    tags:
- *    - address
- *    description: Create new address
+ *    - Address
+ *    summary: This is it
  *    parameters:
  *    - name: address
  *      description: A new address object
@@ -35,8 +35,8 @@ AddressRouter.post(
  * /address/{addressId}:
  *  get:
  *    tags:
- *    - address
- *    description: Get address by ID
+ *    - Address
+ *    summary: Get address by ID
  *    produces:
  *    - application/json
  *    parameters:
@@ -61,8 +61,9 @@ AddressRouter.get("/:addressId", CAddress.getAddress);
  * /address/{addressId}:
  *  patch:
  *    tags:
- *    - address
- *    description: Update address by ID
+ *    - Address
+ *    description: Yoyoo
+ *    summary: Update address by ID
  *    parameters:
  *    - name: addressId
  *      description: mongoDB object id of the address

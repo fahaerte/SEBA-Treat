@@ -10,16 +10,16 @@ const app: express.Application = express();
 const swaggerOptions = {
   swaggerDefinition: {
     definitions: { ...SwaggerAddressDTO },
+    tags: [
+      {
+        name: "Address",
+        description: "hallo",
+      },
+    ],
     info: {
       title: "Treat API",
       version: "1.0.0",
       basePath: "http:/localhost:5000",
-      tags: [
-        {
-          name: "Address",
-          description: "All user addresses",
-        },
-      ],
     },
   },
   apis: ["./src/routes/AddressRouter.ts"],
