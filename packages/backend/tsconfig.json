@@ -3,18 +3,15 @@
   "compilerOptions": {
     "outDir": "lib",
     "rootDir": "./src",
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "typeRoots": ["@types"],
-    "paths": {
-      "@/resources/*": ["resources/*"],
-      "@/utils/*": ["utils/*"],
-      "@/middleware/*": ["middleware/*"]
-    }
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": ["src"]
 }
