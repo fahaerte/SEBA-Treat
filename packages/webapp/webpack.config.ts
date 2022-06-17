@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as webpack from "webpack";
+
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import DotenvWebpackPlugin from "dotenv-webpack";
 // import { configValues } from "./src/utils/ConfigService";
 
@@ -63,11 +63,6 @@ module.exports = (
   plugins: [
     new HtmlWebpackPlugin({
       template: "assets/index.html",
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        configFile: "tsconfig.demo.json",
-      },
     }),
     new DotenvWebpackPlugin(),
     // env.dotenv

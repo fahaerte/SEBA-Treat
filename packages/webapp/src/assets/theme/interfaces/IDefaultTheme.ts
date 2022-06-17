@@ -27,6 +27,10 @@ export interface IDefaultTheme {
     border: {
       radius: string;
       width: string;
+      color: {
+        primary: string;
+        secondary: string;
+      };
     };
     backgroundPrimary: string;
     backgroundSecondary: string;
