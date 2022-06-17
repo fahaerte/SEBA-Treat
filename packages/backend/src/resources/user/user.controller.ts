@@ -6,7 +6,7 @@ import UserService from "../../resources/user/user.service";
 import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
-import User from "../../../lib/resources/user/user.interface";
+import User from "./user.interface";
 
 class UserController implements Controller {
   public path = "/users";
