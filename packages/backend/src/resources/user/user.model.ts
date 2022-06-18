@@ -1,41 +1,46 @@
-import { Schema, model } from "mongoose";
+import {model, Schema, Types} from "mongoose";
 import bcrypt from "bcrypt";
 import User from "./user.interface";
 
-const UserSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
+const UserSchema = new Schema<User>(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+        },
+        password: {
+            type: String,
+            required: true,
+        },
+        virtualAccountId: {
+            type: Types.ObjectId,
+            ref: "VirtualAccount",
+            required: true,
+        },
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-    },
-  },
-  { timestamps: true }
+    {timestamps: true}
 );
 
 UserSchema.pre<User>("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
+    if (!this.isModified("password")) {
+        return next();
+    }
 
-  const hash = await bcrypt.hash(this.password, 10);
-  this.password = hash;
+    this.password = await bcrypt.hash(this.password, 10);
 
-  next();
+    next();
 });
 
 UserSchema.methods.isValidPassword = async function (
-  password: string
-): Promise<Error | boolean> {
-  return await bcrypt.compare(password, this.password);
+    password: string
+): Promise<boolean | Error> {
+    return await bcrypt.compare(password, this.password);
 };
 
 export default model<User>("User", UserSchema);
