@@ -12,3 +12,5 @@ export * from "./Card";
 export { default as Collapse } from "./Collapse/Collapse";
 export * from "./Breadcrumb";
 export * from "./Skeleton";
+export * from "./TabBar";
+export * from "./Toast";

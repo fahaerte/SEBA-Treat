@@ -2,10 +2,11 @@ import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
-import UserService from "../../resources/user/user.service";
 import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
+import UserService from "../../resources/user/user.service";
+import User from "./user.interface";
 
 class UserController implements Controller {
   public path = "/users";
@@ -47,8 +48,8 @@ class UserController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { name, email, password } = req.body;
-      const token = await this.userService.register(name, email, password);
+      const newUser = req.body as User;
+      const token = await this.userService.register(newUser);
 
       res.status(201).json({ token });
     } catch (error: any) {

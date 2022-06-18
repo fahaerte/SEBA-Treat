@@ -1,10 +1,11 @@
-import UserModel from "./user.model";
+import UserModel from "../user/user.model";
 import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import VirtualAccount from "@/resources/virtualAccount/virtualAccount.interface";
+import VirtualAccount from "../virtualAccount/virtualAccount.interface";
 import { ObjectId, Types } from "mongoose";
+import User from "../user/user.interface";
 
 class UserService {
   private userModel = UserModel;
@@ -14,12 +15,11 @@ class UserService {
   /**
    * Register a new user
    */
-  public async register(
-    name: string,
-    email: string,
-    password: string
-  ): Promise<string | Error> {
+  public async register(newUser: User): Promise<string | Error> {
     try {
+      const name = newUser.name;
+      const email = newUser.email;
+      const password = newUser.password;
       const virtualAccount = (await this.virtualAccountService.createAccount(
         process.env["CENTRAL_BANK_ID"] as unknown as ObjectId
       )) as VirtualAccount;
@@ -37,7 +37,7 @@ class UserService {
   }
 
   /**
-   * Attempt to login a user
+   * Attempt to log in a user
    */
   public async login(email: string, password: string): Promise<string | Error> {
     try {
