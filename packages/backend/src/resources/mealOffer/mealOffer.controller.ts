@@ -1,7 +1,7 @@
-import Controller from "../../../lib/utils/interfaces/controller.interface";
-import { NextFunction, Request, Response, Router } from "express";
+import Controller from "../../utils/interfaces/controller.interface";
+import { Request, Response, NextFunction, Router } from "express";
 import MealOffer from "../mealOffer/mealOffer.interface";
-import validationMiddleware from "../../../lib/middleware/validation.middleware";
+import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";

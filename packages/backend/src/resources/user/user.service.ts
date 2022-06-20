@@ -2,17 +2,34 @@ import UserModel from "../user/user.model";
 import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
-import User from "../../../lib/resources/user/user.interface";
+import VirtualAccountService from "../virtualAccount/virtualAccount.service";
+import VirtualAccount from "../virtualAccount/virtualAccount.interface";
+import { ObjectId, Types } from "mongoose";
+import User from "../user/user.interface";
 
 class UserService {
-  private user = UserModel;
+  private userModel = UserModel;
+  // TODO: importing service instead of model right way to do this?
+  private virtualAccountService = new VirtualAccountService();
 
   /**
    * Register a new user
    */
   public async register(newUser: User): Promise<string | Error> {
     try {
-      const user = await this.user.create(newUser);
+      const name = newUser.name;
+      const email = newUser.email;
+      const password = newUser.password;
+      const virtualAccount = (await this.virtualAccountService.createAccount(
+        process.env["CENTRAL_BANK_ID"] as unknown as ObjectId
+      )) as VirtualAccount;
+      const virtualAccountId = virtualAccount._id as Types.ObjectId;
+      const user = await this.userModel.create({
+        name,
+        email,
+        password,
+        virtualAccountId,
+      });
       return token.createToken(user);
     } catch (error: any) {
       throw new Error(error.message as string);
@@ -20,11 +37,11 @@ class UserService {
   }
 
   /**
-   * Attempt to login a user
+   * Attempt to log in a user
    */
   public async login(email: string, password: string): Promise<string | Error> {
     try {
-      const user = await this.user.findOne({ email });
+      const user = await this.userModel.findOne({ email });
 
       if (!user) {
         throw new Error("Unable to find user with that email address");

@@ -1,8 +1,8 @@
-import { Schema, model } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 import User from "./user.interface";
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<User>(
   {
     name: {
       type: String,
@@ -16,6 +16,12 @@ const UserSchema = new Schema(
     },
     password: {
       type: String,
+      required: true,
+    },
+    virtualAccountId: {
+      type: Types.ObjectId,
+      ref: "VirtualAccount",
+      required: true,
     },
   },
   { timestamps: true }
@@ -26,15 +32,14 @@ UserSchema.pre<User>("save", async function (next) {
     return next();
   }
 
-  const hash = await bcrypt.hash(this.password, 10);
-  this.password = hash;
+  this.password = await bcrypt.hash(this.password, 10);
 
   next();
 });
 
 UserSchema.methods.isValidPassword = async function (
   password: string
-): Promise<Error | boolean> {
+): Promise<boolean | Error> {
   return await bcrypt.compare(password, this.password);
 };
 
