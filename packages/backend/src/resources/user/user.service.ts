@@ -6,7 +6,9 @@ import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import VirtualAccount from "../virtualAccount/virtualAccount.interface";
 import { ObjectId, Types } from "mongoose";
 import User from "../user/user.interface";
+import {Service} from "typedi";
 
+@Service()
 class UserService {
   private userModel = UserModel;
   // TODO: importing service instead of model right way to do this?

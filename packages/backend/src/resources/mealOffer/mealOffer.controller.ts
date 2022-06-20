@@ -13,7 +13,7 @@ class MealOfferController implements Controller {
   public path = "/mealOffers";
   public router = Router();
 
-  constructor(private readonly MealOfferService: MealOfferService) {
+  constructor(private readonly mealOfferService: MealOfferService) {
     this.initializeRoutes();
   }
 
@@ -64,7 +64,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOfferRequest = req.body as MealOffer;
-      const newMealOffer = await this.MealOfferService.create(
+      const newMealOffer = await this.mealOfferService.create(
         mealOfferRequest,
         req.user
       );
@@ -80,7 +80,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOffer = await this.MealOfferService.getMealOffer(
+      const mealOffer = await this.mealOfferService.getMealOffer(
         req.params.mealOfferId
       );
       res.status(200).send({ data: mealOffer });
@@ -95,7 +95,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOffers = await this.MealOfferService.getSentMealOfferRequests(
+      const mealOffers = await this.mealOfferService.getSentMealOfferRequests(
         req.user
       );
       res.status(200).send({ data: mealOffers });
@@ -111,7 +111,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOffers =
-        await this.MealOfferService.getReceivedMealOfferRequests(req.user);
+        await this.mealOfferService.getReceivedMealOfferRequests(req.user);
       res.status(200).send({ data: mealOffers });
     } catch (error: any) {
       next(error);
@@ -124,7 +124,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      await this.MealOfferService.deleteMealOffer(
+      await this.mealOfferService.deleteMealOffer(
         req.params.mealOfferId,
         req.user
       );
@@ -140,7 +140,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOffer = await this.MealOfferService.createMealOfferReservation(
+      const mealOffer = await this.mealOfferService.createMealOfferReservation(
         req.params.mealOfferId,
         req.user
       );
@@ -157,7 +157,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { reservationState } = req.body;
-      await this.MealOfferService.updateMealOfferReservationState(
+      await this.mealOfferService.updateMealOfferReservationState(
         req.params.mealOfferId,
         req.user,
         req.params.mealReservationId,
