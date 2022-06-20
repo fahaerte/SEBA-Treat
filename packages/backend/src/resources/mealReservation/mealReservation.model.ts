@@ -3,19 +3,12 @@ import MealReservation from "./mealReservation.interface";
 import MealReservationStateEnum from "./mealReservationState.enum";
 import MealReservationState from "./mealReservationState.enum";
 
-const MealReservationSchema = new Schema<MealReservation>(
+export const MealReservationSchema = new Schema<MealReservation>(
   {
     buyer: {
       type: Types.ObjectId,
       required: true,
-    },
-    seller: {
-      type: Types.ObjectId,
-      required: true,
-    },
-    mealOffer: {
-      type: Types.ObjectId,
-      required: true,
+      ref: "User",
     },
     reservationState: {
       type: String,

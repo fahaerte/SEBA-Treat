@@ -1,5 +1,8 @@
 import { model, Schema, Types } from "mongoose";
 import MealOffer from "../mealOffer/mealOffer.interface";
+import { MealReservationSchema } from "../mealReservation/mealReservation.model";
+import MealCategory from "../mealCategory/mealCategory.enum";
+import MealAllergen from "../mealAllergen/mealAllergen.enum";
 
 const MealOfferSchema = new Schema<MealOffer>(
   {
@@ -18,14 +21,15 @@ const MealOfferSchema = new Schema<MealOffer>(
     },
     categories: [
       {
-        type: Types.ObjectId,
+        type: String,
+        enum: Object.values(MealCategory),
         required: true,
       },
     ],
     allergens: [
       {
-        type: Types.ObjectId,
-        required: true,
+        type: String,
+        enum: Object.values(MealAllergen),
       },
     ],
     startDate: {
@@ -39,18 +43,23 @@ const MealOfferSchema = new Schema<MealOffer>(
     portions: {
       type: Number,
       required: true,
+      min: 1,
     },
     pickUpDetails: {
       type: String,
+      required: true,
     },
     price: {
       type: Number,
       required: true,
+      min: 0,
     },
     transactionFee: {
       type: Number,
       default: 0,
+      min: 0,
     },
+    reservations: [MealReservationSchema],
   },
   { timestamps: true }
 );
