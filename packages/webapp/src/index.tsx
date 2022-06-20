@@ -4,28 +4,27 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./app/app.scss";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import { Provider } from "react-redux";
-// import { store } from "./app/store";
+import { store } from "./app/store";
 import { AppRouter } from "./app/router";
 import { BrowserRouter } from "react-router-dom";
 
 /**
  * TODO:
  * - Authenticator
- * - UI-Components (general)
- * - Installation and usage of lib-common, API implementation
+ * - Installation and usage of lib-common, (API implementation)
  */
 
 class Root extends Component {
   render() {
     return (
       <div className="app docuply h-100">
-        {/*<Provider store={store}>*/}
-        <CustomThemeProvider>
-          <BrowserRouter>
-            <AppRouter />
-          </BrowserRouter>
-        </CustomThemeProvider>
-        {/*</Provider>*/}
+        <Provider store={store}>
+          <CustomThemeProvider>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+          </CustomThemeProvider>
+        </Provider>
       </div>
     );
   }

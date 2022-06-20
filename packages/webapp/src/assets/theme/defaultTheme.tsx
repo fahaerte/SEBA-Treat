@@ -90,6 +90,10 @@ export const defaultTheme: DefaultTheme = {
     border: {
       radius: "50px",
       width: "1px",
+      color: {
+        primary: "#DEDEDF",
+        secondary: "#E6E6E7",
+      },
     },
   },
   spacings: {
