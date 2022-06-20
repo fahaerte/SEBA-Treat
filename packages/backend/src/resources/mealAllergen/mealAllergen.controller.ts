@@ -14,24 +14,20 @@ class MealAllergenController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.get(
-        `${this.path}`,
-        authenticate,
-        this.getMealOfferAllergens
-    )
+    this.router.get(`${this.path}`, authenticate, this.getMealOfferAllergens);
   }
 
   private getMealOfferAllergens = (
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void => {
     try {
       res.status(200).send({ data: Object.values(MealAllergenEnum) });
     } catch (error: any) {
       next(error);
     }
-  }
+  };
 }
 
 export default MealAllergenController;

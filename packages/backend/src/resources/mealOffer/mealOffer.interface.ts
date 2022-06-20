@@ -13,7 +13,7 @@ export default interface MealOffer extends Document {
   pickUpDetails: string;
   price: number;
   transactionFee: number;
-  reservations: MealReservation[]
+  reservations: MealReservation[];
 
   // getPrice(): number;
 }

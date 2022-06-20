@@ -18,7 +18,7 @@ class MealCategoryController implements Controller {
     this.router.get(`${this.path}`, authenticate, this.getMealCategories);
   }
 
-  private getMealCategories =  (
+  private getMealCategories = (
     req: Request,
     res: Response,
     next: NextFunction

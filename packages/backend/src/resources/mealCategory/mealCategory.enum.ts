@@ -1,6 +1,6 @@
 enum MealCategory {
-    VEGAN = "vegan",
-    VEGETARIAN = "vegetarian",
+  VEGAN = "vegan",
+  VEGETARIAN = "vegetarian",
 }
 
 export default MealCategory;
