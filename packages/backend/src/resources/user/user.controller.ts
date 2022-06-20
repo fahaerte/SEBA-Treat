@@ -2,17 +2,16 @@ import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
-import UserService from "../../resources/user/user.service";
 import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
 
+@Service()
 class UserController implements Controller {
   public path = "/users";
   public router = Router();
-  private UserService = new UserService();
 
-  constructor() {
+  constructor(private readonly userService: UserService) {
     this.initializeRoutes();
   }
 
@@ -165,8 +164,8 @@ class UserController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { name, email, password } = req.body;
-      const token = await this.UserService.register(name, email, password);
+      const newUser = req.body as User;
+      const token = await this.userService.register(newUser);
 
       res.status(201).json({ token });
     } catch (error: any) {
@@ -182,7 +181,7 @@ class UserController implements Controller {
     try {
       const { email, password } = req.body;
 
-      const token = await this.UserService.login(
+      const token = await this.userService.login(
         email as string,
         password as string
       );
@@ -222,11 +221,11 @@ class UserController implements Controller {
     try {
       let profilePicturePath;
       if (!req.params.userid) {
-        profilePicturePath = this.UserService.getProfilePicturePath(
+        profilePicturePath = this.userService.getProfilePicturePath(
           req.user._id
         );
       } else {
-        profilePicturePath = this.UserService.getProfilePicturePath(
+        profilePicturePath = this.userService.getProfilePicturePath(
           req.params.userid
         );
       }
