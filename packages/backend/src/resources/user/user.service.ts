@@ -19,19 +19,11 @@ class UserService {
    */
   public async register(newUser: User): Promise<string | Error> {
     try {
-      const name = newUser.name;
-      const email = newUser.email;
-      const password = newUser.password;
       const virtualAccount = (await this.virtualAccountService.createAccount(
         process.env["CENTRAL_BANK_ID"] as unknown as ObjectId
       )) as VirtualAccount;
-      const virtualAccountId = virtualAccount._id as Types.ObjectId;
-      const user = await this.userModel.create({
-        name,
-        email,
-        password,
-        virtualAccountId,
-      });
+      newUser.virtualAccountId = virtualAccount._id;
+      const user = await this.userModel.create(newUser);
       return token.createToken(user);
     } catch (error: any) {
       throw new Error(error.message as string);
