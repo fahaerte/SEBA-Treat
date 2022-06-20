@@ -24,7 +24,6 @@ class MealTransactionController implements Controller {
       this.createTransaction
     );
     this.router.post(
-      // TODO: /perform/:mealTransactionId OR /:mealTransactionId/perform ?
       `${this.path}/perform/:mealTransactionId`,
       authenticated,
       // validationMiddleware(validate.createTransaction),
@@ -41,9 +40,9 @@ class MealTransactionController implements Controller {
       const { mealReservation, senderAccount, receiverAccount } = req.body;
       const mealTransaction =
         await this.mealTransactionService.createTransaction(
-          mealReservation as Types.ObjectId,
+          mealReservation as ObjectId,
           senderAccount as ObjectId,
-          receiverAccount as Types.ObjectId
+          receiverAccount as ObjectId
         );
 
       res.status(201).json({ mealTransaction });
@@ -61,7 +60,7 @@ class MealTransactionController implements Controller {
       const mealTransactionId = req.params.mealTransactionId;
       const mealTransaction =
         await this.mealTransactionService.performTransaction(
-          mealTransactionId as unknown as Types.ObjectId
+          mealTransactionId as unknown as ObjectId
         );
 
       res.status(200).json({ mealTransaction });

@@ -1,7 +1,7 @@
 import { ObjectId, Types } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
-import MealTransactionStateEnum from "./mealTransactionState.enum";
+import MealTransactionState from "./mealTransactionState.enum";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import VirtualBankService from "../virtualBank/virtualBank.service";
 
@@ -14,9 +14,9 @@ class MealTransactionService {
    * Create a new transaction
    */
   public async createTransaction(
-    mealReservation: Types.ObjectId,
+    mealReservation: ObjectId,
     senderAccount: ObjectId,
-    receiverAccount: Types.ObjectId
+    receiverAccount: ObjectId
   ): Promise<MealTransaction | Error> {
     try {
       return await this.mealTransactionModel.create({
@@ -33,14 +33,14 @@ class MealTransactionService {
    * Perform transaction
    */
   public async performTransaction(
-    mealTransactionId: Types.ObjectId
+    mealTransactionId: ObjectId
   ): Promise<MealTransaction | Error> {
     try {
       // TODO: check if user is authorized to perform transaction -> where to do that
       const transaction = (await this.mealTransactionModel.findById(
         mealTransactionId
       )) as MealTransaction;
-      if (transaction.transactionState === MealTransactionStateEnum.PENDING) {
+      if (transaction.transactionState === MealTransactionState.PENDING) {
         // TODO: check if concurrency is handled correctly
 
         // TODO: get price from meal offer
@@ -77,7 +77,7 @@ class MealTransactionService {
         // update transaction state
         await this.mealTransactionModel.findByIdAndUpdate(
           { _id: mealTransactionId },
-          { transactionState: MealTransactionStateEnum.COMPLETED }
+          { transactionState: MealTransactionState.COMPLETED }
         );
 
         return (await this.mealTransactionModel.findById(

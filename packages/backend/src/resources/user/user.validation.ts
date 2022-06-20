@@ -4,7 +4,7 @@ import AddressValidation from "../address/address.validation";
 
 const register = Joi.object({
   email: Joi.string().email().required().example("test@user.de"),
-  firstName: Joi.string().required().example("testuser"),
+  firstName: Joi.string().required().example("Max"),
   lastName: Joi.string().required().example("Mustermann"),
   password: Joi.string().min(6).required().example("pa55word"),
   birthdate: Joi.date().required(),
@@ -12,7 +12,7 @@ const register = Joi.object({
 });
 
 const login = Joi.object({
-  email: Joi.string().email().required().example("teat@user.de"),
+  email: Joi.string().email().required().example("test@user.de"),
   password: Joi.string().required().example("pa55word"),
 });
 
