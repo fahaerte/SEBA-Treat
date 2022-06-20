@@ -6,6 +6,10 @@ import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
 
+import UserService from "../../resources/user/user.service";
+import User from "./user.interface";
+import { Service } from "typedi";
+
 @Service()
 class UserController implements Controller {
   public path = "/users";
