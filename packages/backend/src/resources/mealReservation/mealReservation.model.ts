@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { Schema, Types } from "mongoose";
 import MealReservation from "./mealReservation.interface";
 import MealReservationStateEnum from "./mealReservationState.enum";
 import MealReservationState from "./mealReservationState.enum";
@@ -21,5 +21,3 @@ export const MealReservationSchema = new Schema<MealReservation>(
     timestamps: true,
   }
 );
-
-export default model<MealReservation>("MealReservation", MealReservationSchema);
