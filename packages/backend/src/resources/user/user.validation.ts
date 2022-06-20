@@ -14,7 +14,7 @@ const login = Joi.object({
 
 export default { register, login };
 
-export const UserDTO = {
-  RegisterUserDTO: j2s(register).swagger,
-  RegisterLoginDTO: j2s(login).swagger,
+export const User = {
+  RegisterUser: j2s(register).swagger,
+  LoginUser: j2s(login).swagger,
 };

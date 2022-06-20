@@ -19,35 +19,34 @@ class UserController implements Controller {
   private initializeRoutes(): void {
     /**
      * @swagger
-     * /users/register:
+     * /api/users/register:
      *  post:
      *    tags:
      *    - User
-     *    summary: Register an user
+     *    summary: Register a user
      *    parameters:
      *    - name: username
-     *      description: username
+     *      description: username of user
      *      in: body
      *      required: true
      *      schema:
-     *        $ref: '#/definitions/RegisterUserDTO'
+     *        $ref: '#/definitions/RegisterUser'
      *    - name: email
-     *      description: email
+     *      description: email of user
      *      in: body
      *      required: true
      *      schema:
-     *        $ref: '#/definitions/RegisterUserDTO'
+     *        $ref: '#/definitions/RegisterUser'
      *    - name: password
-     *      description: password
+     *      description: password of user
      *      in: body
-     *      required: true
      *      schema:
-     *        $ref: '#/definitions/RegisterUserDTO'
+     *        $ref: '#/definitions/RegisterUser'
      *    responses:
      *      201:
      *        description: Created
-     *      500:
-     *        description: Error
+     *      400:
+     *        description: Any Error
      */
     this.router.post(
       `${this.path}/register`,
@@ -57,29 +56,29 @@ class UserController implements Controller {
 
     /**
      * @swagger
-     * /users/login:
+     * /api/users/login:
      *  post:
      *    tags:
      *    - User
      *    summary: Login user
      *    parameters:
      *    - name: email
-     *      description: email
+     *      description: email of user
      *      in: body
      *      required: true
      *      schema:
-     *        $ref: '#/definitions/LoginUserDTO'
+     *        $ref: '#/definitions/LoginUser'
      *    - name: password
-     *      description: password
+     *      description: password of user
      *      in: body
      *      required: true
      *      schema:
-     *        $ref: '#/definitions/LoginUserDTO'
+     *        $ref: '#/definitions/LoginUser'
      *    responses:
-     *      201:
+     *      200:
      *        description: LoggedIn
-     *      500:
-     *        description: Error
+     *      400:
+     *        description: Any Error
      */
     this.router.post(
       `${this.path}/login`,
@@ -89,24 +88,26 @@ class UserController implements Controller {
 
     /**
      * @swagger
-     * /users/profile-picture:
+     * /api/users:
      *  get:
      *    tags:
      *    - User
-     *    summary: Get current user
+     *    summary: Get currently logged in user
      *    produces:
      *    - application/json
      *    responses:
      *      200:
      *        description: Returns current user
      *      404:
-     *        description: Not found
+     *        description: no user logged in
+     *      401:
+     *        description: Unauthorised
      */
     this.router.get(`${this.path}`, authenticated, this.getUser);
 
     /**
      * @swagger
-     * /users/profile-picture:
+     * /api/users/profile-picture:
      *  post:
      *    consumes:
      *     - multipart/form-data
@@ -121,9 +122,7 @@ class UserController implements Controller {
      *      required: true
      *    responses:
      *      201:
-     *        description: LoggedIn
-     *      500:
-     *        description: Error
+     *        description: Profile picture uploaded successfully
      */
     this.router.post(
       `${this.path}/profile-picture`,
@@ -134,18 +133,24 @@ class UserController implements Controller {
 
     /**
      * @swagger
-     * /users/profile-picture/:userid:
+     * /api/users/profile-picture/:userid:
      *  get:
      *    tags:
      *    - User
      *    summary: Get profile picture of user
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        type: string
+     *        description: the user's id
      *    produces:
      *    - application/json
      *    responses:
-     *      200:
-     *        description: Returns current user
      *      404:
-     *        description: Not found
+     *        description: Not user logged in
+     *      400:
+     *        description: Any other error
      */
     this.router.get(
       `${this.path}/profile-picture/:userid?`,
@@ -227,7 +232,7 @@ class UserController implements Controller {
       }
       res.sendFile(profilePicturePath);
     } catch (error: any) {
-      next(new HttpException(404, error.message));
+      next(new HttpException(400, error.message));
     }
   };
 }

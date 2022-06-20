@@ -9,7 +9,7 @@ import ErrorMiddleware from "./middleware/error.middleware";
 import helmet from "helmet";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
-import { UserDTO } from "./resources/user/user.validation";
+import { User } from "./resources/user/user.validation";
 
 class App {
   public express: Application;
@@ -56,7 +56,7 @@ class App {
   private initializeSwagger(): void {
     const swaggerOptions = {
       swaggerDefinition: {
-        definitions: { ...UserDTO },
+        definitions: { ...User },
         info: {
           title: "Treat API",
           version: "1.0.0",
