@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import Address from "./address.interface";
+import { IAddress } from "@treat/lib-common";
 
-export const AddressSchema = new Schema<Address>({
+export const AddressSchema = new Schema<IAddress>({
   street: {
     type: String,
     required: true,

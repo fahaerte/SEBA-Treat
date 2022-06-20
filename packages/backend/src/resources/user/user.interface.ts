@@ -1,15 +1,7 @@
-import { Document, ObjectId } from "mongoose";
-import Address from "../address/address.interface";
+import { Document } from "mongoose";
+import { IUser } from "@treat/lib-common";
 
-interface User extends Document {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  birthdate: Date;
-  address: Address;
-  virtualAccountId: ObjectId;
-
+interface User extends Document, IUser {
   isValidPassword(password: string): Promise<Error | boolean>;
 }
 

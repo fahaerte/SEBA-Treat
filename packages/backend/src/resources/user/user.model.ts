@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import User from "./user.interface";
 import { AddressSchema } from "../address/address.model";
@@ -32,7 +32,7 @@ const UserSchema = new Schema<User>(
       required: true,
     },
     virtualAccountId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "VirtualAccount",
       required: true,
     },

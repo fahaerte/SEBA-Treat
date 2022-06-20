@@ -5,7 +5,7 @@ import HttpException from "../../utils/exceptions/http.exception";
 import authenticated from "../../middleware/authenticated.middleware";
 import validate from "./mealTransaction.validation";
 import MealTransactionService from "./mealTransaction.service";
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 
 class MealTransactionController implements Controller {
   public path = "/mealTransactions";

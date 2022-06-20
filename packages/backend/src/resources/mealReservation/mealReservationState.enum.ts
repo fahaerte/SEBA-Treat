@@ -1,3 +1,4 @@
+// TODO: Refactor into lib-common
 enum MealReservationState {
   PENDING = "PENDING",
   SELLER_ACCEPTED = "SELLER_ACCEPTED",
