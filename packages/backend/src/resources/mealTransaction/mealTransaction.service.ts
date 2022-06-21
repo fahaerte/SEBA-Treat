@@ -1,4 +1,4 @@
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
@@ -90,6 +90,11 @@ class MealTransactionService {
       throw new Error(error.message as string);
     }
   }
+
+  /**
+   * Rate transaction (add rating)
+   */
+  // TODO: implement
 }
 
 export default MealTransactionService;

@@ -2,6 +2,7 @@ import { model, Schema, Types } from "mongoose";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
 import MealTransactionStateEnum from "./mealTransactionState.enum";
+import { RatingSchema } from "../rating/rating.model";
 
 const MealTransactionSchema = new Schema<MealTransaction>(
   {
@@ -23,6 +24,13 @@ const MealTransactionSchema = new Schema<MealTransaction>(
       required: true,
       default: MealTransactionState.PENDING,
     },
+    ratings: [
+      {
+        type: RatingSchema,
+        minItems: 0,
+        maxItems: 2,
+      },
+    ],
   },
   { timestamps: true }
 );
