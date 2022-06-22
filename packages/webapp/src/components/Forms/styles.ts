@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { IRadioCheckSwitchProps } from "./RadioCheckSwitch/IRadioCheckSwitch";
 import { ISelectProps } from "./Select/ISelect";
 import { ITextAreaProps } from "./TextArea/ITextArea";
-import { SMGetDefaultBorder } from "../_styles/StylesHelper";
 
 export const SCFloatingForm = styled.div`
   > .form-control,
   > .form-select {
     line-height: ${({ theme }) => theme.form.control.lineHeight};
     border-radius: ${({ theme }) => theme.general.border.radius};
-    border: ${({ theme }) => SMGetDefaultBorder(theme)};
+    border: ${({ theme }) => theme.general.border.width} solid
+      ${({ theme }) => theme.general.border.color.primary};
     color: ${({ theme }) => theme.form.control.color};
     font-size: ${({ theme }) => theme.form.control.fontSize};
     height: ${({ theme }) => theme.form.control.height};

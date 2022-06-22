@@ -1,5 +1,5 @@
 import React from "react";
-import { IFormFileInput } from "./IDropzone";
+import { IFormFileInput } from "./IFileInput";
 import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
 import {
   FieldValues,
@@ -33,6 +33,9 @@ const FileInput = <TFormValues extends FieldValues>({
       isInvalid={fieldState.invalid}
       onChange={field.onChange}
       invalidFeedback={fieldState.error?.message}
+      {...props}
     />
   );
 };
+
+export default FileInput;

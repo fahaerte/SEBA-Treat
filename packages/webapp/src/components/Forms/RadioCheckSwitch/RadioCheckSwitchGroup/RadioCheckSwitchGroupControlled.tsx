@@ -1,7 +1,7 @@
 import React, { FormEvent } from "react";
 import { IRadioCheckSwitchGroup } from "./IRadioCheckSwitchGroup";
 import Typography from "../../../Typography/Typography";
-import { RadioCheckSwitchControlled } from "../";
+import RadioCheckSwitchControlled from "../RadioCheckSwitchControlled";
 
 const RadioCheckSwitchGroupControlled = ({
   wrapperClasses = "col-md",
@@ -28,6 +28,7 @@ const RadioCheckSwitchGroupControlled = ({
     </Typography>
     {options.map((option) => (
       <RadioCheckSwitchControlled
+        className={""}
         key={`${label.replace(/\s+/g, "-").toLowerCase()}-${type}`}
         type={type}
         label={option.label}

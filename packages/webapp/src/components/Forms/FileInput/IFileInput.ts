@@ -1,6 +1,5 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
-import { ChangeEvent, DOMAttributes } from "react";
-import { IFormInput, IInput, IInputProps } from "../Input/IInput";
+import { ChangeEvent } from "react";
 import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
 
 export const AImageFiles = "image/*";

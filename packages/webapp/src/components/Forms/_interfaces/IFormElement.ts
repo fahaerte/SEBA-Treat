@@ -1,9 +1,9 @@
 import { Path } from "react-hook-form";
 import { IFormRulesConfig } from "./IFormRulesConfig";
-import { IBaseProps } from "../../../types/ComponentProps";
+import { IComponentBase } from "../../../assets/theme/types/IComponentBase";
 
 export interface IFormElement<TFormValues>
-  extends Pick<IBaseProps, "className"> {
+  extends Pick<IComponentBase, "className"> {
   /**
    * Label for the form element
    */

@@ -1,6 +1,7 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
 import { ChangeEvent } from "react";
 import { TBootstrapPalette } from "../../../assets/theme/interfaces/TBootstrapPalette";
+import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
 
 export const ACheckTypes = ["radio", "checkbox", "switch"] as const;
 
@@ -19,12 +20,6 @@ export interface IRadioCheckSwitchProps {
    * Value of the item
    */
   value?: string | number | readonly string[];
-  /**
-   * Whether this is a child of an input group
-   * This value is for styling purposes only and will
-   * not be set by the user
-   */
-  groupItem?: boolean;
 }
 
 export interface IFormRadioCheckSwitch<TFormValues>
@@ -32,28 +27,19 @@ export interface IFormRadioCheckSwitch<TFormValues>
     IRadioCheckSwitchProps {}
 
 export interface IRadioCheckSwitch<TFormValues>
-  extends Omit<
-    IFormRadioCheckSwitch<TFormValues>,
-    | "formKey"
-    | "isValid"
-    | "register"
-    | "errors"
-    | "invalidFeedback"
-    | "placeholder"
-    | "defaultValue"
-    | "groupItem"
-  > {
+  extends IFormElementControlled,
+    Omit<IFormRadioCheckSwitch<TFormValues>, TIFormElementOmit> {
   /**
-   * onChange eventhandler
+   * onChange event handler
    */
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   /**
-   * Whether the element is checked by default
+   * Controlled state value
    */
   checked?: boolean;
 }
 
-export interface IRadioCheckSwitchConfig<TFormValues>
-  extends Omit<TIFormElementOmit<TFormValues>, "disabled"> {
-  props: Omit<IRadioCheckSwitchProps, "groupItem">;
+export interface IFormRadioCheckSwitchConfig<TFormValues>
+  extends Omit<IFormElement<TFormValues>, "disabled"> {
+  props: IRadioCheckSwitchProps;
 }

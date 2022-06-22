@@ -1,6 +1,6 @@
 import React from "react";
 import { FieldErrors, FieldValues } from "react-hook-form";
-import { Dropzone, RichText, Select, TagSelect, TOptionValuePair } from "../";
+import { FileInput, Select, TagSelect, TOptionValuePair } from "../";
 import { IFormElementConfig } from "../_interfaces/IFormElementConfig";
 import { IInputProps } from "../Input/IInput";
 import { IDatePickerProps } from "../Datepicker/IDatePicker";
@@ -8,14 +8,13 @@ import { IFormSelectConfig } from "../Select/ISelect";
 import { IRadioCheckSwitchProps } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { ITagSelectProps } from "../TagSelect/ITagSelect";
-import { IRichTextProps } from "../RichText/IRichText";
 import TextArea from "../TextArea/TextArea";
 import Datepicker from "../Datepicker/Datepicker";
 import RadioCheckSwitch from "../RadioCheckSwitch/RadioCheckSwitch";
 import RadioCheckSwitchGroup from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckSwitchGroup";
 import RadioCheckGroupItem from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckGroupItem";
-import { getEncodedString } from "../../../utils/getEncodedString";
 import Input from "../Input/Input";
+import { getEncodedString } from "../../../utils/getEncodedString";
 
 interface IFormRowElement<T> {
   config: IFormElementConfig<T>;
@@ -39,8 +38,8 @@ const FormRowElement = <TFormValues extends FieldValues>({
     case "textarea":
       return (
         <TextArea<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...config.props}
         />
       );
@@ -55,33 +54,25 @@ const FormRowElement = <TFormValues extends FieldValues>({
     case "datepicker":
       return (
         <Datepicker<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...(config.props as IDatePickerProps)}
         />
       );
     case "file":
       return (
-        <Dropzone<TFormValues>
+        <FileInput<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...config.props}
-        />
-      );
-    case "richText":
-      return (
-        <RichText
-          {...config}
-          {...commonParams()}
-          {...(config.props as IRichTextProps)}
         />
       );
     case "select": {
       const configToSelect = config as IFormSelectConfig<TFormValues>;
       return (
         <Select<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...configToSelect}
-          {...commonParams()}
           {...configToSelect.props}
         >
           {configToSelect.options.map((option: HTMLOptionElement, index) => (

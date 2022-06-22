@@ -3,7 +3,7 @@ import { SCInput } from "../styles";
 import { getEncodedString } from "../../../utils/getEncodedString";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
-import { IFileInput } from "./IDropzone";
+import { IFileInput } from "./IFileInput";
 
 const FileInputControlled = ({
   wrapperClasses = "",

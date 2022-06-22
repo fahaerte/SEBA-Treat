@@ -2,12 +2,11 @@ import { IFormElementConfig } from "../_interfaces/IFormElementConfig";
 import { IFormInputConfig } from "../Input/IInput";
 import { IFormDatePickerConfig } from "../Datepicker/IDatePicker";
 import { IFormSelectConfig } from "../Select/ISelect";
-import { IFormDropzoneConfig } from "../Dropzone/IDropzone";
+import { IFileInputConfig } from "../FileInput/IFileInput";
 import { IFormTextAreaConfig } from "../TextArea/ITextArea";
 import { IFormRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { IFormTagSelectConfig } from "../TagSelect/ITagSelect";
-import { IFormRichTextConfig } from "../RichText/IRichText";
 
 abstract class FormHelper {
   public static createInput = <T>(
@@ -31,8 +30,8 @@ abstract class FormHelper {
     ...config,
   });
 
-  public static createDropzone = <T>(
-    config: IFormDropzoneConfig<T>
+  public static createFileInput = <T>(
+    config: IFileInputConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "file",
     ...config,
@@ -63,13 +62,6 @@ abstract class FormHelper {
     config: IFormTagSelectConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "tagSelect",
-    ...config,
-  });
-
-  public static createRichText = <T>(
-    config: IFormRichTextConfig<T>
-  ): IFormElementConfig<T> => ({
-    elementType: "richText",
     ...config,
   });
 }

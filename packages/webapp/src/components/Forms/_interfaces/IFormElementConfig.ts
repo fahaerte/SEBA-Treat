@@ -1,7 +1,7 @@
 import { IFormInputConfig } from "../Input/IInput";
 import { IFormDatePickerConfig } from "../Datepicker/IDatePicker";
 import { IFormSelectConfig } from "../Select/ISelect";
-import { IFormDropzoneConfig } from "../Dropzone/IDropzone";
+import { IFormDropzoneConfig } from "../FileInput/IFileInput";
 import { IFormTextAreaConfig } from "../TextArea/ITextArea";
 import { IFormRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";

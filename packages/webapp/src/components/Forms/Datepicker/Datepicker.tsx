@@ -8,7 +8,6 @@ import {
   useController,
   useFormContext,
 } from "react-hook-form";
-import { getEncodedString } from "../../../utils/getEncodedString";
 import DatepickerControlled from "./DatepickerControlled";
 
 const Datepicker = <TFormValues extends FieldValues>({
