@@ -4,7 +4,7 @@ import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import VirtualAccount from "../virtualAccount/virtualAccount.interface";
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 import User from "../user/user.interface";
 import { Service } from "typedi";
 

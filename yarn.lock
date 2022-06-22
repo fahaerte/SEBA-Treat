@@ -3462,6 +3462,7 @@ __metadata:
     multer: ^1.4.5-lts.1
     nodemon: ^2.0.16
     reflect-metadata: ^0.1.13
+    stripe: ^9.9.0
     swagger-jsdoc: ^6.2.1
     swagger-ui-express: ^4.4.0
     ts-node: ^10.8.0
@@ -3936,7 +3937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:>=8.1.0":
   version: 18.0.0
   resolution: "@types/node@npm:18.0.0"
   checksum: aab2b325727a2599f6d25ebe0dedf58c40fb66a51ce4ca9c0226ceb70fcda2d3afccdca29db5942eb48b158ee8585a274a1e3750c718bbd5399d7f41d62dfdcc
@@ -12801,7 +12802,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.9.4":
+"qs@npm:^6.10.3, qs@npm:^6.9.4":
   version: 6.10.5
   resolution: "qs@npm:6.10.5"
   dependencies:
@@ -14593,6 +14594,16 @@ __metadata:
   version: 2.0.1
   resolution: "strip-json-comments@npm:2.0.1"
   checksum: 1074ccb63270d32ca28edfb0a281c96b94dc679077828135141f27d52a5a398ef5e78bcf22809d23cadc2b81dfbe345eb5fd8699b385c8b1128907dec4a7d1e1
+  languageName: node
+  linkType: hard
+
+"stripe@npm:^9.9.0":
+  version: 9.9.0
+  resolution: "stripe@npm:9.9.0"
+  dependencies:
+    "@types/node": ">=8.1.0"
+    qs: ^6.10.3
+  checksum: d0e7cce1891f16dbfb0041415e442fbd2e50338cf945f6005ddf94f88a6798ee868a8eb4f58ee95012dc2a0df82f82a08d2a853e65e6240b985a4eeaebce7cea
   languageName: node
   linkType: hard
 
