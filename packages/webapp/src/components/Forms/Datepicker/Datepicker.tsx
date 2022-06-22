@@ -1,54 +1,42 @@
 import React from "react";
-import { IDatePicker } from "./IDatePicker";
-import { SCInput, SCFloatingForm } from "../styles";
-import Typography from "../../Typography/Typography";
-import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
+import { IFormDatePicker } from "./IDatePicker";
+import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
+import {
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+  useFormContext,
+} from "react-hook-form";
+import { getEncodedString } from "../../../utils/getEncodedString";
+import DatepickerControlled from "./DatepickerControlled";
 
-const Datepicker = <TFormValues extends Record<string, unknown>>({
-  className = "",
-  label,
-  type,
+const Datepicker = <TFormValues extends FieldValues>({
   formKey,
-  wrapperClasses = "col-md",
-  valueAsDate = true,
-  register,
-  defaultValue = undefined,
-  isValid = true,
-  disabled = false,
-  invalidFeedback = "",
-  errors = undefined,
+  defaultValue = "",
+  label,
+  rules,
   ...props
-}: IDatePicker<TFormValues>) => (
-  <SCFloatingForm className={["form-floating", wrapperClasses].join(" ")}>
-    <SCInput
-      {...register(
-        formKey,
-        generateRegisterOptions(defaultValue, errors, valueAsDate)
-      )}
-      id={`${label.replace(/\s+/g, "-").toLowerCase()}-${type}-${formKey}`}
-      type={type}
-      className={[className, "form-control", isValid ? "" : "is-invalid"].join(
-        " "
-      )}
-      placeholder={label}
+}: IFormDatePicker<TFormValues>) => {
+  const { control } = useFormContext<TFormValues>();
+
+  const { field, fieldState } = useController<TFormValues>({
+    control,
+    name: formKey,
+    rules: useFormRuleConverter(rules),
+    defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
+  });
+
+  return (
+    <DatepickerControlled
+      value={field.value}
+      label={rules?.required?.value ? `${label} *` : label}
+      isInvalid={fieldState.invalid}
+      onChange={field.onChange}
+      invalidFeedback={fieldState.error?.message}
       {...props}
-      readOnly={disabled}
     />
-    <label
-      htmlFor={`${label.replace(/\s+/g, "-").toLowerCase()}-${type}-${formKey}`}
-      className={["form-label", isValid ? "" : "is-invalid"].join(" ")}
-    >
-      {label}
-      {errors?.required?.value ? " *" : ""}
-    </label>
-    {isValid ? (
-      ""
-    ) : (
-      <Typography variant="psmall" className="invalid-feedback">
-        {invalidFeedback}
-      </Typography>
-    )}
-  </SCFloatingForm>
-);
+  );
+};
 
 export default Datepicker;

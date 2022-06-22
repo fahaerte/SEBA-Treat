@@ -1,23 +1,24 @@
 import { IFormElementConfig } from "../_interfaces/IFormElementConfig";
-import { IInputConfig } from "../Input/IInput";
-import { IDatePickerConfig } from "../Datepicker/IDatePicker";
+import { IFormInputConfig } from "../Input/IInput";
+import { IFormDatePickerConfig } from "../Datepicker/IDatePicker";
 import { IFormSelectConfig } from "../Select/ISelect";
-import { IDropzoneConfig } from "../Dropzone/IDropzone";
-import { ITextAreaConfig } from "../TextArea/ITextArea";
-import { IRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
-import { IRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
-import { ITagSelectConfig } from "../TagSelect/ITagSelect";
+import { IFormDropzoneConfig } from "../Dropzone/IDropzone";
+import { IFormTextAreaConfig } from "../TextArea/ITextArea";
+import { IFormRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
+import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
+import { IFormTagSelectConfig } from "../TagSelect/ITagSelect";
+import { IFormRichTextConfig } from "../RichText/IRichText";
 
 abstract class FormHelper {
   public static createInput = <T>(
-    config: IInputConfig<T>
+    config: IFormInputConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "input",
     ...config,
   });
 
   public static createDatePicker = <T>(
-    config: IDatePickerConfig<T>
+    config: IFormDatePickerConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "datepicker",
     ...config,
@@ -31,37 +32,44 @@ abstract class FormHelper {
   });
 
   public static createDropzone = <T>(
-    config: IDropzoneConfig<T>
+    config: IFormDropzoneConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "file",
     ...config,
   });
 
   public static createTextArea = <T>(
-    config: ITextAreaConfig<T>
+    config: IFormTextAreaConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "textarea",
     ...config,
   });
 
   public static createRadioCheckSwitch = <T>(
-    config: IRadioCheckSwitchConfig<T>
+    config: IFormRadioCheckSwitchConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "radioCheckSwitch",
     ...config,
   });
 
   public static createRadioCheckSwitchGroup = <T>(
-    config: IRadioCheckSwitchGroupConfig<T>
+    config: IFormRadioCheckSwitchGroupConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "radioCheckSwitchGroup",
     ...config,
   });
 
   public static createTagSelect = <T>(
-    config: ITagSelectConfig<T>
+    config: IFormTagSelectConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "tagSelect",
+    ...config,
+  });
+
+  public static createRichText = <T>(
+    config: IFormRichTextConfig<T>
+  ): IFormElementConfig<T> => ({
+    elementType: "richText",
     ...config,
   });
 }

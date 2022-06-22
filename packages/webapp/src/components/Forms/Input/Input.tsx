@@ -1,51 +1,45 @@
 import React from "react";
 import { IFormInput } from "./IInput";
-import { SCInput, SCFloatingForm } from "../styles";
-import Typography from "../../Typography/Typography";
-import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
+import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
+import {
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+  useFormContext,
+} from "react-hook-form";
+import InputControlled from "./InputControlled";
 
-const Input = <TFormValues extends Record<string, unknown>>({
-  className = "",
-  wrapperClasses = "col-md",
-  label,
-  type,
-  register,
-  defaultValue = "",
+const Input = <TFormValues extends FieldValues>({
   formKey,
-  isValid = true,
-  disabled = false,
-  invalidFeedback = "Please check your input.",
-  errors = undefined,
+  defaultValue = "",
+  label,
+  rules,
   ...props
-}: IFormInput<TFormValues>) => (
-  <SCFloatingForm className={["form-floating", wrapperClasses].join(" ")}>
-    <SCInput
-      {...register(formKey, generateRegisterOptions(defaultValue, errors))}
-      id={`${label.replace(/\s+/g, "-").toLowerCase()}-${type}-${formKey}`}
-      type={type}
-      className={[className, "form-control", isValid ? "" : "is-invalid"].join(
-        " "
-      )}
-      placeholder={label}
-      {...props}
-      readOnly={disabled}
-    />
-    <label
-      htmlFor={`${label.replace(/\s+/g, "-").toLowerCase()}-${type}-${formKey}`}
-      className={[isValid ? "" : "is-invalid"].join(" ")}
-    >
-      {label}
-      {errors?.required?.value ? " *" : ""}
-    </label>
+}: IFormInput<TFormValues>) => {
+  const { control } = useFormContext<TFormValues>();
 
-    {isValid ? (
-      ""
-    ) : (
-      <Typography variant="psmall" className="invalid-feedback">
-        {invalidFeedback}
-      </Typography>
-    )}
-  </SCFloatingForm>
-);
+  const { field, fieldState } = useController<TFormValues>({
+    control,
+    name: formKey,
+    rules: useFormRuleConverter(rules),
+    defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
+  });
+
+  // TODO nested values error handling -.-
+  // console.log(formKey, get(errors, formKey)?.message);
+  // console.log(fieldState.error?.message);
+
+  return (
+    <InputControlled
+      value={field.value}
+      onChange={field.onChange}
+      label={rules?.required?.value ? `${label} *` : label}
+      isInvalid={fieldState.invalid}
+      invalidFeedback={fieldState.error?.message}
+      {...props}
+    />
+  );
+};
 
 export default Input;

@@ -1,66 +1,40 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
-import { TBootstrapPalette } from "../../../assets/theme/interfaces/TBootstrapPalette";
+import { IColorProp, ILoadingProp } from "../../../types/ComponentProps";
+import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
+import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 
-export type TOption = {
-  id?: string;
-  label: string;
-};
-
-export type TSelectOption = {
-  id: string;
-  label: string;
-};
-
-export type TNewOption = {
-  label: string;
-};
-
-export interface ITagSelectProps {
+export interface ITagSelectProps extends IColorProp, ILoadingProp {
   /**
-   * The options, you can select from
+   * Prefilled options, user can select from
    */
-  selectOptions: {
-    isLoading: boolean;
-    options: TSelectOption[];
-  };
+  autocompleteOptions: TOptionValuePair[];
   /**
-   * This describes the color of the TagselectComponent
-   */
-  color?: TBootstrapPalette;
-  /**
-   * This is shown, when there are no options
+   * This is shown in the dropdown, when there are no prefilled options
    */
   noOptionsMessage?: string;
   /**
-   * This is shown, while the options are loading
+   * This is shown in the dropdown, while the options are loading
    */
   loadingMessage?: string;
 }
 
-export interface ITagSelectControlledProps extends ITagSelectProps {
-  /**
-   * This describes, what happens on Changes
-   */
-  onChange?: (selectedOptions: TOption[]) => void;
-}
-
-export interface ITagSelect<TFormValues>
-  extends ITagSelectControlledProps,
-    Omit<
-      IFormElement<TFormValues>,
-      "formKey" | "register" | "errors" | "invalidFeedback"
-    > {}
-
 export interface IFormTagSelect<TFormValues>
   extends IFormElement<TFormValues>,
     ITagSelectProps {}
-
-export interface ITagSelectConfig<TFormValues>
-  extends TIFormElementOmit<TFormValues> {
+export interface IFormTagSelectConfig<TFormValues>
+  extends IFormElement<TFormValues> {
   props: ITagSelectProps;
 }
 
-export interface ITagSelectOption {
-  value: string;
-  label: string;
+export interface ITagSelect<TFormValues>
+  extends IFormElementControlled,
+    Omit<IFormTagSelect<TFormValues>, TIFormElementOmit> {
+  /**
+   * onChange event handler
+   */
+  onChange?: (selectedOptions: TOptionValuePair[]) => void;
+  /**
+   * Controlled state
+   */
+  value: TOptionValuePair[];
 }

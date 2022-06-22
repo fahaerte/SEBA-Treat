@@ -1,59 +1,41 @@
 import React from "react";
-import { ITextArea } from "./ITextArea";
-import { SCFloatingForm, SCTextArea } from "../styles";
-import Typography from "../../Typography/Typography";
-import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
+import { IFormTextArea } from "./ITextArea";
+import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
+import {
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+  useFormContext,
+} from "react-hook-form";
+import TextAreaControlled from "./TextAreaControlled";
 
-const TextArea = <TFormValues extends Record<string, unknown>>({
-  label,
+const TextArea = <TFormValues extends FieldValues>({
   formKey,
-  register,
-  className = "",
-  wrapperClasses = "col-md",
-  disabled = false,
-  rows = 1,
-  isValid = true,
-  sendWithNewLines = false,
-  invalidFeedback = "",
-  errors = undefined,
-  defaultValue = undefined,
+  defaultValue = "",
+  label,
+  rules,
   ...props
-}: ITextArea<TFormValues>) => (
-  <SCFloatingForm className={["form-floating", wrapperClasses].join(" ")}>
-    <SCTextArea
-      {...register(formKey, generateRegisterOptions(defaultValue, errors))}
-      className={[
-        "form-control",
-        className,
-        isValid ? "" : "is-invalid",
-        "textarea-height",
-        "row-height",
-      ].join(" ")}
-      rows={rows}
-      placeholder={label}
-      wrap={sendWithNewLines ? "soft" : "hard"}
+}: IFormTextArea<TFormValues>) => {
+  const { control } = useFormContext<TFormValues>();
+
+  const { field, fieldState } = useController<TFormValues>({
+    control,
+    name: formKey,
+    rules: useFormRuleConverter(rules),
+    defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
+  });
+
+  return (
+    <TextAreaControlled
+      value={field.value}
+      onChange={field.onChange}
+      label={rules?.required?.value ? `${label} *` : label}
+      isInvalid={fieldState.invalid}
+      invalidFeedback={fieldState.error?.message}
       {...props}
-      id={`${label.replace(/\s+/g, "-").toLowerCase()}-${formKey}`}
-      readOnly={disabled}
     />
-    <span>
-      {errors?.maxLength?.value ? `Max. ${errors.maxLength.value}` : ""}
-    </span>
-    <label
-      htmlFor={`${label.replace(/\s+/g, "-").toLowerCase()}-${formKey}`}
-      className={["form-label", isValid ? "" : "is-invalid"].join(" ")}
-    >
-      {label}
-      {errors?.required?.value ? " *" : ""}
-    </label>
-    {isValid ? (
-      ""
-    ) : (
-      <Typography variant="psmall" className="invalid-feedback">
-        {invalidFeedback}
-      </Typography>
-    )}
-  </SCFloatingForm>
-);
+  );
+};
 
 export default TextArea;

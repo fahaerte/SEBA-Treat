@@ -1,16 +1,17 @@
 import { SubmitHandler, UseFormProps } from "react-hook-form";
 import { IFormRow } from "./_interfaces/IFormElementConfig";
 import { IButton } from "../Button/IButton";
+import { IBaseProps, ILoadingProp } from "../../types/ComponentProps";
+import { TBootstrapPalette } from "../../types/TBootstrapPalette";
+import { TFormFieldError } from "./_interfaces/TFormFieldError";
 
-export interface IForm<TFormValues> {
+export interface IForm<TFormValues>
+  extends Pick<IBaseProps, "className">,
+    ILoadingProp {
   /**
    * Form Elements that are to be generated
    */
   elements: IFormRow<TFormValues>[];
-  /**
-   * Additional CSS classes
-   */
-  className?: string;
   /**
    * Function to handle submit form
    */
@@ -40,11 +41,13 @@ export interface IForm<TFormValues> {
    */
   resetOnSubmit?: boolean;
   /**
-   * If user wants to pass loading state variable, submit button will show loading spinner while this is true
+   * Shows message between last element and submit button.
+   * Could be used for general error or success messages
    */
-  isLoading?: boolean;
+  feedback?: { color: TBootstrapPalette; message: string };
   /**
-   * Shows error message between last element and submit button
+   * This can be used to add error messages to specific form fields.
+   * e.g. server side validation error messages
    */
-  invalidFeedback?: string;
+  formFieldErrors?: TFormFieldError<TFormValues>[];
 }

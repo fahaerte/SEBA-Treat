@@ -1,59 +1,40 @@
-import React, { useContext } from "react";
+import React from "react";
 import { TagSelectControlled } from "./";
 import { IFormTagSelect } from "./ITagSelect";
-import Typography from "../../Typography/Typography";
-import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
-import { CustomValueContext } from "../Form";
-import { PathValue, UnpackNestedValue, Path } from "react-hook-form";
+import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
+import {
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+  useFormContext,
+} from "react-hook-form";
 
-const TagSelect = <TFormValues extends Record<string, unknown>>({
+const TagSelect = <TFormValues extends FieldValues>({
   formKey,
-  register,
-  defaultValue = "",
-  className = "",
-  wrapperClasses = "col-md",
-  label,
+  defaultValue = [],
   disabled = false,
-  isValid = true,
-  invalidFeedback = "",
-  errors = undefined,
-  color = "secondary",
-  selectOptions,
-  noOptionsMessage,
-  loadingMessage,
+  rules,
+  ...props
 }: IFormTagSelect<TFormValues>) => {
-  const customValueControl = useContext(CustomValueContext);
-  register(formKey, generateRegisterOptions(defaultValue, errors, disabled));
+  const { control } = useFormContext<TFormValues>();
+
+  const { field, fieldState } = useController<TFormValues>({
+    control,
+    name: formKey,
+    rules: useFormRuleConverter(rules),
+    defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
+  });
 
   return (
-    <>
-      <TagSelectControlled
-        color={color}
-        isValid={isValid}
-        wrapperClasses={wrapperClasses}
-        label={label}
-        className={className}
-        disabled={disabled}
-        selectOptions={selectOptions}
-        noOptionsMessage={noOptionsMessage}
-        loadingMessage={loadingMessage}
-        onChange={(selectedOptions) => {
-          customValueControl.setValue(
-            formKey,
-            selectedOptions as UnpackNestedValue<
-              PathValue<TFormValues, Path<TFormValues>>
-            >
-          );
-        }}
-      />
-      {isValid ? (
-        ""
-      ) : (
-        <Typography variant="psmall" className="invalid-feedback">
-          {invalidFeedback}
-        </Typography>
-      )}
-    </>
+    <TagSelectControlled
+      disabled={disabled}
+      onChange={field.onChange}
+      value={field.value}
+      isInvalid={fieldState.invalid}
+      invalidFeedback={fieldState.error?.message}
+      {...props}
+    />
   );
 };
 

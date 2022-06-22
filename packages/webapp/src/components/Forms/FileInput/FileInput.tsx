@@ -1,5 +1,5 @@
 import React from "react";
-import { IFormSelect } from "./ISelect";
+import { IFormFileInput } from "./IDropzone";
 import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
 import {
   FieldValues,
@@ -8,15 +8,15 @@ import {
   useController,
   useFormContext,
 } from "react-hook-form";
-import SelectControlled from "./SelectControlled";
+import FileInputControlled from "./FileInputControlled";
 
-const Select = <TFormValues extends FieldValues>({
+const FileInput = <TFormValues extends FieldValues>({
   formKey,
   defaultValue = "",
   label,
   rules,
   ...props
-}: IFormSelect<TFormValues>) => {
+}: IFormFileInput<TFormValues>) => {
   const { control } = useFormContext<TFormValues>();
 
   const { field, fieldState } = useController<TFormValues>({
@@ -27,15 +27,12 @@ const Select = <TFormValues extends FieldValues>({
   });
 
   return (
-    <SelectControlled
+    <FileInputControlled
       value={field.value}
-      onChange={field.onChange}
       label={rules?.required?.value ? `${label} *` : label}
       isInvalid={fieldState.invalid}
+      onChange={field.onChange}
       invalidFeedback={fieldState.error?.message}
-      {...props}
     />
   );
 };
-
-export default Select;
