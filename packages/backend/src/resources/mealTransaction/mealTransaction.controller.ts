@@ -20,54 +20,16 @@ class MealTransactionController implements Controller {
     this.router.post(
       `${this.path}/create`,
       authenticated,
-      validationMiddleware(validate.createTransaction),
-      this.createTransaction
+      validationMiddleware(validate.createTransaction)
+      // this.createTransaction
     );
     this.router.post(
       `${this.path}/perform/:mealTransactionId`,
-      authenticated,
+      authenticated
       // validationMiddleware(validate.createTransaction),
-      this.performTransaction
+      // this.performTransaction
     );
   }
-
-  private createTransaction = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const { mealReservation, senderAccount, receiverAccount } = req.body;
-      const mealTransaction =
-        await this.mealTransactionService.createTransaction(
-          mealReservation as ObjectId,
-          senderAccount as ObjectId,
-          receiverAccount as ObjectId
-        );
-
-      res.status(201).json({ mealTransaction });
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
-    }
-  };
-
-  private performTransaction = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const mealTransactionId = req.params.mealTransactionId;
-      const mealTransaction =
-        await this.mealTransactionService.performTransaction(
-          mealTransactionId as unknown as ObjectId
-        );
-
-      res.status(200).json({ mealTransaction });
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
-    }
-  };
 }
 
 export default MealTransactionController;

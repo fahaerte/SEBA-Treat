@@ -14,15 +14,18 @@ class MealTransactionService {
    * Create a new transaction
    */
   public async createTransaction(
-    mealReservation: ObjectId,
-    senderAccount: ObjectId,
-    receiverAccount: ObjectId
+    mealOfferId: ObjectId,
+    mealReservationId: ObjectId,
+    senderId: ObjectId,
+    receiverId: ObjectId
   ): Promise<MealTransaction | Error> {
     try {
+      const transactionState = MealTransactionState.COMPLETED;
       return await this.mealTransactionModel.create({
-        mealReservation,
-        senderAccount,
-        receiverAccount,
+        mealOfferId,
+        mealReservationId,
+        senderId,
+        receiverId,
       });
     } catch (error: any) {
       throw new Error(error.message as string);
@@ -49,13 +52,13 @@ class MealTransactionService {
 
         // update sender account
         await this.virtualAccountService.sendTransaction(
-          transaction.senderAccount,
+          transaction.senderId,
           price
         );
 
         // update receiver account
         await this.virtualAccountService.receiveTransaction(
-          transaction.receiverAccount,
+          transaction.receiverId,
           price
         );
 

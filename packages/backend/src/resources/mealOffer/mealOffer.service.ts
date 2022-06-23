@@ -8,10 +8,14 @@ import MealReservation from "../mealReservation/mealReservation.interface";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
 import HttpException from "../../utils/exceptions/http.exception";
+import MealTransactionService from "../mealTransaction/mealTransaction.service";
+import MealTransaction from "../mealTransaction/mealTransaction.interface";
+import { ObjectId } from "mongoose";
 
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
+  private mealTransactionService = new MealTransactionService();
 
   public async create(
     newMealOffer: MealOffer,
@@ -21,13 +25,13 @@ class MealOfferService {
     return await this.mealOffer.create(newMealOffer);
   }
 
-  public async getMealOffer(mealOfferId: string): Promise<MealOffer | Error> {
+  public async getMealOffer(mealOfferId: ObjectId): Promise<MealOffer | Error> {
     const mealOffer = (await this.mealOffer
       .findById(mealOfferId)
       .select("-pickUpDetails")
       .exec()) as MealOffer;
     if (!mealOffer) {
-      throw new MealOfferNotFoundException(mealOfferId);
+      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
     return mealOffer;
   }
@@ -49,7 +53,7 @@ class MealOfferService {
   }
 
   public async deleteMealOffer(
-    mealOfferId: string,
+    mealOfferId: ObjectId,
     user: User
   ): Promise<void | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
@@ -61,7 +65,7 @@ class MealOfferService {
   }
 
   public async createMealOfferReservation(
-    mealOfferId: string,
+    mealOfferId: ObjectId,
     user: User
   ): Promise<MealOffer | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
@@ -71,9 +75,9 @@ class MealOfferService {
   }
 
   public async updateMealOfferReservationState(
-    mealOfferId: string,
+    mealOfferId: ObjectId,
     user: User,
-    mealReservationId: string,
+    mealReservationId: ObjectId,
     newState: MealReservationStateEnum
   ): Promise<MealOffer | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
@@ -94,11 +98,20 @@ class MealOfferService {
           newState
         ))
     ) {
-      mealOffer.reservations.forEach((reservation) => {
+      for (const reservation of mealOffer.reservations) {
         if (reservation._id.toString() === mealReservation._id.toString()) {
+          if (newState === MealReservationState.BUYER_CONFIRMED) {
+            const mealTransaction =
+              (await this.mealTransactionService.createTransaction(
+                mealOfferId,
+                mealReservationId,
+                mealReservation.buyer,
+                mealOffer.user
+              )) as MealTransaction;
+          }
           reservation.reservationState = newState;
         }
-      });
+      }
       return await mealOffer.save();
     }
     throw new HttpException(400, "Wrong state");
