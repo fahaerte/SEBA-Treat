@@ -1,14 +1,14 @@
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import VirtualBankService from "../virtualBank/virtualBank.service";
+import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
   private virtualAccountService = new VirtualAccountService();
-  private virtualBankService = new VirtualBankService();
+  private virtualCentralAccountService = new VirtualCentralAccountService();
 
   /**
    * Create a new transaction
@@ -45,6 +45,7 @@ class MealTransactionService {
 
         // TODO: get price from meal offer
         const price = 14;
+        const fee = 2;
 
         // update sender account
         await this.virtualAccountService.sendTransaction(
@@ -59,20 +60,7 @@ class MealTransactionService {
         );
 
         // update central account
-        const centralBankId = process.env[
-          "CENTRAL_BANK_ID"
-        ] as unknown as ObjectId;
-        const centralAccountId =
-          (await this.virtualBankService.getVirtualCentralAccount(
-            centralBankId
-          )) as ObjectId;
-        const fee = (await this.virtualBankService.getCentralFee(
-          centralBankId
-        )) as number;
-        await this.virtualAccountService.receiveTransaction(
-          centralAccountId,
-          price * fee
-        );
+        await this.virtualCentralAccountService.receiveTransaction(fee);
 
         // update transaction state
         await this.mealTransactionModel.findByIdAndUpdate(

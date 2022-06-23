@@ -1,11 +1,6 @@
-import { Document, ObjectId } from "mongoose";
-import VirtualAccountType from "./virtualAccountType.enum";
+import { Document } from "mongoose";
+import { IVirtualAccount } from "@treat/lib-common/src/interfaces/IVirtualAccount";
 
-// TODO: Refactor?
-interface VirtualAccount extends Document {
-  virtualBankId: ObjectId;
-  accountType: VirtualAccountType;
-  balance: number;
-}
+interface VirtualAccount extends Document, IVirtualAccount {}
 
 export default VirtualAccount;

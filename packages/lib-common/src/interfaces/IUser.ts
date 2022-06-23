@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { IAddress } from "./IAddress";
+import { IVirtualAccount } from "./IVirtualAccount";
 
 // Interface
 export interface IUser {
@@ -12,5 +12,5 @@ export interface IUser {
   // profilePicture: File;
   // rating: number;
   address: IAddress;
-  virtualAccountId: Types.ObjectId;
+  virtualAccount: IVirtualAccount;
 }
