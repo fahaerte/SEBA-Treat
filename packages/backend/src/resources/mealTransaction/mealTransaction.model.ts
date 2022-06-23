@@ -5,16 +5,28 @@ import MealTransactionStateEnum from "./mealTransactionState.enum";
 
 const MealTransactionSchema = new Schema<MealTransaction>(
   {
-    mealReservation: {
+    mealOfferId: {
       type: Types.ObjectId,
       required: true,
     },
-    senderAccount: {
+    mealReservationId: {
       type: Types.ObjectId,
       required: true,
     },
-    receiverAccount: {
+    senderId: {
       type: Types.ObjectId,
+      required: true,
+    },
+    receiverId: {
+      type: Types.ObjectId,
+      required: true,
+    },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    transactionFee: {
+      type: Number,
       required: true,
     },
     transactionState: {

@@ -1,32 +1,20 @@
 import VirtualAccount from "./virtualAccount.interface";
 import VirtualAccountModel from "./virtualAccount.model";
 import { ObjectId, Types } from "mongoose";
-import VirtualBankService from "../../resources/virtualBank/virtualBank.service";
-import VirtualAccountType from "./virtualAccountType.enum";
+import { Service } from "typedi";
 
+@Service()
 class VirtualAccountService {
   private virtualAccountModel = VirtualAccountModel;
-  private virtualBankService = new VirtualBankService();
 
   /**
    * Create a new account
    */
-  public async createAccount(
-    virtualBankId: ObjectId,
-    accountType = VirtualAccountType.USER_ACCOUNT
-  ): Promise<VirtualAccount | Error> {
+  public createAccount(balance: number): VirtualAccount {
     try {
-      let balance = 0;
-      if (accountType === VirtualAccountType.USER_ACCOUNT) {
-        balance = (await this.virtualBankService.geUserStartingBalance(
-          virtualBankId
-        )) as number;
-      }
-      return await this.virtualAccountModel.create({
-        virtualBankId,
-        accountType,
-        balance,
-      });
+      return {
+        balance: balance,
+      } as VirtualAccount;
     } catch (error: any) {
       throw new Error(error.message as string);
     }

@@ -8,10 +8,14 @@ import MealReservation from "../mealReservation/mealReservation.interface";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
 import HttpException from "../../utils/exceptions/http.exception";
+import MealTransactionService from "../mealTransaction/mealTransaction.service";
+import MealTransaction from "../mealTransaction/mealTransaction.interface";
+import { ObjectId } from "mongoose";
 
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
+  private mealTransactionService = new MealTransactionService();
 
   public async create(
     newMealOffer: MealOffer,
@@ -21,13 +25,13 @@ class MealOfferService {
     return await this.mealOffer.create(newMealOffer);
   }
 
-  public async getMealOffer(mealOfferId: string): Promise<MealOffer | Error> {
+  public async getMealOffer(mealOfferId: ObjectId): Promise<MealOffer | Error> {
     const mealOffer = (await this.mealOffer
       .findById(mealOfferId)
       .select("-pickUpDetails")
       .exec()) as MealOffer;
     if (!mealOffer) {
-      throw new MealOfferNotFoundException(mealOfferId);
+      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
     return mealOffer;
   }
@@ -49,7 +53,7 @@ class MealOfferService {
   }
 
   public async deleteMealOffer(
-    mealOfferId: string,
+    mealOfferId: ObjectId,
     user: User
   ): Promise<void | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
@@ -61,7 +65,7 @@ class MealOfferService {
   }
 
   public async createMealOfferReservation(
-    mealOfferId: string,
+    mealOfferId: ObjectId,
     user: User
   ): Promise<MealOffer | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
@@ -71,9 +75,9 @@ class MealOfferService {
   }
 
   public async updateMealOfferReservationState(
-    mealOfferId: string,
+    mealOfferId: ObjectId,
     user: User,
-    mealReservationId: string,
+    mealReservationId: ObjectId,
     newState: MealReservationStateEnum
   ): Promise<MealOffer | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
@@ -84,27 +88,41 @@ class MealOfferService {
     ) as MealReservation;
     if (
       (mealOffer.user.toString() === user._id.toString() &&
-        this.isValidSellerReservationStateUpdate(
+        MealOfferService.isValidSellerReservationStateUpdate(
           mealReservation.reservationState,
           newState
         )) ||
       (mealReservation.buyer.toString() === user._id.toString() &&
-        this.isValidBuyerReservationStateUpdate(
+        MealOfferService.isValidBuyerReservationStateUpdate(
           mealReservation.reservationState,
           newState
         ))
     ) {
-      mealOffer.reservations.forEach((reservation) => {
+      for (const reservation of mealOffer.reservations) {
         if (reservation._id.toString() === mealReservation._id.toString()) {
+          if (newState === MealReservationState.BUYER_CONFIRMED) {
+            const mealTransaction =
+              (await this.mealTransactionService.createTransaction(
+                mealOfferId,
+                mealReservationId,
+                mealReservation.buyer,
+                mealOffer.user,
+                mealOffer.price,
+                mealOffer.transactionFee
+              )) as MealTransaction;
+            await this.mealTransactionService.performTransaction(
+              mealTransaction._id as ObjectId
+            );
+          }
           reservation.reservationState = newState;
         }
-      });
+      }
       return await mealOffer.save();
     }
     throw new HttpException(400, "Wrong state");
   }
 
-  private isValidBuyerReservationStateUpdate(
+  private static isValidBuyerReservationStateUpdate(
     mealReservationState: MealReservationStateEnum,
     newState: MealReservationStateEnum
   ): boolean {
@@ -114,7 +132,7 @@ class MealOfferService {
         MealReservationState.BUYER_REJECTED,
       ].includes(newState)
     ) {
-      return this.isValidReservationStateUpdate(
+      return MealOfferService.isValidReservationStateUpdate(
         mealReservationState,
         MealReservationState.SELLER_ACCEPTED
       );
@@ -122,7 +140,7 @@ class MealOfferService {
     return false;
   }
 
-  private isValidSellerReservationStateUpdate(
+  private static isValidSellerReservationStateUpdate(
     mealReservationState: MealReservationStateEnum,
     newState: MealReservationStateEnum
   ): boolean {
@@ -130,7 +148,7 @@ class MealOfferService {
       newState === MealReservationState.SELLER_ACCEPTED ||
       newState === MealReservationState.SELLER_REJECTED
     ) {
-      return this.isValidReservationStateUpdate(
+      return MealOfferService.isValidReservationStateUpdate(
         mealReservationState,
         MealReservationState.PENDING
       );
@@ -138,7 +156,7 @@ class MealOfferService {
     return false;
   }
 
-  private isValidReservationStateUpdate(
+  private static isValidReservationStateUpdate(
     mealReservationState: MealReservationStateEnum,
     expectedState: MealReservationStateEnum
   ): boolean {

@@ -1,32 +1,49 @@
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
-import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import VirtualBankService from "../virtualBank/virtualBank.service";
+import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
+import UserService from "../user/user.service";
 
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
-  private virtualAccountService = new VirtualAccountService();
-  private virtualBankService = new VirtualBankService();
+  private virtualCentralAccountService = new VirtualCentralAccountService();
+  private userService = new UserService();
 
   /**
    * Create a new transaction
    */
   public async createTransaction(
-    mealReservation: ObjectId,
-    senderAccount: ObjectId,
-    receiverAccount: ObjectId
+    mealOfferId: ObjectId,
+    mealReservationId: ObjectId,
+    senderId: ObjectId,
+    receiverId: ObjectId,
+    amount: number,
+    transactionFee: number
   ): Promise<MealTransaction | Error> {
     try {
       return await this.mealTransactionModel.create({
-        mealReservation,
-        senderAccount,
-        receiverAccount,
+        mealOfferId,
+        mealReservationId,
+        senderId,
+        receiverId,
+        amount,
+        transactionFee,
       });
     } catch (error: any) {
       throw new Error(error.message as string);
     }
+  }
+
+  /**
+   * Get all transactions (sent and received) for a specific user
+   */
+  public async getMealTransactions(
+    userId: ObjectId
+  ): Promise<MealTransaction[] | Error> {
+    return this.mealTransactionModel.find({
+      $or: [{ senderId: userId }, { receiverId: userId }],
+    });
   }
 
   /**
@@ -36,42 +53,23 @@ class MealTransactionService {
     mealTransactionId: ObjectId
   ): Promise<MealTransaction | Error> {
     try {
-      // TODO: check if user is authorized to perform transaction -> where to do that
-      const transaction = (await this.mealTransactionModel.findById(
+      const mealTransaction = (await this.mealTransactionModel.findById(
         mealTransactionId
       )) as MealTransaction;
-      if (transaction.transactionState === MealTransactionState.PENDING) {
-        // TODO: check if concurrency is handled correctly
-
-        // TODO: get price from meal offer
-        const price = 14;
-
-        // update sender account
-        await this.virtualAccountService.sendTransaction(
-          transaction.senderAccount,
-          price
-        );
-
-        // update receiver account
-        await this.virtualAccountService.receiveTransaction(
-          transaction.receiverAccount,
-          price
-        );
+      if (mealTransaction.transactionState === MealTransactionState.PENDING) {
+        const price = mealTransaction.amount;
+        const fee = mealTransaction.transactionFee;
 
         // update central account
-        const centralBankId = process.env[
-          "CENTRAL_BANK_ID"
-        ] as unknown as ObjectId;
-        const centralAccountId =
-          (await this.virtualBankService.getVirtualCentralAccount(
-            centralBankId
-          )) as ObjectId;
-        const fee = (await this.virtualBankService.getCentralFee(
-          centralBankId
-        )) as number;
-        await this.virtualAccountService.receiveTransaction(
-          centralAccountId,
-          price * fee
+        await this.virtualCentralAccountService.receiveTransaction(fee);
+
+        // update sender account
+        await this.userService.sendTransaction(mealTransaction.senderId, price);
+
+        // update receiver account
+        await this.userService.receiveTransaction(
+          mealTransaction.receiverId,
+          price
         );
 
         // update transaction state
@@ -84,7 +82,7 @@ class MealTransactionService {
           mealTransactionId
         )) as MealTransaction;
       } else {
-        return transaction;
+        return mealTransaction;
       }
     } catch (error: any) {
       throw new Error(error.message as string);
