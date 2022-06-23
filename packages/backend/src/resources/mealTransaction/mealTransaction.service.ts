@@ -2,13 +2,11 @@ import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
-import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 import UserService from "../user/user.service";
 
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
-  private virtualAccountService = new VirtualAccountService();
   private virtualCentralAccountService = new VirtualCentralAccountService();
   private userService = new UserService();
 
@@ -24,7 +22,6 @@ class MealTransactionService {
     transactionFee: number
   ): Promise<MealTransaction | Error> {
     try {
-      const transactionState = MealTransactionState.COMPLETED;
       return await this.mealTransactionModel.create({
         mealOfferId,
         mealReservationId,
@@ -36,6 +33,17 @@ class MealTransactionService {
     } catch (error: any) {
       throw new Error(error.message as string);
     }
+  }
+
+  /**
+   * Get all transactions (sent and received) for a specific user
+   */
+  public async getMealTransactions(
+    userId: ObjectId
+  ): Promise<MealTransaction[] | Error> {
+    return this.mealTransactionModel.find({
+      $or: [{ senderId: userId }, { receiverId: userId }],
+    });
   }
 
   /**

@@ -88,12 +88,12 @@ class MealOfferService {
     ) as MealReservation;
     if (
       (mealOffer.user.toString() === user._id.toString() &&
-        this.isValidSellerReservationStateUpdate(
+        MealOfferService.isValidSellerReservationStateUpdate(
           mealReservation.reservationState,
           newState
         )) ||
       (mealReservation.buyer.toString() === user._id.toString() &&
-        this.isValidBuyerReservationStateUpdate(
+        MealOfferService.isValidBuyerReservationStateUpdate(
           mealReservation.reservationState,
           newState
         ))
@@ -111,7 +111,7 @@ class MealOfferService {
                 mealOffer.transactionFee
               )) as MealTransaction;
             await this.mealTransactionService.performTransaction(
-              mealTransaction._id
+              mealTransaction._id as ObjectId
             );
           }
           reservation.reservationState = newState;
@@ -122,7 +122,7 @@ class MealOfferService {
     throw new HttpException(400, "Wrong state");
   }
 
-  private isValidBuyerReservationStateUpdate(
+  private static isValidBuyerReservationStateUpdate(
     mealReservationState: MealReservationStateEnum,
     newState: MealReservationStateEnum
   ): boolean {
@@ -132,7 +132,7 @@ class MealOfferService {
         MealReservationState.BUYER_REJECTED,
       ].includes(newState)
     ) {
-      return this.isValidReservationStateUpdate(
+      return MealOfferService.isValidReservationStateUpdate(
         mealReservationState,
         MealReservationState.SELLER_ACCEPTED
       );
@@ -140,7 +140,7 @@ class MealOfferService {
     return false;
   }
 
-  private isValidSellerReservationStateUpdate(
+  private static isValidSellerReservationStateUpdate(
     mealReservationState: MealReservationStateEnum,
     newState: MealReservationStateEnum
   ): boolean {
@@ -148,7 +148,7 @@ class MealOfferService {
       newState === MealReservationState.SELLER_ACCEPTED ||
       newState === MealReservationState.SELLER_REJECTED
     ) {
-      return this.isValidReservationStateUpdate(
+      return MealOfferService.isValidReservationStateUpdate(
         mealReservationState,
         MealReservationState.PENDING
       );
@@ -156,7 +156,7 @@ class MealOfferService {
     return false;
   }
 
-  private isValidReservationStateUpdate(
+  private static isValidReservationStateUpdate(
     mealReservationState: MealReservationStateEnum,
     expectedState: MealReservationStateEnum
   ): boolean {
