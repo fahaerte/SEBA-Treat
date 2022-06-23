@@ -4,11 +4,13 @@ import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
+import UserService from "../user/user.service";
 
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
   private virtualAccountService = new VirtualAccountService();
   private virtualCentralAccountService = new VirtualCentralAccountService();
+  private userService = new UserService();
 
   /**
    * Create a new transaction
@@ -17,7 +19,9 @@ class MealTransactionService {
     mealOfferId: ObjectId,
     mealReservationId: ObjectId,
     senderId: ObjectId,
-    receiverId: ObjectId
+    receiverId: ObjectId,
+    amount: number,
+    transactionFee: number
   ): Promise<MealTransaction | Error> {
     try {
       const transactionState = MealTransactionState.COMPLETED;
@@ -26,6 +30,8 @@ class MealTransactionService {
         mealReservationId,
         senderId,
         receiverId,
+        amount,
+        transactionFee,
       });
     } catch (error: any) {
       throw new Error(error.message as string);
@@ -39,31 +45,24 @@ class MealTransactionService {
     mealTransactionId: ObjectId
   ): Promise<MealTransaction | Error> {
     try {
-      // TODO: check if user is authorized to perform transaction -> where to do that
-      const transaction = (await this.mealTransactionModel.findById(
+      const mealTransaction = (await this.mealTransactionModel.findById(
         mealTransactionId
       )) as MealTransaction;
-      if (transaction.transactionState === MealTransactionState.PENDING) {
-        // TODO: check if concurrency is handled correctly
-
-        // TODO: get price from meal offer
-        const price = 14;
-        const fee = 2;
-
-        // update sender account
-        await this.virtualAccountService.sendTransaction(
-          transaction.senderId,
-          price
-        );
-
-        // update receiver account
-        await this.virtualAccountService.receiveTransaction(
-          transaction.receiverId,
-          price
-        );
+      if (mealTransaction.transactionState === MealTransactionState.PENDING) {
+        const price = mealTransaction.amount;
+        const fee = mealTransaction.transactionFee;
 
         // update central account
         await this.virtualCentralAccountService.receiveTransaction(fee);
+
+        // update sender account
+        await this.userService.sendTransaction(mealTransaction.senderId, price);
+
+        // update receiver account
+        await this.userService.receiveTransaction(
+          mealTransaction.receiverId,
+          price
+        );
 
         // update transaction state
         await this.mealTransactionModel.findByIdAndUpdate(
@@ -75,7 +74,7 @@ class MealTransactionService {
           mealTransactionId
         )) as MealTransaction;
       } else {
-        return transaction;
+        return mealTransaction;
       }
     } catch (error: any) {
       throw new Error(error.message as string);

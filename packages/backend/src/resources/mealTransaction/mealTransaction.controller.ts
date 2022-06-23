@@ -17,17 +17,11 @@ class MealTransactionController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.post(
-      `${this.path}/create`,
+    this.router.get(
+      `${this.path}`,
       authenticated,
       validationMiddleware(validate.createTransaction)
-      // this.createTransaction
-    );
-    this.router.post(
-      `${this.path}/perform/:mealTransactionId`,
-      authenticated
-      // validationMiddleware(validate.createTransaction),
-      // this.performTransaction
+      // this.getTransactions
     );
   }
 }

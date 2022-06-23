@@ -106,8 +106,13 @@ class MealOfferService {
                 mealOfferId,
                 mealReservationId,
                 mealReservation.buyer,
-                mealOffer.user
+                mealOffer.user,
+                mealOffer.price,
+                mealOffer.transactionFee
               )) as MealTransaction;
+            await this.mealTransactionService.performTransaction(
+              mealTransaction._id
+            );
           }
           reservation.reservationState = newState;
         }

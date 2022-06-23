@@ -13,9 +13,10 @@ class VirtualCentralAccountService {
     try {
       const balance = 0;
       if ((await this.virtualAccountModel.count()) === 0) {
-        return (await this.virtualAccountModel.create(
-          balance
-        )) as VirtualAccount;
+        console.log("Creating new central account.");
+        return (await this.virtualAccountModel.create({
+          balance: balance,
+        })) as VirtualAccount;
       } else {
         throw new Error("A central account exists already.");
       }
@@ -35,6 +36,7 @@ class VirtualCentralAccountService {
         await this.createCentralAccount();
       }
       if ((await this.virtualAccountModel.count()) === 1) {
+        console.log("Central account found. Updating balance.");
         const virtualCentralAccount =
           (await this.virtualAccountModel.findOne()) as VirtualAccount;
         virtualCentralAccount.balance += amount;

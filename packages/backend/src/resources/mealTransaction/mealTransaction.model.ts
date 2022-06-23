@@ -21,6 +21,14 @@ const MealTransactionSchema = new Schema<MealTransaction>(
       type: Types.ObjectId,
       required: true,
     },
+    amount: {
+      type: Number,
+      required: true,
+    },
+    transactionFee: {
+      type: Number,
+      required: true,
+    },
     transactionState: {
       type: String,
       enum: Object.keys(MealTransactionStateEnum),

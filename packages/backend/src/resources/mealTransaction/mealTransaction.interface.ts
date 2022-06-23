@@ -6,6 +6,8 @@ interface MealTransaction extends Document {
   mealReservationId: ObjectId;
   senderId: ObjectId;
   receiverId: ObjectId;
+  amount: number;
+  transactionFee: number;
   transactionState: MealTransactionState;
 }
 
