@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormHelper } from "@treat/webapp/src/components/";
-import { IFormRow } from "@treat/webapp/src/components/";
-import { IUser } from "@treat/lib-common";
+import { Button, Form, FormHelper } from "../components/";
+import { IFormRow } from "../components/";
+import { IUser } from "../../../lib-common";
+import { useUserLogInMutation, } from "../store/api";
 
 const LoginScreen = () => {
+
+  const [userLogIn, { isLoading, isSuccess, isError}] =
+      useUserLogInMutation();
+
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -29,12 +34,17 @@ const LoginScreen = () => {
   ];
 
   const handleSignIn = (data: IUser) => {
-    console.log(data.email + "  " + data.password);
+    console.log("Trying to log in...");
+    console.log(JSON.stringify(data));
+    void userLogIn(data);
   };
 
   return (
     <>
-      <Form<IUser> elements={elements} onSubmit={handleSignIn} />
+      <Form<IUser> elements={elements} onSubmit={handleSignIn}/>
+      {isLoading && <h6>Signing in...</h6>}
+      {isSuccess && <h6>Signed In!</h6>}
+      {isError && <h6>error</h6>}
     </>
   );
 };
