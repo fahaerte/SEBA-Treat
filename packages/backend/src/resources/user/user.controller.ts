@@ -9,13 +9,18 @@ import profileFileUpload from "../../middleware/upload.middleware";
 import UserService from "../../resources/user/user.service";
 import User from "./user.interface";
 import { Service } from "typedi";
+import StripeService from "../stripe/stripe.service";
 
+// TODO: Update user
 @Service()
 class UserController implements Controller {
   public path = "/users";
   public router = Router();
 
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly stripeService: StripeService
+  ) {
     this.initializeRoutes();
   }
 
@@ -28,21 +33,10 @@ class UserController implements Controller {
      *    - User
      *    summary: Register a user
      *    parameters:
-     *    - name: username
-     *      description: username of user
+     *    - name: user object
+     *      description: an user object
      *      in: body
      *      required: true
-     *      schema:
-     *        $ref: '#/definitions/RegisterUser'
-     *    - name: email
-     *      description: email of user
-     *      in: body
-     *      required: true
-     *      schema:
-     *        $ref: '#/definitions/RegisterUser'
-     *    - name: password
-     *      description: password of user
-     *      in: body
      *      schema:
      *        $ref: '#/definitions/RegisterUser'
      *    responses:
@@ -136,14 +130,14 @@ class UserController implements Controller {
 
     /**
      * @swagger
-     * /api/users/profile-picture/:userid:
+     * /api/users/profile-picture/{userid}:
      *  get:
      *    tags:
      *    - User
      *    summary: Get profile picture of user
      *    parameters:
      *      - in: path
-     *        name: id
+     *        name: userid
      *        required: true
      *        type: string
      *        description: the user's id
@@ -156,7 +150,7 @@ class UserController implements Controller {
      *        description: Any other error
      */
     this.router.get(
-      `${this.path}/profile-picture/:userid?`,
+      `${this.path}/profile-picture/:userid`,
       authenticated,
       this.getProfilePicture
     );
@@ -169,8 +163,23 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const newUser = req.body as User;
-      const token = await this.userService.register(newUser);
-
+      const { token, userId } = (await this.userService.register(newUser)) as {
+        token: string;
+        userId: string;
+      };
+      const { city, country, street, postalCode, houseNumber } =
+        newUser.address;
+      await this.stripeService.stripeUsers.createCustomer(
+        userId,
+        `${newUser.firstName} ${newUser.lastName}`,
+        newUser.email,
+        {
+          city,
+          country,
+          line1: `${street} ${houseNumber}`,
+          postal_code: postalCode,
+        }
+      );
       res.status(201).json({ token });
     } catch (error: any) {
       next(new HttpException(400, error.message));

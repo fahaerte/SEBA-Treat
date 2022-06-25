@@ -20,7 +20,10 @@ validateEnv();
 
 const app = new App(
   [
-    new UserController(Container.get(UserService)),
+    new UserController(
+      Container.get(UserService),
+      Container.get(StripeService)
+    ),
 
     new VirtualBankController(),
     new VirtualAccountController(),

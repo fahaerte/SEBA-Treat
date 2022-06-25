@@ -5,10 +5,10 @@ import HttpException from "../../../utils/exceptions/http.exception";
 
 @Service()
 class StripePricesService {
-  private stripe: Stripe;
+  // private stripe: Stripe;
 
-  constructor(private readonly stripeInstance: Stripe) {
-    this.stripe = stripeInstance;
+  constructor(private readonly stripe: Stripe) {
+    // this.stripe = stripeInstance;
   }
 
   public async createPrice(productId: string, pricePerUnit: number) {

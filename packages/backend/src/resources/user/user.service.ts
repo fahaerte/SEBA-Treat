@@ -17,14 +17,16 @@ class UserService {
   /**
    * Register a new user
    */
-  public async register(newUser: User): Promise<string | Error> {
+  public async register(
+    newUser: User
+  ): Promise<{ token: string; userId: string } | Error> {
     try {
       const virtualAccount = (await this.virtualAccountService.createAccount(
         process.env["CENTRAL_BANK_ID"] as unknown as ObjectId
       )) as VirtualAccount;
       newUser.virtualAccountId = virtualAccount._id;
       const user = await this.userModel.create(newUser);
-      return token.createToken(user);
+      return { token: token.createToken(user), userId: user._id };
     } catch (error: any) {
       throw new Error(error.message as string);
     }

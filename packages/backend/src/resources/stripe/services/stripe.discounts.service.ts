@@ -6,13 +6,13 @@ import { StripeError } from "../../../utils/exceptions/stripe.errors";
 
 @Service()
 class StripeDiscountsService {
-  private stripe: Stripe;
+  // private stripe: Stripe;
 
-  constructor(private readonly stripeInstance: Stripe) {
-    this.stripe = stripeInstance;
+  constructor(private readonly stripe: Stripe) {
+    // this.stripe = stripeInstance;
   }
 
-  // TODO: Adjust
+  // TODO: Adjust -> Necessary as endpoint? because we could do it via the dashboard instead
   public async createCreditDiscount(
     start: Date,
     description: string,
@@ -32,7 +32,7 @@ class StripeDiscountsService {
 
   public async getCreditDiscounts() {
     try {
-      return await this.stripe.products.list();
+      return await this.stripe.coupons.list();
     } catch (error: any) {
       if (error?.code === StripeError.ResourceMissing) {
         throw new HttpException(401, "Credit card not set up");

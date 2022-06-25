@@ -67,10 +67,17 @@ class App {
             name: "User",
             description: "User functions including authentication",
           },
+          {
+            name: "Stripe",
+            description: "Stripe endpoints to purchase virtual credits",
+          },
         ],
       },
 
-      apis: ["./src/resources/user/user.controller.ts"],
+      apis: [
+        "./src/resources/user/user.controller.ts",
+        "./src/resources/stripe/stripe.controller.ts",
+      ],
     };
 
     const swaggerDocs = swaggerJSDoc(swaggerOptions);

@@ -12,30 +12,13 @@ class StripeProductsService {
     this.stripePrices = new StripePricesService(stripe);
   }
 
-  public async createCreditPackage(
-    start: Date,
-    description: string,
-    end: Date,
-    name: string,
-    price: number
-  ) {
+  public async getCreditPackages(withPrice = false) {
     try {
-      const product = await this.stripe.products.create({ name, description });
-      const priceForProduct = await this.stripePrices.createPrice(
-        product.id,
-        price
-      );
-      return { product, price: priceForProduct };
-    } catch (error: any) {
-      if (error?.code === StripeError.ResourceMissing) {
-        throw new HttpException(401, "Credit card not set up");
+      if (withPrice) {
+        return await this.stripe.products.list({
+          expand: ["data.default_price"],
+        });
       }
-      throw new HttpException(500, error?.message as string);
-    }
-  }
-
-  public async getCreditPackages() {
-    try {
       return await this.stripe.products.list();
     } catch (error: any) {
       if (error?.code === StripeError.ResourceMissing) {
