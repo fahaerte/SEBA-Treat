@@ -3,15 +3,14 @@ import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import VirtualAccount from "../virtualAccount/virtualAccount.interface";
-import { ObjectId, Types } from "mongoose";
 import User from "../user/user.interface";
 import { Service } from "typedi";
+import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
+import { ObjectId } from "mongoose";
 
 @Service()
 class UserService {
   private userModel = UserModel;
-  // TODO: importing service instead of model right way to do this?
   private virtualAccountService = new VirtualAccountService();
 
   /**
@@ -19,10 +18,10 @@ class UserService {
    */
   public async register(newUser: User): Promise<string | Error> {
     try {
-      const virtualAccount = (await this.virtualAccountService.createAccount(
-        process.env["CENTRAL_BANK_ID"] as unknown as ObjectId
-      )) as VirtualAccount;
-      newUser.virtualAccountId = virtualAccount._id;
+      // create account
+      newUser.virtualAccount = this.virtualAccountService.createAccount(
+        USER_STARTING_BALANCE
+      );
       const user = await this.userModel.create(newUser);
       return token.createToken(user);
     } catch (error: any) {
@@ -68,6 +67,34 @@ class UserService {
       throw new Error("User has no profile picture");
     }
     return path.join(profilePicturesPath, pictureForId);
+  }
+
+  public async sendTransaction(
+    userId: ObjectId,
+    amount: number
+  ): Promise<number | Error> {
+    try {
+      const user = (await this.userModel.findById(userId)) as User;
+      user.virtualAccount.balance -= amount;
+      await user.save();
+      return user.virtualAccount.balance;
+    } catch (error) {
+      throw new Error("Unable to send transaction");
+    }
+  }
+
+  public async receiveTransaction(
+    userId: ObjectId,
+    amount: number
+  ): Promise<number | Error> {
+    try {
+      const user = (await this.userModel.findById(userId)) as User;
+      user.virtualAccount.balance += amount;
+      await user.save();
+      return user.virtualAccount.balance;
+    } catch (error) {
+      throw new Error("Unable to receive transaction");
+    }
   }
 }
 
