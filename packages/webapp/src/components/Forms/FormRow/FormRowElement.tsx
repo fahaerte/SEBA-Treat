@@ -7,6 +7,7 @@ import { IFormSelectConfig } from "../Select/ISelect";
 import { IRadioCheckSwitchProps } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { ITagSelectProps } from "../TagSelect/ITagSelect";
+import { IFileInputProps } from "../FileInput/IFileInput";
 import TextArea from "../TextArea/TextArea";
 import Datepicker from "../Datepicker/Datepicker";
 import RadioCheckSwitch from "../RadioCheckSwitch/RadioCheckSwitch";
@@ -14,7 +15,7 @@ import RadioCheckSwitchGroup from "../RadioCheckSwitch/RadioCheckSwitchGroup/Rad
 import RadioCheckGroupItem from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckGroupItem";
 import { getEncodedString } from "../../../utils/getEncodedString";
 import Input from "../Input/Input";
-// import Dropzone from "../Dropzone/Dropzone";
+import FileInput from "../FileInput/FileInput";
 import Select from "../Select/Select";
 import TagSelect from "../TagSelect/TagSelect";
 import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
@@ -64,7 +65,13 @@ const FormRowElement = <TFormValues extends FieldValues>({
         />
       );
     case "file":
-      return <div>Placeholder</div>;
+      return (
+        <FileInput<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
+          {...config}
+          {...(config.props as IFileInputProps)}
+        />
+      );
 
     case "select": {
       const configToSelect = config as IFormSelectConfig<TFormValues>;

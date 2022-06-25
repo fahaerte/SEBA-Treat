@@ -136,6 +136,9 @@ export const defaultTheme: DefaultTheme = {
       padding: "1em 1em 0.5em",
       color: "#333",
       fontSize: "1rem",
+      border: {
+        radius: "4px",
+      },
     },
     label: {
       color: "",
