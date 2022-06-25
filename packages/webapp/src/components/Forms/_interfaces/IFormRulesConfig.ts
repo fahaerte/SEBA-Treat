@@ -9,6 +9,7 @@ export interface IFormRulesConfig {
   minLength?: TFormRuleInput<number>;
   maxLength?: TFormRuleInput<number>;
   pattern?: TFormRuleInput<RegExp>;
+  matchWithField?: TFormRuleInput<string>;
 }
 
 type TFormRule<T> = {
@@ -22,6 +23,7 @@ export interface IFormRules {
   minLength?: TFormRule<number>;
   maxLength?: TFormRule<number>;
   pattern?: TFormRule<RegExp>;
+  validate?: (value: any) => any;
 }
 
 export class CFormRule<T> {

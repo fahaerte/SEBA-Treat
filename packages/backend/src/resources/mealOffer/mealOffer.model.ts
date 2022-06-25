@@ -56,7 +56,7 @@ const MealOfferSchema = new Schema<MealOffer>(
     },
     transactionFee: {
       type: Number,
-      default: 0,
+      required: true,
       min: 0,
     },
     reservations: [MealReservationSchema],

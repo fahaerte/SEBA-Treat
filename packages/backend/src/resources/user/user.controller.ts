@@ -3,7 +3,7 @@ import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
 import HttpException from "../../utils/exceptions/http.exception";
-import authenticated from "../../middleware/authenticated.middleware";
+import authenticate from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
 
 import UserService from "../../resources/user/user.service";
@@ -106,7 +106,7 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}`, authenticated, this.getUser);
+    this.router.get(`${this.path}`, authenticate, this.getUser);
 
     /**
      * @swagger
@@ -129,7 +129,7 @@ class UserController implements Controller {
      */
     this.router.post(
       `${this.path}/profile-picture`,
-      authenticated,
+      authenticate,
       profileFileUpload.single("profilePicture"),
       this.uploadProfilePicture
     );
@@ -157,7 +157,7 @@ class UserController implements Controller {
      */
     this.router.get(
       `${this.path}/profile-picture/:userid?`,
-      authenticated,
+      authenticate,
       this.getProfilePicture
     );
   }

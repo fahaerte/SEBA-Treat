@@ -2,7 +2,7 @@ import { IFormElementConfig } from "../_interfaces/IFormElementConfig";
 import { IFormInputConfig } from "../Input/IInput";
 import { IFormDatePickerConfig } from "../Datepicker/IDatePicker";
 import { IFormSelectConfig } from "../Select/ISelect";
-import { IFileInputConfig } from "../FileInput/IFileInput";
+// import { IFormDropzoneConfig } from "../Dropzone/IDropzone";
 import { IFormTextAreaConfig } from "../TextArea/ITextArea";
 import { IFormRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
@@ -13,56 +13,56 @@ abstract class FormHelper {
     config: IFormInputConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "input",
-    ...config,
+    config,
   });
 
   public static createDatePicker = <T>(
     config: IFormDatePickerConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "datepicker",
-    ...config,
+    config,
   });
 
   public static createSelect = <T>(
     config: IFormSelectConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "select",
-    ...config,
+    config,
   });
 
-  public static createFileInput = <T>(
-    config: IFileInputConfig<T>
-  ): IFormElementConfig<T> => ({
-    elementType: "file",
-    ...config,
-  });
+  // public static createDropzone = <T>(
+  //   config: IFormDropzoneConfig<T>
+  // ): IFormElementConfig<T> => ({
+  //   elementType: "file",
+  //   config,
+  // });
 
   public static createTextArea = <T>(
     config: IFormTextAreaConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "textarea",
-    ...config,
+    config,
   });
 
   public static createRadioCheckSwitch = <T>(
     config: IFormRadioCheckSwitchConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "radioCheckSwitch",
-    ...config,
+    config,
   });
 
   public static createRadioCheckSwitchGroup = <T>(
     config: IFormRadioCheckSwitchGroupConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "radioCheckSwitchGroup",
-    ...config,
+    config,
   });
 
   public static createTagSelect = <T>(
     config: IFormTagSelectConfig<T>
   ): IFormElementConfig<T> => ({
     elementType: "tagSelect",
-    ...config,
+    config,
   });
 }
 
