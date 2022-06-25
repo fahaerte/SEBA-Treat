@@ -64,7 +64,6 @@ abstract class FormHelper {
     elementType: "tagSelect",
     config,
   });
-
 }
 
 export default FormHelper;

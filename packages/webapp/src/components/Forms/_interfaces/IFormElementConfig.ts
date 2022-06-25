@@ -16,7 +16,7 @@ export type IFormElementConfig<TFormValues> = {
     | IFormRadioCheckSwitchConfig<TFormValues>
     | IFormTextAreaConfig<TFormValues>
     | IFormRadioCheckSwitchGroupConfig<TFormValues>
-    | IFormTagSelectConfig<TFormValues>
+    | IFormTagSelectConfig<TFormValues>;
   elementType:
     | "input"
     | "textarea"
@@ -25,7 +25,7 @@ export type IFormElementConfig<TFormValues> = {
     | "file"
     | "datepicker"
     | "radioCheckSwitch"
-    | "radioCheckSwitchGroup"
+    | "radioCheckSwitchGroup";
 };
 export type IFormRow<TFormValues> =
   | IFormElementConfig<TFormValues>

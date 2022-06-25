@@ -1,10 +1,10 @@
 import React from "react";
-import {UserControllerLogInArgs} from "../store/api/types";
-import {Form, FormHelper, IFormRow} from "../components";
-import {useUserLogInMutation} from "../store/api/userApi";
+import { UserControllerLogInArgs } from "../store/api/types";
+import { Form, FormHelper, IFormRow } from "../components";
+import { useUserLogInMutation } from "../store/api/userApi";
 
 const FormExample = () => {
-  const [userLogIn, {isLoading, isSuccess, error}] = useUserLogInMutation();
+  const [userLogIn, { isLoading, isSuccess, error }] = useUserLogInMutation();
 
   const formElements: IFormRow<UserControllerLogInArgs>[] = [
     FormHelper.createInput({
@@ -28,12 +28,11 @@ const FormExample = () => {
   };
 
   return (
-      <div>
-        <Form<UserControllerLogInArgs>
-            elements={formElements}
-            onSubmit={handleSubmit}
-        />
-      </div>
-
+    <div>
+      <Form<UserControllerLogInArgs>
+        elements={formElements}
+        onSubmit={handleSubmit}
+      />
+    </div>
   );
 };
