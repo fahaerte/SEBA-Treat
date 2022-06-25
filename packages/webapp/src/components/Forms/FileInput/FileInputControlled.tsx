@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { SCInput } from "../styles";
 import { getEncodedString } from "../../../utils/getEncodedString";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
@@ -19,12 +19,19 @@ const FileInputControlled = ({
   ...rest
 }: IFileInput<HTMLInputElement>) => {
   const inputId = getEncodedString(label, "file");
+  const [files, setFiles] = React.useState<FileList | null>(null);
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFiles(e.target.files);
+    console.log(e.target.files);
+
+    onChange(e);
+  };
   return (
-    <div className={wrapperClasses}>
+    <>
       <label
         htmlFor={inputId}
-        className={["form-label", isInvalid ? "is-invalid" : ""].join(" ")}
+        className={["form-label mb-0", isInvalid ? "is-invalid" : ""].join(" ")}
       >
         {label}
       </label>
@@ -40,13 +47,12 @@ const FileInputControlled = ({
         placeholder={label}
         readOnly={disabled}
         multiple={multiple}
-        value={value}
-        onChange={(event) => onChange(event)}
+        onChange={(event) => handleChange(event)}
         {...rest}
       />
 
       {isInvalid && <FormInvalidFeedback message={invalidFeedback} />}
-    </div>
+    </>
   );
 };
 

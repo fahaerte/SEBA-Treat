@@ -57,6 +57,9 @@ export interface IDefaultTheme {
       padding: string;
       color: string;
       fontSize: string;
+      border: {
+        radius: string;
+      };
     };
     label: {
       color: string;
