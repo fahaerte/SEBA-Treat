@@ -8,7 +8,7 @@ import {
 
 const injectedUserRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    userLogIn: build.query<
+    userLogIn: build.mutation<
       UserControllerLogInResponse,
       UserControllerLogInArgs
     >({
@@ -34,5 +34,5 @@ const injectedUserRtkApi = api.injectEndpoints({
   }),
 });
 
-export const { useUserLogInQuery, useUserRegistrationMutation } =
+export const { useUserLogInMutation, useUserRegistrationMutation } =
   injectedUserRtkApi;
