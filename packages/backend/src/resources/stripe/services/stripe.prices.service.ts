@@ -3,6 +3,7 @@ import { Stripe } from "stripe";
 import { StripeError } from "../../../utils/exceptions/stripe.errors";
 import HttpException from "../../../utils/exceptions/http.exception";
 
+@Service()
 class StripePricesService {
   private stripe: Stripe;
 
@@ -25,9 +26,9 @@ class StripePricesService {
     }
   }
 
-  public async getPrice(priceId: string) {
+  public async getPriceAndProducts() {
     try {
-      return await this.stripe.prices.retrieve(priceId);
+      return await this.stripe.prices.list({ expand: ["data.product"] });
     } catch (error: any) {
       if (error?.code === StripeError.ResourceMissing) {
         throw new HttpException(401, "Credit card not set up");

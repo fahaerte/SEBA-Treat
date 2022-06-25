@@ -2,7 +2,7 @@ import { Service } from "typedi";
 import { Router } from "express";
 import StripeService from "./stripe.service";
 
-// @Service
+@Service()
 class StripeController {
   public path = "/payment";
   public router = Router();

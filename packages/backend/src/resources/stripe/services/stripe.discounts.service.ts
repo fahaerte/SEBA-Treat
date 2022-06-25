@@ -4,7 +4,7 @@ import HttpException from "../../../utils/exceptions/http.exception";
 
 import { StripeError } from "../../../utils/exceptions/stripe.errors";
 
-// @Service
+@Service()
 class StripeDiscountsService {
   private stripe: Stripe;
 
@@ -12,7 +12,7 @@ class StripeDiscountsService {
     this.stripe = stripeInstance;
   }
 
-  // TODO Adjust
+  // TODO: Adjust
   public async createCreditDiscount(
     start: Date,
     description: string,
@@ -23,7 +23,17 @@ class StripeDiscountsService {
     try {
       return await this.stripe.products.create({ name, description });
     } catch (error: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (error?.code === StripeError.ResourceMissing) {
+        throw new HttpException(401, "Credit card not set up");
+      }
+      throw new HttpException(500, error?.message as string);
+    }
+  }
+
+  public async getCreditDiscounts() {
+    try {
+      return await this.stripe.products.list();
+    } catch (error: any) {
       if (error?.code === StripeError.ResourceMissing) {
         throw new HttpException(401, "Credit card not set up");
       }

@@ -13,6 +13,8 @@ import MealTransactionController from "./resources/mealTransaction/mealTransacti
 import VirtualBankController from "./resources/virtualBank/virtualBank.controller";
 import MealCategoryController from "./resources/mealCategory/mealCategory.controller";
 import UserService from "./resources/user/user.service";
+import StripeService from "./resources/stripe/stripe.service";
+import StripeController from "./resources/stripe/stripe.controller";
 
 validateEnv();
 
@@ -27,6 +29,7 @@ const app = new App(
     new MealOfferController(Container.get(MealOfferService)),
     new MealAllergenController(),
     new MealCategoryController(),
+    new StripeController(Container.get(StripeService)),
   ],
   Number(process.env.PORT)
 );
