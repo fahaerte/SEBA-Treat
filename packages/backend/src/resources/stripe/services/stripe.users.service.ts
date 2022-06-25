@@ -47,6 +47,7 @@ class StripeUsersService {
     }
   }
 
+  // TODO: Has to be added in user
   public async updateCustomer(
     userId: string,
     name?: string,
@@ -68,6 +69,21 @@ class StripeUsersService {
     } catch (error) {
       console.log(error);
       throw new HttpException(500, "couldn't update stripe customer");
+    }
+  }
+
+  public async getPaymentMethods(treatId: string) {
+    try {
+      const user = await this.getUserByTreatId(treatId);
+      const stripeId = user.data[0].id;
+      if (stripeId) {
+        return await this.stripe.customers.listPaymentMethods(stripeId, {
+          type: "card",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(500, "couldn't find payment");
     }
   }
 }

@@ -32,7 +32,9 @@ class StripeDiscountsService {
 
   public async getCreditDiscounts() {
     try {
-      return await this.stripe.coupons.list();
+      return await this.stripe.coupons.list({
+        expand: ["data.applies_to"],
+      });
     } catch (error: any) {
       if (error?.code === StripeError.ResourceMissing) {
         throw new HttpException(401, "Credit card not set up");

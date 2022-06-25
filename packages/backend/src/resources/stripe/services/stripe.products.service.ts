@@ -2,15 +2,10 @@ import { Service } from "typedi";
 import { Stripe } from "stripe";
 import HttpException from "../../../utils/exceptions/http.exception";
 import { StripeError } from "../../../utils/exceptions/stripe.errors";
-import StripePricesService from "./stripe.prices.service";
 
 @Service()
 class StripeProductsService {
-  private stripePrices: StripePricesService;
-
-  constructor(private readonly stripe: Stripe) {
-    this.stripePrices = new StripePricesService(stripe);
-  }
+  constructor(private readonly stripe: Stripe) {}
 
   public async getCreditPackages(withPrice = false) {
     try {

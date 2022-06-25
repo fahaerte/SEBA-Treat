@@ -78,8 +78,7 @@ class StripeController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const allProducts =
-        await this.stripeService.stripeProducts.getCreditPackages(true);
+      const allProducts = await this.stripeService.getCreditPackages(true);
       res.status(200).json(allProducts.data);
     } catch (error: any) {
       next(new HttpException(400, error.message));
@@ -92,8 +91,7 @@ class StripeController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const allDiscounts =
-        await this.stripeService.stripeDiscounts.getCreditDiscounts();
+      const allDiscounts = await this.stripeService.getCreditDiscounts();
       res.status(200).json(allDiscounts.data);
     } catch (error: any) {
       next(new HttpException(400, error.message));

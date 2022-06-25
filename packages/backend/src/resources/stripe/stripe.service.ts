@@ -1,9 +1,8 @@
 import Stripe from "stripe";
 import HttpException from "../../utils/exceptions/http.exception";
 import { StripeError } from "../../utils/exceptions/stripe.errors";
-import StripePricesService from "./services/stripe.prices.service";
 import StripeDiscountsService from "./services/stripe.discounts.service";
-import StripeProductsService from "./services/stripe.products.service";
+// import StripeProductsService from "./services/stripe.products.service";
 import { Service } from "typedi";
 import StripeUsersService from "./services/stripe.users.service";
 
@@ -11,8 +10,8 @@ import StripeUsersService from "./services/stripe.users.service";
 class StripeService {
   private stripe: Stripe;
   // private stripePrices: StripePricesService;
-  public stripeDiscounts: StripeDiscountsService;
-  public stripeProducts: StripeProductsService;
+  // public stripeDiscounts: StripeDiscountsService;
+  // public stripeProducts: StripeProductsService;
   public stripeUsers: StripeUsersService;
 
   constructor() {
@@ -21,11 +20,12 @@ class StripeService {
       apiVersion: "2020-08-27", // TODO for now api version of example article is used, check newer version https://stripe.com/docs/upgrades#api-changelog
     });
     // this.stripePrices = new StripePricesService(this.stripe);
-    this.stripeDiscounts = new StripeDiscountsService(this.stripe);
-    this.stripeProducts = new StripeProductsService(this.stripe);
+    // this.stripeDiscounts = new StripeDiscountsService(this.stripe);
+    // this.stripeProducts = new StripeProductsService(this.stripe);
     this.stripeUsers = new StripeUsersService(this.stripe);
   }
 
+  // PAYMENT SESSIONS
   public async createPaymentIntent(amountToCharge: number) {
     try {
       const paymentIntent = await this.stripe.paymentIntents.create({
@@ -48,6 +48,36 @@ class StripeService {
       // TODO: Add correct url
       return_url: `localhost:3000/${userId}/profile`,
     });
+  }
+
+  // GETTER OF PRODUCTS, CUSTOMER, DISCOUNTS
+  public async getCreditPackages(withPrice = false) {
+    try {
+      if (withPrice) {
+        return this.stripe.products.list({
+          expand: ["data.default_price"],
+        });
+      }
+      return this.stripe.products.list();
+    } catch (error: any) {
+      if (error?.code === StripeError.ResourceMissing) {
+        throw new HttpException(401, "Credit card not set up");
+      }
+      throw new HttpException(500, error?.message as string);
+    }
+  }
+
+  public async getCreditDiscounts() {
+    try {
+      return await this.stripe.coupons.list({
+        expand: ["data.applies_to"],
+      });
+    } catch (error: any) {
+      if (error?.code === StripeError.ResourceMissing) {
+        throw new HttpException(401, "Credit card not set up");
+      }
+      throw new HttpException(500, error?.message as string);
+    }
   }
 }
 
