@@ -3,8 +3,12 @@ import { Button, Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IUser } from "@treat/lib-common";
 import { TDatePickerType } from "../components/Forms/Datepicker/IDatePicker";
+import { useUserRegistrationMutation } from "../store/api";
 
 const RegisterScreen = () => {
+  const [userRegistration, { isLoading, isSuccess, isError }] =
+    useUserRegistrationMutation();
+
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -65,6 +69,7 @@ const RegisterScreen = () => {
         formKey: "birthdate",
         label: "Birthdate",
         type: "yyyy-mm-dd",
+        valueAsDate: true,
       }),
       FormHelper.createInput({
         formKey: "street",
@@ -95,11 +100,15 @@ const RegisterScreen = () => {
 
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
+    void userRegistration(data);
   };
 
   return (
     <>
       <Form<IUser> elements={elements} onSubmit={handleRegister} />
+      {isLoading && <h6>Trying to register...</h6>}
+      {isSuccess && <h6>Registered!</h6>}
+      {isError && <h6>error</h6>}
     </>
   );
 };
