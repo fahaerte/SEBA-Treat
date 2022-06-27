@@ -1,26 +1,26 @@
 import React from "react";
-import {Navigate, RouteObject, useRoutes} from "react-router-dom";
+import { Navigate, RouteObject, useRoutes } from "react-router-dom";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ErrorPage from "../screens/ErrorPage";
-import {Typography} from "../components";
+import { Typography } from "../components";
 
 export const AppRouter = () => {
   const mainRoutes = {
     path: "/",
-    element: <HomeScreen/>,
+    element: <HomeScreen />,
     children: [
-      {path: "*", element: <Navigate to="/404"/>},
-      {path: "/404", element: <ErrorPage/>},
+      { path: "*", element: <Navigate to="/404" /> },
+      { path: "/404", element: <ErrorPage /> },
 
       {
         path: "/login",
-        element: <LoginScreen/>,
+        element: <LoginScreen />,
       },
       {
         path: "/register",
-        element: <RegisterScreen/>,
+        element: <RegisterScreen />,
       },
     ],
   };
@@ -53,7 +53,7 @@ export const AppRouter = () => {
         // MEAL DETAIL
         path: ":mealId",
         element: (
-            <Typography>Meal Detail page with possible edit mode</Typography>
+          <Typography>Meal Detail page with possible edit mode</Typography>
         ),
         children: [
           {
@@ -64,11 +64,10 @@ export const AppRouter = () => {
       },
       {
         path: "create/",
-        element: <Typography>Create a new meal</Typography>
-      }
+        element: <Typography>Create a new meal</Typography>,
+      },
     ],
   };
-
 
   const routing = useRoutes([mainRoutes, profileRoutes, mealRoutes]);
 
