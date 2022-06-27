@@ -9,6 +9,7 @@ import profileFileUpload from "../../middleware/upload.middleware";
 import UserService from "../../resources/user/user.service";
 import User from "./user.interface";
 import { Service } from "typedi";
+import userService from "../../resources/user/user.service";
 
 @Service()
 class UserController implements Controller {
@@ -106,7 +107,7 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}`, authenticate, this.getUser);
+    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
 
     /**
      * @swagger
@@ -195,15 +196,22 @@ class UserController implements Controller {
     }
   };
 
-  private getUser = (
+  private getUser = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ): Response | void => {
+  ): Promise<Response | void> => {
     if (!req.user) {
       return next(new HttpException(404, "No logged in user"));
     }
-    res.status(200).send({ data: req.user });
+    let user;
+    const userId = req.params.userId;
+    if (userId) {
+      user = await this.userService.getUser(userId);
+    } else {
+      user = req.user;
+    }
+    res.status(200).send({ data: user });
   };
 
   private uploadProfilePicture = (

@@ -7,6 +7,7 @@ import User from "../user/user.interface";
 import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
 import { ObjectId } from "mongoose";
+import { IUser } from "@treat/lib-common";
 
 @Service()
 class UserService {
@@ -47,6 +48,16 @@ class UserService {
       }
     } catch (error) {
       throw new Error("Unable to create user");
+    }
+  }
+
+  public async getUser(userId: string): Promise<IUser | Error> {
+    try {
+      return (await this.userModel
+        .findById(userId)
+        .select(["email", "firstName", "lastName"])) as IUser;
+    } catch (error) {
+      throw new Error("No user found");
     }
   }
 

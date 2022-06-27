@@ -1,3 +1,3 @@
 export { ERatingRole } from "./ERatingRole";
-export { EReservationState } from "./EReservationState";
+export { EMealReservationState } from "./EMealReservationState";
 export { ETransactionState } from "./ETransactionState";

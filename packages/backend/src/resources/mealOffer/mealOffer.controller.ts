@@ -40,7 +40,7 @@ class MealOfferController implements Controller {
       authenticate,
       this.getReceivedMealOfferRequests
     );
-    this.router.put(
+    this.router.patch(
       `${this.path}/:mealOfferId/reservations/:mealReservationId`,
       authenticate,
       validationMiddleware(validate.updateReservationState),
