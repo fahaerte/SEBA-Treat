@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, FormHelper } from "../components/";
 import { IFormRow } from "../components/";
-import { IUser } from "../../../lib-common";
+import { IUserCredentials } from "../../../lib-common";
 import { useUserLogInMutation } from "../store/api";
 
 const LoginScreen = () => {
   const [userLogIn, { isLoading, isSuccess, isError }] = useUserLogInMutation();
 
-  const elements: IFormRow<IUser>[] = [
+  const elements: IFormRow<IUserCredentials>[] = [
     [
       FormHelper.createInput({
         formKey: "email",
         label: "Email",
         props: {
-          type: "text",
+          type: "email",
         },
         rules: {
           required: { value: true },
@@ -24,14 +24,14 @@ const LoginScreen = () => {
         formKey: "password",
         label: "Password",
         props: {
-          type: "text",
+          type: "password",
         },
         defaultValue: "",
       }),
     ],
   ];
 
-  const handleSignIn = (data: IUser) => {
+  const handleSignIn = (data: IUserCredentials) => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
     void userLogIn(data);
@@ -39,7 +39,7 @@ const LoginScreen = () => {
 
   return (
     <>
-      <Form<IUser> elements={elements} onSubmit={handleSignIn} />
+      <Form<IUserCredentials> elements={elements} onSubmit={handleSignIn} />
       {isLoading && <h6>Signing in...</h6>}
       {isSuccess && <h6>Signed In!</h6>}
       {isError && <h6>error</h6>}
