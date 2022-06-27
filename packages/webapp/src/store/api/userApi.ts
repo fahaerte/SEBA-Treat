@@ -13,7 +13,7 @@ const injectedUserRtkApi = api.injectEndpoints({
       UserControllerLogInArgs
     >({
       query: (queryArg) => ({
-        url: `/api/users/login`,
+        url: `/users/login`,
         method: "POST",
         body: {
           email: queryArg.email,
@@ -26,7 +26,7 @@ const injectedUserRtkApi = api.injectEndpoints({
       UserControllerRegisterArgs
     >({
       query: (queryArg) => ({
-        url: `/api/users/register`,
+        url: `/users/register`,
         method: "POST",
         body: {
           email: queryArg.email,
