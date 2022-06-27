@@ -28,7 +28,21 @@ const injectedUserRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/users/register`,
         method: "POST",
-        body: queryArg,
+        body: {
+          email: queryArg.email,
+          username: queryArg.username,
+          firstName: queryArg.firstName,
+          lastName: queryArg.lastName,
+          password: queryArg.password,
+          birthdate: queryArg.birthdate,
+          address: {
+            street: queryArg.address.street,
+            houseNumber: queryArg.address.houseNumber,
+            postalCode: queryArg.address.postalCode,
+            city: queryArg.address.city,
+            country: queryArg.address.country,
+          },
+        },
       }),
     }),
   }),

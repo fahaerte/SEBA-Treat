@@ -15,7 +15,7 @@ const RegisterScreen = () => {
         formKey: "email",
         label: "Email",
         props: {
-          type: "text",
+          type: "email",
         },
         rules: {
           required: { value: true },
@@ -37,14 +37,14 @@ const RegisterScreen = () => {
         formKey: "password",
         label: "Password",
         props: {
-          type: "text",
+          type: "password",
         },
         defaultValue: "",
       }),
     ],
     [
       FormHelper.createInput({
-        formKey: "firstname",
+        formKey: "firstName",
         label: "First Name",
         props: {
           type: "text",
@@ -55,7 +55,7 @@ const RegisterScreen = () => {
         defaultValue: "Max",
       }),
       FormHelper.createInput({
-        formKey: "lastname",
+        formKey: "lastName",
         label: "Last Name",
         props: {
           type: "text",
@@ -71,8 +71,10 @@ const RegisterScreen = () => {
         type: "yyyy-mm-dd",
         valueAsDate: true,
       }),
+    ],
+    [
       FormHelper.createInput({
-        formKey: "street",
+        formKey: "address.street",
         label: "Street",
         props: {
           type: "text",
@@ -80,20 +82,36 @@ const RegisterScreen = () => {
         defaultValue: "Musterstrasse",
       }),
       FormHelper.createInput({
-        formKey: "streetNumber",
-        label: "Streetnumber",
+        formKey: "address.houseNumber",
+        label: "Housenumber",
         props: {
           type: "number",
         },
         defaultValue: 123,
       }),
       FormHelper.createInput({
-        formKey: "postalCode",
+        formKey: "address.postalCode",
         label: "Postal Code",
         props: {
           type: "number",
         },
         defaultValue: 80335,
+      }),
+      FormHelper.createInput({
+        formKey: "address.city",
+        label: "City",
+        props: {
+          type: "text",
+        },
+        defaultValue: "Munich",
+      }),
+      FormHelper.createInput({
+        formKey: "address.country",
+        label: "Country",
+        props: {
+          type: "text",
+        },
+        defaultValue: "Germany",
       }),
     ],
   ];
