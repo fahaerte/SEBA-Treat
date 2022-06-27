@@ -11,6 +11,7 @@ import MealAllergenController from "./resources/mealAllergen/mealAllergen.contro
 import MealTransactionController from "./resources/mealTransaction/mealTransaction.controller";
 import MealCategoryController from "./resources/mealCategory/mealCategory.controller";
 import UserService from "./resources/user/user.service";
+import CreditPackageController from "./resources/creditPackage/creditPackage.controller";
 
 validateEnv();
 
@@ -23,6 +24,8 @@ const app = new App(
     new MealOfferController(Container.get(MealOfferService)),
     new MealAllergenController(),
     new MealCategoryController(),
+
+    new CreditPackageController(),
   ],
   Number(process.env.PORT)
 );

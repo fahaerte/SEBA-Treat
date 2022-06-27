@@ -5,3 +5,4 @@ export type { IMealOffer } from "./IMealOffer";
 export type { IRating } from "./IRating";
 export type { IUser } from "./IUser";
 export type { IVirtualAccount } from "./IVirtualAccount";
+export type { ICreditPackage } from "./ICreditPackage";
