@@ -7,7 +7,7 @@ const register = Joi.object({
   firstName: Joi.string().required().example("Max"),
   lastName: Joi.string().required().example("Mustermann"),
   password: Joi.string().min(6).required().example("pa55word"),
-  birthdate: Joi.date().required(),
+  birthdate: Joi.date().required().example(new Date('2000-04-20')),
   address: AddressValidation.create.required(),
 });
 
