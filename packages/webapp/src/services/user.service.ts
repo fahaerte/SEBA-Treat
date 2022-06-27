@@ -5,7 +5,8 @@ class UserService {
   private static PATH = "/users";
 
   public static getUser = async (userId: string): Promise<IUser> => {
-    const data = await ApiService.get(`${UserService.PATH}/${userId}`);
+    const response = await ApiService.get(`${UserService.PATH}/${userId}`);
+    const data = await response.json();
     return data["data"] as IUser;
   };
 }
