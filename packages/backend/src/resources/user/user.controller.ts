@@ -28,14 +28,14 @@ class UserController implements Controller {
      *    - User
      *    summary: Register a user
      *    parameters:
-     *    - name: username
-     *      description: username of user
+     *    - name: email
+     *      description: email of user
      *      in: body
      *      required: true
      *      schema:
      *        $ref: '#/definitions/RegisterUser'
-     *    - name: email
-     *      description: email of user
+     *    - name: username
+     *      description: username of user
      *      in: body
      *      required: true
      *      schema:
@@ -43,6 +43,31 @@ class UserController implements Controller {
      *    - name: password
      *      description: password of user
      *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: firstName
+     *      description: first name of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: lastName
+     *      description: last name of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: birthdate
+     *      description: birthdate of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: address
+     *      description: Address of user
+     *      in: body
+     *      required: true
      *      schema:
      *        $ref: '#/definitions/RegisterUser'
      *    responses:
