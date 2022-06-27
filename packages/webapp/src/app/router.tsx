@@ -1,22 +1,18 @@
 import React from "react";
-import { Navigate, useRoutes } from "react-router-dom";
-import { Button, Icon } from "../components";
+import { useRoutes } from "react-router-dom";
+import { MealOfferRequests } from "../screens/mealOfferRequests";
 
 export const AppRouter = () => {
-  const mainRoutes = {};
+  const mainRoutes = [
+    {
+      path: "/mealOfferRequests",
+      element: <MealOfferRequests />,
+    },
+  ];
 
   const redirectRoutes = [];
 
-  const routing = useRoutes([mainRoutes]);
+  const routing = useRoutes(mainRoutes);
 
-  return (
-    <>
-      Hallo :-D
-      <br />
-      <Button>
-        <Icon type={"download"} /> asdf
-      </Button>
-      <br />
-    </>
-  );
+  return routing;
 };

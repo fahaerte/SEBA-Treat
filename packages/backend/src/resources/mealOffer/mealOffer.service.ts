@@ -1,16 +1,16 @@
 import MealOfferSchema from "../mealOffer/mealOffer.model";
-import MealOffer from "../../resources/mealOffer/mealOffer.interface";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
 
 import User from "../user/user.interface";
 import { Service } from "typedi";
-import MealReservation from "../mealReservation/mealReservation.interface";
-import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import MealReservationState from "../mealReservation/mealReservationState.enum";
-import HttpException from "../../utils/exceptions/http.exception";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
 import { ObjectId } from "mongoose";
+import MealOffer from "./mealOffer.interface";
+import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
+import MealReservationState from "../mealReservation/mealReservationState.enum";
+import MealReservation from "../mealReservation/mealReservation.interface";
+import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 
 @Service()
 class MealOfferService {
@@ -40,7 +40,25 @@ class MealOfferService {
     user: User
   ): Promise<MealOffer[] | Error> {
     return (await this.mealOffer
-      .find({ reservations: { $elemMatch: { buyer: user._id } } })
+      .find(
+        { reservations: { $elemMatch: { buyer: user._id } } },
+        {
+          description: 1,
+          user: 1,
+          portions: 1,
+          startDate: 1,
+          endDate: 1,
+          price: 1,
+          title: 1,
+          reservations: {
+            $filter: {
+              input: "$reservations",
+              as: "reservation",
+              cond: { $eq: ["$$reservation.buyer", user._id] },
+            },
+          },
+        }
+      )
       .exec()) as MealOffer[];
   }
 
@@ -78,89 +96,187 @@ class MealOfferService {
     mealOfferId: ObjectId,
     user: User,
     mealReservationId: ObjectId,
-    newState: MealReservationStateEnum
-  ): Promise<MealOffer | Error> {
+    newState: MealReservationState
+  ): Promise<void | Error> {
+    if (newState === MealReservationState.SELLER_ACCEPTED) {
+      await this.updateMealOfferReservationToSellerAccepted(
+        mealOfferId,
+        user,
+        mealReservationId
+      );
+    } else if (newState === MealReservationState.SELLER_REJECTED) {
+      await this.updateMealOfferReservationToSellerRejected(
+        mealOfferId,
+        user,
+        mealReservationId
+      );
+    } else if (newState === MealReservationState.BUYER_CONFIRMED) {
+      await this.updateMealOfferReservationToBuyerConfirmed(
+        mealOfferId,
+        user,
+        mealReservationId
+      );
+    } else if (newState === MealReservationState.BUYER_REJECTED) {
+      await this.updateMealOfferReservationToBuyerRejected(
+        mealOfferId,
+        user,
+        mealReservationId
+      );
+    } else if (newState === MealReservationState.PENDING) {
+      throw new InvalidMealReservationStateException(
+        `State can not be set to ${MealReservationState.PENDING}`
+      );
+    } else {
+      throw new InvalidMealReservationStateException("Unknown state");
+    }
+  }
+
+  private async updateMealOfferReservationToSellerAccepted(
+    mealOfferId: ObjectId,
+    seller: User,
+    mealReservationId: ObjectId
+  ): Promise<void | Error> {
+    const [mealOffer, mealReservation] =
+      (await this.getMealOfferAndReservationForSeller(
+        mealOfferId,
+        mealReservationId,
+        seller
+      )) as [MealOffer, MealReservation];
+    if (mealReservation.reservationState === MealReservationState.PENDING) {
+      mealReservation.reservationState = MealReservationState.SELLER_ACCEPTED;
+      await mealOffer.save();
+    } else {
+      throw new InvalidMealReservationStateException(
+        `State should be ${MealReservationState.PENDING}`
+      );
+    }
+  }
+
+  private async updateMealOfferReservationToBuyerConfirmed(
+    mealOfferId: ObjectId,
+    buyer: User,
+    mealReservationId: ObjectId
+  ): Promise<void | Error> {
+    const [mealOffer, mealReservation] =
+      (await this.getMealOfferAndReservationForBuyer(
+        mealOfferId,
+        mealReservationId,
+        buyer
+      )) as [MealOffer, MealReservation];
+    console.log(mealReservation);
+    if (
+      mealReservation.reservationState === MealReservationState.SELLER_ACCEPTED
+    ) {
+      const mealTransaction =
+        (await this.mealTransactionService.createTransaction(
+          mealOfferId,
+          mealReservationId,
+          mealReservation.buyer,
+          mealOffer.user,
+          mealOffer.price,
+          mealOffer.transactionFee
+        )) as MealTransaction;
+      await this.mealTransactionService.performTransaction(
+        mealTransaction._id as ObjectId
+      );
+      mealReservation.reservationState = MealReservationState.BUYER_CONFIRMED;
+      await mealOffer.save();
+    } else {
+      throw new InvalidMealReservationStateException(
+        `State should be ${MealReservationState.SELLER_ACCEPTED}`
+      );
+    }
+  }
+
+  private async updateMealOfferReservationToSellerRejected(
+    mealOfferId: ObjectId,
+    seller: User,
+    mealReservationId: ObjectId
+  ): Promise<void | Error> {
+    const [mealOffer, mealReservation] =
+      (await this.getMealOfferAndReservationForSeller(
+        mealOfferId,
+        mealReservationId,
+        seller
+      )) as [MealOffer, MealReservation];
+    if (
+      mealReservation.reservationState === MealReservationState.PENDING ||
+      mealReservation.reservationState === MealReservationState.SELLER_ACCEPTED
+    ) {
+      mealReservation.reservationState = MealReservationState.SELLER_REJECTED;
+      await mealOffer.save();
+    } else {
+      throw new InvalidMealReservationStateException(
+        `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
+      );
+    }
+  }
+
+  private async updateMealOfferReservationToBuyerRejected(
+    mealOfferId: ObjectId,
+    buyer: User,
+    mealReservationId: ObjectId
+  ): Promise<void | Error> {
+    const [mealOffer, mealReservation] =
+      (await this.getMealOfferAndReservationForBuyer(
+        mealOfferId,
+        mealReservationId,
+        buyer
+      )) as [MealOffer, MealReservation];
+    if (
+      mealReservation.reservationState ===
+        MealReservationState.SELLER_ACCEPTED ||
+      mealReservation.reservationState === MealReservationState.PENDING
+    ) {
+      mealReservation.reservationState = MealReservationState.BUYER_REJECTED;
+      await mealOffer.save();
+    } else {
+      throw new InvalidMealReservationStateException(
+        `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
+      );
+    }
+  }
+
+  private async getMealOfferAndReservation(
+    mealOfferId: ObjectId,
+    mealReservationId: ObjectId
+  ): Promise<[MealOffer, MealReservation] | Error> {
     const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
-    const mealReservations = mealOffer.reservations;
-    const mealReservation = mealReservations.find(
+    const mealReservation = mealOffer.reservations.find(
       (reservation) =>
         reservation._id.toString() === mealReservationId.toString()
     ) as MealReservation;
-    if (
-      (mealOffer.user.toString() === user._id.toString() &&
-        MealOfferService.isValidSellerReservationStateUpdate(
-          mealReservation.reservationState,
-          newState
-        )) ||
-      (mealReservation.buyer.toString() === user._id.toString() &&
-        MealOfferService.isValidBuyerReservationStateUpdate(
-          mealReservation.reservationState,
-          newState
-        ))
-    ) {
-      for (const reservation of mealOffer.reservations) {
-        if (reservation._id.toString() === mealReservation._id.toString()) {
-          if (newState === MealReservationState.BUYER_CONFIRMED) {
-            const mealTransaction =
-              (await this.mealTransactionService.createTransaction(
-                mealOfferId,
-                mealReservationId,
-                mealReservation.buyer,
-                mealOffer.user,
-                mealOffer.price,
-                mealOffer.transactionFee
-              )) as MealTransaction;
-            await this.mealTransactionService.performTransaction(
-              mealTransaction._id as ObjectId
-            );
-          }
-          reservation.reservationState = newState;
-        }
-      }
-      return await mealOffer.save();
-    }
-    throw new HttpException(400, "Wrong state");
+    return [mealOffer, mealReservation];
   }
 
-  private static isValidBuyerReservationStateUpdate(
-    mealReservationState: MealReservationStateEnum,
-    newState: MealReservationStateEnum
-  ): boolean {
-    if (
-      [
-        MealReservationState.BUYER_CONFIRMED,
-        MealReservationState.BUYER_REJECTED,
-      ].includes(newState)
-    ) {
-      return MealOfferService.isValidReservationStateUpdate(
-        mealReservationState,
-        MealReservationState.SELLER_ACCEPTED
-      );
+  private async getMealOfferAndReservationForSeller(
+    mealOfferId: ObjectId,
+    mealReservationId: ObjectId,
+    seller: User
+  ): Promise<[MealOffer, MealReservation] | Error> {
+    const [mealOffer, mealReservation] = (await this.getMealOfferAndReservation(
+      mealOfferId,
+      mealReservationId
+    )) as [MealOffer, MealReservation];
+    if (String(mealOffer.user) === String(seller._id)) {
+      return [mealOffer, mealReservation];
     }
-    return false;
+    throw new Error("User is not seller of offer");
   }
 
-  private static isValidSellerReservationStateUpdate(
-    mealReservationState: MealReservationStateEnum,
-    newState: MealReservationStateEnum
-  ): boolean {
-    if (
-      newState === MealReservationState.SELLER_ACCEPTED ||
-      newState === MealReservationState.SELLER_REJECTED
-    ) {
-      return MealOfferService.isValidReservationStateUpdate(
-        mealReservationState,
-        MealReservationState.PENDING
-      );
+  private async getMealOfferAndReservationForBuyer(
+    mealOfferId: ObjectId,
+    mealReservationId: ObjectId,
+    buyer: User
+  ): Promise<[MealOffer, MealReservation] | Error> {
+    const [mealOffer, mealReservation] = (await this.getMealOfferAndReservation(
+      mealOfferId,
+      mealReservationId
+    )) as [MealOffer, MealReservation];
+    if (String(mealReservation.buyer) === String(buyer._id)) {
+      return [mealOffer, mealReservation];
     }
-    return false;
-  }
-
-  private static isValidReservationStateUpdate(
-    mealReservationState: MealReservationStateEnum,
-    expectedState: MealReservationStateEnum
-  ): boolean {
-    return mealReservationState === expectedState;
+    throw new Error("User is not buyer of offer");
   }
 }
 

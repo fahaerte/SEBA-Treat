@@ -1,19 +1,17 @@
-import { IAllergens } from "./IAllergens";
-import { Types } from "mongoose";
+import { ObjectId } from "mongoose";
+import { IMealOfferReservation } from "./IMealOfferReservation";
 
-export interface IMealOffer {
+export interface IMealOffer extends Document {
   title: string;
   description: string;
-  categories?: string[];
-  createdAt: Date;
+  user: ObjectId;
+  categories: ObjectId[];
+  allergens: ObjectId[];
   startDate: Date;
   endDate: Date;
-  images: File[];
   portions: number;
-  pickupDetails?: string;
-  price: string;
-  transactionFee: string;
-  allergens?: IAllergens;
-  allergenVerified: boolean;
-  author: Types.ObjectId;
+  pickUpDetails: string;
+  price: number;
+  transactionFee: number;
+  reservations: IMealOfferReservation[];
 }
