@@ -1,5 +1,5 @@
-import {ObjectId} from "mongoose";
-import {IMealOfferReservation} from "./IMealOfferReservation";
+import { ObjectId } from "mongoose";
+import { IMealOfferReservation } from "./IMealOfferReservation";
 
 export interface IMealOffer extends Document {
   title: string;
@@ -15,4 +15,3 @@ export interface IMealOffer extends Document {
   transactionFee: number;
   reservations: IMealOfferReservation[];
 }
-

@@ -197,9 +197,9 @@ class UserController implements Controller {
   };
 
   private getUser = async (
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): Promise<Response | void> => {
     if (!req.user) {
       return next(new HttpException(404, "No logged in user"));
@@ -211,7 +211,7 @@ class UserController implements Controller {
     } else {
       user = req.user;
     }
-    res.status(200).send({data: user});
+    res.status(200).send({ data: user });
   };
 
   private uploadProfilePicture = (

@@ -1,6 +1,6 @@
 enum EMealCategory {
-    VEGAN = "vegan",
-    VEGETARIAN = "vegetarian",
+  VEGAN = "vegan",
+  VEGETARIAN = "vegetarian",
 }
 
 export default EMealCategory;

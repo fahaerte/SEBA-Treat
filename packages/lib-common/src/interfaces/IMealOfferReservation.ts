@@ -1,7 +1,7 @@
-import {ObjectId} from "mongoose";
-import {EMealReservationState} from "../enums";
+import { ObjectId } from "mongoose";
+import { EMealReservationState } from "../enums";
 
 export interface IMealOfferReservation {
-    buyer: ObjectId;
-    reservationState: EMealReservationState;
+  buyer: ObjectId;
+  reservationState: EMealReservationState;
 }

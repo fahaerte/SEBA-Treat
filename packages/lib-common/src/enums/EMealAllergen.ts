@@ -1,6 +1,5 @@
 enum EMealAllergen {
-    GLUTEN = "gluten",
+  GLUTEN = "gluten",
 }
 
 export default EMealAllergen;
-
