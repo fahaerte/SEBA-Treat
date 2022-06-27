@@ -68,8 +68,10 @@ const RegisterScreen = () => {
       FormHelper.createDatePicker({
         formKey: "birthdate",
         label: "Birthdate",
-        type: "yyyy-mm-dd",
-        valueAsDate: true,
+        props: {
+          type: "date",
+          valueAsDate: true,
+        },
       }),
     ],
     [

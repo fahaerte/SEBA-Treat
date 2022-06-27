@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, FormHelper } from "../components/";
 import { IFormRow } from "../components/";
-import { IUserCredentials } from "../../../lib-common";
 import { useUserLogInMutation } from "../store/api";
+import { IUserCredentials } from "@treat/lib-common";
 
 const LoginScreen = () => {
   const [userLogIn, { isLoading, isSuccess, isError }] = useUserLogInMutation();
