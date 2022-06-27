@@ -70,7 +70,6 @@ const RegisterScreen = () => {
         label: "Birthdate",
         props: {
           type: "date",
-          valueAsDate: true,
         },
       }),
     ],

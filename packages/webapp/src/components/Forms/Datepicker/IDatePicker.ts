@@ -14,19 +14,12 @@ export interface IDatePickerProps {
    * Time: hh:mm
    */
   type?: TDatePickerType;
-  /**
-   * Whether the input should be sent as a date object
-   * If false, then the comparable min/max values in
-   * register have to be represented as strings.
-   * Otherwise, a number is required, by using the
-   * getTime() function.
-   */
-  valueAsDate?: boolean;
 }
 
 export interface IFormDatePicker<TFormValues>
   extends IFormElement<TFormValues>,
     IDatePickerProps {}
+
 export interface IFormDatePickerConfig<TFormValues>
   extends IFormElement<TFormValues> {
   props?: IDatePickerProps;
@@ -34,7 +27,7 @@ export interface IFormDatePickerConfig<TFormValues>
 
 export interface IDatePicker<TFormValues>
   extends IFormElementControlled,
-    Omit<IFormDatePicker<TFormValues>, TIFormElementOmit | "valueAsDate">,
+    Omit<IFormDatePicker<TFormValues>, TIFormElementOmit>,
     Partial<
       Pick<DOMAttributes<HTMLInputElement>, "onKeyDown" | "onFocus" | "onBlur">
     > {

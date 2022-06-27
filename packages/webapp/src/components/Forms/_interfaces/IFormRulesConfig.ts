@@ -2,6 +2,7 @@ type TFormRuleInput<T> = {
   value: T;
   message?: string;
 };
+
 export interface IFormRulesConfig {
   required?: TFormRuleInput<boolean>;
   min?: TFormRuleInput<number | string>;
@@ -16,6 +17,7 @@ type TFormRule<T> = {
   value: T;
   message: string;
 };
+
 export interface IFormRules {
   required?: TFormRule<boolean>;
   min?: TFormRule<number | string>;
