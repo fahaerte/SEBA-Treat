@@ -114,7 +114,7 @@ export const defaultTheme: DefaultTheme = {
   },
   shadows: {
     sm: "",
-    md: "",
+    md: "0 0 15px -5px grey",
     lg: "",
     inset: "",
   },
