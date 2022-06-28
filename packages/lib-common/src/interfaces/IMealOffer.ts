@@ -5,7 +5,6 @@ export interface IMealOffer {
   title: string;
   description: string;
   categories?: string[];
-  createdAt: Date;
   startDate: Date;
   endDate: Date;
   images: File[];
@@ -15,5 +14,5 @@ export interface IMealOffer {
   transactionFee: string;
   allergens?: IAllergens;
   allergenVerified: boolean;
-  author: Types.ObjectId;
+  // author: Types.ObjectId;
 }

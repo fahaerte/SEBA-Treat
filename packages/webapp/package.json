@@ -12,13 +12,6 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "webpack serve --hot --env development --env dotenv --env platform=web --progress",
-    "build": "yarn run build:types && yarn run build:js && yarn run build:web && yarn run build:umd && yarn run build:umd:min",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
-    "build:web": "rimraf ./build/web && webpack --env platform=web --progress",
-    "build:web:dotenv": "rimraf ./build/web && webpack --env platform=web --env dotenv --progress",
-    "build:umd": "rimraf ./umd && webpack --progress --config webpack.config.umd.ts",
-    "build:umd:min": "webpack --env production --progress --config webpack.config.umd.ts",
     "clean": "rimraf lib",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx",

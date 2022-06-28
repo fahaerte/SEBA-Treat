@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormHelper } from "@treat/webapp/src/components/";
-import { IFormRow } from "@treat/webapp/src/components/";
 import { IUser } from "@treat/lib-common";
-import { TDatePickerType } from "../components/Forms/Datepicker/IDatePicker";
+import { TDatePickerType } from "../components/ui/Forms/Datepicker/IDatePicker";
 import { useUserRegistrationMutation } from "../store/api";
+import { Form, FormHelper, IFormRow } from "../components";
+import CreateMealForm from "../components/Meal/CreateMealForm";
 
 const RegisterScreen = () => {
   const [userRegistration, { isLoading, isSuccess, isError }] =
@@ -124,10 +124,12 @@ const RegisterScreen = () => {
 
   return (
     <>
-      <Form<IUser> elements={elements} onSubmit={handleRegister} />
-      {isLoading && <h6>Trying to register...</h6>}
-      {isSuccess && <h6>Registered!</h6>}
-      {isError && <h6>error</h6>}
+      {/*<Form<IUser> elements={elements} onSubmit={handleRegister}/>*/}
+      {/*{isLoading && <h6>Trying to register...</h6>}*/}
+      {/*{isSuccess && <h6>Registered!</h6>}*/}
+      {/*{isError && <h6>error</h6>}*/}
+
+      <CreateMealForm />
     </>
   );
 };

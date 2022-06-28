@@ -17,7 +17,7 @@ import { BrowserRouter } from "react-router-dom";
 class Root extends Component {
   render() {
     return (
-      <div className="app docuply h-100">
+      <div className="app h-100 overflow-scroll">
         <Provider store={store}>
           <CustomThemeProvider>
             <BrowserRouter>
@@ -29,6 +29,7 @@ class Root extends Component {
     );
   }
 }
+
 export default Root;
 
 render(<Root />, document.getElementById("root"));

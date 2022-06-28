@@ -71,5 +71,6 @@ export const AppRouter = () => {
 
   const routing = useRoutes([mainRoutes, profileRoutes, mealRoutes]);
 
+  // TODO: Put user context here (authenticated or not?)
   return <>{routing}</>;
 };

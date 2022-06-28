@@ -1,7 +1,4 @@
 .grid-app {
-  display: grid;
-  grid-template-columns: minmax(200px, 15%) 1fr;
-  grid-template-rows: minmax(80px, 5%) 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
@@ -9,9 +6,11 @@
     "explorer main";
   height: 100%;
 }
+
 .header {
   grid-area: header;
 }
+
 .explorer {
   grid-area: explorer;
 }
@@ -26,11 +25,13 @@
     "nav-breadcrumb"
     "content";
   grid-area: main;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
+
 .nav-breadcrumb {
   grid-area: nav-breadcrumb;
 }
+
 .content {
   grid-area: content;
   overflow-y: auto;

@@ -85,8 +85,8 @@ export const defaultTheme: DefaultTheme = {
   },
   general: {
     backgroundPrimary: "white",
-    backgroundSecondary: "#f8f8f8",
-    backgroundBody: "#f8f8f8",
+    backgroundSecondary: "white",
+    backgroundBody: "white",
     border: {
       radius: "50px",
       width: "1px",
