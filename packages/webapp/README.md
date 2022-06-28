@@ -26,7 +26,7 @@ development: [https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4]().
 
 **NOTE: Just Saving it in case for later usage**
 
-````
+```
 "build": "yarn run build:types && yarn run build:js && yarn run build:web && yarn run build:umd && yarn run build:umd:min",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
@@ -34,4 +34,4 @@ development: [https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4]().
     "build:web:dotenv": "rimraf ./build/web && webpack --env platform=web --env dotenv --progress",
     "build:umd": "rimraf ./umd && webpack --progress --config webpack.config.umd.ts",
     "build:umd:min": "webpack --env production --progress --config webpack.config.umd.ts",
-````
+```
