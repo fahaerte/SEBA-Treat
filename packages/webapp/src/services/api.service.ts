@@ -3,7 +3,7 @@ class ApiService {
   private static BASE_URL = "http://localhost:5000/api";
 
   private static BEARER =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjQ1NzdlNzJkNWZjNTJlMjUwMTM0MSIsImlhdCI6MTY1NjMzOTgzMCwiZXhwIjoxNjU2NDI2MjMwfQ.EQK4LI2nJlsOaqiAOPmNDU9qZExi7kGV7IV4VBG49TY";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjQ1NzdlNzJkNWZjNTJlMjUwMTM0MSIsImlhdCI6MTY1NjUxNjk4NiwiZXhwIjoxNjU2NjAzMzg2fQ.zO_tOVp6E7f7GXtCkcHqgvBGcRWOEz0Z1WCld6zcIKA";
 
   private static headers = {
     "Content-Type": "application/json",
@@ -25,8 +25,8 @@ class ApiService {
     return await ApiService.requestWithBody("POST", url, data);
   };
 
-  public static put = async (url: string, data: any): Promise<Response> => {
-    return await ApiService.requestWithBody("PUT", url, data);
+  public static patch = async (url: string, data: any): Promise<Response> => {
+    return await ApiService.requestWithBody("PATCH", url, data);
   };
 
   private static requestWithBody = async (
