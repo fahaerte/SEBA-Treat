@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Col, Row } from "../Grid";
-import { Button, Icon } from "../index";
+import React, {useCallback, useEffect, useState} from "react";
+import {Col, Row} from "../Grid";
+import {Button, Icon} from "../index";
 import UserService from "../../services/user.service";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import User from "../../types/interfaces/user.interface";
+import styled from "styled-components";
+import {MealOfferRequestUserInfo} from "./MealOfferRequestUserInfo";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -18,15 +20,25 @@ export const SentMealReservation = ({
   sellerId,
   reservation,
 }: SentMealOfferRequestBottomProps) => {
+
+
+  const ProfilePicture = styled.img`
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+  `;
+
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
   const [seller, setSeller] = useState({} as User);
+  const [profilePicture, setProfilePicture] = useState("");
 
   const fetchSellerData = useCallback(async () => {
     try {
-      const seller = await UserService.getUser(String(sellerId));
-      setSeller(seller);
+      setSeller(await UserService.getUser(sellerId));
+      setProfilePicture(await UserService.getProfilePictureURL(sellerId));
     } catch (error: any) {
       console.log(error);
     }
@@ -110,14 +122,7 @@ export const SentMealReservation = ({
 
   return (
     <Row className={""}>
-      <Col className={"col-2"}>
-        <Row>
-          <Col className={"col-sm-auto"}>Bild</Col>
-          <Col className={"col-sm-auto"}>
-            {`${seller.firstName} ${seller.lastName}`}
-          </Col>
-        </Row>
-      </Col>
+      <MealOfferRequestUserInfo userId={sellerId}/>
       <Col className={""}>
         <Row>
           <Col className={"col-sm-auto"}>
