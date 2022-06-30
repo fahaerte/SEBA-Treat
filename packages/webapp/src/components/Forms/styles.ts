@@ -7,7 +7,7 @@ export const SCFloatingForm = styled.div`
   > .form-control,
   > .form-select {
     line-height: ${({ theme }) => theme.form.control.lineHeight};
-    border-radius: ${({ theme }) => theme.general.border.radius};
+    border-radius: ${({ theme }) => theme.form.control.border.radius};
     border: ${({ theme }) => theme.general.border.width} solid
       ${({ theme }) => theme.general.border.color.primary};
     color: ${({ theme }) => theme.form.control.color};
@@ -15,6 +15,7 @@ export const SCFloatingForm = styled.div`
     height: ${({ theme }) => theme.form.control.height};
     padding: ${({ theme }) => theme.form.control.padding};
   }
+
   > .form-control:not(:placeholder-shown),
   > .form-select {
     padding-top: 1.5em;
@@ -48,6 +49,7 @@ export const SCCheckbox = styled.input<IRadioCheckSwitchProps>`
       theme.palette[color as string].main};
     border-color: ${({ theme, color }) => theme.palette[color as string].main};
   }
+
   &:focus {
     border-color: ${({ theme }) => theme.palette.primary.active};
     box-shadow: 0 0 0 0.15rem ${({ theme }) => theme.palette.primary.active};

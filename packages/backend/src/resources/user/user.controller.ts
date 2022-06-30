@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response, Router} from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
@@ -8,54 +8,79 @@ import profileFileUpload from "../../middleware/upload.middleware";
 
 import UserService from "../../resources/user/user.service";
 import User from "./user.interface";
-import {Service} from "typedi";
+import { Service } from "typedi";
 
 @Service()
 class UserController implements Controller {
-    public path = "/users";
-    public router = Router();
+  public path = "/users";
+  public router = Router();
 
-    constructor(private readonly userService: UserService) {
-        this.initializeRoutes();
-    }
+  constructor(private readonly userService: UserService) {
+    this.initializeRoutes();
+  }
 
-    private initializeRoutes(): void {
-        /**
-         * @swagger
-         * /api/users/register:
-         *  post:
-         *    tags:
-         *    - User
-         *    summary: Register a user
-         *    parameters:
-         *    - name: username
-         *      description: username of user
-         *      in: body
-         *      required: true
-         *      schema:
-         *        $ref: '#/definitions/RegisterUser'
-         *    - name: email
-         *      description: email of user
-         *      in: body
-         *      required: true
-         *      schema:
-         *        $ref: '#/definitions/RegisterUser'
-         *    - name: password
-         *      description: password of user
-         *      in: body
-         *      schema:
-         *        $ref: '#/definitions/RegisterUser'
-         *    responses:
-         *      201:
-         *        description: Created
-         *      400:
-         *        description: Any Error
-         */
-        this.router.post(
-            `${this.path}/register`,
-            validationMiddleware(validate.register),
-            this.register
-        );
+  private initializeRoutes(): void {
+    /**
+     * @swagger
+     * /api/users/register:
+     *  post:
+     *    tags:
+     *    - User
+     *    summary: Register a user
+     *    parameters:
+     *    - name: email
+     *      description: email of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: username
+     *      description: username of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: password
+     *      description: password of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: firstName
+     *      description: first name of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: lastName
+     *      description: last name of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: birthdate
+     *      description: birthdate of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: address
+     *      description: Address of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    responses:
+     *      201:
+     *        description: Created
+     *      400:
+     *        description: Any Error
+     */
+    this.router.post(
+      `${this.path}/register`,
+      validationMiddleware(validate.register),
+      this.register
+    );
 
         /**
          * @swagger
@@ -108,31 +133,31 @@ class UserController implements Controller {
          */
         this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
 
-        /**
-         * @swagger
-         * /api/users/profile-picture:
-         *  post:
-         *    consumes:
-         *     - multipart/form-data
-         *    tags:
-         *    - User
-         *    summary: Upload profile picture
-         *    parameters:
-         *    - name: photo
-         *      description: email
-         *      in: formData
-         *      type: file
-         *      required: true
-         *    responses:
-         *      201:
-         *        description: Profile picture uploaded successfully
-         */
-        this.router.post(
-            `${this.path}/profile-picture`,
-            authenticate,
-            profileFileUpload.single("profilePicture"),
-            this.uploadProfilePicture
-        );
+    /**
+     * @swagger
+     * /api/users/profile-picture:
+     *  post:
+     *    consumes:
+     *     - multipart/form-data
+     *    tags:
+     *    - User
+     *    summary: Upload profile picture
+     *    parameters:
+     *    - name: photo
+     *      description: email
+     *      in: formData
+     *      type: file
+     *      required: true
+     *    responses:
+     *      201:
+     *        description: Profile picture uploaded successfully
+     */
+    this.router.post(
+      `${this.path}/profile-picture`,
+      authenticate,
+      profileFileUpload.single("profilePicture"),
+      this.uploadProfilePicture
+    );
 
         /**
          * @swagger
@@ -171,29 +196,29 @@ class UserController implements Controller {
             const newUser = req.body as User;
             const token = await this.userService.register(newUser);
 
-            res.status(201).json({token});
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
+      res.status(201).json({ token });
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
 
-    private login = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const {email, password} = req.body;
+  private login = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const { email, password } = req.body;
 
-            const token = await this.userService.login(
-                email as string,
-                password as string
-            );
-            res.status(200).json({token});
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
+      const token = await this.userService.login(
+        email as string,
+        password as string
+      );
+      res.status(200).json({ token });
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
 
     private getUser = async (
         req: Request,
@@ -217,38 +242,38 @@ class UserController implements Controller {
         }
     };
 
-    private uploadProfilePicture = (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Response | void => {
-        res.status(201).send("Your profile picture was uploaded");
-    };
+  private uploadProfilePicture = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Response | void => {
+    res.status(201).send("Your profile picture was uploaded");
+  };
 
-    private getProfilePicture = (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Response | void => {
-        if (!req.user) {
-            return next(new HttpException(404, "No logged in user"));
-        }
-        try {
-            let profilePicturePath;
-            if (!req.params.userid) {
-                profilePicturePath = this.userService.getProfilePicturePath(
-                    req.user._id
-                );
-            } else {
-                profilePicturePath = this.userService.getProfilePicturePath(
-                    req.params.userid
-                );
-            }
-            res.sendFile(profilePicturePath);
-        } catch (error: any) {
-            next(new HttpException(400, error.message));
-        }
-    };
+  private getProfilePicture = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Response | void => {
+    if (!req.user) {
+      return next(new HttpException(404, "No logged in user"));
+    }
+    try {
+      let profilePicturePath;
+      if (!req.params.userid) {
+        profilePicturePath = this.userService.getProfilePicturePath(
+          req.user._id
+        );
+      } else {
+        profilePicturePath = this.userService.getProfilePicturePath(
+          req.params.userid
+        );
+      }
+      res.sendFile(profilePicturePath);
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
 }
 
 export default UserController;

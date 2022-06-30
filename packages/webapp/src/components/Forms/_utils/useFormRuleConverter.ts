@@ -1,8 +1,8 @@
 import { RegisterOptions } from "react-hook-form";
 import {
-  IFormRulesConfig,
   CFormRule,
   IFormRules,
+  IFormRulesConfig,
 } from "../_interfaces/IFormRulesConfig";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 
@@ -54,7 +54,10 @@ export const generateRegisterOptions = (
   disabled,
 });
 
-export const useFormRuleConverter = (rules?: IFormRulesConfig) => {
+export const useFormRuleConverter = (
+  rules?: IFormRulesConfig,
+  watch?: (field: string) => void
+) => {
   if (!rules) return undefined;
 
   return {
@@ -94,5 +97,14 @@ export const useFormRuleConverter = (rules?: IFormRulesConfig) => {
           message: rules.pattern.message || EDefaultErrorMessages.PATTERN,
         }
       : undefined,
+    validate:
+      rules.matchWithField?.value && watch
+        ? (value: any) => {
+            return (
+              value === watch(rules.matchWithField?.value as string) ||
+              EDefaultErrorMessages.MATCH_WITH_FIELD
+            );
+          }
+        : null,
   } as IFormRules;
 };

@@ -31,7 +31,6 @@ const Datepicker = <TFormValues extends FieldValues>({
       value={field.value}
       label={rules?.required?.value ? `${label} *` : label}
       isInvalid={fieldState.invalid}
-      onChange={field.onChange}
       invalidFeedback={fieldState.error?.message}
       {...props}
     />
