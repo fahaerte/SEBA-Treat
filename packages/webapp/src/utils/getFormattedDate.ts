@@ -1,3 +1,4 @@
 export const getFormattedDateFromString = (date: string | Date) => {
-  return new Date(date).toLocaleString("de-DE");
+    const options = {weekday: "short", month: "short", day: "numeric", hour:"numeric", minute:"numeric"};
+    return new Date(date).toLocaleString("ens-DE", options);
 };

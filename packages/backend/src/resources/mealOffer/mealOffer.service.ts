@@ -2,16 +2,15 @@ import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
 
 import User from "../user/user.interface";
-import { Service } from "typedi";
+import {Service} from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
-import { ObjectId } from "mongoose";
+import {ObjectId} from "mongoose";
 import MealOffer from "./mealOffer.interface";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
 import MealReservation from "../mealReservation/mealReservation.interface";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
-import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 
 @Service()
 class MealOfferService {

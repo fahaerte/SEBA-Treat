@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
-import UserService from "../../services/user.service";
-import { Col, Row } from "../Grid";
-import { Button, Icon } from "../index";
+import React, {useState} from "react";
+import {Col, Row} from "../Grid";
+import {Button, Icon} from "../index";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
-import User from "../../types/interfaces/user.interface";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
+import {MealOfferRequestUserInfo} from "./MealOfferRequestUserInfo";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -19,17 +18,6 @@ export const ReceivedMealReservation = ({
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
-  const [buyer, setBuyer] = useState({} as User);
-
-  const fetchBuyerData = useCallback(async () => {
-    const buyer = await UserService.getUser(String(reservation.buyer));
-    console.log(buyer);
-    setBuyer(buyer);
-  }, [reservation]);
-
-  useEffect(() => {
-    fetchBuyerData().catch(console.error);
-  }, [fetchBuyerData]);
 
   async function updateReservationState(newState: MealReservationState) {
     try {
@@ -103,23 +91,16 @@ export const ReceivedMealReservation = ({
 
   return (
     <Row className={""}>
-      <Col className={"col-2"}>
-        <Row>
-          <Col className={"col-sm-auto"}>Bild</Col>
-          <Col className={"col-sm-auto"}>
-            {`${buyer.firstName} ${buyer.lastName}`}
-          </Col>
-        </Row>
-      </Col>
+      <MealOfferRequestUserInfo userId={reservation.buyer}/>
       <Col className={""}>
-        <Row>
-          <Col className={"col-sm-auto"}>
+        <Row className={"h-100"}>
+          <Col className={"col-sm-auto d-flex align-items-center"}>
             <Icon type={"info"}></Icon>
           </Col>
-          <Col className={"col-sm-auto"}>Sterne</Col>
+          <Col className={"col-sm-auto my-auto"}>Sterne</Col>
         </Row>
       </Col>
-      <Col className={"col-sm-auto"}>{getActionBar()}</Col>
+      <Col className={"col-sm-auto d-flex align-items-center"}>{getActionBar()}</Col>
     </Row>
   );
 };
