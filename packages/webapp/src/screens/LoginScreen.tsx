@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, FormHelper } from "../components/";
 import { IFormRow } from "../components/";
-import { useUserLogInMutation } from "../store/api";
 import { IUserCredentials } from "@treat/lib-common";
+import UserService from "../services/user.service";
 
 const LoginScreen = () => {
-  const [userLogIn, { isLoading, isSuccess, isError }] = useUserLogInMutation();
+
 
   const elements: IFormRow<IUserCredentials>[] = [
     [
@@ -34,15 +34,14 @@ const LoginScreen = () => {
   const handleSignIn = (data: IUserCredentials) => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
-    void userLogIn(data);
+    UserService.loginUser(data)
+        .then(response => console.log(JSON.stringify(response)))
+        .catch(error => console.error(error));
   };
 
   return (
     <>
       <Form<IUserCredentials> elements={elements} onSubmit={handleSignIn} />
-      {isLoading && <h6>Signing in...</h6>}
-      {isSuccess && <h6>Signed In!</h6>}
-      {isError && <h6>error</h6>}
     </>
   );
 };

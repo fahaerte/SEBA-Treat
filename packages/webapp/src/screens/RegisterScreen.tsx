@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Button, Form, FormHelper } from "@treat/webapp/src/components/";
+import React from "react";
+import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IUser } from "@treat/lib-common";
-import { TDatePickerType } from "../components/Forms/Datepicker/IDatePicker";
-import { useUserRegistrationMutation } from "../store/api";
+import UserService from "../services/user.service";
 
 const RegisterScreen = () => {
-  const [userRegistration, { isLoading, isSuccess, isError }] =
-    useUserRegistrationMutation();
 
   const elements: IFormRow<IUser>[] = [
     [
@@ -70,7 +67,6 @@ const RegisterScreen = () => {
         label: "Birthdate",
         props: {
           type: "date",
-          valueAsDate: true,
         },
       }),
     ],
@@ -135,15 +131,14 @@ const RegisterScreen = () => {
 
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
-    void userRegistration(data);
+    UserService.registerUser(data)
+        .then(response => console.log(JSON.stringify(response)))
+        .catch(error => console.error(error));
   };
 
   return (
     <>
       <Form<IUser> elements={elements} onSubmit={handleRegister} />
-      {isLoading && <h6>Trying to register...</h6>}
-      {isSuccess && <h6>Registered!</h6>}
-      {isError && <h6>error</h6>}
     </>
   );
 };
