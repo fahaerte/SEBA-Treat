@@ -70,6 +70,7 @@ const RegisterScreen = () => {
         label: "Birthdate",
         props: {
           type: "date",
+          valueAsDate: true,
         },
       }),
     ],
@@ -80,6 +81,9 @@ const RegisterScreen = () => {
         props: {
           type: "text",
         },
+        rules: {
+          required: { value: true },
+        },
         defaultValue: "Musterstrasse",
       }),
       FormHelper.createInput({
@@ -87,6 +91,9 @@ const RegisterScreen = () => {
         label: "Housenumber",
         props: {
           type: "number",
+        },
+        rules: {
+          required: { value: true },
         },
         defaultValue: 123,
       }),
@@ -96,6 +103,9 @@ const RegisterScreen = () => {
         props: {
           type: "number",
         },
+        rules: {
+          required: { value: true },
+        },
         defaultValue: 80335,
       }),
       FormHelper.createInput({
@@ -104,6 +114,9 @@ const RegisterScreen = () => {
         props: {
           type: "text",
         },
+        rules: {
+          required: { value: true },
+        },
         defaultValue: "Munich",
       }),
       FormHelper.createInput({
@@ -111,6 +124,9 @@ const RegisterScreen = () => {
         label: "Country",
         props: {
           type: "text",
+        },
+        rules: {
+          required: { value: true },
         },
         defaultValue: "Germany",
       }),
