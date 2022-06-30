@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-import {Col, Row} from "../Grid";
-import {Button, Icon} from "../index";
+import React, { useState } from "react";
+import { Col, Row } from "../Grid";
+import { Button, Icon } from "../index";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
-import {MealOfferRequestUserInfo} from "./MealOfferRequestUserInfo";
+import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -91,7 +91,7 @@ export const ReceivedMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo userId={reservation.buyer}/>
+      <MealOfferRequestUserInfo userId={reservation.buyer} />
       <Col className={""}>
         <Row className={"h-100"}>
           <Col className={"col-sm-auto d-flex align-items-center"}>
@@ -100,7 +100,9 @@ export const ReceivedMealReservation = ({
           <Col className={"col-sm-auto my-auto"}>Sterne</Col>
         </Row>
       </Col>
-      <Col className={"col-sm-auto d-flex align-items-center"}>{getActionBar()}</Col>
+      <Col className={"col-sm-auto d-flex align-items-center"}>
+        {getActionBar()}
+      </Col>
     </Row>
   );
 };

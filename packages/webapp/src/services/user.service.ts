@@ -1,4 +1,4 @@
-import {IUser} from "@treat/lib-common";
+import { IUser } from "@treat/lib-common";
 import ApiService from "./api.service";
 
 class UserService {
@@ -10,10 +10,14 @@ class UserService {
     return data["data"] as IUser;
   };
 
-  public static getProfilePictureURL = async (userId: string): Promise<string> => {
-    const response = await ApiService.getImage(`${UserService.PATH}/profile-picture/${userId}`);
+  public static getProfilePictureURL = async (
+    userId: string
+  ): Promise<string> => {
+    const response = await ApiService.getImage(
+      `${UserService.PATH}/profile-picture/${userId}`
+    );
     return URL.createObjectURL(await response.blob());
-  }
+  };
 }
 
 export default UserService;

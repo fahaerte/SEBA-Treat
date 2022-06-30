@@ -23,10 +23,10 @@ export const AppRouter = () => {
         path: "/register",
         element: <RegisterScreen />,
       },
-        {
-            path: "/mealOfferRequests",
-            element: <MealOfferRequests />,
-        },
+      {
+        path: "/mealOfferRequests",
+        element: <MealOfferRequests />,
+      },
     ],
   };
 

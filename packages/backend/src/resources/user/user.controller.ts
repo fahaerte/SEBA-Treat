@@ -82,56 +82,56 @@ class UserController implements Controller {
       this.register
     );
 
-        /**
-         * @swagger
-         * /api/users/login:
-         *  post:
-         *    tags:
-         *    - User
-         *    summary: Login user
-         *    parameters:
-         *    - name: email
-         *      description: email of user
-         *      in: body
-         *      required: true
-         *      schema:
-         *        $ref: '#/definitions/LoginUser'
-         *    - name: password
-         *      description: password of user
-         *      in: body
-         *      required: true
-         *      schema:
-         *        $ref: '#/definitions/LoginUser'
-         *    responses:
-         *      200:
-         *        description: LoggedIn
-         *      400:
-         *        description: Any Error
-         */
-        this.router.post(
-            `${this.path}/login`,
-            validationMiddleware(validate.login),
-            this.login
-        );
+    /**
+     * @swagger
+     * /api/users/login:
+     *  post:
+     *    tags:
+     *    - User
+     *    summary: Login user
+     *    parameters:
+     *    - name: email
+     *      description: email of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/LoginUser'
+     *    - name: password
+     *      description: password of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/LoginUser'
+     *    responses:
+     *      200:
+     *        description: LoggedIn
+     *      400:
+     *        description: Any Error
+     */
+    this.router.post(
+      `${this.path}/login`,
+      validationMiddleware(validate.login),
+      this.login
+    );
 
-        /**
-         * @swagger
-         * /api/users:
-         *  get:
-         *    tags:
-         *    - User
-         *    summary: Get currently logged in user
-         *    produces:
-         *    - application/json
-         *    responses:
-         *      200:
-         *        description: Returns current user
-         *      404:
-         *        description: no user logged in
-         *      401:
-         *        description: Unauthorised
-         */
-        this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
+    /**
+     * @swagger
+     * /api/users:
+     *  get:
+     *    tags:
+     *    - User
+     *    summary: Get currently logged in user
+     *    produces:
+     *    - application/json
+     *    responses:
+     *      200:
+     *        description: Returns current user
+     *      404:
+     *        description: no user logged in
+     *      401:
+     *        description: Unauthorised
+     */
+    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
 
     /**
      * @swagger
@@ -159,42 +159,42 @@ class UserController implements Controller {
       this.uploadProfilePicture
     );
 
-        /**
-         * @swagger
-         * /api/users/profile-picture/:userid:
-         *  get:
-         *    tags:
-         *    - User
-         *    summary: Get profile picture of user
-         *    parameters:
-         *      - in: path
-         *        name: id
-         *        required: true
-         *        type: string
-         *        description: the user's id
-         *    produces:
-         *    - application/json
-         *    responses:
-         *      404:
-         *        description: Not user logged in
-         *      400:
-         *        description: Any other error
-         */
-        this.router.get(
-            `${this.path}/profile-picture/:userid?`,
-            authenticate,
-            this.getProfilePicture
-        );
-    }
+    /**
+     * @swagger
+     * /api/users/profile-picture/:userid:
+     *  get:
+     *    tags:
+     *    - User
+     *    summary: Get profile picture of user
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        required: true
+     *        type: string
+     *        description: the user's id
+     *    produces:
+     *    - application/json
+     *    responses:
+     *      404:
+     *        description: Not user logged in
+     *      400:
+     *        description: Any other error
+     */
+    this.router.get(
+      `${this.path}/profile-picture/:userid?`,
+      authenticate,
+      this.getProfilePicture
+    );
+  }
 
-    private register = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const newUser = req.body as User;
-            const token = await this.userService.register(newUser);
+  private register = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const newUser = req.body as User;
+      const token = await this.userService.register(newUser);
 
       res.status(201).json({ token });
     } catch (error: any) {
@@ -220,27 +220,27 @@ class UserController implements Controller {
     }
   };
 
-    private getUser = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        if (!req.user) {
-            return next(new HttpException(404, "No logged in user"));
-        }
-        try {
-        let user;
-        const userId = req.params.userId;
-            if (userId) {
-                user = await this.userService.getUser(userId);
-            } else {
-                user = req.user;
-            }
-            res.status(200).send({data: user});
-        } catch(error: any) {
-            next(error);
-        }
-    };
+  private getUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    if (!req.user) {
+      return next(new HttpException(404, "No logged in user"));
+    }
+    try {
+      let user;
+      const userId = req.params.userId;
+      if (userId) {
+        user = await this.userService.getUser(userId);
+      } else {
+        user = req.user;
+      }
+      res.status(200).send({ data: user });
+    } catch (error: any) {
+      next(error);
+    }
+  };
 
   private uploadProfilePicture = (
     req: Request,
