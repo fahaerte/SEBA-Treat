@@ -26,7 +26,8 @@ class UserService {
          `${UserService.PATH}/login`,
          credentials
      );
-     return response;
+    const data = await response.json();
+    return data["token"];
   }
 
   public static registerUser = async (
@@ -36,7 +37,8 @@ class UserService {
         `${UserService.PATH}/login`,
         user
     );
-    return response;
+    const data = await response.json();
+    return data["token"];
   }
 }
 
