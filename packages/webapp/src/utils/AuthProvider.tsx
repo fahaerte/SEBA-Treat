@@ -1,17 +1,17 @@
 import React from "react";
-import {IUser} from "@treat/lib-common";
+import { IUser } from "@treat/lib-common";
 
 export const AuthContext = React.createContext<{
-    token?: string;
-    setToken: (token: string) => void;
-}>({setToken: () => undefined});
+  token?: string;
+  setToken: (token: string) => void;
+}>({ setToken: () => undefined });
 
-export const AuthProvider = ({children}: { children: React.ReactNode }) => {
-    const [token, setToken] = React.useState<string | undefined>();
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [token, setToken] = React.useState<string | undefined>();
 
-    return (
-        <AuthContext.Provider value={{token, setToken}}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+  return (
+    <AuthContext.Provider value={{ token, setToken }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

@@ -8,7 +8,6 @@ import { MealOfferRequests } from "../screens/mealOfferRequests";
 import LoginSuccessfulScreen from "../screens/LoginSuccessfulScreen";
 
 export const AppRouter = () => {
-
   const mainRoutes = {
     path: "/",
     element: <HomeScreen />,
