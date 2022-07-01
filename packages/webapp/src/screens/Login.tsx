@@ -4,7 +4,7 @@ import { IFormRow } from "../components/";
 import { IUserCredentials } from "@treat/lib-common";
 import UserService from "../services/user.service";
 
-const LoginScreen = () => {
+const Login = () => {
   const elements: IFormRow<IUserCredentials>[] = [
     [
       FormHelper.createInput({
@@ -63,4 +63,4 @@ const LoginScreen = () => {
     </>
   );
 };
-export default LoginScreen;
+export default Login;
