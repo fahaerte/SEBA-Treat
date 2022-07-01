@@ -4,9 +4,6 @@ import { Link, Outlet } from "react-router-dom";
 const HomeScreen: React.FC = (): JSX.Element => {
   return (
     <>
-      HOMESCREEN
-      <br />
-      <br />
       <nav>
         <ul>
           <li>

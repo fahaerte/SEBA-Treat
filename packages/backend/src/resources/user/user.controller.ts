@@ -88,7 +88,7 @@ class UserController implements Controller {
      *  post:
      *    tags:
      *    - User
-     *    summary: Login user
+     *    summary: LoginScreen user
      *    parameters:
      *    - name: email
      *      description: email of user

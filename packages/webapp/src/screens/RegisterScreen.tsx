@@ -4,7 +4,7 @@ import { IFormRow } from "@treat/webapp/src/components/";
 import { IUser } from "@treat/lib-common";
 import UserService from "../services/user.service";
 
-const Register = () => {
+const RegisterScreen = () => {
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -197,4 +197,4 @@ const Register = () => {
     </>
   );
 };
-export default Register;
+export default RegisterScreen;
