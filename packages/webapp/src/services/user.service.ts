@@ -1,4 +1,4 @@
-import {IUser, IUserCredentials} from "@treat/lib-common";
+import { IUser, IUserCredentials } from "@treat/lib-common";
 import ApiService from "./api.service";
 
 class UserService {
@@ -20,24 +20,22 @@ class UserService {
   };
 
   public static loginUser = async (
-      credentials: IUserCredentials
-  ): Promise<Response | Error> => {
-     const response = await ApiService.post(
-         `${UserService.PATH}/login`,
-         credentials
-     );
-     return response;
-  }
+    credentials: IUserCredentials
+  ): Promise<string | Error> => {
+    const response = await ApiService.post(
+      `${UserService.PATH}/login`,
+      credentials
+    );
+    const data = await response.json();
+    return data["token"];
+  };
 
   public static registerUser = async (
-      user: IUser
+    user: IUser
   ): Promise<Response | Error> => {
-    const response = await ApiService.post(
-        `${UserService.PATH}/login`,
-        user
-    );
+    const response = await ApiService.post(`${UserService.PATH}/login`, user);
     return response;
-  }
+  };
 }
 
 export default UserService;

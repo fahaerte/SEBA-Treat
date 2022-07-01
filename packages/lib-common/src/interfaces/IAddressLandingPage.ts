@@ -1,3 +1,3 @@
 export interface IAddressLandingPage {
-    address: string;
+  address: string;
 }
