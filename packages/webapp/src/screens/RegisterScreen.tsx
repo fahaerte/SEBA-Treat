@@ -5,7 +5,6 @@ import { IUser } from "@treat/lib-common";
 import UserService from "../services/user.service";
 
 const RegisterScreen = () => {
-
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -17,12 +16,12 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide an email!',
+            message: "Please provide an email!",
           },
           min: {
             value: 5,
-            message: 'Your email needs at least 5 characters!',
-          }
+            message: "Your email needs at least 5 characters!",
+          },
         },
         defaultValue: "max@mustermann.de",
       }),
@@ -35,12 +34,12 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a username!',
+            message: "Please provide a username!",
           },
           min: {
             value: 5,
-            message: 'Your username needs at least 5 characters!',
-          }
+            message: "Your username needs at least 5 characters!",
+          },
         },
         defaultValue: "maxi1234",
       }),
@@ -53,12 +52,12 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a password!',
+            message: "Please provide a password!",
           },
           min: {
             value: 6,
-            message: 'Your username needs at least 6 characters!',
-          }
+            message: "Your username needs at least 6 characters!",
+          },
         },
         defaultValue: "",
       }),
@@ -73,7 +72,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a name!',
+            message: "Please provide a name!",
           },
         },
         defaultValue: "Max",
@@ -87,7 +86,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a name!',
+            message: "Please provide a name!",
           },
         },
         defaultValue: "Mustermann",
@@ -110,7 +109,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a street!',
+            message: "Please provide a street!",
           },
         },
         defaultValue: "Musterstrasse",
@@ -124,7 +123,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide your house number!',
+            message: "Please provide your house number!",
           },
         },
         defaultValue: 123,
@@ -138,7 +137,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a postal code!',
+            message: "Please provide a postal code!",
           },
         },
         defaultValue: 80335,
@@ -152,7 +151,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide your city!',
+            message: "Please provide your city!",
           },
         },
         defaultValue: "Munich",
@@ -166,7 +165,7 @@ const RegisterScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide your country!',
+            message: "Please provide your country!",
           },
         },
         defaultValue: "Germany",
@@ -177,23 +176,23 @@ const RegisterScreen = () => {
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
     UserService.registerUser(data)
-        .then(response => console.log(JSON.stringify(response)))
-        .catch(error => console.error(error));
+      .then((response) => console.log(JSON.stringify(response)))
+      .catch((error) => console.error(error));
   };
 
   return (
     <>
       <Form<IUser>
-          elements={elements}
-          onSubmit={handleRegister}
-          formTitle={"Please register!"}
-          resetOnSubmit
-          abortButton={{
-            children: "Cancel",
-            color: "secondary",
-            className: "ms-3",
-            outline: true,
-          }}
+        elements={elements}
+        onSubmit={handleRegister}
+        formTitle={"Please register!"}
+        resetOnSubmit
+        abortButton={{
+          children: "Cancel",
+          color: "secondary",
+          className: "ms-3",
+          outline: true,
+        }}
       />
     </>
   );

@@ -5,8 +5,6 @@ import { IUserCredentials } from "@treat/lib-common";
 import UserService from "../services/user.service";
 
 const LoginScreen = () => {
-
-
   const elements: IFormRow<IUserCredentials>[] = [
     [
       FormHelper.createInput({
@@ -18,7 +16,7 @@ const LoginScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide an email!',
+            message: "Please provide an email!",
           },
         },
         defaultValue: "test@user.de",
@@ -32,7 +30,7 @@ const LoginScreen = () => {
         rules: {
           required: {
             value: true,
-            message: 'Please provide a password!',
+            message: "Please provide a password!",
           },
         },
         defaultValue: "pa55word",
@@ -44,23 +42,23 @@ const LoginScreen = () => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
     UserService.loginUser(data)
-        .then(response => console.log(response))
-        .catch(error => console.error(error));
+      .then((response) => console.log(response))
+      .catch((error) => console.error(error));
   };
 
   return (
     <>
       <Form<IUserCredentials>
-          elements={elements}
-          onSubmit={handleSignIn}
-          formTitle={"Please sign in!"}
-          resetOnSubmit
-          abortButton={{
-            children: "Cancel",
-            color: "secondary",
-            className: "ms-3",
-            outline: true,
-          }}
+        elements={elements}
+        onSubmit={handleSignIn}
+        formTitle={"Please sign in!"}
+        resetOnSubmit
+        abortButton={{
+          children: "Cancel",
+          color: "secondary",
+          className: "ms-3",
+          outline: true,
+        }}
       />
     </>
   );
