@@ -16,10 +16,13 @@ const HomeScreen: React.FC = (): JSX.Element => {
             <Link to="/register">Register Screen</Link>
           </li>
           <li>
-            <Link to="/mealOfferRequests">Meal Offer Requests</Link>
+            <Link to="/mealoffers">Meal Offer Screen</Link>
           </li>
           <li>
-            <Link to="/landingPage">Landing Page</Link>
+            <Link to="/mealOfferRequests">Meal Offer Requests Screen</Link>
+          </li>
+          <li>
+            <Link to="/landing">Landing Page</Link>
           </li>
         </ul>
       </nav>
