@@ -7,7 +7,8 @@ interface MealTransaction extends Document {
   senderAccount: ObjectId;
   receiverAccount: ObjectId;
   transactionState: MealTransactionState;
-  ratings: Rating[];
+  buyerRating: number;
+  sellerRating: number;
 }
 
 export default MealTransaction;

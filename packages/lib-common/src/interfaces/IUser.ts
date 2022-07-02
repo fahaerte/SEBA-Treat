@@ -10,7 +10,8 @@ export interface IUser {
   lastName: string;
   birthdate: Date;
   // profilePicture: File;
-  // rating: number;
   address: IAddress;
   virtualAccountId: Types.ObjectId;
+  meanRating: number;
+  countRatings: number;
 }
