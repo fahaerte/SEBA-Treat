@@ -1,6 +1,6 @@
 enum MealTransactionParticipant {
-    BUYER = "BUYER",
-    SELLER = "SELLER",
+  BUYER = "BUYER",
+  SELLER = "SELLER",
 }
 
 export default MealTransactionParticipant;

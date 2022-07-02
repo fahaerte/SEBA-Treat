@@ -1,4 +1,4 @@
-import {ObjectId} from "mongoose";
+import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
@@ -117,13 +117,13 @@ class MealTransactionService {
   }
 
   public async rateTransactionParticipant(
-      transactionId: ObjectId,
-      stars: number,
-      participantType: MealTransactionParticipant,
+    transactionId: ObjectId,
+    stars: number,
+    participantType: MealTransactionParticipant
   ): Promise<MealTransaction | Error> {
     try {
       const transaction = (await this.mealTransactionModel.findById(
-          transactionId
+        transactionId
       )) as MealTransaction;
       if (!transaction) {
         throw new TransactionNotFoundException(transaction.id);
@@ -140,10 +140,10 @@ class MealTransactionService {
   }
 
   private rateParticipant(
-      stars: number,
-      participantType: MealTransactionParticipant,
-      transaction: MealTransaction
-  ) : void {
+    stars: number,
+    participantType: MealTransactionParticipant,
+    transaction: MealTransaction
+  ): void {
     if (participantType === MealTransactionParticipant.BUYER) {
       transaction.buyerRating = stars;
     } else {

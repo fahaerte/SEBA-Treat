@@ -6,6 +6,7 @@ import authenticated from "../../middleware/authenticated.middleware";
 import validate from "./mealTransaction.validation";
 import MealTransactionService from "./mealTransaction.service";
 import { ObjectId } from "mongoose";
+import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 
 class MealTransactionController implements Controller {
   public path = "/mealTransactions";
@@ -28,6 +29,11 @@ class MealTransactionController implements Controller {
       authenticated,
       // validationMiddleware(validate.createTransaction),
       this.performTransaction
+    );
+    this.router.post(
+        '${this.path}/rate/:mealTransactionId',
+        authenticated,
+        this.rateTransactionParticipant
     );
   }
 
@@ -68,6 +74,27 @@ class MealTransactionController implements Controller {
       next(new HttpException(400, error.message));
     }
   };
+
+  private rateTransactionParticipant = async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const mealTransactionId = req.params.mealTransactionId;
+      const stars = req.body.stars;
+      const participantType = req.body.participantType;
+      const mealTransaction =
+          await this.mealTransactionService.rateTransactionParticipant(
+              mealTransactionId as unknown as ObjectId,
+              stars as number,
+              participantType as MealTransactionParticipant
+          );
+      res.status(200).json({ mealTransaction });
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  }
 }
 
 export default MealTransactionController;
