@@ -68,8 +68,6 @@ class MealTransactionController implements Controller {
       next(new HttpException(400, error.message));
     }
   };
-
-
 }
 
 export default MealTransactionController;
