@@ -6,6 +6,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ErrorPage from "../screens/ErrorPage";
 import { MealOfferRequests } from "../screens/mealOfferRequests";
 import LoginSuccessfulScreen from "../screens/LoginSuccessfulScreen";
+import {AuthProvider} from "../utils/AuthProvider";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -41,5 +42,9 @@ export const AppRouter = () => {
 
   const routing = useRoutes([mainRoutes]);
 
-  return <>{routing}</>;
+  return <>
+    <AuthProvider>
+      {routing}
+    </AuthProvider>
+  </>;
 };

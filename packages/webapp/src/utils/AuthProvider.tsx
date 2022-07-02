@@ -1,5 +1,4 @@
 import React from "react";
-import { IUser } from "@treat/lib-common";
 
 export const AuthContext = React.createContext<{
   token?: string;
