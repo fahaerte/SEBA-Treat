@@ -1,11 +1,10 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IAddressLandingPage } from "@treat/lib-common";
-import {AddressContext} from "../utils/AddressProvider";
+import { AddressContext } from "../utils/AddressProvider";
 
 const LandingPage = () => {
-
   const addressContext = useContext(AddressContext);
 
   const elements: IFormRow<IAddressLandingPage>[] = [
