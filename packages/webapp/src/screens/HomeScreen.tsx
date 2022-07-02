@@ -18,6 +18,9 @@ const HomeScreen: React.FC = (): JSX.Element => {
           <li>
             <Link to="/mealOfferRequests">Meal Offer Requests</Link>
           </li>
+          <li>
+            <Link to="/landingPage">Landing Page</Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

@@ -1,4 +1,4 @@
-import { IUser, IUserCredentials } from "@treat/lib-common";
+import {IUser, IUserCredentials} from "@treat/lib-common";
 import ApiService from "./api.service";
 
 class UserService {
