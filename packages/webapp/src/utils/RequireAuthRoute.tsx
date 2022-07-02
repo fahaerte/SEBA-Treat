@@ -1,17 +1,14 @@
-import React, {useContext} from "react";
-import {AuthContext} from "./AuthProvider";
-import {Navigate} from "react-router-dom";
+import React, { useContext } from "react";
+import { AuthContext } from "./AuthProvider";
+import { Navigate } from "react-router-dom";
 import LoginScreen from "../screens/LoginScreen";
 
 export const RequireAuthRoute = ({ path }: { path: string }) => {
-    const authContext = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
 
-    return (
-        <>
-            {authContext.token ?
-                <Navigate to={path}/>
-                : <Navigate to={"/login"}/>
-            }
-        </>
-    );
+  return (
+    <>
+      {authContext.token ? <Navigate to={path} /> : <Navigate to={"/login"} />}
+    </>
+  );
 };
