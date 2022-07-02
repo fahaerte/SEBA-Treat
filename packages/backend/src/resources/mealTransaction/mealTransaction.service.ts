@@ -1,9 +1,12 @@
-import { ObjectId } from "mongoose";
+import {ObjectId} from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import VirtualBankService from "../virtualBank/virtualBank.service";
+import TransactionInWrongStateException from "../../utils/exceptions/transactionInWrongState.exception";
+import TransactionNotFoundException from "../../utils/exceptions/transactionNotFound.exception";
+import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
@@ -91,9 +94,6 @@ class MealTransactionService {
     }
   }
 
-  /**
-   * Rate transaction (add rating)
-   */
   public async rateBuyer(
     transactionId: ObjectId,
     stars: number
@@ -102,12 +102,52 @@ class MealTransactionService {
       const transaction = (await this.mealTransactionModel.findById(
         transactionId
       )) as MealTransaction;
+      if (!transaction) {
+        throw new TransactionNotFoundException(transaction.id);
+      }
       if (transaction.transactionState === MealTransactionState.COMPLETED) {
         transaction.buyerRating = stars;
+      } else {
+        throw new TransactionInWrongStateException(transaction.id);
       }
       return transaction;
     } catch (error: any) {
       throw new Error(error.message as string);
+    }
+  }
+
+  public async rateTransactionParticipant(
+      transactionId: ObjectId,
+      stars: number,
+      participantType: MealTransactionParticipant,
+  ): Promise<MealTransaction | Error> {
+    try {
+      const transaction = (await this.mealTransactionModel.findById(
+          transactionId
+      )) as MealTransaction;
+      if (!transaction) {
+        throw new TransactionNotFoundException(transaction.id);
+      }
+      if (transaction.transactionState === MealTransactionState.COMPLETED) {
+        this.rateParticipant(stars, participantType, transaction);
+      } else {
+        throw new TransactionInWrongStateException(transaction.id);
+      }
+      return transaction;
+    } catch (error: any) {
+      throw new Error(error.message as string);
+    }
+  }
+
+  private rateParticipant(
+      stars: number,
+      participantType: MealTransactionParticipant,
+      transaction: MealTransaction
+  ) : void {
+    if (participantType === MealTransactionParticipant.BUYER) {
+      transaction.buyerRating = stars;
+    } else {
+      transaction.sellerRating = stars;
     }
   }
 }
