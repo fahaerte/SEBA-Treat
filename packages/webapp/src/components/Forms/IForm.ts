@@ -1,13 +1,12 @@
 import { SubmitHandler, UseFormProps } from "react-hook-form";
 import { IFormRow } from "./_interfaces/IFormElementConfig";
 import { IButton } from "../Button/IButton";
-import { IBaseProps, ILoadingProp } from "../../types/ComponentProps";
-import { TBootstrapPalette } from "../../types/TBootstrapPalette";
 import { TFormFieldError } from "./_interfaces/TFormFieldError";
+import { IComponentBase } from "../../assets/theme/types/IComponentBase";
+import { TBootstrapPalette } from "../../assets/theme/interfaces/TBootstrapPalette";
 
-export interface IForm<TFormValues>
-  extends Pick<IBaseProps, "className">,
-    ILoadingProp {
+export interface IForm<TFormValues> extends Pick<IComponentBase, "className"> {
+  isLoading?: boolean;
   /**
    * Form Elements that are to be generated
    */

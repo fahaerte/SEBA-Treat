@@ -2,7 +2,7 @@ import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
 
 import User from "../user/user.interface";
-import {Service} from "typedi";
+import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
 import {ObjectId, Schema} from "mongoose";
@@ -15,16 +15,27 @@ import MealReservationNotFoundException from "../../utils/exceptions/mealReserva
 
 @Service()
 class MealOfferService {
-    private mealOffer = MealOfferSchema;
-    private mealTransactionService = new MealTransactionService();
+  private mealOffer = MealOfferSchema;
+  private mealTransactionService = new MealTransactionService();
 
-    public async create(
-        newMealOffer: MealOffer,
-        user: User
-    ): Promise<MealOffer | Error> {
-        newMealOffer.user = user._id;
-        return await this.mealOffer.create(newMealOffer);
+  public async create(
+    newMealOffer: MealOffer,
+    user: User
+  ): Promise<MealOffer | Error> {
+    newMealOffer.user = user._id;
+    return await this.mealOffer.create(newMealOffer);
+  }
+
+  public async getMealOffer(mealOfferId: ObjectId): Promise<MealOffer | Error> {
+    const mealOffer = (await this.mealOffer
+      .findById(mealOfferId)
+      .select("-pickUpDetails")
+      .exec()) as MealOffer;
+    if (!mealOffer) {
+      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
+    return mealOffer;
+  }
 
     public async getMealOffer(user: User, mealOfferId: string): Promise<MealOfferDocument | Error> {
         const mealOfferDoc = await this.mealOffer.findById(mealOfferId) as MealOfferDocument;
@@ -53,13 +64,17 @@ class MealOfferService {
         return await this.mealOffer.findSentMealOfferRequests(user._id);
     }
 
-    public async getReceivedMealOfferRequests(
-        user: User
-    ): Promise<MealOffer[] | Error> {
-        return (await this.mealOffer
-            .find({user: user._id})
-            .exec()) as MealOffer[];
+  public async deleteMealOffer(
+    mealOfferId: ObjectId,
+    user: User
+  ): Promise<void | Error> {
+    const mealOffer = (await this.getMealOffer(mealOfferId)) as MealOffer;
+    if (String(mealOffer.user) === String(user._id)) {
+      await this.mealOffer.findByIdAndDelete(mealOfferId);
+    } else {
+      console.log();
     }
+  }
 
     public async deleteMealOffer(
         mealOfferId: string,
@@ -72,6 +87,10 @@ class MealOfferService {
             console.log();
         }
     }
+    throw new InvalidMealReservationException(
+      "You can not make a reservation for your own meal offer"
+    );
+  }
 
     public async createMealOfferReservation(
         mealOfferId: string,
@@ -95,6 +114,7 @@ class MealOfferService {
             "You can not make a reservation for your own meal offer"
         );
     }
+  }
 
     public async updateMealOfferReservationState(
         mealOfferId: string,
@@ -134,6 +154,7 @@ class MealOfferService {
             throw new InvalidMealReservationStateException("Unknown state");
         }
     }
+  }
 
     private async updateMealOfferReservationToSellerAccepted(
         mealOfferId: string,
@@ -150,11 +171,16 @@ class MealOfferService {
             mealReservation.reservationState = MealReservationState.SELLER_ACCEPTED;
             await mealOfferDoc.save();
         } else {
-            throw new InvalidMealReservationStateException(
-                `State should be ${MealReservationState.PENDING}`
-            );
+          reservation.reservationState = MealReservationState.SELLER_REJECTED;
         }
+      });
+      await mealOffer.save();
+    } else {
+      throw new InvalidMealReservationStateException(
+        `State should be ${MealReservationState.SELLER_ACCEPTED}`
+      );
     }
+  }
 
     private async updateMealOfferReservationToBuyerConfirmed(
         mealOfferId: string,
@@ -193,6 +219,7 @@ class MealOfferService {
             );
         }
     }
+  }
 
     private async updateMealOfferReservationToSellerRejected(
         mealOfferId: string,
@@ -217,6 +244,7 @@ class MealOfferService {
             );
         }
     }
+  }
 
     private async updateMealOfferReservationToBuyerRejected(
         mealOfferId: string,
@@ -258,6 +286,8 @@ class MealOfferService {
         }
         return [mealOfferDoc, mealReservation];
     }
+    throw new Error("User is not seller of offer");
+  }
 
     private async getMealOfferAndReservationForSeller(
         mealOfferId: string,
@@ -290,6 +320,8 @@ class MealOfferService {
         }
         throw new Error("User is not buyer of offer");
     }
+    throw new Error("User is not buyer of offer");
+  }
 }
 
 export default MealOfferService;

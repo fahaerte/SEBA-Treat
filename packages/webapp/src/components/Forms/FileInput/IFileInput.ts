@@ -39,12 +39,12 @@ export interface IFormFileInput<TFormValues>
 
 export interface IFileInputConfig<TFormValues>
   extends IFormElement<TFormValues> {
-  props: IFileInputProps;
+  props?: IFileInputProps;
 }
 
 export interface IFileInput<TFormValues>
   extends IFormElementControlled,
     Omit<IFormFileInput<TFormValues>, TIFormElementOmit> {
-  value: File;
+  value?: string | ReadonlyArray<string> | number;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }

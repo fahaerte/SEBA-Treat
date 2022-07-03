@@ -1,4 +1,4 @@
-import {IUser} from "@treat/lib-common";
+import { IUser, IUserCredentials } from "@treat/lib-common";
 import ApiService from "./api.service";
 
 class UserService {
@@ -10,10 +10,31 @@ class UserService {
     return data["data"] as IUser;
   };
 
-  public static getProfilePictureURL = async (userId: string): Promise<string> => {
-    const response = await ApiService.getImage(`${UserService.PATH}/profile-picture/${userId}`);
+  public static getProfilePictureURL = async (
+    userId: string
+  ): Promise<string> => {
+    const response = await ApiService.getImage(
+      `${UserService.PATH}/profile-picture/${userId}`
+    );
     return URL.createObjectURL(await response.blob());
-  }
+  };
+
+  public static loginUser = async (
+    credentials: IUserCredentials
+  ): Promise<Response | Error> => {
+    const response = await ApiService.post(
+      `${UserService.PATH}/login`,
+      credentials
+    );
+    return response;
+  };
+
+  public static registerUser = async (
+    user: IUser
+  ): Promise<Response | Error> => {
+    const response = await ApiService.post(`${UserService.PATH}/login`, user);
+    return response;
+  };
 }
 
 export default UserService;

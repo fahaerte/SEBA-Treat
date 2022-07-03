@@ -26,6 +26,8 @@ const FileInput = <TFormValues extends FieldValues>({
     defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
   });
 
+  console.log(field.value);
+
   return (
     <FileInputControlled
       value={field.value}

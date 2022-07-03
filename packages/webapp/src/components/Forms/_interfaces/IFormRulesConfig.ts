@@ -2,6 +2,7 @@ type TFormRuleInput<T> = {
   value: T;
   message?: string;
 };
+
 export interface IFormRulesConfig {
   required?: TFormRuleInput<boolean>;
   min?: TFormRuleInput<number | string>;
@@ -9,12 +10,14 @@ export interface IFormRulesConfig {
   minLength?: TFormRuleInput<number>;
   maxLength?: TFormRuleInput<number>;
   pattern?: TFormRuleInput<RegExp>;
+  matchWithField?: TFormRuleInput<string>;
 }
 
 type TFormRule<T> = {
   value: T;
   message: string;
 };
+
 export interface IFormRules {
   required?: TFormRule<boolean>;
   min?: TFormRule<number | string>;
@@ -22,6 +25,7 @@ export interface IFormRules {
   minLength?: TFormRule<number>;
   maxLength?: TFormRule<number>;
   pattern?: TFormRule<RegExp>;
+  validate?: (value: any) => any;
 }
 
 export class CFormRule<T> {

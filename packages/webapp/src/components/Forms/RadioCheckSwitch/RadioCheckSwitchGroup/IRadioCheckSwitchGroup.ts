@@ -7,18 +7,18 @@ import {
   IFormRadioCheckSwitch,
   IRadioCheckSwitchProps,
 } from "../IRadioCheckSwitch";
-import { TBootstrapPalette } from "../../../../assets/theme/interfaces/TBootstrapPalette";
 import { TOptionValuePair } from "../../_interfaces/TOptionValuePair";
+import { TBootstrapPalette } from "../../../../assets/theme/interfaces/TBootstrapPalette";
 
 export interface IRadioCheckSwitchGroupProps {
+  /**
+   * Alignment of the children (whether they are displayed listed or inline)
+   */
+  inline?: boolean;
   /**
    * Type of the element
    */
   type: IRadioCheckSwitchProps["type"];
-  /**
-   * alignment of the children (whether they are displayed listed or inline)
-   */
-  inline?: boolean;
   color?: TBootstrapPalette;
 }
 
