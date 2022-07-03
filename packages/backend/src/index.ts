@@ -11,6 +11,7 @@ import MealAllergenController from "./resources/mealAllergen/mealAllergen.contro
 import MealTransactionController from "./resources/mealTransaction/mealTransaction.controller";
 import MealCategoryController from "./resources/mealCategory/mealCategory.controller";
 import UserService from "./resources/user/user.service";
+import CreditPackageController from "./resources/creditPackage/creditPackage.controller";
 import StripeService from "./resources/stripe/stripe.service";
 import StripeController from "./resources/stripe/stripe.controller";
 
@@ -29,6 +30,8 @@ const app = new App(
     new MealAllergenController(),
     new MealCategoryController(),
     new StripeController(Container.get(StripeService)),
+
+    new CreditPackageController(),
   ],
   Number(process.env.PORT)
 );

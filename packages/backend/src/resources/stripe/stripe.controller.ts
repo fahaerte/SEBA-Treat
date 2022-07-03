@@ -50,17 +50,11 @@ class StripeController implements Controller {
 
     /**
      * @swagger
-     * /api/payment/user/{userid}:
+     * /api/payment/prices:
      *  get:
      *    tags:
      *    - Stripe
-     *    summary: Get stripe customer by treat Id
-     *    parameters:
-     *     - in: path
-     *       name: userid
-     *       required: true
-     *       type: string
-     *       description: the user's id
+     *    summary: Get all credit packages including the price
      *    produces:
      *    - application/json
      *    responses:
@@ -69,25 +63,17 @@ class StripeController implements Controller {
      *      400:
      *        description: Any other error
      */
-    this.router.get(`${this.path}/user/:userid`, this.getUserById);
-
-    this.router.get(
-      `${this.path}/create-payment-intent/:productId`,
-      this.createPaymentIntent
-    );
+    this.router.get(`${this.path}/prices`, this.getPrices);
   }
 
-  private createPaymentIntent = async (
+  private getPrices = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const clientSecret = await this.stripeService.createPaymentIntent(
-        req.params.productId
-      );
-      console.log(clientSecret);
-      res.status(200).json(clientSecret);
+      const pricesAndProducts = await this.stripeService.getPrices();
+      res.status(200).json(pricesAndProducts.data);
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
@@ -119,20 +105,20 @@ class StripeController implements Controller {
     }
   };
 
-  private getUserById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const user = await this.stripeService.stripeUsers.getUserByTreatId(
-        req.params.userid
-      );
-      res.status(200).json(user);
-    } catch (error: any) {
-      next(new HttpException(error.status, error.message));
-    }
-  };
+  // private createPaymentIntent = async (
+  //   req: Request,
+  //   res: Response,
+  //   next: NextFunction
+  // ): Promise<Response | void> => {
+  //   try {
+  //     const clientSecret = await this.stripeService.createPaymentIntent(
+  //       req.params.productId
+  //     );
+  //     res.status(200).json(clientSecret);
+  //   } catch (error: any) {
+  //     next(new HttpException(400, error.message));
+  //   }
+  // };
 }
 
 export default StripeController;

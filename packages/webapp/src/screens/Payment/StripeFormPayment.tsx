@@ -4,7 +4,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { Button } from "../../components";
+import { Button } from "../../components/ui";
 
 const StipeFormPayment = ({ redirectUrl }: { redirectUrl: string }) => {
   const stripe = useStripe();

@@ -85,7 +85,7 @@ class UserController implements Controller {
 
     /**
      * @swagger
-     * /api/users:
+     * /api/users/{userid}:
      *  get:
      *    tags:
      *    - User
@@ -100,7 +100,7 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}`, authenticate, this.getUser);
+    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
 
     /**
      * @swagger
@@ -204,15 +204,26 @@ class UserController implements Controller {
     }
   };
 
-  private getUser = (
+  private getUser = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ): Response | void => {
+  ): Promise<Response | void> => {
     if (!req.user) {
       return next(new HttpException(404, "No logged in user"));
     }
-    res.status(200).send({ data: req.user });
+    try {
+      let user;
+      const userId = req.params.userId;
+      if (userId) {
+        user = await this.userService.getUser(userId);
+      } else {
+        user = req.user;
+      }
+      res.status(200).send({ data: user });
+    } catch (error: any) {
+      next(error);
+    }
   };
 
   private uploadProfilePicture = (

@@ -1,4 +1,6 @@
 import { emptyApi as api } from "../emptyApi";
+// import {Stripe} from "@stripe/stripe-js";
+import { IStripeProduct } from "@treat/lib-common";
 
 const injectedStripeRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -10,9 +12,19 @@ const injectedStripeRtkApi = api.injectEndpoints({
         url: `/payment/create-payment-intent/${queryArg.productId}`,
       }),
     }),
+    paymentGetProductsWithPrices: build.query<
+      PaymentControllerGetProductsWithPricesApiResponse,
+      Record<string, never>
+    >({
+      query: () => ({
+        url: `/payment/products/`,
+      }),
+    }),
   }),
 });
 
+export type PaymentControllerGetProductsWithPricesApiResponse =
+  IStripeProduct[];
 export type PaymentControllerGetPaymentIntentSecretApiResponse =
   /** status 200  */ string;
 export type PaymentControllerGetPaymentIntentSecretApiArg = {
@@ -21,7 +33,9 @@ export type PaymentControllerGetPaymentIntentSecretApiArg = {
   productId: string;
 };
 
-export const { usePaymentControllerGetPaymentIntentSecretQuery } =
-  injectedStripeRtkApi;
+export const {
+  usePaymentControllerGetPaymentIntentSecretQuery,
+  usePaymentGetProductsWithPricesQuery,
+} = injectedStripeRtkApi;
 
 export { injectedStripeRtkApi as stripeApi };
