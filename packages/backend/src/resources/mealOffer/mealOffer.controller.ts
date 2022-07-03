@@ -1,12 +1,13 @@
 import Controller from "../../utils/interfaces/controller.interface";
-import {NextFunction, Request, Response, Router} from "express";
-import {MealOffer} from "./mealOffer.interface";
+import { Request, Response, NextFunction, Router } from "express";
+import MealOffer from "../mealOffer/mealOffer.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
-import {Service} from "typedi";
+import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
+import { ObjectId } from "mongoose";
 
 @Service()
 class MealOfferController implements Controller {
@@ -81,8 +82,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOffer = await this.mealOfferService.getMealOffer(
-        req.user,
-        req.params.mealOfferId
+        req.params.mealOfferId as unknown as ObjectId
       );
       res.status(200).send({ data: mealOffer });
     } catch (error: any) {
@@ -126,7 +126,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       await this.mealOfferService.deleteMealOffer(
-        req.params.mealOfferId,
+        req.params.mealOfferId as unknown as ObjectId,
         req.user
       );
       res.send(200).send();
@@ -142,7 +142,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOffer = await this.mealOfferService.createMealOfferReservation(
-        req.params.mealOfferId,
+        req.params.mealOfferId as unknown as ObjectId,
         req.user
       );
       res.status(201).send({ data: mealOffer });
@@ -159,9 +159,9 @@ class MealOfferController implements Controller {
     try {
       const { reservationState } = req.body;
       await this.mealOfferService.updateMealOfferReservationState(
-        req.params.mealOfferId,
+        req.params.mealOfferId as unknown as ObjectId,
         req.user,
-        req.params.mealReservationId,
+        req.params.mealReservationId as unknown as ObjectId,
         reservationState as MealReservationStateEnum
       );
       res.sendStatus(204);
