@@ -47,7 +47,6 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
         },
         pickUpDetails: {
             type: String,
-            required: true,
         },
         price: {
             type: Number,

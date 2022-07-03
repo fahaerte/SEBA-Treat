@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import MealOfferService from "../../services/mealOffer.service";
-import { MealOfferRequest } from "../../components/MealOfferRequest/MealOfferRequest";
-import { ReceivedMealReservation } from "../../components/MealOfferRequest/ReceivedMealReservation";
+import {MealOfferRequest} from "../../components/MealOfferRequest/MealOfferRequest";
+import {ReceivedMealReservation} from "../../components/MealOfferRequest/ReceivedMealReservation";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 
@@ -30,7 +30,7 @@ export const ReceivedMealOfferRequests = () => {
   }, [fetchData]);
 
   return (
-    <div>
+    <div className={"mt-4"}>
       {receivedMealOfferRequests.map((mealOffer, index) => {
         return (
           <div key={index}>
