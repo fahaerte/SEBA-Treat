@@ -130,15 +130,19 @@ export const defaultTheme: DefaultTheme = {
     background: "",
   },
   form: {
-    element: {
-      height: "calc(3rem + 2px)",
+    control: {
+      height: "4em",
       lineHeight: 1.25,
-      color: "#495057",
-      padding: "10px 15px",
-
-      borderColor: "#ced4da",
-      labelColor: "",
-      fontSize: "",
+      padding: "1em 1em 0.5em",
+      color: "#333",
+      fontSize: "1rem",
+      border: {
+        radius: "4px",
+      },
+    },
+    label: {
+      color: "",
+      padding: "0 1em",
     },
   },
   table: {

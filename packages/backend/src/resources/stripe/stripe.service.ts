@@ -26,29 +26,34 @@ class StripeService {
   }
 
   // PAYMENT SESSIONS
-  public async createPaymentIntent(amountToCharge: number) {
+  public async createPaymentIntent(productId: string) {
     try {
-      const paymentIntent = await this.stripe.paymentIntents.create({
-        amount: amountToCharge, // price which will be deducted from customer's balance
-        currency: "eur",
-        automatic_payment_methods: {
-          enabled: true,
-        },
-      });
-      return paymentIntent.client_secret;
+      // Calculate order amount
+      const priceObject = await this.getProductPrice(productId);
+      if (priceObject && priceObject.data[0].unit_amount) {
+        const paymentIntent = await this.stripe.paymentIntents.create({
+          amount: priceObject.data[0].unit_amount,
+          currency: "eur",
+          automatic_payment_methods: {
+            enabled: true,
+          },
+        });
+        return paymentIntent.client_secret;
+      }
+      return "";
     } catch (error) {
       console.log(error);
-      throw new HttpException(500, "couldn't update stripe customer");
+      throw new HttpException(500, "Could not create intent");
     }
   }
 
-  public async createBillingPortalSession(userId: string) {
-    return this.stripe.billingPortal.sessions.create({
-      customer: userId,
-      // TODO: Add correct url
-      return_url: `localhost:3000/${userId}/profile`,
-    });
-  }
+  // public async createBillingPortalSession(userId: string) {
+  //   return this.stripe.billingPortal.sessions.create({
+  //     customer: userId,
+  //     // TODO: Add correct url
+  //     return_url: `localhost:3000/${userId}/profile`,
+  //   });
+  // }
 
   // GETTER OF PRODUCTS, CUSTOMER, DISCOUNTS
   public async getCreditPackages(withPrice = false) {
@@ -58,7 +63,7 @@ class StripeService {
           expand: ["data.default_price"],
         });
       }
-      return this.stripe.products.list();
+      return await this.stripe.products.list();
     } catch (error: any) {
       if (error?.code === StripeError.ResourceMissing) {
         throw new HttpException(401, "Credit card not set up");
@@ -77,6 +82,15 @@ class StripeService {
         throw new HttpException(401, "Credit card not set up");
       }
       throw new HttpException(500, error?.message as string);
+    }
+  }
+
+  public async getProductPrice(id: string) {
+    try {
+      // eslint-disable-next-line no-useless-escape
+      return await this.stripe.prices.search({ query: `product:\"${id}\"` });
+    } catch (error: any) {
+      throw new HttpException(500, "Could not get price");
     }
   }
 }

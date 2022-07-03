@@ -1,6 +1,6 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
 import { ChangeEvent } from "react";
-import { IInput } from "../Input/IInput";
+import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
 
 export const AImageFiles = "image/*";
 
@@ -22,7 +22,7 @@ export const AAllTypes = [
 
 export type TAllTypes = typeof AFileTypes[number];
 
-export interface IDropzoneProps {
+export interface IFileInputProps {
   /**
    * Array of valid file types
    */
@@ -31,30 +31,20 @@ export interface IDropzoneProps {
    * Whether multiple files can be uploaded
    */
   multiple?: boolean;
-  /**
-   * Used if controlled dropzone
-   * @param event
-   */
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  /**
-   * Used if controlled dropzone
-   */
-  dropzoneLabel?: string;
-  /**
-   * Used if controlled dropzone
-   */
-  buttonLabel?: string;
 }
 
-export interface IDropzone<TFormValues>
-  extends Omit<IInput<TFormValues>, "onChange">,
-    IDropzoneProps {}
-
-export interface IDropzoneForm<TFormValues>
+export interface IFormFileInput<TFormValues>
   extends IFormElement<TFormValues>,
-    IDropzoneProps {}
+    IFileInputProps {}
 
-export interface IDropzoneConfig<TFormValues>
-  extends TIFormElementOmit<TFormValues> {
-  props?: IDropzoneProps;
+export interface IFileInputConfig<TFormValues>
+  extends IFormElement<TFormValues> {
+  props?: IFileInputProps;
+}
+
+export interface IFileInput<TFormValues>
+  extends IFormElementControlled,
+    Omit<IFormFileInput<TFormValues>, TIFormElementOmit> {
+  value?: string | ReadonlyArray<string> | number;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }

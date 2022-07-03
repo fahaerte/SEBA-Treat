@@ -70,7 +70,28 @@ class StripeController implements Controller {
      *        description: Any other error
      */
     this.router.get(`${this.path}/user/:userid`, this.getUserById);
+
+    this.router.get(
+      `${this.path}/create-payment-intent/:productId`,
+      this.createPaymentIntent
+    );
   }
+
+  private createPaymentIntent = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const clientSecret = await this.stripeService.createPaymentIntent(
+        req.params.productId
+      );
+      console.log(clientSecret);
+      res.status(200).json(clientSecret);
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
 
   private getCreditPackages = async (
     req: Request,

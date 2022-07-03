@@ -1,93 +1,91 @@
 import React from "react";
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
-import { Input } from "../";
-import { Datepicker } from "../";
-import { Select } from "../";
-import { Dropzone } from "../";
-import { RadioCheckSwitch, RadioCheckSwitchGroup } from "../RadioCheckSwitch";
-import { TextArea } from "../";
+import { FieldErrors, FieldValues } from "react-hook-form";
 import { IFormElementConfig } from "../_interfaces/IFormElementConfig";
 import { IInputProps } from "../Input/IInput";
 import { IDatePickerProps } from "../Datepicker/IDatePicker";
 import { IFormSelectConfig } from "../Select/ISelect";
 import { IRadioCheckSwitchProps } from "../RadioCheckSwitch/IRadioCheckSwitch";
-import {
-  IRadioCheckSwitchGroupConfig,
-  TRadioCheckSwitchGroupOptions,
-} from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
-import { TagSelect } from "../";
+import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { ITagSelectProps } from "../TagSelect/ITagSelect";
+import { IFileInputProps } from "../FileInput/IFileInput";
+import TextArea from "../TextArea/TextArea";
+import Datepicker from "../Datepicker/Datepicker";
+import RadioCheckSwitch from "../RadioCheckSwitch/RadioCheckSwitch";
+import RadioCheckSwitchGroup from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckSwitchGroup";
+import RadioCheckGroupItem from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckGroupItem";
+import { getEncodedString } from "../../../utils/getEncodedString";
+import Input from "../Input/Input";
+import FileInput from "../FileInput/FileInput";
+import Select from "../Select/Select";
+import TagSelect from "../TagSelect/TagSelect";
+import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 
 interface IFormRowElement<T> {
-  config: IFormElementConfig<T>;
-  register: UseFormRegister<T>;
+  formConfig: IFormElementConfig<T>;
   errors: FieldErrors;
 }
 
 const FormRowElement = <TFormValues extends FieldValues>({
-  config,
-  register,
+  formConfig,
   errors,
 }: IFormRowElement<TFormValues>) => {
+  const { config, elementType } = formConfig;
   const commonParams = () => ({
+    // TODO remove after refactoring
     isValid: !errors[`${config.formKey}`],
     invalidFeedback: errors[`${config.formKey}`]
       ? errors[`${config.formKey}`].message
       : undefined,
-    key: `${config.label.replace(/\s+/g, "-").toLowerCase()}-${config.formKey}`,
+    key: getEncodedString(config.label, config.formKey),
   });
 
-  switch (config.elementType) {
+  switch (elementType) {
     case "textarea":
       return (
         <TextArea<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...config.props}
-          register={register}
         />
       );
     case "input":
       return (
         <Input<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...(config.props as IInputProps)}
-          register={register}
         />
       );
     case "datepicker":
       return (
         <Datepicker<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...(config.props as IDatePickerProps)}
-          register={register}
         />
       );
     case "file":
       return (
-        <Dropzone<TFormValues>
+        <FileInput<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
-          {...config.props}
-          register={register}
+          {...(config.props as IFileInputProps)}
         />
       );
+
     case "select": {
       const configToSelect = config as IFormSelectConfig<TFormValues>;
       return (
         <Select<TFormValues>
+          key={getEncodedString(config.label, config.formKey)}
           {...configToSelect}
-          {...commonParams()}
           {...configToSelect.props}
-          register={register}
         >
-          {configToSelect.options.map((option: HTMLOptionElement) => (
+          {configToSelect.options.map((option: HTMLOptionElement, index) => (
             <option
               disabled={option.disabled}
               value={option.value}
-              key={`${option.label ?? option.value}-${option.value}`}
+              key={`${option.label || index}-${option.value}`}
             >
               {option.label ? option.label : option.value}
             </option>
@@ -98,10 +96,9 @@ const FormRowElement = <TFormValues extends FieldValues>({
     case "tagSelect":
       return (
         <TagSelect
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...(config.props as ITagSelectProps)}
-          register={register}
         />
       );
     case "radioCheckSwitch":
@@ -110,39 +107,24 @@ const FormRowElement = <TFormValues extends FieldValues>({
           {...config}
           {...commonParams()}
           {...(config.props as IRadioCheckSwitchProps)}
-          register={register}
         />
       );
     case "radioCheckSwitchGroup": {
-      const configToRadioCheckSwitchGroup =
-        config as IRadioCheckSwitchGroupConfig<TFormValues>;
+      const groupConfig =
+        config as IFormRadioCheckSwitchGroupConfig<TFormValues>;
       return (
         <RadioCheckSwitchGroup
-          invalidFeedback={commonParams().invalidFeedback}
-          label={configToRadioCheckSwitchGroup.label}
-          inline={configToRadioCheckSwitchGroup.props.inline}
-          wrapperClasses={configToRadioCheckSwitchGroup.wrapperClasses}
-          required={configToRadioCheckSwitchGroup.errors?.required?.value}
+          {...config}
+          inline={groupConfig.props.inline}
+          type={groupConfig.props.type}
         >
-          {configToRadioCheckSwitchGroup.options.map(
-            (option: TRadioCheckSwitchGroupOptions<TFormValues>) => (
-              <RadioCheckSwitch
-                label={option.label}
-                register={register}
-                formKey={configToRadioCheckSwitchGroup.formKey}
-                // disabled={configToRadioCheckSwitchGroup.disabled}
-                defaultValue={configToRadioCheckSwitchGroup.defaultValue}
-                errors={configToRadioCheckSwitchGroup.errors}
-                groupItem
-                color={configToRadioCheckSwitchGroup.props.color ?? "primary"}
-                type={configToRadioCheckSwitchGroup.props.type}
-                value={option.value}
-                key={`${option.label.replace(/\s+/g, "-").toLowerCase()}-${
-                  configToRadioCheckSwitchGroup.formKey
-                }`}
-              />
-            )
-          )}
+          {groupConfig.options.map((option: TOptionValuePair) => (
+            <RadioCheckGroupItem
+              label={option.label}
+              value={option.value}
+              key={getEncodedString(option.label, groupConfig.formKey)}
+            />
+          ))}
         </RadioCheckSwitchGroup>
       );
     }

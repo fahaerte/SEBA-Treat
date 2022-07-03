@@ -1,22 +1,22 @@
-import { IInputConfig } from "../Input/IInput";
-import { IDatePickerConfig } from "../Datepicker/IDatePicker";
+import { IFormInputConfig } from "../Input/IInput";
+import { IFormDatePickerConfig } from "../Datepicker/IDatePicker";
 import { IFormSelectConfig } from "../Select/ISelect";
-import { IDropzoneConfig } from "../Dropzone/IDropzone";
-import { ITextAreaConfig } from "../TextArea/ITextArea";
-import { IRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
-import { IRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
-import { ITagSelectConfig } from "../TagSelect/ITagSelect";
+import { IFileInputConfig } from "../FileInput/IFileInput";
+import { IFormTextAreaConfig } from "../TextArea/ITextArea";
+import { IFormRadioCheckSwitchConfig } from "../RadioCheckSwitch/IRadioCheckSwitch";
+import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
+import { IFormTagSelectConfig } from "../TagSelect/ITagSelect";
 
-export type IFormElementConfig<TFormValues> = (
-  | IFormSelectConfig<TFormValues>
-  | IDatePickerConfig<TFormValues>
-  | IInputConfig<TFormValues>
-  | IDropzoneConfig<TFormValues>
-  | IRadioCheckSwitchConfig<TFormValues>
-  | ITextAreaConfig<TFormValues>
-  | IRadioCheckSwitchGroupConfig<TFormValues>
-  | ITagSelectConfig<TFormValues>
-) & {
+export type IFormElementConfig<TFormValues> = {
+  config:
+    | IFormSelectConfig<TFormValues>
+    | IFormDatePickerConfig<TFormValues>
+    | IFormInputConfig<TFormValues>
+    | IFileInputConfig<TFormValues>
+    | IFormRadioCheckSwitchConfig<TFormValues>
+    | IFormTextAreaConfig<TFormValues>
+    | IFormRadioCheckSwitchGroupConfig<TFormValues>
+    | IFormTagSelectConfig<TFormValues>;
   elementType:
     | "input"
     | "textarea"
@@ -28,5 +28,5 @@ export type IFormElementConfig<TFormValues> = (
     | "radioCheckSwitchGroup";
 };
 export type IFormRow<TFormValues> =
-  | IFormElementConfig<TFormValues>[]
-  | IFormElementConfig<TFormValues>;
+  | IFormElementConfig<TFormValues>
+  | IFormElementConfig<TFormValues>[];

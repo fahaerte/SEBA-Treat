@@ -1,46 +1,32 @@
 import React, { ChangeEvent } from "react";
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
+import { IComponentSize } from "../../../types/ComponentProps";
+import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
 
-export interface IFormSelectProps {
-  /**
-   * size of the select attribute
-   */
-  size?: "sm" | "md" | "lg";
-  /**
-   * Whether multiple options are allowed to be selected
-   */
-  multiple?: boolean;
-}
+export interface ISelectProps extends IComponentSize {}
 
 export interface IFormSelect<TFormValues>
   extends IFormElement<TFormValues>,
-    IFormSelectProps {
+    ISelectProps {
   /**
-   * SelectControlled Options
+   * <option> children as react nodes
    */
   children:
     | React.ReactElement<HTMLOptionElement>[]
     | React.ReactElement<HTMLOptionElement>;
 }
-
-export interface ISelect<TFormValues>
-  extends Omit<
-    IFormSelect<TFormValues>,
-    | "formKey"
-    | "isValid"
-    | "register"
-    | "errors"
-    | "invalidFeedback"
-    | "placeholder"
-  > {
-  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
-}
-
 export interface IFormSelectConfig<TFormValues>
-  extends TIFormElementOmit<TFormValues> {
-  props?: IFormSelectProps;
+  extends IFormElement<TFormValues> {
+  props?: ISelectProps;
   /**
-   * options of the select component
+   * <option> children as object array list
    */
   options: HTMLOptionElement[];
+}
+
+export interface ISelect<TFormValues>
+  extends IFormElementControlled,
+    Omit<IFormSelect<TFormValues>, TIFormElementOmit> {
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
+  value: string;
 }

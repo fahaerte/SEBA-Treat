@@ -23,3 +23,5 @@ export const TabBar = ({ className = "", tabs, color = "light" }: ITabBar) => (
     ))}
   </SCTabBar>
 );
+
+export default TabBar;

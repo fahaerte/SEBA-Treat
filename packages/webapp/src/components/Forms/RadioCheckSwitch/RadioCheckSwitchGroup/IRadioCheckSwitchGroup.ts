@@ -1,58 +1,47 @@
 import React, { FormEvent } from "react";
-import { TIFormElementOmit } from "../../_interfaces/IFormElement";
+import {
+  IFormElement,
+  TIFormElementOmit,
+} from "../../_interfaces/IFormElement";
 import {
   IFormRadioCheckSwitch,
   IRadioCheckSwitchProps,
 } from "../IRadioCheckSwitch";
+import { TOptionValuePair } from "../../_interfaces/TOptionValuePair";
+import { TBootstrapPalette } from "../../../../assets/theme/interfaces/TBootstrapPalette";
 
 export interface IRadioCheckSwitchGroupProps {
   /**
-   * Label / Instruction of the input group
-   */
-  label: string;
-  /**
-   * alignment of the children (whether they are displayed listed or inline)
+   * Alignment of the children (whether they are displayed listed or inline)
    */
   inline?: boolean;
-  /**
-   * Additional CSS classes
-   */
-  wrapperClasses?: string;
-  /**
-   * Whether providing an input is required
-   * Will not be set by developer and only propagated through error object
-   */
-  required?: boolean;
-  /**
-   * error message that will be displayed
-   * Will not be set by developer and only propagated through error object
-   */
-  invalidFeedback?: string;
-}
-
-export interface IFormRadioCheckSwitchGroup
-  extends IRadioCheckSwitchGroupProps {
-  /**
-   * Children of this component
-   */
-  children: React.ReactNode;
-}
-
-export type TRadioCheckSwitchGroupOptions<TFormValues> = {
-  label: IFormRadioCheckSwitch<TFormValues>["label"];
-  value?: IFormRadioCheckSwitch<TFormValues>["value"];
-};
-
-export interface IRadioCheckSwitchGroup<TFormValues>
-  extends Omit<IRadioCheckSwitchGroupProps, "required" | "invalidFeedback"> {
   /**
    * Type of the element
    */
   type: IRadioCheckSwitchProps["type"];
+  color?: TBootstrapPalette;
+}
+
+export interface IFormRadioCheckSwitchGroup<TFormValues>
+  extends Omit<IFormElement<TFormValues>, "disabled" | "wrapperClasses">,
+    IRadioCheckSwitchGroupProps {
   /**
-   * Color of the filling when checked
+   * RadioCheckSwitch items as react nodes
    */
-  color?: IRadioCheckSwitchProps["color"];
+  children: React.ReactNode;
+}
+
+export interface IFormRadioCheckSwitchGroupConfig<TFormValues>
+  extends Omit<IFormElement<TFormValues>, "disabled"> {
+  props: IRadioCheckSwitchGroupProps;
+  /**
+   * RadioCheckSwitch items as object array
+   */
+  options: TOptionValuePair[];
+}
+
+export interface IRadioCheckSwitchGroup<TFormValues>
+  extends Omit<IFormRadioCheckSwitch<TFormValues>, TIFormElementOmit> {
   /**
    * On Change event handler
    * @param event
@@ -61,24 +50,12 @@ export interface IRadioCheckSwitchGroup<TFormValues>
   /**
    * Options to display the children
    */
-  options: TRadioCheckSwitchGroupOptions<TFormValues>[];
+  // options: TRadioCheckSwitchGroupOptions<TFormValues>[];
+  children: React.ReactNode;
 }
 
-export interface IRadioCheckSwitchGroupConfig<TFormValues>
-  extends TIFormElementOmit<TFormValues> {
-  /**
-   * Required attribute will be retrieved from the error object
-   * invalidFeedback will be retrieved from the errors property of the useForm-hook
-   */
-  props: Omit<
-    IRadioCheckSwitchGroupProps,
-    "required" | "invalidFeedback" | "label"
-  > & {
-    type: IRadioCheckSwitchProps["type"];
-    color?: IRadioCheckSwitchProps["color"];
-  };
-  /**
-   * Options of a radioCheckSwitchGroup
-   */
-  options: TRadioCheckSwitchGroupOptions<TFormValues>[];
-}
+export interface IFormRadioCheckGroupItem<TFormValues>
+  extends Omit<
+    IFormRadioCheckSwitch<TFormValues>,
+    "formKey" | "defaultValue" | "rules" | "type" | "color"
+  > {}

@@ -1,78 +1,41 @@
 import React from "react";
 import { IFormSelect } from "./ISelect";
-import { SCFloatingForm, SCSelect } from "../styles";
-import { generateRegisterOptions } from "../_utils/generateRegisterOptions";
-import Typography from "../../Typography/Typography";
+import { useFormRuleConverter } from "../_utils/useFormRuleConverter";
+import {
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+  useFormContext,
+} from "react-hook-form";
+import SelectControlled from "./SelectControlled";
 
-const Select = <TFormValues extends Record<string, unknown>>({
-  children,
+const Select = <TFormValues extends FieldValues>({
   formKey,
-  register,
   defaultValue = "",
-  className = "",
-  wrapperClasses = "col-md",
-  size = "md",
-  multiple = false,
   label,
-  disabled = false,
-  isValid = true,
-  invalidFeedback = "",
-  errors = undefined,
-}: IFormSelect<TFormValues>) => (
-  <SCFloatingForm
-    className={[
-      multiple || size !== "md" ? "" : "form-floating",
-      wrapperClasses,
-    ].join(" ")}
-  >
-    {multiple || size !== "md" ? (
-      <label
-        htmlFor={`${label.replace(/\s+/g, "-").toLowerCase()}-${formKey}`}
-        className={["form-label", isValid ? "" : "is-invalid"].join(" ")}
-      >
-        {label}
-        {errors?.required?.value ? " *" : ""}
-      </label>
-    ) : (
-      ""
-    )}
-    <SCSelect
-      id={`${label.replace(/\s+/g, "-").toLowerCase()}-${formKey}`}
-      {...register(formKey, generateRegisterOptions(defaultValue, errors))}
-      multiple={multiple}
-      className={[
-        "form-select",
-        size === "md" ? "" : `form-select-${size}`,
-        isValid ? "" : "is-invalid",
-        className,
-      ].join(" ")}
-      // Using disabled attribute because readOnly does not exist.
-      disabled={disabled}
-    >
-      <option disabled />
-      {children}
-    </SCSelect>
+  rules,
+  ...props
+}: IFormSelect<TFormValues>) => {
+  const { control } = useFormContext<TFormValues>();
 
-    {!multiple && size === "md" ? (
-      <label
-        htmlFor={`${label.replace(/\s+/g, "-").toLowerCase()}-${formKey}`}
-        className={["form-label", isValid ? "" : "is-invalid"].join(" ")}
-      >
-        {label}
-        {errors?.required?.value ? " *" : ""}
-      </label>
-    ) : (
-      ""
-    )}
+  const { field, fieldState } = useController<TFormValues>({
+    control,
+    name: formKey,
+    rules: useFormRuleConverter(rules),
+    defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
+  });
 
-    {isValid ? (
-      ""
-    ) : (
-      <Typography variant="psmall" className="invalid-feedback">
-        {invalidFeedback}
-      </Typography>
-    )}
-  </SCFloatingForm>
-);
+  return (
+    <SelectControlled
+      value={field.value}
+      onChange={field.onChange}
+      label={rules?.required?.value ? `${label} *` : label}
+      isInvalid={fieldState.invalid}
+      invalidFeedback={fieldState.error?.message}
+      {...props}
+    />
+  );
+};
 
 export default Select;

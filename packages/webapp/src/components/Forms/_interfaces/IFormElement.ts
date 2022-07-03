@@ -1,54 +1,36 @@
-import { UseFormRegister, Path } from "react-hook-form";
-import { IError } from "./IFormErrors";
+import { Path } from "react-hook-form";
+import { IFormRulesConfig } from "./IFormRulesConfig";
+import { IComponentBase } from "../../../assets/theme/types/IComponentBase";
 
-export interface IFormElement<TFormValues> {
+export interface IFormElement<TFormValues>
+  extends Pick<IComponentBase, "className"> {
   /**
-   * Label for a form element
+   * Label for the form element
    */
   label: string;
-  /**
-   * register prop for react hook form
-   */
-  register: UseFormRegister<TFormValues>;
   /**
    * The key of the formelement which it should be referred to
    */
   formKey: Path<TFormValues>;
   /**
-   * Additional CSS classes on the input element
-   */
-  className?: string;
-  /**
    * Classes regarding the div wrapper for some elements
    */
   wrapperClasses?: string;
-  /**
-   * Whether the input value is valid
-   */
-  isValid?: boolean;
-  /**
-   * Helper text if input is invalid
-   */
-  invalidFeedback?: string;
   /**
    * Whether the form element is disabled
    */
   disabled?: boolean;
   /**
-   * default Value of the form element
+   * Default value of the form element
    */
   defaultValue?: unknown;
   /**
-   * Defines rules and error messages when a user
-   * wants to submit a form with an invalid input.
+   * Defines rules and error messages for client form validation
    */
-  errors?: IError;
+  rules?: IFormRulesConfig;
 }
 
 /**
- * Helper type of IFormElement without register and invalidFeedback.
+ * Reduced IFormElement interface without uncontrolled properties like formKey, defaultValue and rules
  */
-export type TIFormElementOmit<TFormValues> = Omit<
-  IFormElement<TFormValues>,
-  "register"
->;
+export type TIFormElementOmit = "formKey" | "defaultValue" | "rules";

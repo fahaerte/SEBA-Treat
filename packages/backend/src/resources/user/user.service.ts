@@ -7,6 +7,7 @@ import VirtualAccount from "../virtualAccount/virtualAccount.interface";
 import { ObjectId } from "mongoose";
 import User from "../user/user.interface";
 import { Service } from "typedi";
+import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
 
 @Service()
 class UserService {
@@ -21,10 +22,10 @@ class UserService {
     newUser: User
   ): Promise<{ token: string; userId: string } | Error> {
     try {
-      const virtualAccount = (await this.virtualAccountService.createAccount(
-        process.env["CENTRAL_BANK_ID"] as unknown as ObjectId
-      )) as VirtualAccount;
-      newUser.virtualAccountId = virtualAccount._id;
+      // create account
+      newUser.virtualAccount = this.virtualAccountService.createAccount(
+        USER_STARTING_BALANCE
+      );
       const user = await this.userModel.create(newUser);
       return { token: token.createToken(user), userId: user._id };
     } catch (error: any) {
@@ -70,6 +71,34 @@ class UserService {
       throw new Error("User has no profile picture");
     }
     return path.join(profilePicturesPath, pictureForId);
+  }
+
+  public async sendTransaction(
+    userId: ObjectId,
+    amount: number
+  ): Promise<number | Error> {
+    try {
+      const user = (await this.userModel.findById(userId)) as User;
+      user.virtualAccount.balance -= amount;
+      await user.save();
+      return user.virtualAccount.balance;
+    } catch (error) {
+      throw new Error("Unable to send transaction");
+    }
+  }
+
+  public async receiveTransaction(
+    userId: ObjectId,
+    amount: number
+  ): Promise<number | Error> {
+    try {
+      const user = (await this.userModel.findById(userId)) as User;
+      user.virtualAccount.balance += amount;
+      await user.save();
+      return user.virtualAccount.balance;
+    } catch (error) {
+      throw new Error("Unable to receive transaction");
+    }
   }
 }
 

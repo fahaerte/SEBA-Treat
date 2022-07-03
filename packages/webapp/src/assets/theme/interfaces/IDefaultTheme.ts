@@ -51,14 +51,19 @@ export interface IDefaultTheme {
     background: string;
   };
   form: {
-    element: {
+    control: {
       height: string;
       lineHeight: number;
+      padding: string;
+      color: string;
+      fontSize: string;
+      border: {
+        radius: string;
+      };
+    };
+    label: {
       color: string;
       padding: string;
-      borderColor: string;
-      labelColor: string;
-      fontSize: string;
     };
   };
   table: {

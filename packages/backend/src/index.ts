@@ -8,9 +8,7 @@ import MealOfferController from "./resources/mealOffer/mealOffer.controller";
 import MealOfferService from "./resources/mealOffer/mealOffer.service";
 import { Container } from "typedi";
 import MealAllergenController from "./resources/mealAllergen/mealAllergen.controller";
-import VirtualAccountController from "./resources/virtualAccount/virtualAccount.controller";
 import MealTransactionController from "./resources/mealTransaction/mealTransaction.controller";
-import VirtualBankController from "./resources/virtualBank/virtualBank.controller";
 import MealCategoryController from "./resources/mealCategory/mealCategory.controller";
 import UserService from "./resources/user/user.service";
 import StripeService from "./resources/stripe/stripe.service";
@@ -25,8 +23,6 @@ const app = new App(
       Container.get(StripeService)
     ),
 
-    new VirtualBankController(),
-    new VirtualAccountController(),
     new MealTransactionController(),
 
     new MealOfferController(Container.get(MealOfferService)),

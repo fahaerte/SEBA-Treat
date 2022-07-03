@@ -1,94 +1,60 @@
-import React, { useMemo, useState, useContext } from "react";
+import React from "react";
 import CreatableSelect from "react-select/creatable";
-import { ActionMeta, OnChangeValue } from "react-select";
+import { OnChangeValue } from "react-select";
 import makeAnimated from "react-select/animated";
-import { ITagSelect, ITagSelectOption, TOption } from "./ITagSelect";
-import { customStyles } from "./utils";
-import { CustomValueContext } from "../Form";
+import { ITagSelect } from "./ITagSelect";
+import { customStyles } from "./styles";
+import { SCFloatingForm } from "../styles";
+import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
+import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
+import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
+import { getEncodedString } from "../../../utils/getEncodedString";
+import { useTheme } from "styled-components";
 
 const TagSelectControlled = ({
-  color = "primary",
+  wrapperClasses = "",
   className = "",
-  wrapperClasses = "col-md",
-  isValid = true,
-  label,
+  color = "primary",
   disabled = false,
-  selectOptions,
   noOptionsMessage = "No options",
   loadingMessage = "loading...",
-  onChange = () => {
-    return;
-  },
+  isLoading = false,
+  onChange = () => undefined,
+  isInvalid = false,
+  invalidFeedback = EDefaultErrorMessages.GENERAL,
+  label,
+  value,
+  autocompleteOptions,
 }: ITagSelect<HTMLDivElement>) => {
-  const customValueControl = useContext(CustomValueContext);
-  customValueControl.setCustomizedReset(() => {
-    selectedOptions.splice(0, selectedOptions.length);
-    setShownOptions([]);
-  });
-
-  const mappedOptions = selectOptions.options.map((option) => {
-    return { value: String(option.id), label: option.label };
-  });
-  const selectedOptions: TOption[] = useMemo(() => [], []);
-  const [shownOptions, setShownOptions] = useState<ITagSelectOption[]>([]);
-
-  const onChangeHandler = (
-    _: OnChangeValue<ITagSelectOption, boolean>,
-    actionMeta: ActionMeta<ITagSelectOption>
-  ) => {
-    if (actionMeta.action === "select-option" && actionMeta.option) {
-      selectedOptions.push({
-        id: actionMeta.option.value,
-        label: actionMeta.option.label,
-      });
-    } else if (actionMeta.action === "create-option") {
-      selectedOptions.push({ label: actionMeta.option.value });
-    } else if (
-      (actionMeta.action === "remove-value" || "pop-value") &&
-      !(actionMeta.action === "clear")
-    ) {
-      let counter = 0;
-      selectedOptions.forEach((option) => {
-        if (option.label === actionMeta.removedValue?.label) {
-          selectedOptions.splice(counter, 1);
-        }
-        counter++;
-      });
-    } else if (actionMeta.action === "clear") {
-      selectedOptions.splice(0, selectedOptions.length);
-    }
-    setShownOptions(
-      selectedOptions.map((option) => ({
-        value: `${option.id ? option.id : option.label}`,
-        label: option.label,
-      }))
-    );
-    onChange(selectedOptions);
-  };
+  const theme = useTheme();
 
   return (
-    <div
-      className={["form-floating", "multi-select-wrapper", wrapperClasses].join(
-        " "
-      )}
+    <SCFloatingForm
+      className={`form-floating multi-select-wrapper ${wrapperClasses}`}
     >
-      <CreatableSelect
-        id={`${label.replace(/\s+/g, "-").toLowerCase()}`}
+      <CreatableSelect<TOptionValuePair, true>
+        id={getEncodedString(label)}
         isMulti
-        onChange={onChangeHandler}
-        options={selectOptions.isLoading ? [] : mappedOptions}
-        styles={customStyles(color, isValid)}
+        onChange={(newValue: OnChangeValue<TOptionValuePair, true>) =>
+          onChange(newValue as TOptionValuePair[])
+        }
+        onCreateOption={(inputValue) =>
+          onChange([...value, { value: "", label: inputValue }])
+        }
+        options={isLoading ? [] : autocompleteOptions}
+        styles={customStyles(color, isInvalid, theme)}
         className={className}
         isDisabled={disabled}
-        isLoading={selectOptions.isLoading}
+        isLoading={isLoading}
         noOptionsMessage={() => noOptionsMessage}
         loadingMessage={() => loadingMessage}
         placeholder={label}
         components={makeAnimated()}
-        value={shownOptions}
+        value={value}
+        isClearable={false}
       />
-    </div>
+      {isInvalid && <FormInvalidFeedback message={invalidFeedback} />}
+    </SCFloatingForm>
   );
 };
-
 export default TagSelectControlled;
