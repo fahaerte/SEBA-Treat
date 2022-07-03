@@ -6,8 +6,8 @@ import {
   Routes,
   useRoutes,
 } from "react-router-dom";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
+import LoginScreen from "../screens/Auth/LoginScreen";
+import RegisterScreen from "../screens/Auth/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LandingPage from "../screens/LandingPage";
 import ErrorPage from "../screens/ErrorPage";

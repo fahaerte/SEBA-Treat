@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, FormHelper } from "../components/";
-import { IFormRow } from "../components/";
+import { Button, Form, FormHelper } from "../../components";
+import { IFormRow } from "../../components";
 import { IUserCredentials } from "@treat/lib-common";
-import UserService from "../services/user.service";
 import { AuthContext } from "../utils/AuthProvider";
 import { Navigate } from "react-router-dom";
+import UserService from "../../services/user.service";
 
 const LoginScreen = () => {
   const authContext = useContext(AuthContext);

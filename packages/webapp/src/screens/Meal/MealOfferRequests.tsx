@@ -1,19 +1,19 @@
 import React from "react";
-import { Row } from "../components";
-import { Container, Tabs, Tab } from "react-bootstrap";
-import { Header } from "../components/Header/header";
-import { SentMealOfferRequests } from "./sentMealOfferRequests";
-import { ReceivedMealOfferRequests } from "./receivedMealOfferRequests";
-import TabBar from "../components/TabBar/TabBar";
-import TabContent from "../components/TabBar/TabContent";
+import { Row, Typography, Container } from "../../components";
+import { Tabs, Tab } from "react-bootstrap";
+import { Header } from "../../components/Header/header";
+import { SentMealOfferRequests } from "./SentMealOfferRequests";
+import { ReceivedMealOfferRequests } from "./ReceivedMealOfferRequests";
+import TabBar from "../../components/TabBar/TabBar";
+import TabContent from "../../components/TabBar/TabContent";
 
 export const MealOfferRequests = () => {
   return (
     <div>
       <Header />
-      <Container className={""}>
+      <Container>
         <Row className={"pt-5"}>
-          <h1>Your orders</h1>
+          <Typography variant={"h1"}>Your orders</Typography>
         </Row>
         <Row className={"pt-3"}>
           <Tabs defaultActiveKey={"sentRequests"} className={""}>
