@@ -1,22 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
-import MealOfferService from "../services/mealOffer.service";
-import { MealOfferRequest } from "../components/MealOfferRequest/MealOfferRequest";
-import { ReceivedMealReservation } from "../components/MealOfferRequest/ReceivedMealReservation";
-import MealOffer from "../types/interfaces/mealOffer.interface";
+import MealOfferService from "../../services/mealOffer.service";
+import { MealOfferRequest } from "../../components/MealOfferRequest/MealOfferRequest";
+import { ReceivedMealReservation } from "../../components/MealOfferRequest/ReceivedMealReservation";
+import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 
-export const ReceivedMealOfferRequests = () => {
-  const MainDivider = styled.hr`
-    border: none;
-    border-top: 1px dashed #cfcfcf;
-    color: #fff;
-    background-color: #fff;
-    height: 1px;
-  `;
+// TODO: use theme or maybe even create a component
+const MainDivider = styled.hr`
+  border: none;
+  border-top: 1px dashed #cfcfcf;
+  color: #fff;
+  background-color: #fff;
+  height: 1px;
+`;
 
-  const [receivedMealOfferRequests, setReceivedMealOfferRequests] = useState(
-    [] as MealOffer[]
-  );
+export const ReceivedMealOfferRequests = () => {
+  const [receivedMealOfferRequests, setReceivedMealOfferRequests] = useState<
+    MealOffer[]
+  >([]);
 
   const fetchData = useCallback(async () => {
     const data = await MealOfferService.getReceivedMealOfferRequests();

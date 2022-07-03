@@ -1,11 +1,9 @@
 import React from "react";
-import { Form, FormHelper } from "@treat/webapp/src/components/";
-import { IFormRow } from "@treat/webapp/src/components/";
+import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
-import UserService from "../services/user.service";
+import UserService from "../../services/user.service";
 
 const RegisterScreen = () => {
-
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -132,8 +130,8 @@ const RegisterScreen = () => {
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
     UserService.registerUser(data)
-        .then(response => console.log(JSON.stringify(response)))
-        .catch(error => console.error(error));
+      .then((response) => console.log(JSON.stringify(response)))
+      .catch((error) => console.error(error));
   };
 
   return (

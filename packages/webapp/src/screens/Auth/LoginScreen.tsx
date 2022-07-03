@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormHelper } from "../components/";
-import { IFormRow } from "../components/";
+import { Button, Form, FormHelper } from "../../components";
+import { IFormRow } from "../../components";
 import { IUserCredentials } from "@treat/lib-common";
-import UserService from "../services/user.service";
+import UserService from "../../services/user.service";
 
 const LoginScreen = () => {
-
-
   const elements: IFormRow<IUserCredentials>[] = [
     [
       FormHelper.createInput({
@@ -35,8 +33,8 @@ const LoginScreen = () => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
     UserService.loginUser(data)
-        .then(response => console.log(JSON.stringify(response)))
-        .catch(error => console.error(error));
+      .then((response) => console.log(JSON.stringify(response)))
+      .catch((error) => console.error(error));
   };
 
   return (

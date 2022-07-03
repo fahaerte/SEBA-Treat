@@ -6,5 +6,6 @@ export const getFormattedDateFromString = (date: string | Date) => {
     hour: "numeric",
     minute: "numeric",
   };
+  // TODO: Fix?
   return new Date(date).toLocaleString("ens-DE", options);
 };

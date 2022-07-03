@@ -1,11 +1,11 @@
 import React from "react";
 import { Navigate, RouteObject, useRoutes } from "react-router-dom";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
+import LoginScreen from "../screens/Auth/LoginScreen";
+import RegisterScreen from "../screens/Auth/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
-import ErrorPage from "../screens/ErrorPage";
+import ErrorPage from "../screens/Status/ErrorPage";
 import { Typography } from "../components";
-import { MealOfferRequests } from "../screens/mealOfferRequests";
+import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 
 export const AppRouter = () => {
   const mainRoutes = {
