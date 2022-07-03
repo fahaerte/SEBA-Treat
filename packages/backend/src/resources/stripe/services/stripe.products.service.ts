@@ -1,12 +1,11 @@
-import {Service} from "typedi";
-import {Stripe} from "stripe";
+import { Service } from "typedi";
+import { Stripe } from "stripe";
 import HttpException from "../../../utils/exceptions/http.exception";
-import {StripeError} from "../../../utils/exceptions/stripe.errors";
+import { StripeError } from "../../../utils/exceptions/stripe.errors";
 
 @Service()
 class StripeProductsService {
-  constructor(private readonly stripe: Stripe) {
-  }
+  constructor(private readonly stripe: Stripe) {}
 
   public async getCreditPackages(withPrice = false) {
     try {
@@ -23,8 +22,6 @@ class StripeProductsService {
       throw new HttpException(500, error?.message as string);
     }
   }
-
-
 }
 
 export default StripeProductsService;
