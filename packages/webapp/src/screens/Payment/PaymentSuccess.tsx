@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import {
   Col,
   Container,
@@ -13,7 +13,7 @@ import { useVerifyPaymentQuery } from "../../store/api/stripeApi";
 const PaymentSuccess = () => {
   const { priceId } = useParams();
   const {
-    data: verifyPayment,
+    // data: verifyPayment,
     isLoading,
     error,
     isSuccess,

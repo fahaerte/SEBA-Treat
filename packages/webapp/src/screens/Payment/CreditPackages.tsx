@@ -16,30 +16,15 @@ import {
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 
-const configService = new ConfigService();
-let stripePromise: Stripe | null;
-
-const getStripe = async () => {
-  if (!stripePromise) {
-    stripePromise = await loadStripe(
-      configService.get("STRIPE_API_PUBLIC_KEY")
-    );
-  }
-  return stripePromise;
-};
-
 export const CreditPackages = () => {
-  const {
-    data: products,
-    isLoading: productsIsLoading,
-    isError: productsIsError,
-  } = usePaymentGetProductsWithPricesQuery({});
+  const { data: products, isLoading: productsIsLoading } =
+    usePaymentGetProductsWithPricesQuery({});
 
   const [createCheckout, { isLoading, isError, data }] =
     useCreateCheckoutSessionMutation();
 
   const redirectToCheckout = (priceId: string) => {
-    createCheckout({
+    void createCheckout({
       priceId,
       userId: "62b776eafc0a00b0fa2d125e",
     });
@@ -95,5 +80,3 @@ export const CreditPackages = () => {
     </>
   );
 };
-
-// export default CreditPackages;
