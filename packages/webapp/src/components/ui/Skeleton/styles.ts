@@ -31,14 +31,14 @@ const cssCustom = (props: ThemeProps<DefaultTheme>) => {
     tmp += `
       &.bg-${element} {
           --bs-bg-opacity: 1;
-        background-color: ${props.theme.palette[element].main} !important;
+        background-color: ${props.theme.palette[element].active} !important;
       }
       &.wave-${element} {
         background: linear-gradient(
           to right,
-          ${props.theme.palette[element].main} 8%,
-          ${props.theme.palette[element].hover} 18%,
-          ${props.theme.palette[element].main} 50%
+          ${props.theme.palette[element].hover} 3%,
+         #d8d8d8 18%,
+          ${props.theme.palette[element].hover} 50%
         );
       }
       `;

@@ -12,27 +12,51 @@ class StripeService {
   constructor() {
     const { STRIPE_API_SECRET_KEY } = process.env;
     this.stripe = new Stripe(`${STRIPE_API_SECRET_KEY}`, {
-      apiVersion: "2020-08-27", // TODO for now api version of example article is used, check newer version https://stripe.com/docs/upgrades#api-changelog
+      apiVersion: "2020-08-27",
     });
     this.stripeUsers = new StripeUsersService(this.stripe);
   }
 
-  // PAYMENT SESSIONS
-  public async createPaymentIntent(productId: string) {
+  public async createCheckoutSession(priceId: string, customerId: string) {
     try {
-      // Calculate order amount
-      const priceObject = await this.getProductPrice(productId);
-      if (priceObject && priceObject.data[0].unit_amount) {
-        const paymentIntent = await this.stripe.paymentIntents.create({
-          amount: priceObject.data[0].unit_amount,
-          currency: "eur",
-          automatic_payment_methods: {
-            enabled: true,
+      return await this.stripe.checkout.sessions.create({
+        line_items: [
+          {
+            // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+            price: priceId,
+            quantity: 1,
           },
+        ],
+        customer: customerId,
+        customer_update: { address: "auto" },
+        mode: "payment",
+        success_url: `http://localhost:3000/success/${priceId}`,
+        cancel_url: `http://localhost:3000/purchase-credits`,
+        automatic_tax: { enabled: true },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(500, "Could not create session");
+    }
+  }
+
+  public async getLatestCustomerPaymentIntent(customerId: string) {
+    try {
+      const customerIndent = await this.stripe.paymentIntents
+        .search({
+          // eslint-disable-next-line no-useless-escape
+          query: `customer:\"${customerId}\"`,
+        })
+        .then((response) => {
+          return response.data;
         });
-        return paymentIntent.client_secret;
+      if (customerIndent.length > 0) {
+        return customerIndent.reduce((prev, current) => {
+          return prev.created > current.created ? prev : current;
+        });
+      } else {
+        throw new Error("Could not find intent");
       }
-      return "";
     } catch (error) {
       console.log(error);
       throw new HttpException(500, "Could not create intent");
@@ -56,9 +80,9 @@ class StripeService {
     }
   }
 
-  public async getPrices() {
+  public async getPrice(priceId: string) {
     try {
-      return await this.stripe.prices.list({ expand: ["data.product"] });
+      return await this.stripe.prices.retrieve(priceId);
     } catch (error: any) {
       throw new HttpException(500, "Could not get prices");
     }
@@ -77,14 +101,37 @@ class StripeService {
     }
   }
 
-  public async getProductPrice(id: string) {
-    try {
-      // eslint-disable-next-line no-useless-escape
-      return await this.stripe.prices.search({ query: `product:\"${id}\"` });
-    } catch (error: any) {
-      throw new HttpException(500, "Could not get price");
-    }
-  }
+  // PAYMENT SESSIONS
+  // public async createPaymentIntent(productId: string) {
+  //   try {
+  //     // Calculate order amount
+  //     const priceObject = await this.getProductPrice(productId);
+  //     // const checkout = await this.stripe.checkout();
+  //     if (priceObject && priceObject.data[0].unit_amount) {
+  //       const paymentIntent = await this.stripe.paymentIntents.create({
+  //         amount: priceObject.data[0].unit_amount,
+  //         currency: "eur",
+  //         automatic_payment_methods: {
+  //           enabled: true,
+  //         },
+  //       });
+  //       return paymentIntent.client_secret;
+  //     }
+  //     return "";
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw new HttpException(500, "Could not create intent");
+  //   }
+  // }
+  //
+  // public async getProductPrice(id: string) {
+  //   try {
+  //     // eslint-disable-next-line no-useless-escape
+  //     return await this.stripe.prices.search({ query: `product:\"${id}\"` });
+  //   } catch (error: any) {
+  //     throw new HttpException(500, "Could not get price");
+  //   }
+  // }
 }
 
 export default StripeService;

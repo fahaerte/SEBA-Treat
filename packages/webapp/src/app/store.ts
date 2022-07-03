@@ -8,8 +8,6 @@ import {
 } from "@reduxjs/toolkit";
 import userReducer from "../redux/userSlice";
 import { stripeApi } from "../store/api/stripeApi";
-import { userApi } from "../store/api/userApi";
-import { mealApi } from "../store/api/mealApi";
 
 const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {

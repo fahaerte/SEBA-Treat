@@ -13,8 +13,8 @@ const CreditPackage = ({
   buttonAction: () => void;
 }) => (
   <Card className={`align-items-center ${className}`}>
-    <CardBody className={"text-center"}>
-      <Typography variant={"h2"} className={"mb-3"}>
+    <CardBody className={"text-center my-3"}>
+      <Typography variant={"h1"} className={"mb-3"}>
         {productName}
       </Typography>
       <Typography variant={"h3"} className={"fw-normal mb-3"}>

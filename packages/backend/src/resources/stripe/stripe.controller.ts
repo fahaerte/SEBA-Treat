@@ -50,7 +50,7 @@ class StripeController implements Controller {
 
     /**
      * @swagger
-     * /api/payment/prices:
+     * /api/payment/get-latest-payment:
      *  get:
      *    tags:
      *    - Stripe
@@ -63,17 +63,58 @@ class StripeController implements Controller {
      *      400:
      *        description: Any other error
      */
-    this.router.get(`${this.path}/prices`, this.getPrices);
+    this.router.post(`${this.path}/get-latest-payment`, this.getLatestIntent);
+
+    this.router.post(
+      `${this.path}/create-checkout-session`,
+      this.createCheckoutSession
+    );
   }
 
-  private getPrices = async (
+  private createCheckoutSession = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const pricesAndProducts = await this.stripeService.getPrices();
-      res.status(200).json(pricesAndProducts.data);
+      const stripeCustomer =
+        await this.stripeService.stripeUsers.getUserByTreatId(
+          req.body.userId as string
+        );
+      const session = await this.stripeService.createCheckoutSession(
+        req.body.priceId as string,
+        stripeCustomer.data[0].id
+      );
+      if (session.url) {
+        res.json({ url: session.url });
+      } else {
+        throw new Error("Session could not be created");
+      }
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private getLatestIntent = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const customerId = req.body.customerId as string;
+      const priceId = req.query.price as string;
+      const latestIntent =
+        await this.stripeService.getLatestCustomerPaymentIntent(customerId);
+      const priceObject = await this.stripeService.getPrice(priceId);
+
+      if (
+        priceObject.unit_amount === latestIntent.amount &&
+        latestIntent.created <= latestIntent.created + 3000
+      ) {
+        res.status(200).json({ message: "Payment successful" });
+      } else {
+        res.status(500).json({ message: "Payment not successful" });
+      }
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

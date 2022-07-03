@@ -4,14 +4,6 @@ import { IStripeProduct } from "@treat/lib-common";
 
 const injectedStripeRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    paymentControllerGetPaymentIntentSecret: build.query<
-      PaymentControllerGetPaymentIntentSecretApiResponse,
-      PaymentControllerGetPaymentIntentSecretApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/payment/create-payment-intent/${queryArg.productId}`,
-      }),
-    }),
     paymentGetProductsWithPrices: build.query<
       PaymentControllerGetProductsWithPricesApiResponse,
       Record<string, never>
@@ -20,9 +12,38 @@ const injectedStripeRtkApi = api.injectEndpoints({
         url: `/payment/products/`,
       }),
     }),
+    verifyPayment: build.query<VerifyPaymentApiResponse, VerifyPaymentApiArg>({
+      query: (queryArg) => ({
+        url: `/payment/get-latest-payment?price=${queryArg.priceId}`,
+        body: {
+          customerId: queryArg.customerId,
+        },
+        method: "POST",
+      }),
+    }),
+    createCheckoutSession: build.mutation<
+      CreateCheckoutSessionApiResponse,
+      CreateCheckoutSessionApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/payment/create-checkout-session`,
+        method: "POST",
+        body: {
+          priceId: queryArg.priceId,
+          userId: queryArg.userId,
+        },
+      }),
+    }),
   }),
 });
 
+export type CreateCheckoutSessionApiResponse = { url: string };
+export type CreateCheckoutSessionApiArg = {
+  priceId: string;
+  userId: string;
+};
+export type VerifyPaymentApiResponse = { message: string };
+export type VerifyPaymentApiArg = { customerId: string; priceId: string };
 export type PaymentControllerGetProductsWithPricesApiResponse =
   IStripeProduct[];
 export type PaymentControllerGetPaymentIntentSecretApiResponse =
@@ -34,8 +55,9 @@ export type PaymentControllerGetPaymentIntentSecretApiArg = {
 };
 
 export const {
-  usePaymentControllerGetPaymentIntentSecretQuery,
   usePaymentGetProductsWithPricesQuery,
+  useVerifyPaymentQuery,
+  useCreateCheckoutSessionMutation,
 } = injectedStripeRtkApi;
 
 export { injectedStripeRtkApi as stripeApi };

@@ -6,7 +6,8 @@ import HomeScreen from "../screens/HomeScreen";
 import ErrorPage from "../screens/Status/ErrorPage";
 import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
-import CreditPackages from "../screens/Payment/CreditPackages";
+import { CreditPackages } from "../screens/Payment/CreditPackages";
+import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -33,8 +34,8 @@ export const AppRouter = () => {
 
   const redirectRoutes = [
     {
-      path: "/success",
-      element: <div>Everything worked out find!</div>,
+      path: "/success/:priceId",
+      element: <PaymentSuccess />,
     },
     {
       path: "/cancel",

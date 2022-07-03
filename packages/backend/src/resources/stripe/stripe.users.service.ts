@@ -35,6 +35,18 @@ class StripeUsersService {
     }
   }
 
+  public async getUserByEmail(email: string) {
+    try {
+      return await this.stripe.customers.search({
+        // eslint-disable-next-line no-useless-escape
+        query: `email:\"${email}\"`,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(500, "couldn't create stripe customer");
+    }
+  }
+
   public async getUserByTreatId(treatId: string) {
     try {
       return await this.stripe.customers.search({
@@ -71,22 +83,6 @@ class StripeUsersService {
       throw new HttpException(500, "couldn't update stripe customer");
     }
   }
-
-  // TODO: Delete?
-  // public async getPaymentMethods(treatId: string) {
-  //   try {
-  //     const user = await this.getUserByTreatId(treatId);
-  //     const stripeId = user.data[0].id;
-  //     if (stripeId) {
-  //       return await this.stripe.customers.listPaymentMethods(stripeId, {
-  //         type: "card",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw new HttpException(500, "couldn't find payment");
-  //   }
-  // }
 }
 
 export default StripeUsersService;
