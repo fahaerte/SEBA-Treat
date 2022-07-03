@@ -1,9 +1,9 @@
 import React from "react";
-import { Container } from "react-bootstrap";
-import { Col, Row } from "../Grid";
+import {Container} from "react-bootstrap";
+import {Col, Row} from "../Grid";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
-import { getFormattedDateFromString } from "../../utils/getFormattedDate";
+import {getFormattedDateFromString} from "../../utils/getFormattedDate";
 
 interface MealOfferProps {
   mealOffer: MealOffer;
@@ -46,10 +46,7 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => {
                   </h6>
                 </Col>
                 <Col>
-                  <Row className={"border"}>
-                    {/*<Col>*/}
-                    {/*    <i className={"bi-alarm"}></i>*/}
-                    {/*</Col>*/}
+                  <Row className={""}>
                     <Col>
                       <h6>{mealOffer.portions} portions</h6>
                     </Col>

@@ -1,11 +1,13 @@
 import React from "react";
-import { Navigate, RouteObject, useRoutes } from "react-router-dom";
+import {Navigate, useRoutes} from "react-router-dom";
 import LoginScreen from "../screens/Auth/LoginScreen";
 import RegisterScreen from "../screens/Auth/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ErrorPage from "../screens/Status/ErrorPage";
-import { Typography } from "../components";
-import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
+import {Typography} from "../components";
+import {MealOfferRequests} from "../screens/Meal/MealOfferRequests";
+import {SentMealOfferRequests} from "../screens/Meal/SentMealOfferRequests";
+import {ReceivedMealOfferRequests} from "../screens/Meal/ReceivedMealOfferRequests";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -25,7 +27,17 @@ export const AppRouter = () => {
       },
       {
         path: "/mealOfferRequests",
-        element: <MealOfferRequests />,
+        element: <MealOfferRequests/>,
+        children: [
+          {
+            path: "sent",
+            element: <SentMealOfferRequests/>
+          },
+          {
+            path: "received",
+            element: <ReceivedMealOfferRequests/>
+          }
+        ]
       },
     ],
   };

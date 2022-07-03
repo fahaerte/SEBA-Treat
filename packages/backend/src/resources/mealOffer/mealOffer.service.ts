@@ -235,7 +235,12 @@ class MealOfferService {
             mealReservation.reservationState === MealReservationState.PENDING
         ) {
             mealReservation.reservationState = MealReservationState.BUYER_REJECTED;
-            await mealOfferDoc.save();
+            console.log(mealOfferDoc);
+            try {
+                await mealOfferDoc.save();
+            } catch(e:any) {
+                console.log(e);
+            }
         } else {
             throw new InvalidMealReservationStateException(
                 `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
