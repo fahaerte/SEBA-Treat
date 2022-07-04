@@ -7,9 +7,7 @@ export const RequireAddressRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const {address} = useContext(UserContext);
+  const { address } = useContext(UserContext);
 
-  return (
-    <>{address ? children : <Navigate to={"/landing"} />}</>
-  );
+  return <>{address ? children : <Navigate to={"/landing"} />}</>;
 };

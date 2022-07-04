@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
 import UserService from "../../services/user.service";
-import { AuthContext } from "../../utils/AuthProvider";
+import { UserContext} from "../../utils/AuthProvider";
 
 const RegisterScreen = () => {
-  const authContext = useContext(AuthContext);
+  const userContext = useContext(UserContext);
 
   const elements: IFormRow<IUser>[] = [
     [
@@ -177,13 +177,14 @@ const RegisterScreen = () => {
 
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
-    UserService.registerUser(data)
-      .then((response) => {
-        console.log(response);
-        authContext.setToken(String(response["token"]));
-        userContext.setUser(response["user"]);
-      })
-      .catch((error) => console.error(error));
+    // TODO: use rtkQuery
+    // UserService.registerUser(data)
+    //   .then((response) => {
+    //     console.log(response);
+    //     userContext.setToken(String(response["token"]));
+    //     userContext.setUser(response["user"]);
+    //   })
+    //   .catch((error) => console.error(error));
   };
 
   return (

@@ -7,7 +7,7 @@ export const RequireAuthRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
-  return <>{user ?  children  : <Navigate to={"/login"} />}</>;
+  return <>{user ? children : <Navigate to={"/login"} />}</>;
 };

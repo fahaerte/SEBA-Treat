@@ -1,5 +1,5 @@
 import React from "react";
-import {IAddressLandingPage, IUser} from "@treat/lib-common";
+import { IAddressLandingPage, IUser } from "@treat/lib-common";
 
 export const UserContext = React.createContext<{
   token?: string;
@@ -8,16 +8,24 @@ export const UserContext = React.createContext<{
   setUser: (user: IUser | undefined) => void;
   address?: IAddressLandingPage;
   setAddress: (address: IAddressLandingPage) => void;
-}>({ setUser: () => undefined, setToken: () => undefined, setAddress: () => undefined });
+}>({
+  setUser: () => undefined,
+  setToken: () => undefined,
+  setAddress: () => undefined,
+});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = React.useState<string | undefined>();
   const [user, setUser] = React.useState<IUser | undefined>();
-  const [address, setAddress] = React.useState<IAddressLandingPage | undefined>();
+  const [address, setAddress] = React.useState<
+    IAddressLandingPage | undefined
+  >();
 
   return (
-      <UserContext.Provider value={{ user, setUser, token, setToken , address, setAddress}}>
-        {children}
-      </UserContext.Provider>
+    <UserContext.Provider
+      value={{ user, setUser, token, setToken, address, setAddress }}
+    >
+      {children}
+    </UserContext.Provider>
   );
 };

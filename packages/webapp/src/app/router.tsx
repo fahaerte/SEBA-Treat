@@ -5,7 +5,7 @@ import RegisterScreen from "../screens/Auth/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LandingPage from "../screens/LandingPage";
 import ErrorPage from "../screens/Status/ErrorPage";
-import { MealOfferRequests} from "../screens/Meal/MealOfferRequests";
+import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { AuthProvider } from "../utils/AuthProvider";
 import { RequireAuthRoute } from "../utils/RequireAuthRoute";
 import MealOfferScreen from "../screens/MealOfferScreen";

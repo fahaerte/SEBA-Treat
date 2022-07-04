@@ -1,13 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Form, FormHelper } from "../../components";
+import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
-import { IUserCredentials } from "@treat/lib-common";
-import { AuthContext, UserContext } from "../../utils/AuthProvider";
+import {
+  IAddress,
+  IAddressLandingPage,
+  IUser,
+  IUserCredentials,
+} from "@treat/lib-common";
+import { UserContext } from "../../utils/AuthProvider";
 import UserService from "../../services/user.service";
+import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
+import { useUserLogInMutation } from "../../store/api";
 
 const LoginScreen = () => {
-  const authContext = useContext(AuthContext);
   const userContext = useContext(UserContext);
+
+  const [login, { isLoading, isError, isSuccess, data }] =
+    useUserLogInMutation();
 
   const elements: IFormRow<IUserCredentials>[] = [
     [
@@ -42,17 +51,15 @@ const LoginScreen = () => {
     ],
   ];
 
-  const handleSignIn = (data: IUserCredentials) => {
+  const handleSignIn = (user: IUserCredentials) => {
     console.log("Trying to log in...");
-    console.log(JSON.stringify(data));
-    UserService.loginUser(data)
-      .then((response) => {
-        authContext.setToken(String(response["token"]));
-        userContext.setUser(response["user"]);
-      })
-      .catch((error) => console.error(error));
+    console.log(JSON.stringify(user));
+    void login(user);
   };
 
+  if (data) {
+    console.log(data);
+  }
   return (
     <>
       <Form<IUserCredentials>
