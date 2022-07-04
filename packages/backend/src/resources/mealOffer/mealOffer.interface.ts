@@ -1,4 +1,4 @@
-import {Document, ObjectId} from "mongoose";
+import { Document, ObjectId } from "mongoose";
 import MealReservation from "../mealReservation/mealReservation.interface";
 
 export interface MealOffer {

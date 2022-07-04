@@ -21,19 +21,21 @@ class UserService {
 
   public static loginUser = async (
     credentials: IUserCredentials
-  ): Promise<Response | Error> => {
+  ): Promise<string | Error> => {
     const response = await ApiService.post(
       `${UserService.PATH}/login`,
       credentials
     );
-    return response;
+    const data = await response.json();
+    return data["token"];
   };
 
   public static registerUser = async (
     user: IUser
-  ): Promise<Response | Error> => {
-    const response = await ApiService.post(`${UserService.PATH}/login`, user);
-    return response;
+  ): Promise<string | Error> => {
+    const response = await ApiService.post(`${UserService.PATH}/register`, user);
+    const data = await response.json();
+    return data["token"];
   };
 }
 

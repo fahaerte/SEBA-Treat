@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
 import UserService from "../../services/user.service";
+import {AuthContext} from "../../utils/AuthProvider";
 
 const RegisterScreen = () => {
+  const authContext = useContext(AuthContext);
+
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -13,7 +16,14 @@ const RegisterScreen = () => {
           type: "email",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide an email!",
+          },
+          min: {
+            value: 5,
+            message: "Your email needs at least 5 characters!",
+          },
         },
         defaultValue: "max@mustermann.de",
       }),
@@ -24,7 +34,14 @@ const RegisterScreen = () => {
           type: "text",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide a username!",
+          },
+          min: {
+            value: 5,
+            message: "Your username needs at least 5 characters!",
+          },
         },
         defaultValue: "maxi1234",
       }),
@@ -33,6 +50,16 @@ const RegisterScreen = () => {
         label: "Password",
         props: {
           type: "password",
+        },
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide a password!",
+          },
+          min: {
+            value: 6,
+            message: "Your username needs at least 6 characters!",
+          },
         },
         defaultValue: "",
       }),
@@ -45,7 +72,10 @@ const RegisterScreen = () => {
           type: "text",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide a name!",
+          },
         },
         defaultValue: "Max",
       }),
@@ -56,7 +86,10 @@ const RegisterScreen = () => {
           type: "text",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide a name!",
+          },
         },
         defaultValue: "Mustermann",
       }),
@@ -64,7 +97,7 @@ const RegisterScreen = () => {
         formKey: "birthdate",
         label: "Birthdate",
         props: {
-          type: "date",
+          type: "datetime-local",
         },
       }),
     ],
@@ -76,7 +109,10 @@ const RegisterScreen = () => {
           type: "text",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide a street!",
+          },
         },
         defaultValue: "Musterstrasse",
       }),
@@ -87,7 +123,10 @@ const RegisterScreen = () => {
           type: "number",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide your house number!",
+          },
         },
         defaultValue: 123,
       }),
@@ -98,7 +137,10 @@ const RegisterScreen = () => {
           type: "number",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide a postal code!",
+          },
         },
         defaultValue: 80335,
       }),
@@ -109,7 +151,10 @@ const RegisterScreen = () => {
           type: "text",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide your city!",
+          },
         },
         defaultValue: "Munich",
       }),
@@ -120,7 +165,10 @@ const RegisterScreen = () => {
           type: "text",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide your country!",
+          },
         },
         defaultValue: "Germany",
       }),
@@ -130,13 +178,27 @@ const RegisterScreen = () => {
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
     UserService.registerUser(data)
-      .then((response) => console.log(JSON.stringify(response)))
+        .then((response) => {
+          console.log(response);
+          authContext.setToken(response);
+        })
       .catch((error) => console.error(error));
   };
 
   return (
     <>
-      <Form<IUser> elements={elements} onSubmit={handleRegister} />
+      <Form<IUser>
+        elements={elements}
+        onSubmit={handleRegister}
+        formTitle={"Please register!"}
+        resetOnSubmit
+        abortButton={{
+          children: "Cancel",
+          color: "secondary",
+          className: "ms-3",
+          outline: true,
+        }}
+      />
     </>
   );
 };

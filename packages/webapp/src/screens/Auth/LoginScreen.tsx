@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
 import { IUserCredentials } from "@treat/lib-common";
+import { AuthContext } from "../../utils/AuthProvider";
 import UserService from "../../services/user.service";
 
 const LoginScreen = () => {
+  const authContext = useContext(AuthContext);
+
   const elements: IFormRow<IUserCredentials>[] = [
     [
       FormHelper.createInput({
@@ -14,9 +17,12 @@ const LoginScreen = () => {
           type: "email",
         },
         rules: {
-          required: { value: true },
+          required: {
+            value: true,
+            message: "Please provide an email!",
+          },
         },
-        defaultValue: "max@mustermann.de",
+        defaultValue: "test@user.de",
       }),
       FormHelper.createInput({
         formKey: "password",
@@ -24,7 +30,13 @@ const LoginScreen = () => {
         props: {
           type: "password",
         },
-        defaultValue: "",
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide a password!",
+          },
+        },
+        defaultValue: "pa55word",
       }),
     ],
   ];
@@ -33,13 +45,27 @@ const LoginScreen = () => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
     UserService.loginUser(data)
-      .then((response) => console.log(JSON.stringify(response)))
+      .then((response) => {
+        console.log(response);
+        authContext.setToken(response);
+      })
       .catch((error) => console.error(error));
   };
 
   return (
     <>
-      <Form<IUserCredentials> elements={elements} onSubmit={handleSignIn} />
+      <Form<IUserCredentials>
+        elements={elements}
+        onSubmit={handleSignIn}
+        formTitle={"Please sign in!"}
+        resetOnSubmit
+        abortButton={{
+          children: "Cancel",
+          color: "secondary",
+          className: "ms-3",
+          outline: true,
+        }}
+      />
     </>
   );
 };
