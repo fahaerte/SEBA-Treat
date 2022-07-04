@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../utils/AuthProvider";
+import { UserContext } from "../utils/AuthProvider";
 import Button from "../components/Button/Button";
 
 const AuthStatus = () => {
-  const authContext = useContext(AuthContext);
+  const userContext = useContext(UserContext);
 
   const signout = () => {
-    authContext.setToken(undefined);
+    userContext.setToken(undefined);
     console.log("logged out!");
   };
 
   return (
     <>
-      {authContext.token ? (
+      {userContext.token ? (
         <div>
           <p>Logged in!</p>
           <Button onClick={signout}>Sign Out</Button>

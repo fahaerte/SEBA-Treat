@@ -1,25 +1,23 @@
 import React from "react";
-import { IUser } from "@treat/lib-common";
-
-export const AuthContext = React.createContext<{
-  token?: string;
-  setToken: (token: string | undefined) => void;
-}>({ setToken: () => undefined });
+import {IAddressLandingPage, IUser} from "@treat/lib-common";
 
 export const UserContext = React.createContext<{
+  token?: string;
+  setToken: (token: string | undefined) => void;
   user?: IUser;
   setUser: (user: IUser | undefined) => void;
-}>({ setUser: () => undefined });
+  address?: IAddressLandingPage;
+  setAddress: (address: IAddressLandingPage) => void;
+}>({ setUser: () => undefined, setToken: () => undefined, setAddress: () => undefined });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = React.useState<string | undefined>();
   const [user, setUser] = React.useState<IUser | undefined>();
+  const [address, setAddress] = React.useState<IAddressLandingPage | undefined>();
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
-      <UserContext.Provider value={{ user, setUser }}>
+      <UserContext.Provider value={{ user, setUser, token, setToken , address, setAddress}}>
         {children}
       </UserContext.Provider>
-    </AuthContext.Provider>
   );
 };

@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import { AddressContext } from "./AddressProvider";
+import { UserContext } from "./AuthProvider";
 import { Navigate } from "react-router-dom";
 
 export const RequireAddressRoute = ({
   children,
 }: {
-  children: JSX.Element;
+  children: React.ReactNode;
 }) => {
-  const addressContext = useContext(AddressContext);
+  const {address} = useContext(UserContext);
 
   return (
-    <>{addressContext.address ? { children } : <Navigate to={"/landing"} />}</>
+    <>{address ? children : <Navigate to={"/landing"} />}</>
   );
 };
