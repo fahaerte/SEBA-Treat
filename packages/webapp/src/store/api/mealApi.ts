@@ -1,10 +1,5 @@
 import { emptyApi as api } from "../emptyApi";
-import {
-  MealControllerGetMealByIdResponse,
-  MealControllerCreateResponse,
-  MealControllerGetMealByIdArgs,
-  MealControllerCreateArgs,
-} from "./types";
+import { IMealOffer } from "@treat/lib-common";
 
 const injectedMealRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -29,6 +24,13 @@ const injectedMealRtkApi = api.injectEndpoints({
     }),
   }),
 });
+
+/** 200 status code */
+export type MealControllerGetMealByIdResponse = IMealOffer;
+export type MealControllerGetMealByIdArgs = { id: string };
+
+export type MealControllerCreateResponse = IMealOffer;
+export type MealControllerCreateArgs = IMealOffer;
 
 export const {
   useMealControllerGetByIdQuery,

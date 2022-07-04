@@ -8,5 +8,6 @@ export type { IVirtualAccount } from "./IVirtualAccount";
 export { IUserCredentials } from "./IUserCredentials";
 export type { ICreditPackage } from "./ICreditPackage";
 export type { IStripeProduct } from "./ICreditPackage";
+export type { IStripeDiscount } from "./ICreditDiscount";
 export type { IMealOfferReservation } from "./IMealOfferReservation";
 export type { ICreditDiscount } from "./ICreditDiscount";

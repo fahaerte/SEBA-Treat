@@ -140,26 +140,11 @@ class StripeController implements Controller {
   ): Promise<Response | void> => {
     try {
       const allDiscounts = await this.stripeService.getCreditDiscounts();
-      res.status(200).json(allDiscounts.data);
+      res.status(200).json(allDiscounts || {});
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
   };
-
-  // private createPaymentIntent = async (
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ): Promise<Response | void> => {
-  //   try {
-  //     const clientSecret = await this.stripeService.createPaymentIntent(
-  //       req.params.productId
-  //     );
-  //     res.status(200).json(clientSecret);
-  //   } catch (error: any) {
-  //     next(new HttpException(400, error.message));
-  //   }
-  // };
 }
 
 export default StripeController;

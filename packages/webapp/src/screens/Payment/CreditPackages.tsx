@@ -1,6 +1,4 @@
 import React from "react";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
-import { ConfigService } from "../../utils/ConfigService";
 import {
   Card,
   Col,
@@ -12,7 +10,7 @@ import {
 import {
   usePaymentGetProductsWithPricesQuery,
   useCreateCheckoutSessionMutation,
-} from "../../store/api/stripeApi";
+} from "../../store/api";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 
