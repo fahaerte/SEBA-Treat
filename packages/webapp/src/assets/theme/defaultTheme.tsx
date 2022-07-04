@@ -1,4 +1,4 @@
-import { DefaultTheme } from "styled-components";
+import {DefaultTheme} from "styled-components";
 
 export const defaultTheme: DefaultTheme = {
   name: "defaultTheme",
@@ -40,7 +40,7 @@ export const defaultTheme: DefaultTheme = {
       contrastText: "#FFF",
     },
     light: {
-      main: "#fff",
+      main: "#EBEBEB",
       contrastText: "#000",
       hover: "#c7c7c7",
       active: "#FAFAFB", // E2E2E3

@@ -237,28 +237,34 @@ class MealOfferService {
     }
   }
 
-  private async updateMealOfferReservationToBuyerRejected(
-    mealOfferId: string,
-    buyer: User,
-    mealReservationId: string
-  ): Promise<void | Error> {
-    const [mealOfferDoc, mealReservation] =
-      (await this.getMealOfferAndReservationForBuyer(
-        mealOfferId,
-        mealReservationId,
-        buyer
-      )) as [MealOfferDocument, MealReservation];
-    if (
-      mealReservation.reservationState ===
-        MealReservationState.SELLER_ACCEPTED ||
-      mealReservation.reservationState === MealReservationState.PENDING
-    ) {
-      mealReservation.reservationState = MealReservationState.BUYER_REJECTED;
-      await mealOfferDoc.save();
-    } else {
-      throw new InvalidMealReservationStateException(
-        `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
-      );
+    private async updateMealOfferReservationToBuyerRejected(
+        mealOfferId: string,
+        buyer: User,
+        mealReservationId: string
+    ): Promise<void | Error> {
+        const [mealOfferDoc, mealReservation] =
+            (await this.getMealOfferAndReservationForBuyer(
+                mealOfferId,
+                mealReservationId,
+                buyer
+            )) as [MealOfferDocument, MealReservation];
+        if (
+            mealReservation.reservationState ===
+            MealReservationState.SELLER_ACCEPTED ||
+            mealReservation.reservationState === MealReservationState.PENDING
+        ) {
+            mealReservation.reservationState = MealReservationState.BUYER_REJECTED;
+            console.log(mealOfferDoc);
+            try {
+                await mealOfferDoc.save();
+            } catch(e:any) {
+                console.log(e);
+            }
+        } else {
+            throw new InvalidMealReservationStateException(
+                `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
+            );
+        }
     }
   }
 

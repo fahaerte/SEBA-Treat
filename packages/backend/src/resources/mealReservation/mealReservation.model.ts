@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import {Schema, Types} from "mongoose";
 import MealReservation from "./mealReservation.interface";
 import MealReservationStateEnum from "./mealReservationState.enum";
 import MealReservationState from "./mealReservationState.enum";
@@ -12,7 +12,7 @@ export const MealReservationSchema = new Schema<MealReservation>(
     },
     reservationState: {
       type: String,
-      enum: Object.keys(MealReservationStateEnum),
+      enum: Object.values(MealReservationStateEnum),
       required: true,
       default: MealReservationState.PENDING,
     },

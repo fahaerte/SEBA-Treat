@@ -33,7 +33,7 @@ class UserService {
   /**
    * Attempt to log in a user
    */
-  public async login(email: string, password: string): Promise<string | Error> {
+  public async login(email: string, password: string): Promise<JSON | Error> {
     try {
       const user = await this.userModel.findOne({ email });
 
@@ -42,7 +42,11 @@ class UserService {
       }
 
       if (await user.isValidPassword(password)) {
-        return token.createToken(user);
+        const authenticatedUser:JSON = <JSON><unknown>{
+          "user": JSON.stringify(user),
+          "token": token.createToken(user),
+        }
+        return authenticatedUser;
       } else {
         throw new Error("Wrong credentials given");
       }

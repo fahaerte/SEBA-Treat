@@ -210,11 +210,11 @@ class UserController implements Controller {
     try {
       const { email, password } = req.body;
 
-      const token = await this.userService.login(
+      const authenticatedUser = await this.userService.login(
         email as string,
         password as string
       );
-      res.status(200).json({ token });
+      res.status(200).json({ authenticatedUser });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

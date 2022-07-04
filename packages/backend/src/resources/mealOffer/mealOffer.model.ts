@@ -5,15 +5,60 @@ import MealCategory from "../mealCategory/mealCategory.enum";
 import MealAllergen from "../mealAllergen/mealAllergen.enum";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
-  {
-    title: {
-      type: String,
-      required: true,
-    },
-    user: {
-      type: Types.ObjectId,
-      ref: "User",
-      required: true,
+    {
+        title: {
+            type: String,
+            required: true,
+        },
+        user: {
+            type: Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        categories: [
+            {
+                type: String,
+                enum: Object.values(MealCategory),
+                required: true,
+            },
+        ],
+        allergens: [
+            {
+                type: String,
+                enum: Object.values(MealAllergen),
+            },
+        ],
+        startDate: {
+            type: Date,
+            required: true,
+        },
+        endDate: {
+            type: Date,
+            required: true,
+        },
+        portions: {
+            type: Number,
+            required: true,
+            min: 1,
+        },
+        pickUpDetails: {
+            type: String,
+        },
+        price: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
+        transactionFee: {
+            type: Number,
+            required: true,
+            min: 0,
+        },
+        reservations: [MealReservationSchema],
     },
     description: {
       type: String,
