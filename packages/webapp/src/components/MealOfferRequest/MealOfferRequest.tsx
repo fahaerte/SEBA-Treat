@@ -1,9 +1,9 @@
 import React from "react";
-import {Container} from "react-bootstrap";
-import {Col, Row} from "../Grid";
+import { Container } from "react-bootstrap";
+import { Col, Row } from "../Grid";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
-import {getFormattedDateFromString} from "../../utils/getFormattedDate";
+import { getFormattedDateFromString } from "../../utils/getFormattedDate";
 
 interface MealOfferProps {
   mealOffer: MealOffer;
