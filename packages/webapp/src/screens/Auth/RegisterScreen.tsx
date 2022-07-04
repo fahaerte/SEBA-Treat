@@ -1,8 +1,8 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
 import UserService from "../../services/user.service";
-import {AuthContext} from "../../utils/AuthProvider";
+import { AuthContext } from "../../utils/AuthProvider";
 
 const RegisterScreen = () => {
   const authContext = useContext(AuthContext);
@@ -180,26 +180,27 @@ const RegisterScreen = () => {
     UserService.registerUser(data)
         .then((response) => {
           console.log(response);
-          authContext.setToken(response);
+          authContext.setToken(String(response["token"]));
+          userContext.setUser(response["user"]);
         })
-      .catch((error) => console.error(error));
+        .catch((error) => console.error(error));
   };
 
   return (
-    <>
-      <Form<IUser>
-        elements={elements}
-        onSubmit={handleRegister}
-        formTitle={"Please register!"}
-        resetOnSubmit
-        abortButton={{
-          children: "Cancel",
-          color: "secondary",
-          className: "ms-3",
-          outline: true,
-        }}
-      />
-    </>
+      <>
+        <Form<IUser>
+            elements={elements}
+            onSubmit={handleRegister}
+            formTitle={"Please register!"}
+            resetOnSubmit
+            abortButton={{
+              children: "Cancel",
+              color: "secondary",
+              className: "ms-3",
+              outline: true,
+            }}
+        />
+      </>
   );
 };
 export default RegisterScreen;

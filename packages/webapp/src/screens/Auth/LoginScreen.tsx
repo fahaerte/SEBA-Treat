@@ -2,11 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
 import { IUserCredentials } from "@treat/lib-common";
-import { AuthContext } from "../../utils/AuthProvider";
+import { AuthContext, UserContext } from "../../utils/AuthProvider";
 import UserService from "../../services/user.service";
 
 const LoginScreen = () => {
   const authContext = useContext(AuthContext);
+  const userContext = useContext(UserContext);
 
   const elements: IFormRow<IUserCredentials>[] = [
     [
@@ -45,28 +46,28 @@ const LoginScreen = () => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
     UserService.loginUser(data)
-      .then((response) => {
-        console.log(response);
-        authContext.setToken(response);
-      })
-      .catch((error) => console.error(error));
+        .then((response) => {
+          authContext.setToken(String(response["token"]));
+          userContext.setUser(response["user"]);
+        })
+        .catch((error) => console.error(error));
   };
 
   return (
-    <>
-      <Form<IUserCredentials>
-        elements={elements}
-        onSubmit={handleSignIn}
-        formTitle={"Please sign in!"}
-        resetOnSubmit
-        abortButton={{
-          children: "Cancel",
-          color: "secondary",
-          className: "ms-3",
-          outline: true,
-        }}
-      />
-    </>
+      <>
+        <Form<IUserCredentials>
+            elements={elements}
+            onSubmit={handleSignIn}
+            formTitle={"Please sign in!"}
+            resetOnSubmit
+            abortButton={{
+              children: "Cancel",
+              color: "secondary",
+              className: "ms-3",
+              outline: true,
+            }}
+        />
+      </>
   );
 };
 export default LoginScreen;

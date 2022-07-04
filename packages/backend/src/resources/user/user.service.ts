@@ -17,14 +17,19 @@ class UserService {
   /**
    * Register a new user
    */
-  public async register(newUser: User): Promise<string | Error> {
+  public async register(newUser: User): Promise<JSON | Error> {
     try {
       // create account
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
       );
+
       const user = await this.userModel.create(newUser);
-      return token.createToken(user);
+      const authenticatedUser:JSON = <JSON><unknown>{
+        "user": JSON.stringify(user),
+        "token": token.createToken(user),
+      }
+      return authenticatedUser;
     } catch (error: any) {
       throw new Error(error.message as string);
     }

@@ -194,9 +194,9 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const newUser = req.body as User;
-      const token = await this.userService.register(newUser);
+      const authenticatedUser = await this.userService.register(newUser);
 
-      res.status(201).json({ token });
+      res.status(201).json({ authenticatedUser });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
