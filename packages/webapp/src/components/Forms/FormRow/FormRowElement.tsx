@@ -1,6 +1,5 @@
 import React from "react";
 import { FieldErrors, FieldValues } from "react-hook-form";
-import { FileInput, Select, TagSelect, TOptionValuePair } from "../";
 import { IFormElementConfig } from "../_interfaces/IFormElementConfig";
 import { IInputProps } from "../Input/IInput";
 import { IDatePickerProps } from "../Datepicker/IDatePicker";
@@ -8,23 +7,29 @@ import { IFormSelectConfig } from "../Select/ISelect";
 import { IRadioCheckSwitchProps } from "../RadioCheckSwitch/IRadioCheckSwitch";
 import { IFormRadioCheckSwitchGroupConfig } from "../RadioCheckSwitch/RadioCheckSwitchGroup/IRadioCheckSwitchGroup";
 import { ITagSelectProps } from "../TagSelect/ITagSelect";
+import { IFileInputProps } from "../FileInput/IFileInput";
 import TextArea from "../TextArea/TextArea";
 import Datepicker from "../Datepicker/Datepicker";
 import RadioCheckSwitch from "../RadioCheckSwitch/RadioCheckSwitch";
 import RadioCheckSwitchGroup from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckSwitchGroup";
 import RadioCheckGroupItem from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckGroupItem";
-import Input from "../Input/Input";
 import { getEncodedString } from "../../../utils/getEncodedString";
+import Input from "../Input/Input";
+import FileInput from "../FileInput/FileInput";
+import Select from "../Select/Select";
+import TagSelect from "../TagSelect/TagSelect";
+import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 
 interface IFormRowElement<T> {
-  config: IFormElementConfig<T>;
+  formConfig: IFormElementConfig<T>;
   errors: FieldErrors;
 }
 
 const FormRowElement = <TFormValues extends FieldValues>({
-  config,
+  formConfig,
   errors,
 }: IFormRowElement<TFormValues>) => {
+  const { config, elementType } = formConfig;
   const commonParams = () => ({
     // TODO remove after refactoring
     isValid: !errors[`${config.formKey}`],
@@ -34,7 +39,7 @@ const FormRowElement = <TFormValues extends FieldValues>({
     key: getEncodedString(config.label, config.formKey),
   });
 
-  switch (config.elementType) {
+  switch (elementType) {
     case "textarea":
       return (
         <TextArea<TFormValues>
@@ -64,9 +69,10 @@ const FormRowElement = <TFormValues extends FieldValues>({
         <FileInput<TFormValues>
           key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...config.props}
+          {...(config.props as IFileInputProps)}
         />
       );
+
     case "select": {
       const configToSelect = config as IFormSelectConfig<TFormValues>;
       return (
@@ -90,8 +96,8 @@ const FormRowElement = <TFormValues extends FieldValues>({
     case "tagSelect":
       return (
         <TagSelect
+          key={getEncodedString(config.label, config.formKey)}
           {...config}
-          {...commonParams()}
           {...(config.props as ITagSelectProps)}
         />
       );

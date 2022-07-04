@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { IDatePicker } from "./IDatePicker";
 import { SCFloatingForm, SCInput } from "../styles";
 import { getEncodedString } from "../../../utils/getEncodedString";

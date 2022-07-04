@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, Col, Row } from "../components";
+import { Button, Col, Row } from "../../components";
 import { Container } from "react-bootstrap";
-import { Header } from "../components/Header/header";
-import PageHeading from "../components/PageHeading/PageHeading";
-import SectionHeading from "../components/SectionHeading/SectionHeading";
-import CreditPackageCard from "../components/CreditPackageCard/CreditPackageCard";
+import { Header } from "../../components/Header/header";
+import PageHeading from "../../components/PageHeading/PageHeading";
+import SectionHeading from "../../components/SectionHeading/SectionHeading";
+import CreditPackageCard from "../../components/CreditPackageCard/CreditPackageCard";
 
-export const Account = () => {
+export const AccountScreen = () => {
   return (
     <div>
       <Header />

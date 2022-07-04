@@ -31,7 +31,7 @@ class MealOfferService {
     const newStateObject = {
       reservationState: newReservationState,
     };
-    const data = await ApiService.put(
+    const data = await ApiService.patch(
       `${MealOfferService.PATH}/${mealOfferId}/reservations/${mealOfferReservationId}`,
       newStateObject
     );

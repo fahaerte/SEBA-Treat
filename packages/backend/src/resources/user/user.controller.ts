@@ -9,7 +9,6 @@ import profileFileUpload from "../../middleware/upload.middleware";
 import UserService from "../../resources/user/user.service";
 import User from "./user.interface";
 import { Service } from "typedi";
-import userService from "../../resources/user/user.service";
 
 @Service()
 class UserController implements Controller {
@@ -29,14 +28,14 @@ class UserController implements Controller {
      *    - User
      *    summary: Register a user
      *    parameters:
-     *    - name: username
-     *      description: username of user
+     *    - name: email
+     *      description: email of user
      *      in: body
      *      required: true
      *      schema:
      *        $ref: '#/definitions/RegisterUser'
-     *    - name: email
-     *      description: email of user
+     *    - name: username
+     *      description: username of user
      *      in: body
      *      required: true
      *      schema:
@@ -44,6 +43,31 @@ class UserController implements Controller {
      *    - name: password
      *      description: password of user
      *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: firstName
+     *      description: first name of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: lastName
+     *      description: last name of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: birthdate
+     *      description: birthdate of user
+     *      in: body
+     *      required: true
+     *      schema:
+     *        $ref: '#/definitions/RegisterUser'
+     *    - name: address
+     *      description: Address of user
+     *      in: body
+     *      required: true
      *      schema:
      *        $ref: '#/definitions/RegisterUser'
      *    responses:
@@ -204,14 +228,18 @@ class UserController implements Controller {
     if (!req.user) {
       return next(new HttpException(404, "No logged in user"));
     }
-    let user;
-    const userId = req.params.userId;
-    if (userId) {
-      user = await this.userService.getUser(userId);
-    } else {
-      user = req.user;
+    try {
+      let user;
+      const userId = req.params.userId;
+      if (userId) {
+        user = await this.userService.getUser(userId);
+      } else {
+        user = req.user;
+      }
+      res.status(200).send({ data: user });
+    } catch (error: any) {
+      next(error);
     }
-    res.status(200).send({ data: user });
   };
 
   private uploadProfilePicture = (

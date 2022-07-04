@@ -1,125 +1,96 @@
-import React, { useCallback, useEffect, useState } from "react";
-import UserService from "../../services/user.service";
-import { Col, Row } from "../Grid";
-import { Button, Icon } from "../index";
+import React, {useState} from "react";
+import {Col, Row} from "../Grid";
+import {Button, Icon} from "../index";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
-import User from "../../types/interfaces/user.interface";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
+import {MealOfferRequestUserInfo} from "./MealOfferRequestUserInfo";
 
 interface ReceivedMealReservationProps {
-  mealOfferId: string;
-  reservation: MealReservation;
+    mealOfferId: string;
+    reservation: MealReservation;
 }
 
 export const ReceivedMealReservation = ({
-  mealOfferId,
-  reservation,
-}: ReceivedMealReservationProps) => {
-  const [reservationState, setReservationState] = useState(
-    reservation.reservationState
-  );
-  const [buyer, setBuyer] = useState({} as User);
-
-  const fetchBuyerData = useCallback(async () => {
-    const buyer = await UserService.getUser(String(reservation.buyer));
-    console.log(buyer);
-    setBuyer(buyer);
-  }, [reservation]);
-
-  useEffect(() => {
-    fetchBuyerData().catch(console.error);
-  }, [fetchBuyerData]);
-
-  async function updateReservationState(newState: MealReservationState) {
-    try {
-      await MealOfferService.updateMealReservationState(
-        String(mealOfferId),
-        reservation._id,
-        newState
-      );
-      setReservationState(newState);
-    } catch (error: any) {
-      console.log(error);
-    }
-  }
-
-  function getActionButton() {
-    let label = "Default";
-    let newState: MealReservationState;
-    let disabled = false;
-    if (reservationState == MealReservationState.PENDING) {
-      label = "Accept offer";
-      newState = MealReservationState.SELLER_ACCEPTED;
-    } else if (reservationState == MealReservationState.SELLER_ACCEPTED) {
-      label = "You accepted wait for buyer";
-      disabled = true;
-    } else if (reservationState == MealReservationState.SELLER_REJECTED) {
-      label = "You rejected";
-      disabled = true;
-    } else if (reservationState == MealReservationState.BUYER_REJECTED) {
-      label = "Buyer rejected";
-      disabled = true;
-    } else if (reservationState == MealReservationState.BUYER_CONFIRMED) {
-      label = "Rate TODO";
-    }
-    return (
-      <Button
-        onClick={() => updateReservationState(newState)}
-        disabled={disabled}
-      >
-        {label}
-      </Button>
+                                            mealOfferId,
+                                            reservation,
+                                        }: ReceivedMealReservationProps) => {
+    const [reservationState, setReservationState] = useState(
+        reservation.reservationState
     );
-  }
 
-  function getActionBar() {
-    if (
-      reservationState == MealReservationState.BUYER_REJECTED ||
-      reservationState == MealReservationState.SELLER_REJECTED
-    ) {
-      return (
-        <Row>
-          <Col className={"col-sm-auto"}>{getActionButton()}</Col>
-        </Row>
-      );
-    } else {
-      return (
-        <Row>
-          <Col className={"col-sm-auto"}>
-            <Button
-              onClick={() =>
-                updateReservationState(MealReservationState.SELLER_REJECTED)
-              }
-            >
-              Decline offer
-            </Button>
-          </Col>
-          <Col className={"col-sm-auto"}>{getActionButton()}</Col>
-        </Row>
-      );
+    async function updateReservationState(newState: MealReservationState) {
+        try {
+            await MealOfferService.updateMealReservationState(
+                String(mealOfferId),
+                reservation._id,
+                newState
+            );
+            setReservationState(newState);
+        } catch (error: any) {
+            console.log(error);
+        }
     }
-  }
 
-  return (
-    <Row className={""}>
-      <Col className={"col-2"}>
-        <Row>
-          <Col className={"col-sm-auto"}>Bild</Col>
-          <Col className={"col-sm-auto"}>
-            {`${buyer.firstName} ${buyer.lastName}`}
-          </Col>
+    function getActionButton() {
+        if (reservationState == MealReservationState.PENDING) {
+            return (<Button onClick={() => updateReservationState(MealReservationState.SELLER_ACCEPTED)}>Accept
+                offer</Button>)
+        } else if (reservationState == MealReservationState.SELLER_ACCEPTED) {
+            return (
+                <span>You accepted the request, wait for buyer</span>
+            );
+        } else if (reservationState == MealReservationState.SELLER_REJECTED) {
+            return (
+                <span>You rejected the request</span>
+            );
+        } else if (reservationState == MealReservationState.BUYER_REJECTED) {
+            return (
+                <span>The buyer cancelled the request</span>
+            );
+        } else if (reservationState == MealReservationState.BUYER_CONFIRMED) {
+            return (<Button onClick={() => console.log("Rate")}>Rate the seller</Button>);
+        }
+    }
+
+    function getActionBar() {
+        if (
+            reservationState == MealReservationState.BUYER_REJECTED ||
+            reservationState == MealReservationState.SELLER_REJECTED
+        ) {
+            return (
+                <Row>
+                    <Col className={"col-sm-auto"}>{getActionButton()}</Col>
+                </Row>
+            );
+        } else {
+            return (
+                <Row>
+                    <Col className={"col-sm-auto"}>
+                        <Button color={"light"}
+                                onClick={() => updateReservationState(MealReservationState.SELLER_REJECTED)}>Decline offer
+                        </Button>
+                    </Col>
+                    <Col className={"col-sm-auto align-items-center d-flex"}>{getActionButton()}</Col>
+                </Row>
+            );
+        }
+    }
+
+    return (
+        <Row className={""}>
+            <MealOfferRequestUserInfo userId={reservation.buyer}/>
+            <Col className={""}>
+                <Row className={"h-100"}>
+                    <Col className={"col-sm-auto d-flex align-items-center"}>
+                        <Icon type={"info"}></Icon>
+                    </Col>
+                    <Col className={"col-sm-auto my-auto"}>Sterne</Col>
+                </Row>
+            </Col>
+            <Col className={"col-sm-auto d-flex align-items-center"}>
+                {getActionBar()}
+            </Col>
         </Row>
-      </Col>
-      <Col className={""}>
-        <Row>
-          <Col className={"col-sm-auto"}>
-            <Icon type={"info"}></Icon>
-          </Col>
-          <Col className={"col-sm-auto"}>Sterne</Col>
-        </Row>
-      </Col>
-      <Col className={"col-sm-auto"}>{getActionBar()}</Col>
-    </Row>
-  );
+    );
 };

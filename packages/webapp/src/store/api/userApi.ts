@@ -8,12 +8,12 @@ import {
 
 const injectedUserRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    userLogIn: build.query<
+    userLogIn: build.mutation<
       UserControllerLogInResponse,
       UserControllerLogInArgs
     >({
       query: (queryArg) => ({
-        url: `/api/users/login`,
+        url: `/users/login`,
         method: "POST",
         body: {
           email: queryArg.email,
@@ -26,13 +26,27 @@ const injectedUserRtkApi = api.injectEndpoints({
       UserControllerRegisterArgs
     >({
       query: (queryArg) => ({
-        url: `/api/users/register`,
+        url: `/users/register`,
         method: "POST",
-        body: queryArg,
+        body: {
+          email: queryArg.email,
+          username: queryArg.username,
+          firstName: queryArg.firstName,
+          lastName: queryArg.lastName,
+          password: queryArg.password,
+          birthdate: queryArg.birthdate,
+          address: {
+            street: queryArg.address.street,
+            houseNumber: queryArg.address.houseNumber,
+            postalCode: queryArg.address.postalCode,
+            city: queryArg.address.city,
+            country: queryArg.address.country,
+          },
+        },
       }),
     }),
   }),
 });
 
-export const { useUserLogInQuery, useUserRegistrationMutation } =
+export const { useUserLogInMutation, useUserRegistrationMutation } =
   injectedUserRtkApi;
