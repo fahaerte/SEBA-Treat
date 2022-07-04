@@ -178,29 +178,29 @@ const RegisterScreen = () => {
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
     UserService.registerUser(data)
-        .then((response) => {
-          console.log(response);
-          authContext.setToken(String(response["token"]));
-          userContext.setUser(response["user"]);
-        })
-        .catch((error) => console.error(error));
+      .then((response) => {
+        console.log(response);
+        authContext.setToken(String(response["token"]));
+        userContext.setUser(response["user"]);
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
-      <>
-        <Form<IUser>
-            elements={elements}
-            onSubmit={handleRegister}
-            formTitle={"Please register!"}
-            resetOnSubmit
-            abortButton={{
-              children: "Cancel",
-              color: "secondary",
-              className: "ms-3",
-              outline: true,
-            }}
-        />
-      </>
+    <>
+      <Form<IUser>
+        elements={elements}
+        onSubmit={handleRegister}
+        formTitle={"Please register!"}
+        resetOnSubmit
+        abortButton={{
+          children: "Cancel",
+          color: "secondary",
+          className: "ms-3",
+          outline: true,
+        }}
+      />
+    </>
   );
 };
 export default RegisterScreen;

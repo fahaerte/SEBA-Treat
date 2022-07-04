@@ -46,28 +46,28 @@ const LoginScreen = () => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(data));
     UserService.loginUser(data)
-        .then((response) => {
-          authContext.setToken(String(response["token"]));
-          userContext.setUser(response["user"]);
-        })
-        .catch((error) => console.error(error));
+      .then((response) => {
+        authContext.setToken(String(response["token"]));
+        userContext.setUser(response["user"]);
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
-      <>
-        <Form<IUserCredentials>
-            elements={elements}
-            onSubmit={handleSignIn}
-            formTitle={"Please sign in!"}
-            resetOnSubmit
-            abortButton={{
-              children: "Cancel",
-              color: "secondary",
-              className: "ms-3",
-              outline: true,
-            }}
-        />
-      </>
+    <>
+      <Form<IUserCredentials>
+        elements={elements}
+        onSubmit={handleSignIn}
+        formTitle={"Please sign in!"}
+        resetOnSubmit
+        abortButton={{
+          children: "Cancel",
+          color: "secondary",
+          className: "ms-3",
+          outline: true,
+        }}
+      />
+    </>
   );
 };
 export default LoginScreen;

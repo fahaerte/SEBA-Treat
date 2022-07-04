@@ -16,10 +16,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = React.useState<IUser | undefined>();
 
   return (
-      <AuthContext.Provider value={{ token, setToken }}>
-        <UserContext.Provider value={{ user, setUser }}>
-          {children}
-        </UserContext.Provider>
-      </AuthContext.Provider>
+    <AuthContext.Provider value={{ token, setToken }}>
+      <UserContext.Provider value={{ user, setUser }}>
+        {children}
+      </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };

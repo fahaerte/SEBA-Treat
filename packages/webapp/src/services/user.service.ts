@@ -30,10 +30,11 @@ class UserService {
     return data["authenticatedUser"];
   };
 
-  public static registerUser = async (
-    user: IUser
-  ): Promise<string | Error> => {
-    const response = await ApiService.post(`${UserService.PATH}/register`, user);
+  public static registerUser = async (user: IUser): Promise<string | Error> => {
+    const response = await ApiService.post(
+      `${UserService.PATH}/register`,
+      user
+    );
     const data = await response.json();
     return data["authenticatedUser"];
   };

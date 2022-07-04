@@ -25,10 +25,10 @@ class UserService {
       );
 
       const user = await this.userModel.create(newUser);
-      const authenticatedUser:JSON = <JSON><unknown>{
-        "user": JSON.stringify(user),
-        "token": token.createToken(user),
-      }
+      const authenticatedUser: JSON = <JSON>(<unknown>{
+        user: JSON.stringify(user),
+        token: token.createToken(user),
+      });
       return authenticatedUser;
     } catch (error: any) {
       throw new Error(error.message as string);
@@ -47,10 +47,10 @@ class UserService {
       }
 
       if (await user.isValidPassword(password)) {
-        const authenticatedUser:JSON = <JSON><unknown>{
-          "user": JSON.stringify(user),
-          "token": token.createToken(user),
-        }
+        const authenticatedUser: JSON = <JSON>(<unknown>{
+          user: JSON.stringify(user),
+          token: token.createToken(user),
+        });
         return authenticatedUser;
       } else {
         throw new Error("Wrong credentials given");
