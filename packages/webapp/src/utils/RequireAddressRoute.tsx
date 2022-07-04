@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 export const RequireAddressRoute = ({
   children,
 }: {
-  children: React.ReactNode;
+  children: JSX.Element;
 }) => {
   const addressContext = useContext(AddressContext);
 

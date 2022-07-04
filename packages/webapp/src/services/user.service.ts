@@ -21,7 +21,7 @@ class UserService {
 
   public static loginUser = async (
     credentials: IUserCredentials
-  ): Promise<Response | Error> => {
+  ): Promise<string | Error> => {
     const response = await ApiService.post(
       `${UserService.PATH}/login`,
       credentials
@@ -32,8 +32,8 @@ class UserService {
 
   public static registerUser = async (
     user: IUser
-  ): Promise<Response | Error> => {
-    const response = await ApiService.post(`${UserService.PATH}/login`, user);
+  ): Promise<string | Error> => {
+    const response = await ApiService.post(`${UserService.PATH}/register`, user);
     const data = await response.json();
     return data["token"];
   };

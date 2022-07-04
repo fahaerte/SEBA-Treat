@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
 import UserService from "../../services/user.service";
+import {AuthContext} from "../../utils/AuthProvider";
 
 const RegisterScreen = () => {
+  const authContext = useContext(AuthContext);
+
   const elements: IFormRow<IUser>[] = [
     [
       FormHelper.createInput({
@@ -175,7 +178,10 @@ const RegisterScreen = () => {
   const handleRegister = (data: IUser) => {
     console.log(JSON.stringify(data));
     UserService.registerUser(data)
-      .then((response) => console.log(JSON.stringify(response)))
+        .then((response) => {
+          console.log(response);
+          authContext.setToken(response);
+        })
       .catch((error) => console.error(error));
   };
 
