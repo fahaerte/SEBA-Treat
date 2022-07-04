@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IAddressLandingPage } from "@treat/lib-common";
-import { AddressContext } from "../utils/AddressProvider";
+import { UserContext } from "../utils/AuthProvider";
 
 const LandingPage = () => {
-  const addressContext = useContext(AddressContext);
+  const userContext = useContext(UserContext);
 
   const elements: IFormRow<IAddressLandingPage>[] = [
     FormHelper.createInput({
@@ -23,7 +23,7 @@ const LandingPage = () => {
 
   const handleAddress = (address: IAddressLandingPage) => {
     console.log(JSON.stringify(address));
-    addressContext.setAddress(address);
+    userContext.setAddress(address);
   };
 
   return (

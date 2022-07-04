@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
 import UserService from "../../services/user.service";
-import { UserContext} from "../../utils/AuthProvider";
+import { UserContext } from "../../utils/AuthProvider";
 
 const RegisterScreen = () => {
   const userContext = useContext(UserContext);
