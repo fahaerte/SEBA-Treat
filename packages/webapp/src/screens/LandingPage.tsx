@@ -21,9 +21,9 @@ const LandingPage = () => {
     }),
   ];
 
-  const handleAddress = (address: IAddressLandingPage) => {
-    console.log(JSON.stringify(address));
-    userContext.setAddress(address);
+  const handleAddress = (data: IAddressLandingPage) => {
+    console.log(JSON.stringify(data));
+    userContext.setAddress(data.address);
   };
 
   return (

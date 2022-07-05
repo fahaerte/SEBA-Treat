@@ -17,8 +17,8 @@ abstract class FormHelper {
   });
 
   public static createDatePicker = <T>(
-      config: IFormDatePickerConfig<T>
-    ): IFormElementConfig<T> => ({
+    config: IFormDatePickerConfig<T>
+  ): IFormElementConfig<T> => ({
     elementType: "datepicker",
     config,
   });

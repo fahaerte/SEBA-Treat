@@ -7,6 +7,7 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import userReducer from "../redux/userSlice";
+import { UserApi } from "../store/api";
 
 const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
@@ -35,8 +36,9 @@ export const store = configureStore({
   // preloadedState: persistedState,
   reducer: {
     user: userReducer,
+    [UserApi.reducerPath]: UserApi.reducer,
   },
-  middleware: (gDM) => gDM().concat(rtkQueryErrorLogger),
+  middleware: (gDM) => gDM().concat(rtkQueryErrorLogger, UserApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

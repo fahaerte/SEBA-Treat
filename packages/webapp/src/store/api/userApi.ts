@@ -1,10 +1,11 @@
 import { emptyApi as api } from "../emptyApi";
-import {
-  UserControllerLogInArgs,
-  UserControllerLogInResponse,
-  UserControllerRegisterArgs,
-  UserControllerRegisterResponse,
-} from "./types/UserControllerDTO";
+import { IUser, IUserCredentials } from "@treat/lib-common";
+
+export type UserControllerLogInResponse = { token: string; user: IUser };
+export type UserControllerLogInArgs = IUserCredentials;
+
+export type UserControllerRegisterResponse = { token: string; user: IUser };
+export type UserControllerRegisterArgs = IUser;
 
 const injectedUserRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -50,3 +51,5 @@ const injectedUserRtkApi = api.injectEndpoints({
 
 export const { useUserLogInMutation, useUserRegistrationMutation } =
   injectedUserRtkApi;
+
+export { injectedUserRtkApi as UserApi };

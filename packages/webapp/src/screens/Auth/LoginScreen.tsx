@@ -1,14 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext} from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
 import {
-  IAddress,
-  IAddressLandingPage,
   IUser,
   IUserCredentials,
 } from "@treat/lib-common";
 import { UserContext } from "../../utils/AuthProvider";
-import UserService from "../../services/user.service";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useUserLogInMutation } from "../../store/api";
 
@@ -59,6 +56,15 @@ const LoginScreen = () => {
 
   if (data) {
     console.log(data);
+    const user = data["authenticatedUser"]["user"] as IUser;
+    const token = data["authenticatedUser"]["token"];
+
+    userContext.setToken(token);
+    userContext.setUser(user);
+    userContext.setAddress(getStringFromIAddress(user.address));
+    console.log("context is set!");
+    console.log(userContext.user);
+    console.log(userContext.token);
   }
   return (
     <>
