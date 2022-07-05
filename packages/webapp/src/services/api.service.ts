@@ -3,7 +3,7 @@ class ApiService {
   private static BASE_URL = "http://localhost:5000/api";
 
   private static BEARER =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjQ1NzdlNzJkNWZjNTJlMjUwMTM0MSIsImlhdCI6MTY1NjU2ODk0OCwiZXhwIjoxNjU2NjU1MzQ4fQ.THx6kttTiE_aaW02eYSm67SnIrWadWy0zcCOhqlvvDg";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjQ0MzhkYzQ1OWE4YmJiOTUyZjg4ZiIsImlhdCI6MTY1NzAyNzU3OCwiZXhwIjoxNjU3MTEzOTc4fQ.R8AYaXLbjckjxanZzFjuvCtkcWBkUXZ_icVGc31oW4g";
 
   private static headers = {
     "Content-Type": "application/json",
@@ -11,7 +11,7 @@ class ApiService {
   };
 
   public static getImage = async (url: string): Promise<Response> => {
-    const response = await fetch(`${ApiService.BASE_URL}${url}`, {
+    return await fetch(`${ApiService.BASE_URL}${url}`, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -19,7 +19,6 @@ class ApiService {
         Authorization: `Bearer ${ApiService.BEARER}`,
       },
     });
-    return response;
   };
 
   public static get = async (url: string): Promise<Response> => {

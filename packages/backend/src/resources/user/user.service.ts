@@ -47,7 +47,7 @@ class UserService {
         throw new Error("Wrong credentials given");
       }
     } catch (error) {
-      throw new Error("Unable to create user");
+      throw new Error("Unable to log in user");
     }
   }
 
@@ -105,6 +105,15 @@ class UserService {
       return user.virtualAccount.balance;
     } catch (error) {
       throw new Error("Unable to receive transaction");
+    }
+  }
+
+  public async getAccountBalance(userId: ObjectId): Promise<number | Error> {
+    try {
+      const user = (await this.userModel.findById(userId)) as User;
+      return user.virtualAccount.balance;
+    } catch (error) {
+      throw new Error("Unable to receive account balance");
     }
   }
 }

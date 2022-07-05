@@ -1,8 +1,9 @@
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../Grid";
 import { Button } from "../index";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
+import UserService from "../../services/user.service";
 
 export const Header = () => {
   const Header = styled.header`
@@ -15,6 +16,18 @@ export const Header = () => {
     border-radius: 50px;
     border-color: #cfcfcf;
   `;
+
+  const [balance, setBalance] = useState("Loading...");
+
+  const fetchData = useCallback(async () => {
+    const balance = await UserService.getAccountBalance();
+    console.log(balance);
+    setBalance(balance);
+  }, []);
+
+  useEffect(() => {
+    fetchData().catch(console.error);
+  }, [fetchData]);
 
   return (
     <Header>
@@ -30,7 +43,7 @@ export const Header = () => {
             <ProfileButton className={"btn btn-outline-primary"}>
               <Container className={"w-100"}>
                 <Row className={"p-0"}>
-                  <Col className={"col-sm-auto p-0"}>100 Cr</Col>
+                  <Col className={"col-sm-auto p-0"}>{balance} Credits</Col>
                   <Col className={"col-sm-auto p-0 ms-2"}>Bild</Col>
                 </Row>
               </Container>

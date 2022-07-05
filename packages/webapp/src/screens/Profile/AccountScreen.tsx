@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Col, Row } from "../../components";
 import { Container } from "react-bootstrap";
 import { Header } from "../../components/Header/header";
 import PageHeading from "../../components/PageHeading/PageHeading";
 import SectionHeading from "../../components/SectionHeading/SectionHeading";
 import CreditPackageCard from "../../components/CreditPackageCard/CreditPackageCard";
+import UserService from "../../services/user.service";
+import Balance from "../../components/Balance/Balance";
 
 export const AccountScreen = () => {
+  const [balance, setBalance] = useState("Loading...");
+
+  const fetchData = useCallback(async () => {
+    const balance = await UserService.getAccountBalance();
+    console.log(balance);
+    setBalance(balance);
+  }, []);
+
+  useEffect(() => {
+    fetchData().catch(console.error);
+  }, [fetchData]);
+
   return (
     <div>
       <Header />
@@ -18,7 +32,7 @@ export const AccountScreen = () => {
         </Row>
         <Row className={"pt-3"}>
           <SectionHeading>Balance</SectionHeading>
-          <span>Du bist broke, junge</span>
+          <Balance className="account-balance">{balance} Credits</Balance>
         </Row>
         <Row>
           <SectionHeading>Credit Packages</SectionHeading>

@@ -9,6 +9,7 @@ import profileFileUpload from "../../middleware/upload.middleware";
 import UserService from "../../resources/user/user.service";
 import User from "./user.interface";
 import { Service } from "typedi";
+import { ObjectId } from "mongoose";
 
 @Service()
 class UserController implements Controller {
@@ -112,6 +113,12 @@ class UserController implements Controller {
       `${this.path}/login`,
       validationMiddleware(validate.login),
       this.login
+    );
+
+    this.router.get(
+      `${this.path}/account-balance`,
+      authenticate,
+      this.getAccountBalance
     );
 
     /**
@@ -270,6 +277,24 @@ class UserController implements Controller {
         );
       }
       res.sendFile(profilePicturePath);
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private getAccountBalance = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    if (!req.user) {
+      return next(new HttpException(404, "No logged in user"));
+    }
+    try {
+      const balance = await this.userService.getAccountBalance(
+        req.user._id as ObjectId
+      );
+      res.status(200).send({ accountBalance: balance });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
