@@ -4,11 +4,13 @@ import LoginScreen from "../screens/Auth/LoginScreen";
 import RegisterScreen from "../screens/Auth/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ErrorPage from "../screens/Status/ErrorPage";
-import { Typography } from "../components";
+import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
 import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
 import { AccountScreen } from "../screens/Profile/AccountScreen";
+import { CreditPackages } from "../screens/Payment/CreditPackages";
+import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -47,7 +49,20 @@ export const AppRouter = () => {
     ],
   };
 
-  const redirectRoutes = [];
+  const redirectRoutes = [
+    {
+      path: "/success/:priceId",
+      element: <PaymentSuccess />,
+    },
+    {
+      path: "/cancel",
+      element: <div>You canceled the purchase</div>,
+    },
+    {
+      path: "/purchase-credits",
+      element: <CreditPackages />,
+    },
+  ];
 
   const profileRoutes = {
     path: "profile/:profileId/",
@@ -93,7 +108,12 @@ export const AppRouter = () => {
     ],
   };
 
-  const routing = useRoutes([mainRoutes, profileRoutes, mealRoutes]);
+  const routing = useRoutes([
+    mainRoutes,
+    profileRoutes,
+    ...redirectRoutes,
+    mealRoutes,
+  ]);
 
   return <>{routing}</>;
 };

@@ -34,3 +34,5 @@ export const {
   useMealControllerGetByIdQuery,
   useMealControllerCreateMutation,
 } = injectedMealRtkApi;
+
+export { injectedMealRtkApi as mealApi };

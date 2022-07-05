@@ -50,3 +50,5 @@ const injectedUserRtkApi = api.injectEndpoints({
 
 export const { useUserLogInMutation, useUserRegistrationMutation } =
   injectedUserRtkApi;
+
+export { injectedUserRtkApi as userApi };

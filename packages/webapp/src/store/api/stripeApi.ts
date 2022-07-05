@@ -1,5 +1,6 @@
 import { emptyApi as api } from "../emptyApi";
-import { IStripeProduct, IStripeDiscount } from "@treat/lib-common";
+// import {Stripe} from "@stripe/stripe-js";
+import { IStripeProduct } from "@treat/lib-common";
 
 const injectedStripeRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -9,14 +10,6 @@ const injectedStripeRtkApi = api.injectEndpoints({
     >({
       query: () => ({
         url: `/payment/products/`,
-      }),
-    }),
-    paymentGetDiscount: build.query<
-      IStripeDiscount | undefined,
-      Record<string, never>
-    >({
-      query: () => ({
-        url: `/payment/discounts/`,
       }),
     }),
     verifyPayment: build.query<VerifyPaymentApiResponse, VerifyPaymentApiArg>({
@@ -49,10 +42,8 @@ export type CreateCheckoutSessionApiArg = {
   priceId: string;
   userId: string;
 };
-
 export type VerifyPaymentApiResponse = { message: string };
 export type VerifyPaymentApiArg = { customerId: string; priceId: string };
-
 export type PaymentControllerGetProductsWithPricesApiResponse =
   IStripeProduct[];
 export type PaymentControllerGetPaymentIntentSecretApiResponse =
@@ -66,7 +57,6 @@ export type PaymentControllerGetPaymentIntentSecretApiArg = {
 export const {
   usePaymentGetProductsWithPricesQuery,
   useVerifyPaymentQuery,
-  usePaymentGetDiscountQuery,
   useCreateCheckoutSessionMutation,
 } = injectedStripeRtkApi;
 

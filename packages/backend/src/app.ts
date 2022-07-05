@@ -28,7 +28,11 @@ class App {
 
   private initialiseMiddleware(): void {
     this.express.use(helmet());
-    this.express.use(cors());
+    this.express.use(
+      cors({
+        origin: ["https://checkout.stripe.com", "http://localhost:3000", "*"],
+      })
+    );
     this.express.use(morgan("dev"));
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: false }));
@@ -67,10 +71,17 @@ class App {
             name: "User",
             description: "User functions including authentication",
           },
+          {
+            name: "Stripe",
+            description: "Stripe endpoints to purchase virtual credits",
+          },
         ],
       },
 
-      apis: ["./src/resources/user/user.controller.ts"],
+      apis: [
+        "./src/resources/user/user.controller.ts",
+        "./src/resources/stripe/stripe.controller.ts",
+      ],
     };
 
     const swaggerDocs = swaggerJSDoc(swaggerOptions);

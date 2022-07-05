@@ -22,6 +22,9 @@ const HomeScreen: React.FC = (): JSX.Element => {
             <Link to="/mealOfferRequests">Meal Offer Requests</Link>
           </li>
           <li>
+            <Link to="/purchase-credits">Purchase Credits</Link>
+          </li>
+          <li>
             <Link to="/account/">Account Screen</Link>
           </li>
         </ul>

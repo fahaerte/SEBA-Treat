@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, FormHelper, IFormRow } from "../../components";
+import { Form, FormHelper, IFormRow } from "../../components/ui";
 import { IUser } from "@treat/lib-common";
 import UserService from "../../services/user.service";
 

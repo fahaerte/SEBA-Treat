@@ -1,8 +1,8 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 import { SCHelper } from "../globalStyles";
-import { IconSet } from "../../components/Icon/IconSet";
-import { IToastContainer, ToastContainer } from "../../components/Toast";
+import { IconSet } from "../../components/ui/Icon/IconSet";
+import { IToastContainer, ToastContainer } from "../../components/ui/Toast";
 import { defaultTheme } from "./defaultTheme";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide } from "react-toastify";

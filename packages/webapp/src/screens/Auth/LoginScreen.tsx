@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormHelper } from "../../components";
-import { IFormRow } from "../../components";
+import { Button, Form, FormHelper } from "../../components/ui";
+import { IFormRow } from "../../components/ui";
 import { IUserCredentials } from "@treat/lib-common";
 import UserService from "../../services/user.service";
 

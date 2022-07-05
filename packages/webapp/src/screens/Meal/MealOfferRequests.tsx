@@ -1,7 +1,12 @@
 import React from "react";
-import { Container, PageHeading, Row, Typography } from "../../components";
-import { Header } from "../../components/Header/header";
-import TabBar from "../../components/TabBar/TabBar";
+import { Row, Typography, PageHeading, Container } from "../../components/ui";
+import { Tabs, Tab } from "react-bootstrap";
+import { Header } from "../../components/ui/Header/header";
+import { SentMealOfferRequests } from "./SentMealOfferRequests";
+import { ReceivedMealOfferRequests } from "./ReceivedMealOfferRequests";
+import TabBar from "../../components/ui/TabBar/TabBar";
+import TabContent from "../../components/ui/TabBar/TabContent";
+import { Header } from "../../components/ui/Header/header";
 import { Outlet } from "react-router-dom";
 
 export const MealOfferRequests = () => {

@@ -12,18 +12,24 @@ import MealTransactionController from "./resources/mealTransaction/mealTransacti
 import MealCategoryController from "./resources/mealCategory/mealCategory.controller";
 import UserService from "./resources/user/user.service";
 import CreditPackageController from "./resources/creditPackage/creditPackage.controller";
+import StripeService from "./resources/stripe/stripe.service";
+import StripeController from "./resources/stripe/stripe.controller";
 
 validateEnv();
 
 const app = new App(
   [
-    new UserController(Container.get(UserService)),
+    new UserController(
+      Container.get(UserService),
+      Container.get(StripeService)
+    ),
 
     new MealTransactionController(),
 
     new MealOfferController(Container.get(MealOfferService)),
     new MealAllergenController(),
     new MealCategoryController(),
+    new StripeController(Container.get(StripeService)),
 
     new CreditPackageController(),
   ],

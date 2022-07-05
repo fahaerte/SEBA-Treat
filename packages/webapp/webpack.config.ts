@@ -58,6 +58,7 @@ module.exports = (
     fallback: {
       path: require.resolve("path-browserify"),
       fs: false,
+      os: false,
     },
   },
   plugins: [

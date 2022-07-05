@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import MealOfferService from "../../services/mealOffer.service";
-import { MealOfferRequest } from "../../components/MealOfferRequest/MealOfferRequest";
-import { SentMealReservation } from "../../components/MealOfferRequest/SentMealReservation";
+import { MealOfferRequest } from "../../components/ui/MealOfferRequest/MealOfferRequest";
+import { SentMealReservation } from "../../components/ui/MealOfferRequest/SentMealReservation";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 
 export const SentMealOfferRequests = () => {
