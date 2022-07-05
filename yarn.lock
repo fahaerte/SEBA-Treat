@@ -3326,7 +3326,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^1.7.1":
+"@stripe/react-stripe-js@npm:^1.9.0":
   version: 1.9.0
   resolution: "@stripe/react-stripe-js@npm:1.9.0"
   dependencies:
@@ -3339,7 +3339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^1.27.0":
+"@stripe/stripe-js@npm:^1.32.0":
   version: 1.32.0
   resolution: "@stripe/stripe-js@npm:1.32.0"
   checksum: 47a8c9764318223b0f244e63aabb0d4d2ca3a85a4e99388c6772b6076a5200e7a6f45a175468fc798ae1abafc7859215bf0207e2d5158d2c83a8629a17a92353
@@ -3466,6 +3466,7 @@ __metadata:
     multer: ^1.4.5-lts.1
     nodemon: ^2.0.16
     reflect-metadata: ^0.1.13
+    stripe: ^9.9.0
     swagger-jsdoc: ^6.2.1
     swagger-ui-express: ^4.4.0
     ts-node: ^10.8.0
@@ -3483,17 +3484,15 @@ __metadata:
     "@babel/core": ^7.16.0
     "@babel/preset-env": ^7.16.4
     "@babel/preset-typescript": ^7.16.0
-    "@types/jest": ^27.0.3
     "@typescript-eslint/eslint-plugin": ^5.4.0
     "@typescript-eslint/parser": ^5.4.0
     dotenv: ^16.0.1
     eslint: ^8.3.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-jest: ^25.2.4
-    jest: ^27.3.1
+    joi: ^17.6.0
     mongoose: ^6.3.5
     rimraf: ^3.0.2
-    ts-jest: ^27.0.7
     typescript: ~4.4.4
   languageName: unknown
   linkType: soft
@@ -3512,8 +3511,8 @@ __metadata:
     "@react-keycloak/web": ^3.4.0
     "@reduxjs/toolkit": ^1.7.1
     "@rtk-query/codegen-openapi": ^1.0.0-alpha.1
-    "@stripe/react-stripe-js": ^1.7.1
-    "@stripe/stripe-js": ^1.27.0
+    "@stripe/react-stripe-js": ^1.9.0
+    "@stripe/stripe-js": ^1.32.0
     "@testing-library/dom": ^8.11.1
     "@testing-library/jest-dom": ^5.15.0
     "@testing-library/react": ^12.1.2
@@ -3877,6 +3876,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/json-buffer@npm:~3.0.0":
+  version: 3.0.0
+  resolution: "@types/json-buffer@npm:3.0.0"
+  checksum: 6b0a371dd603f0eec9d00874574bae195382570e832560dadf2193ee0d1062b8e0694bbae9798bc758632361c227b1e3b19e3bd914043b498640470a2da38b77
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.4, @types/json-schema@npm:^7.0.5, @types/json-schema@npm:^7.0.6, @types/json-schema@npm:^7.0.7, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
@@ -3948,7 +3954,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:>=8.1.0":
   version: 18.0.1
   resolution: "@types/node@npm:18.0.1"
   checksum: be14b251c54cc2b4ca78ac6eadf2fe5e831e487f2e17848f21d576295945b538271dcc674d0bba582b3f8d95b84f6826e99b6ba4710c76f165a8bdd4d4f0618e
@@ -6142,6 +6148,16 @@ __metadata:
     array-ify: ^1.0.0
     dot-prop: ^5.1.0
   checksum: fb71d70632baa1e93283cf9d80f30ac97f003aabee026e0b4426c9716678079ef5fea7519b84d012cbed938c476493866a38a79760564a9e21ae9433e40e6f0d
+  languageName: node
+  linkType: hard
+
+"compress-brotli@npm:^1.3.8":
+  version: 1.3.8
+  resolution: "compress-brotli@npm:1.3.8"
+  dependencies:
+    "@types/json-buffer": ~3.0.0
+    json-buffer: ~3.0.1
+  checksum: de7589d692d40eb362f6c91070b5e51bc10b05a89eabb4a7c76c1aa21b625756f8c101c6999e4df0c4dc6199c5ca2e1353573bfdcca5615810f27485394162a5
   languageName: node
   linkType: hard
 
@@ -10244,6 +10260,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-buffer@npm:3.0.1, json-buffer@npm:~3.0.1":
+  version: 3.0.1
+  resolution: "json-buffer@npm:3.0.1"
+  checksum: 9026b03edc2847eefa2e37646c579300a1f3a4586cfb62bf857832b60c852042d0d6ae55d1afb8926163fa54c2b01d83ae24705f34990348bdac6273a29d4581
+  languageName: node
+  linkType: hard
+
 "json-parse-better-errors@npm:^1.0.1":
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
@@ -10406,6 +10429,16 @@ __metadata:
   dependencies:
     json-buffer: 3.0.0
   checksum: bb7e8f3acffdbafbc2dd5b63f377fe6ec4c0e2c44fc82720449ef8ab54f4a7ce3802671ed94c0f475ae0a8549703353a2124561fcf3317010c141b32ca1ce903
+  languageName: node
+  linkType: hard
+
+"keyv@npm:^4.3.2":
+  version: 4.3.2
+  resolution: "keyv@npm:4.3.2"
+  dependencies:
+    compress-brotli: ^1.3.8
+    json-buffer: 3.0.1
+  checksum: 237952f5faa2ed08da36677d7a3faae48b7e3c305264698cbf4480443f293a2f0c6c63c1d05f5cd4a842ee864dbb395745e6636fecd07489565776a22de7b8d6
   languageName: node
   linkType: hard
 
@@ -11273,8 +11306,8 @@ __metadata:
   linkType: hard
 
 "mongoose@npm:^6.3.5":
-  version: 6.4.2
-  resolution: "mongoose@npm:6.4.2"
+  version: 6.4.3
+  resolution: "mongoose@npm:6.4.3"
   dependencies:
     bson: ^4.6.2
     kareem: 2.4.1
@@ -11283,7 +11316,7 @@ __metadata:
     mquery: 4.0.3
     ms: 2.1.3
     sift: 16.0.0
-  checksum: 16945de7f4f5aa1aedacba937a6f41dad0b7bd3016fc6f55957f01c0478bc9b062c3b5285d18ed642f52815c1bd6d01f9e055e899eddf5ca6aaeab38ece97894
+  checksum: 016bfaf417cf423d801415a7bbb82bca5d721732ed7938d6a8e5c856cd14fc8b95cfa490fd0cca65363c22790b5c6bd961ec42f65f8377e8bf1a1e00a59caf86
   languageName: node
   linkType: hard
 
@@ -12826,7 +12859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.9.4":
+"qs@npm:^6.10.3, qs@npm:^6.9.4":
   version: 6.11.0
   resolution: "qs@npm:6.11.0"
   dependencies:
@@ -13687,6 +13720,7 @@ __metadata:
     eslint-plugin-react: ^7.27.1
     eslint-plugin-react-hooks: ^4.3.0
     husky: ^8.0.1
+    keyv: ^4.3.2
     lerna: ^4.0.0
     morgan: ^1.10.0
     prettier: ^2.7.1
@@ -14619,6 +14653,16 @@ __metadata:
   version: 2.0.1
   resolution: "strip-json-comments@npm:2.0.1"
   checksum: 1074ccb63270d32ca28edfb0a281c96b94dc679077828135141f27d52a5a398ef5e78bcf22809d23cadc2b81dfbe345eb5fd8699b385c8b1128907dec4a7d1e1
+  languageName: node
+  linkType: hard
+
+"stripe@npm:^9.9.0":
+  version: 9.11.0
+  resolution: "stripe@npm:9.11.0"
+  dependencies:
+    "@types/node": ">=8.1.0"
+    qs: ^6.10.3
+  checksum: c0a29fbaec36b1c65aea747a237e6cbc86531b392d452c4db56c4eda258e50cd2b845fcb57be2afc0a621fb8c8985c9ce97f6d8233d3f2043b562e7e9f0b32c0
   languageName: node
   linkType: hard
 

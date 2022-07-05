@@ -10,5 +10,4 @@ export { IUserCredentials } from "./IUserCredentials";
 export type { ICreditPackage } from "./ICreditPackage";
 export type { IStripeProduct } from "./ICreditPackage";
 export type { ICreditDiscount } from "./ICreditDiscount";
-export type { IStripeDiscount } from "./ICreditDiscount";
 export type { ICreditPackageLegacy } from "./ICreditPackageLegacy";

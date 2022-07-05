@@ -3,7 +3,7 @@ import { Col, Row } from "../Grid";
 import { Button } from "../index";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import UserService from "../../services/user.service";
+import UserService from "../../../services/user.service";
 
 export const Header = () => {
   const Header = styled.header`

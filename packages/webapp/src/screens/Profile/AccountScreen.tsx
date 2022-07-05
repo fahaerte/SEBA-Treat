@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Col, Row } from "../../components";
 import { Container } from "react-bootstrap";
-import { Header } from "../../components/Header/header";
-import PageHeading from "../../components/PageHeading/PageHeading";
-import SectionHeading from "../../components/SectionHeading/SectionHeading";
+import { Header } from "../../components/ui/Header/header";
+import PageHeading from "../../components/ui/PageHeading/PageHeading";
+import SectionHeading from "../../components/ui/SectionHeading/SectionHeading";
 import CreditPackageCard from "../../components/CreditPackageCard/CreditPackageCard";
 import UserService from "../../services/user.service";
 import Balance from "../../components/Balance/Balance";

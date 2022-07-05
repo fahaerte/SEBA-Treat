@@ -1,4 +1,4 @@
-import { Joi } from "@treat/lib-common/lib/services/types";
+import { Joi } from "@treat/lib-common";
 import { ConfigServiceAbstract } from "@treat/lib-common";
 
 export const configValues = {
