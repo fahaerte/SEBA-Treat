@@ -97,7 +97,7 @@ const RegisterScreen = () => {
         formKey: "birthdate",
         label: "Birthdate",
         props: {
-          type: "datetime-local",
+          type: "date",
         },
       }),
     ],

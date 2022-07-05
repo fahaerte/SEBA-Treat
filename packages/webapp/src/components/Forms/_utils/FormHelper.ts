@@ -16,11 +16,9 @@ abstract class FormHelper {
     config,
   });
 
-  public static createDatePicker = <T>(config: {
-    formKey: string;
-    label: string;
-    props: { type: string };
-  }): IFormElementConfig<T> => ({
+  public static createDatePicker = <T>(
+      config: IFormDatePickerConfig<T>
+    ): IFormElementConfig<T> => ({
     elementType: "datepicker",
     config,
   });
