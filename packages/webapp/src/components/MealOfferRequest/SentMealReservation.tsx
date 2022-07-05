@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Col, Row } from "../Grid";
-import { Button, Icon } from "../index";
-import UserService from "../../../services/user.service";
-import MealOfferService from "../../../services/mealOffer.service";
-import MealReservationState from "../../../types/enums/mealReservationState.enum";
-import MealReservation from "../../../types/interfaces/mealReservation.interface";
-import User from "../../../types/interfaces/user.interface";
+import { Col, Row } from "../ui/Grid";
+import { Button, Icon } from "../ui";
+import UserService from "../../services/user.service";
+import MealOfferService from "../../services/mealOffer.service";
+import MealReservationState from "../../types/enums/mealReservationState.enum";
+import MealReservation from "../../types/interfaces/mealReservation.interface";
+import User from "../../types/interfaces/user.interface";
 import styled from "styled-components";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 
@@ -15,18 +15,18 @@ interface SentMealOfferRequestBottomProps {
   reservation: MealReservation;
 }
 
+const ProfilePicture = styled.img`
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+`;
+
 export const SentMealReservation = ({
   mealOfferId,
   sellerId,
   reservation,
 }: SentMealOfferRequestBottomProps) => {
-  const ProfilePicture = styled.img`
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-  `;
-
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );

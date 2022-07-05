@@ -19,6 +19,7 @@ const injectedStripeRtkApi = api.injectEndpoints({
         url: `/payment/discounts/`,
       }),
     }),
+
     verifyPayment: build.query<VerifyPaymentApiResponse, VerifyPaymentApiArg>({
       query: (queryArg) => ({
         url: `/payment/get-latest-payment?price=${queryArg.priceId}`,
@@ -66,8 +67,8 @@ export type PaymentControllerGetPaymentIntentSecretApiArg = {
 export const {
   usePaymentGetProductsWithPricesQuery,
   useVerifyPaymentQuery,
-  usePaymentGetDiscountQuery,
   useCreateCheckoutSessionMutation,
+  usePaymentGetDiscountQuery,
 } = injectedStripeRtkApi;
 
 export { injectedStripeRtkApi as stripeApi };

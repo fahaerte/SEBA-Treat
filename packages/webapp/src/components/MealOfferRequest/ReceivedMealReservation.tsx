@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Col, Row } from "../Grid";
-import { Button, Icon } from "../index";
-import MealOfferService from "../../../services/mealOffer.service";
-import MealReservation from "../../../types/interfaces/mealReservation.interface";
-import MealReservationState from "../../../types/enums/mealReservationState.enum";
+import { Col, Row } from "../ui/Grid";
+import { Button, Icon } from "../ui";
+import MealOfferService from "../../services/mealOffer.service";
+import MealReservation from "../../types/interfaces/mealReservation.interface";
+import MealReservationState from "../../types/enums/mealReservationState.enum";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 
 interface ReceivedMealReservationProps {

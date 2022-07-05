@@ -1,5 +1,5 @@
 import React from "react";
-import { ICard } from "../Card/ICard";
+import { ICard } from "../ui/Card/ICard";
 import { SCCreditPackageCard } from "./styles";
 
 const CreditPackageCard = ({

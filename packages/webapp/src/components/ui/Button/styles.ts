@@ -30,6 +30,7 @@ export const SCButton = styled.button<IButton>`
   &.btn-outline-${({ color }) => color} {
     color: ${({ theme, color }) => theme.palette[color as string].main};
     border-color: ${({ theme, color }) => theme.palette[color as string].main};
+    border-radius: ${(props) => props.theme.general.border.radius};
 
     &:hover {
       color: ${({ theme, color }) =>

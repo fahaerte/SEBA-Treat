@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ICard } from "../Card/ICard";
+import { ICard } from "../ui/Card/ICard";
 
 export const SCCreditPackageCard = styled.div<ICard>`
   background-color: ${({ theme, color }) =>
@@ -11,7 +11,9 @@ export const SCCreditPackageCard = styled.div<ICard>`
   margin-bottom: ${({ theme }) => theme.spacings.lg};
   box-shadow: ${({ theme }) => theme.shadows.md};
   border: 2px solid ${({ theme }) => theme.palette["primary"].main};
+  // TODO: Theme value?
   border-radius: 20px;
+  // TODO: Use helper classes
   padding: 40px 20px 20px 20px;
   text-align: center;
 
@@ -31,6 +33,7 @@ export const SCCreditPackageCard = styled.div<ICard>`
 
   > b {
     font-weight: bold;
+    // TODO: helper
     margin: 15px 0 20px 0;
   }
 `;

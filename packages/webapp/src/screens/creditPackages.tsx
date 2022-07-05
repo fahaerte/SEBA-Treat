@@ -5,9 +5,9 @@ import { SentMealReservation } from "../components/MealOfferRequest/SentMealRese
 import MealOffer from "../types/interfaces/mealOffer.interface";
 
 export const SentMealOfferRequests = () => {
-  const [sentMealOfferRequests, setSentMealOfferRequests] = useState(
-    [] as MealOffer[]
-  );
+  const [sentMealOfferRequests, setSentMealOfferRequests] = useState<
+    MealOffer[]
+  >([]);
 
   const fetchData = useCallback(async () => {
     const data = await MealOfferService.getSentMealOfferRequests();
@@ -20,7 +20,7 @@ export const SentMealOfferRequests = () => {
   }, [fetchData]);
 
   return (
-    <div>
+    <>
       {sentMealOfferRequests.map((mealOffer, index) => {
         return (
           <div key={index}>
@@ -40,6 +40,6 @@ export const SentMealOfferRequests = () => {
           </div>
         );
       })}
-    </div>
+    </>
   );
 };

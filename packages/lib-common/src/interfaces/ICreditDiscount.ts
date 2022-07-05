@@ -7,4 +7,4 @@ export interface ICreditDiscount extends ICreditPackage {
   endDate: Date;
 }
 
-export interface IStripeDiscount extends Stripe.Discount {}
+export interface IStripeDiscount extends Stripe.Coupon {}

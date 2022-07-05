@@ -1,5 +1,5 @@
 import React from "react";
-import { CardBody, Card, Typography, Button, Icon } from "../index";
+import { CardBody, Card, Typography, Button, Icon } from "../ui";
 
 const CreditPackage = ({
   className = "",

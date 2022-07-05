@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
-import User from "../../../types/interfaces/user.interface";
-import UserService from "../../../services/user.service";
-import { Col, Row } from "../Grid";
+import User from "../../types/interfaces/user.interface";
+import UserService from "../../services/user.service";
+import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
 
 interface MealOfferRequestUserInfoProps {
   userId: string;
 }
 
+const ProfilePicture = styled.img`
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+`;
+
 export const MealOfferRequestUserInfo = ({
   userId,
 }: MealOfferRequestUserInfoProps) => {
-  const ProfilePicture = styled.img`
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    object-fit: cover;
-  `;
-
   const [user, setUser] = useState({} as User);
   const [profilePicture, setProfilePicture] = useState("");
 

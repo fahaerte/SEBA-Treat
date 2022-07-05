@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SCSectionHeading = styled.h2`
+export const SCSectionHeading = styled.h5`
   margin-top: ${({ theme }) => theme.spacings.xl};
 
   > hr {

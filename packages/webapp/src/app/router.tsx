@@ -11,6 +11,7 @@ import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequ
 import { AccountScreen } from "../screens/Profile/AccountScreen";
 // import { CreditPackages } from "../screens/Payment/CreditPackages";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
+import { CreditPackages } from "../screens/Payment/CreditPackages";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -83,6 +84,17 @@ export const AppRouter = () => {
     ],
   };
 
+  const purchaseCreditRoutes = [
+    {
+      path: "/success/:priceId",
+      element: <PaymentSuccess />,
+    },
+    {
+      path: "/purchase-credits",
+      element: <CreditPackages />,
+    },
+  ];
+
   const mealRoutes = {
     // ALL THE MEALS
     path: "meal/",
@@ -112,6 +124,7 @@ export const AppRouter = () => {
     mainRoutes,
     profileRoutes,
     ...redirectRoutes,
+    ...purchaseCreditRoutes,
     mealRoutes,
   ]);
 

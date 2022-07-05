@@ -97,6 +97,10 @@ class UserController implements Controller {
      *    tags:
      *    - User
      *    summary: Get currently logged in user
+     *    parameters:
+     *    - name: userid
+     *      type: string
+     *      in: path
      *    produces:
      *    - application/json
      *    responses:
@@ -107,7 +111,7 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
+    this.router.get(`${this.path}/:userid?`, authenticate, this.getUser);
 
     /**
      * @swagger
