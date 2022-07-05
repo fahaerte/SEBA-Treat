@@ -6,7 +6,8 @@ export const emptyApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api",
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).user.user.jwt; // TODO Mit context ersetzen
+      const token = (getState() as RootState).user.user.jwt; // TODO Mit context ersetzen,
+      // const userContext = useContext(UserContext); Geht nicht
 
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
