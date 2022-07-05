@@ -48,7 +48,7 @@ class UserService {
 
       if (await user.isValidPassword(password)) {
         const authenticatedUser: JSON = <JSON>(<unknown>{
-          user: JSON.stringify(user),
+          user: user,
           token: token.createToken(user),
         });
         return authenticatedUser;
