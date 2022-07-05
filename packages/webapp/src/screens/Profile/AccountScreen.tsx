@@ -1,12 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Col, Row } from "../../components";
+import { Button, Card, Col, Row, SkeletonSquare } from "../../components";
 import { Container } from "react-bootstrap";
 import { Header } from "../../components/ui/Header/header";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import SectionHeading from "../../components/ui/SectionHeading/SectionHeading";
-import CreditPackageCard from "../../components/CreditPackageCard/CreditPackageCard";
+import CreditPackageCard from "../../components/ui/CreditPackageCard/CreditPackageCard";
 import UserService from "../../services/user.service";
-import Balance from "../../components/Balance/Balance";
+import Balance from "../../components/ui/Balance/Balance";
+import {
+  usePaymentGetProductsWithPricesQuery,
+  useCreateCheckoutSessionMutation,
+} from "../../store/api";
+import { IStripeProduct } from "@treat/lib-common";
+import CreditPackage from "../../components/ui/CreditProducts/CreditPackage";
 
 export const AccountScreen = () => {
   const [balance, setBalance] = useState("Loading...");
@@ -21,6 +27,26 @@ export const AccountScreen = () => {
     fetchData().catch(console.error);
   }, [fetchData]);
 
+  const { data: products, isLoading: productsIsLoading } =
+    usePaymentGetProductsWithPricesQuery({});
+
+  const [createCheckout, { isLoading, isError, data }] =
+    useCreateCheckoutSessionMutation();
+
+  const redirectToCheckout = (priceId: string) => {
+    void createCheckout({
+      priceId,
+      userId: "62b776eafc0a00b0fa2d125e",
+    });
+    if (isError) {
+      return <div>Stripe Instance not available, 401</div>;
+    }
+  };
+
+  if (data) {
+    window.location.replace(data.url);
+  }
+
   return (
     <div>
       <Header />
@@ -34,8 +60,45 @@ export const AccountScreen = () => {
           <SectionHeading>Balance</SectionHeading>
           <Balance className="account-balance">{balance} Credits</Balance>
         </Row>
+        <SectionHeading>Credit Packages</SectionHeading>
         <Row>
-          <SectionHeading>Credit Packages</SectionHeading>
+          {productsIsLoading || isLoading ? (
+            <>
+              <Col>
+                <Card>
+                  <SkeletonSquare height={"150px"} rounded={false} />
+                </Card>
+              </Col>
+              <Col>
+                <Card>
+                  <SkeletonSquare height={"150px"} rounded={false} />
+                </Card>
+              </Col>
+              <Col>
+                <Card>
+                  <SkeletonSquare height={"150px"} rounded={false} />
+                </Card>
+              </Col>
+            </>
+          ) : (
+            <>
+              {/*TODO: sort by price in ascending order*/}
+              {products?.map((creditPackage: IStripeProduct) => (
+                <Col key={`${creditPackage.id}-container`}>
+                  <CreditPackage
+                    key={creditPackage.id}
+                    productName={creditPackage.name}
+                    price={creditPackage.default_price.unit_amount || 0}
+                    buttonAction={() =>
+                      redirectToCheckout(creditPackage.default_price.id)
+                    }
+                  />
+                </Col>
+              ))}
+            </>
+          )}
+        </Row>
+        <Row>
           <Col>
             <CreditPackageCard>
               <h3>250 Credits</h3>

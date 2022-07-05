@@ -1,2 +1,2 @@
 export * from "./ui";
-export * from "./CreditProducts/CreditPackage";
+export * from "./ui/CreditProducts/CreditPackage";

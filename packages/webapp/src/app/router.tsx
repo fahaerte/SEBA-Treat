@@ -9,7 +9,7 @@ import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
 import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
 import { AccountScreen } from "../screens/Profile/AccountScreen";
-import { CreditPackages } from "../screens/Payment/CreditPackages";
+// import { CreditPackages } from "../screens/Payment/CreditPackages";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 
 export const AppRouter = () => {
@@ -58,10 +58,10 @@ export const AppRouter = () => {
       path: "/cancel",
       element: <div>You canceled the purchase</div>,
     },
-    {
-      path: "/purchase-credits",
-      element: <CreditPackages />,
-    },
+    // {
+    //   path: "/purchase-credits",
+    //   element: <CreditPackages />,
+    // },
   ];
 
   const profileRoutes = {
