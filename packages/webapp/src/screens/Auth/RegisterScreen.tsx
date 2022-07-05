@@ -2,14 +2,14 @@ import React, { useContext } from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
 import { UserContext } from "../../utils/AuthProvider";
-import {useUserRegistrationMutation} from "../../store/api";
-import {getStringFromIAddress} from "../../utils/getStringFromIAddress";
+import { useUserRegistrationMutation } from "../../store/api";
+import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 
 const RegisterScreen = () => {
   const userContext = useContext(UserContext);
 
   const [register, { isLoading, isError, isSuccess, data }] =
-      useUserRegistrationMutation();
+    useUserRegistrationMutation();
 
   const elements: IFormRow<IUser>[] = [
     [
@@ -180,13 +180,13 @@ const RegisterScreen = () => {
   ];
 
   const handleRegister = (data: IUser) => {
-    console.log("register user...")
+    console.log("register user...");
     console.log(JSON.stringify(data));
     void register(data);
   };
 
   if (data) {
-    console.log((data));
+    console.log(data);
     const user = data["authenticatedUser"]["user"] as IUser;
     const token = data["authenticatedUser"]["token"];
 
