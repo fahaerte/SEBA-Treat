@@ -3,21 +3,29 @@ import HttpException from "../../utils/exceptions/http.exception";
 import { StripeError } from "../../utils/exceptions/stripe.errors";
 import { Service } from "typedi";
 import StripeUsersService from "./stripe.users.service";
+import { ConfigService } from "../../utils/ConfigService";
 
 @Service()
 class StripeService {
   private stripe: Stripe;
   public stripeUsers: StripeUsersService;
+  private configService = new ConfigService();
 
   constructor() {
-    const { STRIPE_API_SECRET_KEY } = process.env;
-    this.stripe = new Stripe(`${STRIPE_API_SECRET_KEY}`, {
-      apiVersion: "2020-08-27",
-    });
+    this.stripe = new Stripe(
+      `${this.configService.get("STRIPE_API_SECRET_KEY")}`,
+      {
+        apiVersion: "2020-08-27",
+      }
+    );
     this.stripeUsers = new StripeUsersService(this.stripe);
   }
 
-  public async createCheckoutSession(priceId: string, customerId: string) {
+  public async createCheckoutSession(
+    priceId: string,
+    customerId: string,
+    discount?: string
+  ) {
     try {
       return await this.stripe.checkout.sessions.create({
         line_items: [
@@ -30,8 +38,11 @@ class StripeService {
         customer: customerId,
         customer_update: { address: "auto" },
         mode: "payment",
-        success_url: `http://localhost:3000/success/${priceId}`,
-        cancel_url: `http://localhost:3000/purchase-credits`,
+        success_url: `${this.configService.get(
+          "CLIENT_URL"
+        )}/success/${priceId}`,
+        discounts: discount ? [{ coupon: discount }] : undefined,
+        cancel_url: `${this.configService.get("CLIENT_URL")}/purchase-credits`,
         automatic_tax: { enabled: true },
       });
     } catch (error) {
@@ -90,13 +101,15 @@ class StripeService {
 
   public async getCreditDiscounts() {
     try {
-      return await this.stripe.coupons.list({
+      const allCoupons = await this.stripe.coupons.list({
         expand: ["data.applies_to"],
       });
+      return allCoupons.data.find((coupon) => {
+        if (coupon.redeem_by !== null && coupon.duration === "once") {
+          return coupon.redeem_by >= new Date().getTime() / 1000;
+        }
+      });
     } catch (error: any) {
-      if (error?.code === StripeError.ResourceMissing) {
-        throw new HttpException(401, "Credit card not set up");
-      }
       throw new HttpException(500, error?.message as string);
     }
   }
