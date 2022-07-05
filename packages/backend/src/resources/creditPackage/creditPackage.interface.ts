@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
-import { ICreditPackage } from "@treat/lib-common/src/interfaces/ICreditPackage";
+import { ICreditPackageLegacy } from "@treat/lib-common/src/interfaces/ICreditPackage";
 
-interface CreditPackage extends Document, ICreditPackage {}
+interface CreditPackage extends Document, ICreditPackageLegacy {}
 
 export default CreditPackage;

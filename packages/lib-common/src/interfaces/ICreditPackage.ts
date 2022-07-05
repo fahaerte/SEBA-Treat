@@ -1,4 +1,19 @@
+import Stripe from "stripe";
+
+// packages can be always purchased
 export interface ICreditPackage {
+  name: string;
+  creditAmount: number;
+  price: number;
+  title: string;
+  description: string;
+}
+
+export interface IStripeProduct extends Stripe.Product {
+  default_price: Stripe.Price;
+}
+
+export interface ICreditPackage2 {
   credits: number;
   price: number;
 }
