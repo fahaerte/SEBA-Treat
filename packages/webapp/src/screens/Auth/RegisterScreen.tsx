@@ -1,11 +1,15 @@
 import React, { useContext } from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
-import UserService from "../../services/user.service";
 import { UserContext } from "../../utils/AuthProvider";
+import {useUserRegistrationMutation} from "../../store/api";
+import {getStringFromIAddress} from "../../utils/getStringFromIAddress";
 
 const RegisterScreen = () => {
   const userContext = useContext(UserContext);
+
+  const [register, { isLoading, isError, isSuccess, data }] =
+      useUserRegistrationMutation();
 
   const elements: IFormRow<IUser>[] = [
     [
@@ -176,16 +180,23 @@ const RegisterScreen = () => {
   ];
 
   const handleRegister = (data: IUser) => {
+    console.log("register user...")
     console.log(JSON.stringify(data));
-    // TODO: use rtkQuery
-    // UserService.registerUser(data)
-    //   .then((response) => {
-    //     console.log(response);
-    //     userContext.setToken(String(response["token"]));
-    //     userContext.setUser(response["user"]);
-    //   })
-    //   .catch((error) => console.error(error));
+    void register(data);
   };
+
+  if (data) {
+    console.log((data));
+    const user = data["authenticatedUser"]["user"] as IUser;
+    const token = data["authenticatedUser"]["token"];
+
+    userContext.setToken(token);
+    userContext.setUser(user);
+    userContext.setAddress(getStringFromIAddress(user.address));
+    console.log("context is set!");
+    console.log(userContext.user);
+    console.log(userContext.token);
+  }
 
   return (
     <>

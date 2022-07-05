@@ -1,10 +1,7 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
-import {
-  IUser,
-  IUserCredentials,
-} from "@treat/lib-common";
+import { IUser, IUserCredentials } from "@treat/lib-common";
 import { UserContext } from "../../utils/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useUserLogInMutation } from "../../store/api";
@@ -66,6 +63,7 @@ const LoginScreen = () => {
     console.log(userContext.user);
     console.log(userContext.token);
   }
+
   return (
     <>
       <Form<IUserCredentials>
