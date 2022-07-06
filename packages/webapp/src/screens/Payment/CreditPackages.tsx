@@ -82,18 +82,33 @@ export const CreditPackages = () => {
             <LoadingPackages />
           ) : (
             <>
-              {products?.map((creditPackage: IStripeProduct) => (
-                <Col key={`${creditPackage.id}-container`}>
-                  <CreditPackage
-                    key={creditPackage.id}
-                    productName={creditPackage.name}
-                    price={creditPackage.default_price.unit_amount || 0}
-                    buttonAction={() =>
-                      redirectToCheckout(creditPackage.default_price.id)
+              {products &&
+                products
+                  .slice()
+                  .sort((p1, p2) => {
+                    if (
+                      p1.default_price.unit_amount !== null &&
+                      p2.default_price.unit_amount !== null
+                    ) {
+                      return (
+                        p1.default_price.unit_amount -
+                        p2.default_price.unit_amount
+                      );
                     }
-                  />
-                </Col>
-              ))}
+                    return -1;
+                  })
+                  .map((creditPackage: IStripeProduct) => (
+                    <Col key={`${creditPackage.id}-container`}>
+                      <CreditPackage
+                        key={creditPackage.id}
+                        productName={creditPackage.name}
+                        price={creditPackage.default_price.unit_amount || 0}
+                        buttonAction={() =>
+                          redirectToCheckout(creditPackage.default_price.id)
+                        }
+                      />
+                    </Col>
+                  ))}
             </>
           )}
         </Row>

@@ -83,7 +83,7 @@ export const AccountScreen = () => {
           ) : (
             <>
               {/*TODO: sort by price in ascending order*/}
-              {products?.map((creditPackage: IStripeProduct) => (
+              {products.map((creditPackage: IStripeProduct) => (
                 <Col key={`${creditPackage.id}-container`}>
                   <CreditPackage
                     key={creditPackage.id}

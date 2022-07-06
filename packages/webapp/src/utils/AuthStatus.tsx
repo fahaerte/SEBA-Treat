@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../utils/AuthProvider";
-import Button from "../components/Button/Button";
+import { Button } from "../components";
 
 const AuthStatus = () => {
   const userContext = useContext(UserContext);
