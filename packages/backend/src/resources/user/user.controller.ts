@@ -174,14 +174,11 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const newUser = req.body as User;
-      const { token, userId } = (await this.userService.register(newUser)) as {
-        token: string;
-        userId: string;
-      };
+      const { user, token } = await this.userService.register(newUser);
       const { city, country, street, postalCode, houseNumber } =
         newUser.address;
-      await this.stripeService.stripeUsers.createCustomer(
-        userId,
+      const stripeUserId = await this.stripeService.stripeUsers.createCustomer(
+        user._id,
         `${newUser.firstName} ${newUser.lastName}`,
         newUser.email,
         {
@@ -191,7 +188,11 @@ class UserController implements Controller {
           postal_code: postalCode,
         }
       );
-      res.status(201).json({ token });
+      const createdUser = await this.userService.updateUser({
+        _id: user._id,
+        stripeCustomerId: stripeUserId,
+      });
+      res.status(201).json({ token, createdUser });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

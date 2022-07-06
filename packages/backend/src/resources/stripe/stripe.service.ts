@@ -78,7 +78,7 @@ class StripeService {
   public async getCreditPackages(withPrice = false) {
     try {
       if (withPrice) {
-        return this.stripe.products.list({
+        return await this.stripe.products.list({
           expand: ["data.default_price"],
         });
       }

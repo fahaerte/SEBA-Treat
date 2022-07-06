@@ -7,7 +7,7 @@ import VirtualAccount from "../virtualAccount/virtualAccount.interface";
 import User from "../user/user.interface";
 import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
-import { ObjectId } from "mongoose";
+import { ObjectId, Types } from "mongoose";
 import { IUser } from "@treat/lib-common";
 
 @Service()
@@ -20,22 +20,17 @@ class UserService {
    * Register a new user
    */
   public async register(
-    newUser: User
-  ): Promise<{ token: string; userId: string } | Error> {
+    newUser: IUser
+  ): Promise<{ user: User; token: string }> {
     try {
-      // create account
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
       );
-
-      const user = await this.userModel.create(newUser);
-      // TODO: Fix
-      // const authenticatedUser: JSON = <JSON>(<unknown>{
-      //   user: user,
-      //   token: token.createToken(user),
-      // });
-      // return authenticatedUser;
-      return { token: token.createToken(user), userId: user._id };
+      const user = await this.userModel.create({
+        ...newUser,
+        stripeCustomerId: "",
+      });
+      return { user, token: token.createToken(user) };
     } catch (error: any) {
       throw new Error(error.message as string);
     }
@@ -63,6 +58,18 @@ class UserService {
       }
     } catch (error) {
       throw new Error("Unable to log in user");
+    }
+  }
+
+  public async updateUser(
+    user: { _id: string } & Partial<IUser>
+  ): Promise<User | null> {
+    try {
+      const { _id, ...updatedUser } = user;
+      await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
+      return await this.userModel.findById(_id);
+    } catch (error) {
+      throw new Error("Unable to update user");
     }
   }
 

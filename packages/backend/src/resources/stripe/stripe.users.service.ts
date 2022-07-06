@@ -18,15 +18,15 @@ class StripeUsersService {
       postal_code?: string;
       state?: string;
     }
-  ) {
+  ): Promise<string> {
     try {
       const stripeCustomer = await this.stripe.customers.create({
-        name,
-        email,
+        name: name,
+        email: email,
+        address: address,
         metadata: {
-          treatUserId: userId,
+          treatId: userId,
         },
-        address,
       });
       return stripeCustomer.id;
     } catch (error) {

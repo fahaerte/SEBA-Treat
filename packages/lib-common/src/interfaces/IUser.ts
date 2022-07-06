@@ -13,4 +13,5 @@ export interface IUser {
   // rating: number;
   address: IAddress;
   virtualAccount: IVirtualAccount;
+  stripeCustomerId?: string;
 }

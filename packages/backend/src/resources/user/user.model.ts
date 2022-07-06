@@ -40,6 +40,9 @@ const UserSchema = new Schema<User>(
       type: VirtualAccountSchema,
       required: true,
     },
+    stripeCustomerId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
