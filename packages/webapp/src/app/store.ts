@@ -6,6 +6,8 @@ import {
   MiddlewareAPI,
   // ThunkAction,
 } from "@reduxjs/toolkit";
+// import userReducer from "../redux/userSlice";
+import { UserApi } from "../store/api";
 import { stripeApi } from "../store/api";
 
 const rtkQueryErrorLogger: Middleware =
@@ -26,6 +28,8 @@ export const store = configureStore({
   reducer: {
     [stripeApi.reducerPath]: stripeApi.reducer,
     // [mealApi.reducerPath]: mealApi.reducer,
+    //      [UserApi.reducerPath]: UserApi.reducer,
+    //   UserApi.middleware
   },
   middleware: (gDM) => gDM().concat(rtkQueryErrorLogger, stripeApi.middleware),
 });

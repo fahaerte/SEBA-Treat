@@ -27,7 +27,14 @@ class UserService {
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
       );
+
       const user = await this.userModel.create(newUser);
+      // TODO: Fix
+      // const authenticatedUser: JSON = <JSON>(<unknown>{
+      //   user: user,
+      //   token: token.createToken(user),
+      // });
+      // return authenticatedUser;
       return { token: token.createToken(user), userId: user._id };
     } catch (error: any) {
       throw new Error(error.message as string);
@@ -37,7 +44,7 @@ class UserService {
   /**
    * Attempt to log in a user
    */
-  public async login(email: string, password: string): Promise<string | Error> {
+  public async login(email: string, password: string): Promise<JSON | Error> {
     try {
       const user = await this.userModel.findOne({ email });
 
@@ -46,7 +53,11 @@ class UserService {
       }
 
       if (await user.isValidPassword(password)) {
-        return token.createToken(user);
+        const authenticatedUser: JSON = <JSON>(<unknown>{
+          user: user,
+          token: token.createToken(user),
+        });
+        return authenticatedUser;
       } else {
         throw new Error("Wrong credentials given");
       }

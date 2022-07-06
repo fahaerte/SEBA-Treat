@@ -1,12 +1,11 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import AuthStatus from "../utils/AuthStatus";
 
 const HomeScreen: React.FC = (): JSX.Element => {
   return (
     <>
-      HOMESCREEN
-      <br />
-      <br />
+      <AuthStatus />
       <nav>
         <ul>
           <li>
@@ -19,7 +18,13 @@ const HomeScreen: React.FC = (): JSX.Element => {
             <Link to="/register">Register Screen</Link>
           </li>
           <li>
-            <Link to="/mealOfferRequests">Meal Offer Requests</Link>
+            <Link to="/mealoffers">Meal Offer Screen</Link>
+          </li>
+          <li>
+            <Link to="/mealOfferRequests">Meal Offer Requests Screen</Link>
+          </li>
+          <li>
+            <Link to="/landing">Landing Page</Link>
           </li>
           <li>
             <Link to="/purchase-credits">Purchase Credits</Link>

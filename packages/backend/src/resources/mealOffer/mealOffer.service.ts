@@ -1,6 +1,5 @@
 import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
-
 import User from "../user/user.interface";
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
