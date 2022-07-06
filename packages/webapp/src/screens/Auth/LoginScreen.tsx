@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
 import { IUser, IUserCredentials } from "@treat/lib-common";
-import { UserContext } from "../../utils/AuthProvider";
+import { AuthContext } from "../../utils/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useUserLogInMutation } from "../../store/api";
 
 const LoginScreen = () => {
-  const userContext = useContext(UserContext);
+  const userContext = useContext(AuthContext);
 
   const [login, { isLoading, isError, isSuccess, data }] =
     useUserLogInMutation();
@@ -53,8 +53,7 @@ const LoginScreen = () => {
 
   if (data) {
     console.log(data);
-    const user = data["authenticatedUser"]["user"] as IUser;
-    const token = data["authenticatedUser"]["token"];
+    const { user, token } = data;
 
     userContext.setToken(token);
     userContext.setUser(user);

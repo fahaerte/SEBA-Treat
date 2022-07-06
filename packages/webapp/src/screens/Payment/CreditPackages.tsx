@@ -16,8 +16,10 @@ import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
 import CreditOverview from "../../components/CreditOverview";
 import CreditDiscount from "../../components/CreditProducts/CreditDiscount";
+import { useAuthContext } from "../../utils/AuthProvider";
 
 export const CreditPackages = () => {
+  const { user } = useAuthContext();
   const { data: products, isLoading: productsIsLoading } =
     usePaymentGetProductsWithPricesQuery({});
   const { data: discount, isLoading: discountIsLoading } =
@@ -26,23 +28,16 @@ export const CreditPackages = () => {
   const [createCheckout, { isLoading, isError, data }] =
     useCreateCheckoutSessionMutation();
 
-  const [discountedProduct, setDiscountedProduct] = useState<{
-    productName: string;
-    productPrice: number;
-  }>({
-    productName: "",
-    productPrice: 0,
-  });
+  const [discountedProduct, setDiscountedProduct] = useState<
+    IStripeProduct | undefined
+  >();
 
   useEffect(() => {
     if (discount && products) {
       const findProduct = products?.find(
         (product) => product.id === discount?.applies_to?.products[0]
       );
-      setDiscountedProduct({
-        productPrice: findProduct?.default_price.unit_amount || 0,
-        productName: findProduct?.name || "",
-      });
+      setDiscountedProduct(findProduct);
     }
 
     if (data) {
@@ -50,10 +45,11 @@ export const CreditPackages = () => {
     }
   }, [discount, products, data]);
 
-  const redirectToCheckout = (priceId: string) => {
+  const redirectToCheckout = (priceId: string, couponId?: string) => {
     void createCheckout({
       priceId,
       userId: "62b776eafc0a00b0fa2d125e",
+      couponId,
     });
     if (isError) {
       return <div>Stripe Instance not available, 401</div>;
@@ -67,11 +63,16 @@ export const CreditPackages = () => {
         {discount && (
           <CreditDiscount
             discountTitle={discount.name || ""}
-            discountDuration={discount.redeem_by || 0}
+            discountDeadline={discount.redeem_by || 0}
             discountValue={discount.amount_off || 0}
-            productLabel={discountedProduct.productName}
-            productPrice={discountedProduct.productPrice}
-            onClick={() => console.log("discount :-)")}
+            productLabel={discountedProduct?.name || ""}
+            productPrice={discountedProduct?.default_price.unit_amount || 0}
+            onClick={() =>
+              redirectToCheckout(
+                discountedProduct?.default_price.id || "",
+                discount.id
+              )
+            }
           />
         )}
       </Row>

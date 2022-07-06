@@ -21,7 +21,6 @@ export const ReceivedMealOfferRequests = () => {
 
   const fetchData = useCallback(async () => {
     const data = await MealOfferService.getReceivedMealOfferRequests();
-    console.log(data);
     setReceivedMealOfferRequests(data);
   }, []);
 

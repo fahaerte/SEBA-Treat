@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IAddressLandingPage } from "@treat/lib-common";
-import { UserContext } from "../utils/AuthProvider";
+import { AuthContext } from "../utils/AuthProvider";
 
 const LandingPage = () => {
-  const userContext = useContext(UserContext);
+  const userContext = useContext(AuthContext);
 
   const elements: IFormRow<IAddressLandingPage>[] = [
     FormHelper.createInput({

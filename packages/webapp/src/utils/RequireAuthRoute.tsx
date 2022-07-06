@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserContext } from "./AuthProvider";
+import { AuthContext } from "./AuthProvider";
 import { Navigate } from "react-router-dom";
 
 export const RequireAuthRoute = ({
@@ -7,7 +7,7 @@ export const RequireAuthRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { user } = useContext(UserContext);
+  const { user } = useContext(AuthContext);
 
   return <>{user ? children : <Navigate to={"/login"} />}</>;
 };

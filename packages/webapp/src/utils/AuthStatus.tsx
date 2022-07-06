@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { UserContext } from "../utils/AuthProvider";
+import { AuthContext } from "../utils/AuthProvider";
 import { Button } from "../components";
 
 const AuthStatus = () => {
-  const userContext = useContext(UserContext);
+  const userContext = useContext(AuthContext);
 
   const signout = () => {
     userContext.setToken(undefined);

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserContext } from "./AuthProvider";
+import { AuthContext } from "./AuthProvider";
 import { Navigate } from "react-router-dom";
 
 export const RequireAddressRoute = ({
@@ -7,7 +7,8 @@ export const RequireAddressRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { address } = useContext(UserContext);
+  const { address } = useContext(AuthContext);
 
+  // TODO: Maybe landingpage should be our home screen and depending on the context state, we return either the field inpput or the meal list
   return <>{address ? children : <Navigate to={"/landing"} />}</>;
 };

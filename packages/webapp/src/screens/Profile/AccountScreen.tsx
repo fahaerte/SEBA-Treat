@@ -15,10 +15,11 @@ import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 
 export const AccountScreen = () => {
-  const [balance, setBalance] = useState("Loading...");
+  const [balance, setBalance] = useState<string | number>("Loading...");
 
-  const fetchData = useCallback(async () => {
-    const balance = await UserService.getAccountBalance();
+  const fetchData = useCallback(() => {
+    // const balance = await UserService.getAccountBalance();
+    const balance = 1;
     console.log(balance);
     setBalance(balance);
   }, []);
@@ -83,7 +84,7 @@ export const AccountScreen = () => {
           ) : (
             <>
               {/*TODO: sort by price in ascending order*/}
-              {products.map((creditPackage: IStripeProduct) => (
+              {products?.map((creditPackage: IStripeProduct) => (
                 <Col key={`${creditPackage.id}-container`}>
                   <CreditPackage
                     key={creditPackage.id}

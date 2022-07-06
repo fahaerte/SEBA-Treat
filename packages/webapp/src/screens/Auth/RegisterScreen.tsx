@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IUser } from "@treat/lib-common";
-import { UserContext } from "../../utils/AuthProvider";
+import { AuthContext } from "../../utils/AuthProvider";
 import { useUserRegistrationMutation } from "../../store/api";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 
 const RegisterScreen = () => {
-  const userContext = useContext(UserContext);
+  const userContext = useContext(AuthContext);
 
   const [register, { isLoading, isError, isSuccess, data }] =
     useUserRegistrationMutation();
@@ -187,9 +187,7 @@ const RegisterScreen = () => {
 
   if (data) {
     console.log(data);
-    const user = data["authenticatedUser"]["user"] as IUser;
-    const token = data["authenticatedUser"]["token"];
-
+    const { user, token } = data;
     userContext.setToken(token);
     userContext.setUser(user);
     userContext.setAddress(getStringFromIAddress(user.address));

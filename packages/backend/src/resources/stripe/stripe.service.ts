@@ -24,7 +24,7 @@ class StripeService {
   public async createCheckoutSession(
     priceId: string,
     customerId: string,
-    discount?: string
+    couponId?: string
   ) {
     try {
       return await this.stripe.checkout.sessions.create({
@@ -38,10 +38,10 @@ class StripeService {
         customer: customerId,
         customer_update: { address: "auto" },
         mode: "payment",
+        discounts: couponId ? [{ coupon: couponId }] : undefined,
         success_url: `${this.configService.get(
           "CLIENT_URL"
         )}/success/${priceId}`,
-        discounts: discount ? [{ coupon: discount }] : undefined,
         cancel_url: `${this.configService.get("CLIENT_URL")}/purchase-credits`,
         automatic_tax: { enabled: true },
       });

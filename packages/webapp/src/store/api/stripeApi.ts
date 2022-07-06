@@ -39,6 +39,7 @@ const injectedStripeRtkApi = api.injectEndpoints({
         body: {
           priceId: queryArg.priceId,
           userId: queryArg.userId,
+          couponId: queryArg.couponId,
         },
       }),
     }),
@@ -49,6 +50,7 @@ export type CreateCheckoutSessionApiResponse = { url: string };
 export type CreateCheckoutSessionApiArg = {
   priceId: string;
   userId: string;
+  couponId?: string;
 };
 
 export type VerifyPaymentApiResponse = { message: string };
