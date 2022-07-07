@@ -5,7 +5,7 @@ import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import User from "../user/user.interface";
 import { Service } from "typedi";
-import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
+import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
 import { IUser } from "@treat/lib-common";
 import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
@@ -48,25 +48,36 @@ class UserService {
       throw new Error("Unable to find user with that email address");
     }
 
-    if (await user.isValidPassword(password)) {
-      return { user, token: token.createToken(user) };
-    } else {
-      throw new Error("Wrong credentials given");
-    }
+      if (await user.isValidPassword(password)) {
+        return { user, token: token.createToken(user) };
+      } else {
+        throw new Error("Wrong credentials given");
+      }
+
   }
 
   public async updateUser(
     user: { _id: string } & Partial<IUser>
   ): Promise<User | null> {
-    const { _id, ...updatedUser } = user;
-    await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
-    return this.userModel.findById(_id);
+      const { _id, ...updatedUser } = user;
+      await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
+      return this.userModel.findById(_id);
+
   }
 
-  public async getUser(userId: string): Promise<IUser | Error> {
-    return (await this.userModel
-      .findById(userId)
-      .select(["email", "firstName", "lastName"])) as unknown as IUser;
+  public async getUser(userId: string): Promise<Partial<User> | null> {
+      return  this.userModel
+        .findById(userId)
+        .select([
+          "email",
+          "firstName",
+          "lastName",
+          "address",
+          "virtualAccount",
+          "brithDate",
+          "_id",
+        ]);
+
   }
 
   /**

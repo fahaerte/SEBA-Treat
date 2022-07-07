@@ -48,7 +48,7 @@ export const CreditPackages = () => {
   const redirectToCheckout = (priceId: string, couponId?: string) => {
     void createCheckout({
       priceId,
-      userId: "62b776eafc0a00b0fa2d125e",
+      stripeCustomerId: user?.stripeCustomerId || "cus_M0y6NV1PXOlKwa",
       couponId,
     });
     if (isError) {

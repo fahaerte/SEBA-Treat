@@ -3,7 +3,7 @@ import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IAddressLandingPage } from "@treat/lib-common";
 import { AuthContext } from "../utils/AuthProvider";
-import {useLocation, useNavigate} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const AddressInputScreen = () => {
   const userContext = useContext(AuthContext);

@@ -9,16 +9,13 @@ import {
 // import userReducer from "../redux/userSlice";
 import { UserApi } from "../store/api";
 import { stripeApi } from "../store/api";
+import { dangerToast } from "../components";
 
 const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
     // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
     if (isRejectedWithValue(action)) {
-      console.log(
-        `error[${action.payload.status as string}]:`,
-        action.payload.data.message
-      );
-      // toast.warn({ title: 'error!', message: action.payload.data.message })
+      dangerToast({ message: action.payload.data.message });
     }
 
     return next(action);

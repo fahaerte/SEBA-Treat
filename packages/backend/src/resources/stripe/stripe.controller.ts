@@ -3,13 +3,17 @@ import { Router, Request, Response, NextFunction } from "express";
 import StripeService from "./stripe.service";
 import Controller from "../../utils/interfaces/controller.interface";
 import HttpException from "../../utils/exceptions/http.exception";
+import UserService from "../user/user.service";
 
 @Service()
 class StripeController implements Controller {
   public path = "/payment";
   public router = Router();
 
-  constructor(private readonly stripeService: StripeService) {
+  constructor(
+    private readonly stripeService: StripeService,
+    private readonly userService: UserService
+  ) {
     this.initializeRoutes();
   }
 
@@ -63,65 +67,16 @@ class StripeController implements Controller {
      *      400:
      *        description: Any other error
      */
-    this.router.post(`${this.path}/get-latest-payment`, this.getLatestIntent);
+    this.router.post(
+      `${this.path}/get-latest-payment`,
+      this.verifyLatestPayment
+    );
 
     this.router.post(
       `${this.path}/create-checkout-session`,
       this.createCheckoutSession
     );
   }
-
-  private createCheckoutSession = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const stripeCustomer =
-        await this.stripeService.stripeUsers.getUserByTreatId(
-          req.body.userId as string
-        );
-      const session = await this.stripeService.createCheckoutSession(
-        req.body.priceId as string,
-        stripeCustomer.data[0].id,
-        req.body.couponId ? (req.body.couponId as string) : undefined
-      );
-      if (session.url) {
-        res.json({ url: session.url });
-      } else {
-        throw new Error("Session could not be created");
-      }
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
-    }
-  };
-
-  private getLatestIntent = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const customerId = req.body.customerId as string;
-      const priceId = req.query.price as string;
-      const latestIntent =
-        await this.stripeService.getLatestCustomerPaymentIntent(customerId);
-      const priceObject = await this.stripeService.getPrice(priceId);
-
-      // TODO: Check with discount
-      // if (
-      //   priceObject.unit_amount === latestIntent.amount &&
-      //   latestIntent.created <= latestIntent.created + 3000
-      // ) {
-      //   res.status(200).json({ message: "Payment successful" });
-      // } else {
-      //   res.status(500).json({ message: "Payment not successful" });
-      // }
-      res.status(200).json({ message: "Payment successful" });
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
-    }
-  };
 
   private getCreditPackages = async (
     req: Request,
@@ -143,7 +98,66 @@ class StripeController implements Controller {
   ): Promise<Response | void> => {
     try {
       const allDiscounts = await this.stripeService.getCreditDiscounts();
-      res.status(200).json(allDiscounts || {});
+      res.status(200).json(allDiscounts);
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private createCheckoutSession = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const { priceId, stripeCustomerId } = req.body;
+      const session = await this.stripeService.createCheckoutSession(
+        priceId as string,
+        stripeCustomerId as string,
+        req.body.couponId ? req.body.couponId : undefined
+      );
+      if (session.url) {
+        res.json({ url: session.url });
+      } else {
+        throw new Error("Session could not be created");
+      }
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private verifyLatestPayment = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const customerId = req.body.customerId as string;
+      const userId = req.body.userId as string;
+      const productId = req.query.product as string;
+      const productObject = await this.stripeService.getProductByPrice(
+        productId
+      );
+
+      const successfulPayment =
+        await this.stripeService.verifyLatestUserPayment(customerId);
+
+      if (successfulPayment) {
+        const newCredits = parseInt(productObject.name.split(" ")[0]);
+        const user = await this.userService.getUser(userId);
+        const newBalance = newCredits + (user?.virtualAccount?.balance || 0);
+        if (user) {
+          await this.userService.updateUser({
+            _id: userId,
+            virtualAccount: { balance: newBalance },
+          });
+        }
+        res.status(200).json({ newAccountBalance: newBalance });
+      } else {
+        res.status(500).json({
+          message: "You did not make a purchase! Please contact tech-support.",
+        });
+      }
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
