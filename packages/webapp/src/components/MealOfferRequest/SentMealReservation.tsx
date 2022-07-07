@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect, useState} from "react";
-import {Col, Row} from "../ui/Grid";
-import {Button, Icon} from "../ui";
+import React, { useCallback, useEffect, useState } from "react";
+import { Col, Row } from "../ui/Grid";
+import { Button, Icon } from "../ui";
 import UserService from "../../services/user.service";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
-import {MealOfferRequestUserInfo} from "./MealOfferRequestUserInfo";
+import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -17,8 +17,9 @@ interface SentMealOfferRequestBottomProps {
 
 export const SentMealReservation = ({
   mealOfferId,
-    sellerId,
-  sellerFirstName, sellerLastName,
+  sellerId,
+  sellerFirstName,
+  sellerLastName,
   reservation,
 }: SentMealOfferRequestBottomProps) => {
   const [reservationState, setReservationState] = useState(
@@ -109,7 +110,11 @@ export const SentMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo userId={sellerId} firstName={sellerFirstName} lastName={sellerLastName}/>
+      <MealOfferRequestUserInfo
+        userId={sellerId}
+        firstName={sellerFirstName}
+        lastName={sellerLastName}
+      />
       <Col className={""}>
         <Row>
           <Col className={"col-sm-auto"}>

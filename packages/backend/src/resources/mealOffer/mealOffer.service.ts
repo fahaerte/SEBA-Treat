@@ -197,6 +197,7 @@ class MealOfferService {
           mealOfferDoc.price,
           mealOfferDoc.transactionFee
         )) as MealTransaction;
+
       await this.mealTransactionService.performTransaction(
         mealTransaction._id as ObjectId
       );
