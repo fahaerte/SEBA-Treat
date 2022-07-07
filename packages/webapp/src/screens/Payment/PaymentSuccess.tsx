@@ -34,7 +34,7 @@ const PaymentSuccess = () => {
 
   return (
     <>
-      {isLoading !== 2 ? (
+      {isLoading ? (
         <Container className={"mt-5"}>
           <Row>
             <Col>
