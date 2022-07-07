@@ -8,11 +8,11 @@ import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
 import { ObjectId } from "mongoose";
 import { IUser } from "@treat/lib-common";
+import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
 
 @Service()
 class UserService {
   private userModel = UserModel;
-  // TODO: importing service instead of model right way to do this?
   private virtualAccountService = new VirtualAccountService();
 
   /**
@@ -42,43 +42,31 @@ class UserService {
     email: string,
     password: string
   ): Promise<{ user: User; token: string }> {
-    try {
-      const user = await this.userModel.findOne({ email });
+    const user = await this.userModel.findOne({ email });
 
-      if (!user) {
-        throw new Error("Unable to find user with that email address");
-      }
+    if (!user) {
+      throw new Error("Unable to find user with that email address");
+    }
 
-      if (await user.isValidPassword(password)) {
-        return { user, token: token.createToken(user) };
-      } else {
-        throw new Error("Wrong credentials given");
-      }
-    } catch (error) {
-      throw new Error("Unable to log in user");
+    if (await user.isValidPassword(password)) {
+      return { user, token: token.createToken(user) };
+    } else {
+      throw new Error("Wrong credentials given");
     }
   }
 
   public async updateUser(
     user: { _id: string } & Partial<IUser>
   ): Promise<User | null> {
-    try {
-      const { _id, ...updatedUser } = user;
-      await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
-      return await this.userModel.findById(_id);
-    } catch (error) {
-      throw new Error("Unable to update user");
-    }
+    const { _id, ...updatedUser } = user;
+    await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
+    return this.userModel.findById(_id);
   }
 
   public async getUser(userId: string): Promise<IUser | Error> {
-    try {
-      return (await this.userModel
-        .findById(userId)
-        .select(["email", "firstName", "lastName"])) as unknown as IUser;
-    } catch (error) {
-      throw new Error("No user found");
-    }
+    return (await this.userModel
+      .findById(userId)
+      .select(["email", "firstName", "lastName"])) as unknown as IUser;
   }
 
   /**
@@ -104,37 +92,32 @@ class UserService {
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    try {
-      const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as User;
+    const newBalance = user.virtualAccount.balance - amount;
+    if (newBalance >= 0) {
       user.virtualAccount.balance -= amount;
       await user.save();
-      return user.virtualAccount.balance;
-    } catch (error) {
-      throw new Error("Unable to send transaction");
+    } else {
+      throw new accountBalanceInsufficientException(
+        userId as unknown as string
+      );
     }
+    return user.virtualAccount.balance;
   }
 
   public async receiveTransaction(
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    try {
-      const user = (await this.userModel.findById(userId)) as User;
-      user.virtualAccount.balance += amount;
-      await user.save();
-      return user.virtualAccount.balance;
-    } catch (error) {
-      throw new Error("Unable to receive transaction");
-    }
+    const user = (await this.userModel.findById(userId)) as User;
+    user.virtualAccount.balance += amount;
+    await user.save();
+    return user.virtualAccount.balance;
   }
 
   public async getAccountBalance(userId: ObjectId): Promise<number | Error> {
-    try {
-      const user = (await this.userModel.findById(userId)) as User;
-      return user.virtualAccount.balance;
-    } catch (error) {
-      throw new Error("Unable to receive account balance");
-    }
+    const user = (await this.userModel.findById(userId)) as User;
+    return user.virtualAccount.balance;
   }
 }
 
