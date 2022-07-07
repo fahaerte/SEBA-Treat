@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import AuthStatus from "../utils/AuthStatus";
 
-const HomeScreen: React.FC = (): JSX.Element => {
+export const HomeScreen: React.FC = (): JSX.Element => {
   return (
     <>
       <AuthStatus />
@@ -24,7 +24,7 @@ const HomeScreen: React.FC = (): JSX.Element => {
             <Link to="/mealOfferRequests">Meal Offer Requests Screen</Link>
           </li>
           <li>
-            <Link to="/landing">Landing Page</Link>
+            <Link to="/address">Address Input Screen (Landing Page)</Link>
           </li>
           <li>
             <Link to="/purchase-credits">Purchase Credits</Link>
@@ -38,5 +38,3 @@ const HomeScreen: React.FC = (): JSX.Element => {
     </>
   );
 };
-
-export default HomeScreen;

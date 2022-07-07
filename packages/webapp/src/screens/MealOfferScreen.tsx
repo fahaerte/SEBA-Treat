@@ -1,10 +1,9 @@
 import React from "react";
 
-const MealOfferScreen = () => {
+export const MealOfferScreen = () => {
   return (
     <>
       <h3>Meal Offer SCREEN</h3>
     </>
   );
 };
-export default MealOfferScreen;

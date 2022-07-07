@@ -5,7 +5,7 @@ import { AuthContext } from "../../utils/AuthProvider";
 import { useUserRegistrationMutation } from "../../store/api";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 
-const RegisterScreen = () => {
+export const RegisterScreen = () => {
   const userContext = useContext(AuthContext);
 
   const [register, { isLoading, isError, isSuccess, data }] =
@@ -213,4 +213,3 @@ const RegisterScreen = () => {
     </>
   );
 };
-export default RegisterScreen;

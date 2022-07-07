@@ -4,7 +4,7 @@ import { IFormRow } from "@treat/webapp/src/components/";
 import { IAddressLandingPage } from "@treat/lib-common";
 import { AuthContext } from "../utils/AuthProvider";
 
-const LandingPage = () => {
+export const AddressInputScreen = () => {
   const userContext = useContext(AuthContext);
 
   const elements: IFormRow<IAddressLandingPage>[] = [
@@ -37,5 +37,3 @@ const LandingPage = () => {
     </>
   );
 };
-
-export default LandingPage;
