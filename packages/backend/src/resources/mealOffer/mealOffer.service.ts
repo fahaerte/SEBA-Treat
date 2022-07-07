@@ -4,7 +4,7 @@ import User from "../user/user.interface";
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
-import { ObjectId, Schema } from "mongoose";
+import { ObjectId } from "mongoose";
 import { MealOffer, MealOfferDocument } from "./mealOffer.interface";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
 import MealReservation from "../mealReservation/mealReservation.interface";
@@ -189,8 +189,8 @@ class MealOfferService {
     ) {
       const mealTransaction =
         (await this.mealTransactionService.createTransaction(
-          new Schema.Types.ObjectId(mealOfferId),
-          new Schema.Types.ObjectId(mealReservationId),
+          mealOfferId as unknown as ObjectId,
+          mealReservationId as unknown as ObjectId,
           mealReservation.buyer,
           mealOfferDoc.user,
           mealOfferDoc.price,

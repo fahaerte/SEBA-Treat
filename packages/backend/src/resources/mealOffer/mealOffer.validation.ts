@@ -18,6 +18,7 @@ const create = Joi.object({
   portions: Joi.number().min(0).required(),
   pickUpDetails: Joi.string().required(),
   price: Joi.number().required(),
+  transactionFee: Joi.number().required(),
 });
 
 const updateReservationState = Joi.object({

@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { IAddress } from "./IAddress";
+import { IVirtualAccount } from "./IVirtualAccount";
 
 // Interface
 export interface IUser {

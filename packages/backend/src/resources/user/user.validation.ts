@@ -6,7 +6,6 @@ import { IUser } from "@treat/lib-common";
 const register = Joi.object<Omit<IUser, "virtualAccount" | "stripeCustomerId">>(
   {
     email: Joi.string().email().required().example("test@user.de"),
-    username: Joi.string().required().example("Maxi1234"),
     firstName: Joi.string().required().example("Max"),
     lastName: Joi.string().required().example("Mustermann"),
     password: Joi.string().min(6).required().example("pa55word"),
