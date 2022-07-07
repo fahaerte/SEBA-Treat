@@ -48,36 +48,33 @@ class UserService {
       throw new Error("Unable to find user with that email address");
     }
 
-      if (await user.isValidPassword(password)) {
-        return { user, token: token.createToken(user) };
-      } else {
-        throw new Error("Wrong credentials given");
-      }
-
+    if (await user.isValidPassword(password)) {
+      return { user, token: token.createToken(user) };
+    } else {
+      throw new Error("Wrong credentials given");
+    }
   }
 
   public async updateUser(
     user: { _id: string } & Partial<IUser>
   ): Promise<User | null> {
-      const { _id, ...updatedUser } = user;
-      await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
-      return this.userModel.findById(_id);
-
+    const { _id, ...updatedUser } = user;
+    await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
+    return this.userModel.findById(_id);
   }
 
   public async getUser(userId: string): Promise<Partial<User> | null> {
-      return  this.userModel
-        .findById(userId)
-        .select([
-          "email",
-          "firstName",
-          "lastName",
-          "address",
-          "virtualAccount",
-          "brithDate",
-          "_id",
-        ]);
-
+    return this.userModel
+      .findById(userId)
+      .select([
+        "email",
+        "firstName",
+        "lastName",
+        "address",
+        "virtualAccount",
+        "brithDate",
+        "_id",
+      ]);
   }
 
   /**
