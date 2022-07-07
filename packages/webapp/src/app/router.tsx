@@ -1,22 +1,21 @@
 import React from "react";
-import { Navigate, Route, Routes, useRoutes } from "react-router-dom";
+import {Navigate, useRoutes} from "react-router-dom";
 import LoginScreen from "../screens/Auth/LoginScreen";
-import { RegisterScreen } from "../screens/Auth/RegisterScreen";
-import { HomeScreen } from "../screens/HomeScreen";
-import { AddressInputScreen } from "../screens/AddressInputScreen";
-import { ErrorPage } from "../screens/Status/ErrorPage";
-import { AuthProvider } from "../utils/AuthProvider";
-import { RequireAuthRoute } from "../utils/RequireAuthRoute";
-import { MealOfferScreen } from "../screens/MealOfferScreen";
-import { RequireAddressRoute } from "../utils/RequireAddressRoute";
-import { Typography } from "../components/ui";
-import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
-import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
-import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
-import { AccountScreen } from "../screens/Profile/AccountScreen";
+import {RegisterScreen} from "../screens/Auth/RegisterScreen";
+import {HomeScreen} from "../screens/HomeScreen";
+import {AddressInputScreen} from "../screens/AddressInputScreen";
+import {ErrorPage} from "../screens/Status/ErrorPage";
+import {AuthProvider} from "../utils/AuthProvider";
+import {MealOfferScreen} from "../screens/MealOfferScreen";
+import {RequireAddressRoute} from "../utils/RequireAddressRoute";
+import {Typography} from "../components/ui";
+import {MealOfferRequests} from "../screens/Meal/MealOfferRequests";
+import {SentMealOfferRequests} from "../screens/Meal/SentMealOfferRequests";
+import {ReceivedMealOfferRequests} from "../screens/Meal/ReceivedMealOfferRequests";
+import {AccountScreen} from "../screens/Profile/AccountScreen";
 // import { CreditPackages } from "../screens/Payment/CreditPackages";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
-import { CreditPackages } from "../screens/Payment/CreditPackages";
+import {CreditPackages} from "../screens/Payment/CreditPackages";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -117,10 +116,20 @@ export const AppRouter = () => {
     {
       path: "/mealOfferRequests",
       element: (
-        <RequireAuthRoute>
+        // <RequireAuthRoute>
           <MealOfferRequests />
-        </RequireAuthRoute>
+        // </RequireAuthRoute>
       ),
+      children: [
+        {
+          path: "sent",
+          element: <SentMealOfferRequests />,
+        },
+        {
+          path: "received",
+          element: <ReceivedMealOfferRequests />,
+        },
+      ],
     },
   ];
 

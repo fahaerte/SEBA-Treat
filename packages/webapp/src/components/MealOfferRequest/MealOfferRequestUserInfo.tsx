@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
-import User from "../../types/interfaces/user.interface";
+import React, {useCallback, useEffect, useState} from "react";
 import UserService from "../../services/user.service";
-import { Col, Row } from "../ui/Grid";
+import {Col, Row} from "../ui/Grid";
 import styled from "styled-components";
 
 interface MealOfferRequestUserInfoProps {
   userId: string;
+  firstName: string;
+  lastName: string;
 }
 
 const ProfilePicture = styled.img`
@@ -16,15 +17,13 @@ const ProfilePicture = styled.img`
 `;
 
 export const MealOfferRequestUserInfo = ({
-  userId,
+  userId, firstName, lastName
 }: MealOfferRequestUserInfoProps) => {
-  const [user, setUser] = useState({} as User);
   const [profilePicture, setProfilePicture] = useState("");
 
   const fetchUserData = useCallback(async () => {
     try {
-      setUser(await UserService.getUser(userId));
-      setProfilePicture(await UserService.getProfilePictureURL(userId));
+      setProfilePicture(await UserService.getProfilePictureURL(String(userId)));
     } catch (error: any) {
       console.log(error);
     }
@@ -41,7 +40,7 @@ export const MealOfferRequestUserInfo = ({
           <ProfilePicture src={profilePicture} />
         </Col>
         <Col className={"col-sm-auto my-auto p-0"}>
-          {`${user.firstName} ${user.lastName}`}
+          {`${firstName} ${lastName}`}
         </Col>
       </Row>
     </Col>

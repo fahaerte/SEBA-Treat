@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Col, Row } from "../ui/Grid";
-import { Button, Icon } from "../ui";
+import React, {useState} from "react";
+import {Col, Row} from "../ui/Grid";
+import {Button, Icon} from "../ui";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
-import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
+import {MealOfferRequestUserInfo} from "./MealOfferRequestUserInfo";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -19,12 +19,12 @@ export const ReceivedMealReservation = ({
     reservation.reservationState
   );
 
-  async function updateReservationState(newState: MealReservationState) {
+  const updateReservationState = async (newState: MealReservationState) => {
     try {
       await MealOfferService.updateMealReservationState(
-        String(mealOfferId),
-        reservation._id,
-        newState
+          String(mealOfferId),
+          reservation._id,
+          newState
       );
       setReservationState(newState);
     } catch (error: any) {
@@ -32,7 +32,7 @@ export const ReceivedMealReservation = ({
     }
   }
 
-  function getActionButton() {
+  const getActionButton = () => {
     if (reservationState == MealReservationState.PENDING) {
       return (
         <Button
@@ -89,7 +89,7 @@ export const ReceivedMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo userId={reservation.buyer} />
+      <MealOfferRequestUserInfo userId={reservation.buyer._id} firstName={reservation.buyer.firstName} lastName={reservation.buyer.lastName} />
       <Col className={""}>
         <Row className={"h-100"}>
           <Col className={"col-sm-auto d-flex align-items-center"}>

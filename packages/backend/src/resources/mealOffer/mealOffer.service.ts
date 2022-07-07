@@ -69,6 +69,7 @@ class MealOfferService {
   ): Promise<MealOffer[] | Error> {
     return (await this.mealOffer
       .find({ user: user._id })
+        .populate("reservations.buyer", "firstName lastName")
       .exec()) as MealOffer[];
   }
 
