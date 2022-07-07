@@ -7,7 +7,6 @@ import authenticate from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
 
 import UserService from "../../resources/user/user.service";
-import User from "./user.interface";
 import { Service } from "typedi";
 import { ObjectId } from "mongoose";
 import StripeService from "../stripe/stripe.service";
@@ -173,7 +172,7 @@ class UserController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const newUser = req.body as User;
+      const newUser = req.body;
       const { user, token } = await this.userService.register(newUser);
       const { city, country, street, postalCode, houseNumber } =
         newUser.address;
@@ -210,7 +209,7 @@ class UserController implements Controller {
         email as string,
         password as string
       );
-      res.status(200).send( { user, token } );
+      res.status(200).send({ user, token });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

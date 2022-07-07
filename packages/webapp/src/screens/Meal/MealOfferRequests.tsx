@@ -1,8 +1,8 @@
 import React from "react";
-import {Container, PageHeading, Row, Typography} from "../../components/ui";
-import {Header} from "../../components/ui/Header/header";
+import { Container, PageHeading, Row, Typography } from "../../components/ui";
+import { Header } from "../../components/ui/Header/header";
 import TabBar from "../../components/ui/TabBar/TabBar";
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 export const MealOfferRequests = () => {
   return (
@@ -28,8 +28,7 @@ export const MealOfferRequests = () => {
                 children: "Received requests",
               },
             ]}
-          >
-          </TabBar>
+          ></TabBar>
           <Outlet />
         </Row>
       </Container>

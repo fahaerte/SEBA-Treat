@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import UserService from "../../services/user.service";
-import {Col, Row} from "../ui/Grid";
+import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
 
 interface MealOfferRequestUserInfoProps {
@@ -17,7 +17,9 @@ const ProfilePicture = styled.img`
 `;
 
 export const MealOfferRequestUserInfo = ({
-  userId, firstName, lastName
+  userId,
+  firstName,
+  lastName,
 }: MealOfferRequestUserInfoProps) => {
   const [profilePicture, setProfilePicture] = useState("");
 

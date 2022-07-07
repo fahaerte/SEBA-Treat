@@ -35,6 +35,16 @@ const MealTransactionSchema = new Schema<MealTransaction>(
       required: true,
       default: MealTransactionState.PENDING,
     },
+    buyerRating: {
+      type: Number,
+      min: 0,
+      max: 5,
+    },
+    sellerRating: {
+      type: Number,
+      min: 0,
+      max: 5,
+    },
   },
   { timestamps: true }
 );

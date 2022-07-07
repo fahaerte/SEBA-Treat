@@ -1,6 +1,6 @@
-import {Model, model, Schema, Types} from "mongoose";
-import {MealOfferDocument} from "./mealOffer.interface";
-import {MealReservationSchema} from "../mealReservation/mealReservation.model";
+import { Model, model, Schema, Types } from "mongoose";
+import { MealOfferDocument } from "./mealOffer.interface";
+import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import MealCategory from "../mealCategory/mealCategory.enum";
 import MealAllergen from "../mealAllergen/mealAllergen.enum";
 
@@ -89,9 +89,9 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
         },
       },
     }
-  ).
-  populate("user", "firstName lastName")
-      .exec();
+  )
+    .populate("user", "firstName lastName")
+    .exec();
 };
 
 export default model<MealOfferDocument, MealOfferModel>(
