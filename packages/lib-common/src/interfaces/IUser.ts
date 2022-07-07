@@ -5,13 +5,13 @@ import { IAddress } from "./IAddress";
 export interface IUser {
   email: string;
   password: string;
-  // username: string;
   firstName: string;
   lastName: string;
   birthdate: Date;
   // profilePicture: File;
   address: IAddress;
-  virtualAccountId: Types.ObjectId;
+  virtualAccount: IVirtualAccount;
+  stripeCustomerId?: string;
   meanRating: number;
   countRatings: number;
 }

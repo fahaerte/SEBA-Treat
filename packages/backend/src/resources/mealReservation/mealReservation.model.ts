@@ -12,7 +12,7 @@ export const MealReservationSchema = new Schema<MealReservation>(
     },
     reservationState: {
       type: String,
-      enum: Object.keys(MealReservationStateEnum),
+      enum: Object.values(MealReservationStateEnum),
       required: true,
       default: MealReservationState.PENDING,
     },

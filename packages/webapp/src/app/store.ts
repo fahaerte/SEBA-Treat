@@ -1,12 +1,14 @@
 import {
-  Action,
+  // Action,
   configureStore,
   isRejectedWithValue,
   Middleware,
   MiddlewareAPI,
-  ThunkAction,
+  // ThunkAction,
 } from "@reduxjs/toolkit";
-import userReducer from "../redux/userSlice";
+// import userReducer from "../redux/userSlice";
+import { UserApi } from "../store/api";
+import { stripeApi } from "../store/api";
 
 const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
@@ -22,28 +24,21 @@ const rtkQueryErrorLogger: Middleware =
     return next(action);
   };
 
-/*store.subscribe(
-  throttle(() => {
-    saveState({
-      user: store.getState().user,
-      ui: store.getState().ui,
-    });
-  }, 1000)
-);*/
-
 export const store = configureStore({
-  // preloadedState: persistedState,
   reducer: {
-    user: userReducer,
+    [stripeApi.reducerPath]: stripeApi.reducer,
+    // [mealApi.reducerPath]: mealApi.reducer,
+    //      [UserApi.reducerPath]: UserApi.reducer,
+    //   UserApi.middleware
   },
-  middleware: (gDM) => gDM().concat(rtkQueryErrorLogger),
+  middleware: (gDM) => gDM().concat(rtkQueryErrorLogger, stripeApi.middleware),
 });
 
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+// export type AppDispatch = typeof store.dispatch;
+// export type RootState = ReturnType<typeof store.getState>;
+// export type AppThunk<ReturnType = void> = ThunkAction<
+//   ReturnType,
+//   RootState,
+//   unknown,
+//   Action<string>
+// >;

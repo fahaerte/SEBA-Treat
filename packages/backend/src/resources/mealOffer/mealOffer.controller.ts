@@ -1,6 +1,6 @@
 import Controller from "../../utils/interfaces/controller.interface";
-import { Request, Response, NextFunction, Router } from "express";
-import MealOffer from "../mealOffer/mealOffer.interface";
+import { NextFunction, Request, Response, Router } from "express";
+import { MealOffer } from "./mealOffer.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
@@ -39,7 +39,7 @@ class MealOfferController implements Controller {
       authenticate,
       this.getReceivedMealOfferRequests
     );
-    this.router.put(
+    this.router.patch(
       `${this.path}/:mealOfferId/reservations/:mealReservationId`,
       authenticate,
       validationMiddleware(validate.updateReservationState),
@@ -81,6 +81,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOffer = await this.mealOfferService.getMealOffer(
+        req.user,
         req.params.mealOfferId
       );
       res.status(200).send({ data: mealOffer });

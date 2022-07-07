@@ -2,11 +2,10 @@ import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import HttpException from "../../utils/exceptions/http.exception";
-import authenticated from "../../middleware/authenticated.middleware";
 import validate from "./mealTransaction.validation";
 import MealTransactionService from "./mealTransaction.service";
 import { ObjectId } from "mongoose";
-import MealTransactionParticipant from "./mealTransactionParticipant.enum";
+import authenticate from "../../middleware/authenticated.middleware";
 
 class MealTransactionController implements Controller {
   public path = "/mealTransactions";
@@ -18,60 +17,31 @@ class MealTransactionController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.post(
-      `${this.path}/create`,
-      authenticated,
-      validationMiddleware(validate.createTransaction),
-      this.createTransaction
-    );
-    this.router.post(
-      `${this.path}/perform/:mealTransactionId`,
-      authenticated,
-      // validationMiddleware(validate.createTransaction),
-      this.performTransaction
-    );
+    this.router.get(`${this.path}`, authenticate, this.getMealTransactions);
     this.router.post(
       "${this.path}/rate/:mealTransactionId",
-      authenticated,
+      authenticate,
       this.rateTransactionParticipant
     );
   }
 
-  private createTransaction = async (
+  private getMealTransactions = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { mealReservation, senderAccount, receiverAccount } = req.body;
-      const mealTransaction =
-        await this.mealTransactionService.createTransaction(
-          mealReservation as ObjectId,
-          senderAccount as ObjectId,
-          receiverAccount as ObjectId
-        );
-
-      res.status(201).json({ mealTransaction });
+      if (!req.user) {
+        return next(new HttpException(404, "No logged in user"));
+      } else {
+        const mealTransactions =
+          await this.mealTransactionService.getMealTransactions(
+            req.user._id as unknown as ObjectId
+          );
+        res.status(200).send({ data: mealTransactions });
+      }
     } catch (error: any) {
-      next(new HttpException(400, error.message));
-    }
-  };
-
-  private performTransaction = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const mealTransactionId = req.params.mealTransactionId;
-      const mealTransaction =
-        await this.mealTransactionService.performTransaction(
-          mealTransactionId as unknown as ObjectId
-        );
-
-      res.status(200).json({ mealTransaction });
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
+      next(error);
     }
   };
 
@@ -95,6 +65,8 @@ class MealTransactionController implements Controller {
       next(new HttpException(400, error.message));
     }
   };
+
+
 }
 
 export default MealTransactionController;

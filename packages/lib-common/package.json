@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.1",
+    "joi": "^17.6.0",
     "mongoose": "^6.3.5"
   },
   "devDependencies": {
@@ -26,15 +27,12 @@
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
-    "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^25.2.4",
-    "jest": "^27.3.1",
     "rimraf": "^3.0.2",
-    "ts-jest": "^27.0.7",
     "typescript": "~4.4.4"
   }
 }

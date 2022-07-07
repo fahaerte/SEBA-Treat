@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "reflect-metadata";
 import { render } from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app/app.scss";
@@ -17,7 +18,7 @@ import { BrowserRouter } from "react-router-dom";
 class Root extends Component {
   render() {
     return (
-      <div className="app docuply h-100">
+      <div className="app h-100">
         <Provider store={store}>
           <CustomThemeProvider>
             <BrowserRouter>
@@ -29,6 +30,7 @@ class Root extends Component {
     );
   }
 }
+
 export default Root;
 
 render(<Root />, document.getElementById("root"));

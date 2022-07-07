@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import User from "./user.interface";
 import { AddressSchema } from "../address/address.model";
+import { VirtualAccountSchema } from "../virtualAccount/virtualAccount.model";
 
 const UserSchema = new Schema<User>(
   {
@@ -31,10 +32,12 @@ const UserSchema = new Schema<User>(
       type: AddressSchema,
       required: true,
     },
-    virtualAccountId: {
-      type: Schema.Types.ObjectId,
-      ref: "VirtualAccount",
+    virtualAccount: {
+      type: VirtualAccountSchema,
       required: true,
+    },
+    stripeCustomerId: {
+      type: String,
     },
     meanRating: {
       type: Number,

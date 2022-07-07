@@ -68,8 +68,8 @@ export const SCHelper = createGlobalStyle`
     letter-spacing: ${({ theme }) => theme.typography.body.letterSpacing};
     font-family: ${({ theme }) => theme.typography.body.family};
     font-weight: ${({ theme }) => theme.typography.body.weights.regular};
-    position: fixed;
-    overflow: hidden;
+    //position: fixed;
+    //overflow: hidden;
     height: 100%;
     width: 100%;
     margin: 0;

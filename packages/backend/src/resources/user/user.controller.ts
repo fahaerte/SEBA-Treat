@@ -3,19 +3,25 @@ import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
 import HttpException from "../../utils/exceptions/http.exception";
-import authenticated from "../../middleware/authenticated.middleware";
+import authenticate from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
 
 import UserService from "../../resources/user/user.service";
 import User from "./user.interface";
 import { Service } from "typedi";
+import { ObjectId } from "mongoose";
+import StripeService from "../stripe/stripe.service";
 
+// TODO: Update user
 @Service()
 class UserController implements Controller {
   public path = "/users";
   public router = Router();
 
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly stripeService: StripeService
+  ) {
     this.initializeRoutes();
   }
 
@@ -28,21 +34,10 @@ class UserController implements Controller {
      *    - User
      *    summary: Register a user
      *    parameters:
-     *    - name: username
-     *      description: username of user
+     *    - name: user object
+     *      description: an user object
      *      in: body
      *      required: true
-     *      schema:
-     *        $ref: '#/definitions/RegisterUser'
-     *    - name: email
-     *      description: email of user
-     *      in: body
-     *      required: true
-     *      schema:
-     *        $ref: '#/definitions/RegisterUser'
-     *    - name: password
-     *      description: password of user
-     *      in: body
      *      schema:
      *        $ref: '#/definitions/RegisterUser'
      *    responses:
@@ -89,13 +84,23 @@ class UserController implements Controller {
       this.login
     );
 
+    this.router.get(
+      `${this.path}/account-balance`,
+      authenticate,
+      this.getAccountBalance
+    );
+
     /**
      * @swagger
-     * /api/users:
+     * /api/users/{userid}:
      *  get:
      *    tags:
      *    - User
      *    summary: Get currently logged in user
+     *    parameters:
+     *    - name: userid
+     *      type: string
+     *      in: path
      *    produces:
      *    - application/json
      *    responses:
@@ -106,7 +111,7 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}`, authenticated, this.getUser);
+    this.router.get(`${this.path}/:userid?`, authenticate, this.getUser);
 
     /**
      * @swagger
@@ -129,21 +134,21 @@ class UserController implements Controller {
      */
     this.router.post(
       `${this.path}/profile-picture`,
-      authenticated,
+      authenticate,
       profileFileUpload.single("profilePicture"),
       this.uploadProfilePicture
     );
 
     /**
      * @swagger
-     * /api/users/profile-picture/:userid:
+     * /api/users/profile-picture/{userid}:
      *  get:
      *    tags:
      *    - User
      *    summary: Get profile picture of user
      *    parameters:
      *      - in: path
-     *        name: id
+     *        name: userid
      *        required: true
      *        type: string
      *        description: the user's id
@@ -157,7 +162,7 @@ class UserController implements Controller {
      */
     this.router.get(
       `${this.path}/profile-picture/:userid?`,
-      authenticated,
+      authenticate,
       this.getProfilePicture
     );
   }
@@ -169,9 +174,25 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const newUser = req.body as User;
-      const token = await this.userService.register(newUser);
-
-      res.status(201).json({ token });
+      const { user, token } = await this.userService.register(newUser);
+      const { city, country, street, postalCode, houseNumber } =
+        newUser.address;
+      const stripeUserId = await this.stripeService.stripeUsers.createCustomer(
+        user._id,
+        `${newUser.firstName} ${newUser.lastName}`,
+        newUser.email,
+        {
+          city,
+          country,
+          line1: `${street} ${houseNumber}`,
+          postal_code: postalCode,
+        }
+      );
+      const createdUser = await this.userService.updateUser({
+        _id: user._id,
+        stripeCustomerId: stripeUserId,
+      });
+      res.status(201).json({ token, createdUser });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
@@ -185,25 +206,36 @@ class UserController implements Controller {
     try {
       const { email, password } = req.body;
 
-      const token = await this.userService.login(
+      const { user, token } = await this.userService.login(
         email as string,
         password as string
       );
-      res.status(200).json({ token });
+      res.status(200).send( { user, token } );
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
   };
 
-  private getUser = (
+  private getUser = async (
     req: Request,
     res: Response,
     next: NextFunction
-  ): Response | void => {
+  ): Promise<Response | void> => {
     if (!req.user) {
       return next(new HttpException(404, "No logged in user"));
     }
-    res.status(200).send({ data: req.user });
+    try {
+      let user;
+      const userId = req.params.userId;
+      if (userId) {
+        user = await this.userService.getUser(userId);
+      } else {
+        user = req.user;
+      }
+      res.status(200).send({ data: user });
+    } catch (error: any) {
+      next(error);
+    }
   };
 
   private uploadProfilePicture = (
@@ -234,6 +266,24 @@ class UserController implements Controller {
         );
       }
       res.sendFile(profilePicturePath);
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private getAccountBalance = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    if (!req.user) {
+      return next(new HttpException(404, "No logged in user"));
+    }
+    try {
+      const balance = await this.userService.getAccountBalance(
+        req.user._id as ObjectId
+      );
+      res.status(200).send({ accountBalance: balance });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
