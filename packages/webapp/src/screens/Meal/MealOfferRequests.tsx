@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Typography, PageHeading, Container } from "../../components/ui";
+import { Container, PageHeading, Row, Typography } from "../../components/ui";
 import { Header } from "../../components/ui/Header/header";
 import TabBar from "../../components/ui/TabBar/TabBar";
 import { Outlet } from "react-router-dom";
@@ -28,9 +28,7 @@ export const MealOfferRequests = () => {
                 children: "Received requests",
               },
             ]}
-          >
-            Here you could add some children
-          </TabBar>
+          ></TabBar>
           <Outlet />
         </Row>
       </Container>

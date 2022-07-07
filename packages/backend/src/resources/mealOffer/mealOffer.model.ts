@@ -89,7 +89,9 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
         },
       },
     }
-  ).exec();
+  )
+    .populate("user", "firstName lastName")
+    .exec();
 };
 
 export default model<MealOfferDocument, MealOfferModel>(

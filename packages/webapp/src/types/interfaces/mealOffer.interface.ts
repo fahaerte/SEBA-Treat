@@ -1,10 +1,11 @@
 import MealReservation from "./mealReservation.interface";
+import User from "./user.interface";
 
 export default interface MealOffer {
   _id: string;
   title: string;
   description: string;
-  user: string;
+  user: User;
   categories: string[];
   allergens: string[];
   startDate: Date;

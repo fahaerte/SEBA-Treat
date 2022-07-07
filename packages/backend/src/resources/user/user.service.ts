@@ -3,11 +3,10 @@ import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import VirtualAccount from "../virtualAccount/virtualAccount.interface";
 import User from "../user/user.interface";
 import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
-import { ObjectId, Types } from "mongoose";
+import { ObjectId } from "mongoose";
 import { IUser } from "@treat/lib-common";
 
 @Service()
@@ -39,7 +38,10 @@ class UserService {
   /**
    * Attempt to log in a user
    */
-  public async login(email: string, password: string): Promise<{user: User; token: string}> {
+  public async login(
+    email: string,
+    password: string
+  ): Promise<{ user: User; token: string }> {
     try {
       const user = await this.userModel.findOne({ email });
 
@@ -73,7 +75,7 @@ class UserService {
     try {
       return (await this.userModel
         .findById(userId)
-        .select(["email", "firstName", "lastName"])) as IUser;
+        .select(["email", "firstName", "lastName"])) as unknown as IUser;
     } catch (error) {
       throw new Error("No user found");
     }

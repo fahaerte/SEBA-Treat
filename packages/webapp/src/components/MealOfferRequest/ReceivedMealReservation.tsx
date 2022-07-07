@@ -19,7 +19,7 @@ export const ReceivedMealReservation = ({
     reservation.reservationState
   );
 
-  async function updateReservationState(newState: MealReservationState) {
+  const updateReservationState = async (newState: MealReservationState) => {
     try {
       await MealOfferService.updateMealReservationState(
         String(mealOfferId),
@@ -30,9 +30,9 @@ export const ReceivedMealReservation = ({
     } catch (error: any) {
       console.log(error);
     }
-  }
+  };
 
-  function getActionButton() {
+  const getActionButton = () => {
     if (reservationState == MealReservationState.PENDING) {
       return (
         <Button
@@ -54,7 +54,7 @@ export const ReceivedMealReservation = ({
         <Button onClick={() => console.log("Rate")}>Rate the seller</Button>
       );
     }
-  }
+  };
 
   function getActionBar() {
     if (
@@ -89,7 +89,11 @@ export const ReceivedMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo userId={reservation.buyer} />
+      <MealOfferRequestUserInfo
+        userId={reservation.buyer._id}
+        firstName={reservation.buyer.firstName}
+        lastName={reservation.buyer.lastName}
+      />
       <Col className={""}>
         <Row className={"h-100"}>
           <Col className={"col-sm-auto d-flex align-items-center"}>

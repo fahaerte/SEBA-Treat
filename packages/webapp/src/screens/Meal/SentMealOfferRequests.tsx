@@ -30,7 +30,9 @@ export const SentMealOfferRequests = () => {
                   <SentMealReservation
                     key={index}
                     mealOfferId={mealOffer._id}
-                    sellerId={mealOffer.user}
+                    sellerId={mealOffer.user._id}
+                    sellerFirstName={mealOffer.user.firstName}
+                    sellerLastName={mealOffer.user.lastName}
                     reservation={reservation}
                   />
                 );
