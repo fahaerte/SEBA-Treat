@@ -56,6 +56,10 @@ export const AppRouter = () => {
         path: "/account",
         element: <AccountScreen />,
       },
+      {
+        path: "/alreadyLoggedIn",
+        element: <Typography>User already logged in</Typography>,
+      },
     ],
   };
 
