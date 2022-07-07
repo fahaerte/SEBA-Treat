@@ -1,11 +1,11 @@
 import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
 import User from "../user/user.interface";
-import { Service } from "typedi";
+import {Service} from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
-import { ObjectId, Schema } from "mongoose";
-import { MealOffer, MealOfferDocument } from "./mealOffer.interface";
+import {ObjectId, Schema} from "mongoose";
+import {MealOffer, MealOfferDocument} from "./mealOffer.interface";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
 import MealReservation from "../mealReservation/mealReservation.interface";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
@@ -69,6 +69,7 @@ class MealOfferService {
   ): Promise<MealOffer[] | Error> {
     return (await this.mealOffer
       .find({ user: user._id })
+        .populate("reservations.buyer", "firstName lastName")
       .exec()) as MealOffer[];
   }
 
