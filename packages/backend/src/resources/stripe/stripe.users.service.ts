@@ -24,35 +24,8 @@ class StripeUsersService {
         name: name,
         email: email,
         address: address,
-        metadata: {
-          treatId: userId,
-        },
       });
       return stripeCustomer.id;
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(500, "couldn't create stripe customer");
-    }
-  }
-
-  public async getUserByEmail(email: string) {
-    try {
-      return await this.stripe.customers.search({
-        // eslint-disable-next-line no-useless-escape
-        query: `email:\"${email}\"`,
-      });
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(500, "couldn't create stripe customer");
-    }
-  }
-
-  public async getUserByTreatId(treatId: string) {
-    try {
-      return await this.stripe.customers.search({
-        // eslint-disable-next-line no-useless-escape
-        query: `metadata[\'treatUserId\']:\'${treatId}\'`,
-      });
     } catch (error) {
       console.log(error);
       throw new HttpException(500, "couldn't create stripe customer");

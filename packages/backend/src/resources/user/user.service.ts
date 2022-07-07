@@ -5,7 +5,7 @@ import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import User from "../user/user.interface";
 import { Service } from "typedi";
-import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
+import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
 import { IUser } from "@treat/lib-common";
 
@@ -71,11 +71,19 @@ class UserService {
     }
   }
 
-  public async getUser(userId: string): Promise<IUser | Error> {
+  public async getUser(userId: string): Promise<Partial<User> | null> {
     try {
-      return (await this.userModel
+      return await this.userModel
         .findById(userId)
-        .select(["email", "firstName", "lastName"])) as unknown as IUser;
+        .select([
+          "email",
+          "firstName",
+          "lastName",
+          "address",
+          "virtualAccount",
+          "brithDate",
+          "_id",
+        ]);
     } catch (error) {
       throw new Error("No user found");
     }

@@ -12,14 +12,10 @@ import { useVerifyPaymentQuery } from "../../store/api/stripeApi";
 
 const PaymentSuccess = () => {
   const { priceId } = useParams();
-  const {
-    // data: verifyPayment,
-    isLoading,
-    error,
-    isSuccess,
-  } = useVerifyPaymentQuery({
-    customerId: "cus_LwZBhJQ7iHRTQS",
+  const { data, isLoading, error, isSuccess } = useVerifyPaymentQuery({
+    customerId: "cus_M0y6NV1PXOlKwa",
     priceId: priceId || "",
+    userId: "62c6f4b28622a1b6a1be844d",
   });
 
   if (isSuccess) {
@@ -38,8 +34,8 @@ const PaymentSuccess = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Container className={"h-100"}>
+      {isLoading !== 2 ? (
+        <Container className={"mt-5"}>
           <Row>
             <Col>
               <Typography align={"center"} variant={"h1"}>
