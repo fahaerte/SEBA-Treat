@@ -127,6 +127,23 @@ class UserService {
     const user = (await this.userModel.findById(userId)) as User;
     return user.virtualAccount.balance;
   }
+
+  public async updateUserRating(
+    userId: ObjectId,
+    newRating: number
+  ): Promise<number | Error> {
+    try {
+      const user = (await this.userModel.findById(userId)) as User;
+      const ratingVolume = user.meanRating * user.countRatings;
+      user.countRatings += 1;
+      const newMeanRating = (ratingVolume + newRating) / user.countRatings;
+      user.meanRating = Math.round(newMeanRating * 100) / 100;
+      await user.save();
+      return user.meanRating;
+    } catch (error) {
+      throw new Error("MeanRating of user could not be updated!");
+    }
+  }
 }
 
 export default UserService;
