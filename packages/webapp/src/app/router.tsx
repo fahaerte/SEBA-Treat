@@ -1,10 +1,21 @@
 import React from "react";
-import { Navigate, RouteObject, useRoutes } from "react-router-dom";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
-import HomeScreen from "../screens/HomeScreen";
-import ErrorPage from "../screens/ErrorPage";
-import { Typography } from "../components";
+import { Navigate, useRoutes } from "react-router-dom";
+import LoginScreen from "../screens/Auth/LoginScreen";
+import { RegisterScreen } from "../screens/Auth/RegisterScreen";
+import { HomeScreen } from "../screens/HomeScreen";
+import { AddressInputScreen } from "../screens/AddressInputScreen";
+import { ErrorPage } from "../screens/Status/ErrorPage";
+import { AuthProvider } from "../utils/AuthProvider";
+import { MealOfferScreen } from "../screens/MealOfferScreen";
+import { RequireAddressRoute } from "../utils/RequireAddressRoute";
+import { Typography } from "../components/ui";
+import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
+import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
+import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
+import { AccountScreen } from "../screens/Profile/AccountScreen";
+// import { CreditPackages } from "../screens/Payment/CreditPackages";
+import PaymentSuccess from "../screens/Payment/PaymentSuccess";
+import { CreditPackages } from "../screens/Payment/CreditPackages";
 
 export const AppRouter = () => {
   const mainRoutes = {
@@ -22,10 +33,49 @@ export const AppRouter = () => {
         path: "/register",
         element: <RegisterScreen />,
       },
+      {
+        path: "/address",
+        element: <AddressInputScreen />,
+      },
+      // {
+      //   path: "/mealOfferRequests",
+      //   element: <MealOfferRequests />,
+      //   children: [
+      //     {
+      //       path: "sent",
+      //       element: <SentMealOfferRequests />,
+      //     },
+      //     {
+      //       path: "received",
+      //       element: <ReceivedMealOfferRequests />,
+      //     },
+      //   ],
+      // },
+      {
+        path: "/account",
+        element: <AccountScreen />,
+      },
+      {
+        path: "/alreadyLoggedIn",
+        element: <Typography>User already logged in</Typography>,
+      },
     ],
   };
 
-  const redirectRoutes = [];
+  const redirectRoutes = [
+    {
+      path: "/success/:priceId",
+      element: <PaymentSuccess />,
+    },
+    {
+      path: "/cancel",
+      element: <div>You canceled the purchase</div>,
+    },
+    // {
+    //   path: "/purchase-credits",
+    //   element: <CreditPackages />,
+    // },
+  ];
 
   const profileRoutes = {
     path: "profile/:profileId/",
@@ -35,42 +85,65 @@ export const AppRouter = () => {
       // Overview Screen
       {
         path: "requests/",
-        element: <Typography>Oreders by user</Typography>,
-        children: {
-          path: "/received",
-          element: <Typography>Orders for user</Typography>,
-        },
-      },
-    ],
-  };
-
-  const mealRoutes = {
-    // ALL THE MEALS
-    path: "meal/",
-    elements: <Typography>Show all meals here?</Typography>,
-    children: [
-      {
-        // MEAL DETAIL
-        path: ":mealId",
-        element: (
-          <Typography>Meal Detail page with possible edit mode</Typography>
-        ),
+        element: <Typography>Orders by user</Typography>,
         children: [
           {
-            path: "edit",
-            element: <Typography>Editing the meal</Typography>,
+            path: "received/",
+            element: <Typography>Orders for user</Typography>,
           },
         ],
       },
-      {
-        path: "create/",
-        element: <Typography>Create a new meal</Typography>,
-      },
     ],
   };
 
-  const routing = useRoutes([mainRoutes, profileRoutes, mealRoutes]);
+  const purchaseCreditRoutes = [
+    {
+      path: "/purchase-credits",
+      element: <CreditPackages />,
+    },
+    {
+      path: "/success/:priceId",
+      element: <PaymentSuccess />,
+    },
+  ];
 
-  // TODO: Put user context here (authenticated or not?)
-  return <>{routing}</>;
+  const mealRoutes = [
+    {
+      // ALL THE MEALS
+      path: "/mealoffers",
+      element: (
+        <RequireAddressRoute>
+          <MealOfferScreen />
+        </RequireAddressRoute>
+      ),
+    },
+    {
+      path: "/mealOfferRequests",
+      element: (
+        // <RequireAuthRoute>
+        <MealOfferRequests />
+        // </RequireAuthRoute>
+      ),
+      children: [
+        {
+          path: "sent",
+          element: <SentMealOfferRequests />,
+        },
+        {
+          path: "received",
+          element: <ReceivedMealOfferRequests />,
+        },
+      ],
+    },
+  ];
+
+  const routing = useRoutes([
+    mainRoutes,
+    profileRoutes,
+    ...redirectRoutes,
+    ...purchaseCreditRoutes,
+    ...mealRoutes,
+  ]);
+
+  return <AuthProvider>{routing}</AuthProvider>;
 };

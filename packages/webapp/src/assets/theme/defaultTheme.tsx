@@ -40,7 +40,7 @@ export const defaultTheme: DefaultTheme = {
       contrastText: "#FFF",
     },
     light: {
-      main: "#fff",
+      main: "#EBEBEB",
       contrastText: "#000",
       hover: "#c7c7c7",
       active: "#FAFAFB", // E2E2E3
@@ -75,12 +75,12 @@ export const defaultTheme: DefaultTheme = {
     },
     size: {
       xxl: "28px",
-      xl: "18px",
-      lg: "14px",
-      md: "13px",
-      sm: "12px",
-      xs: "10px",
-      xxs: "9px",
+      xl: "24px",
+      lg: "18px",
+      md: "16px",
+      sm: "14px",
+      xs: "14px",
+      xxs: "12px",
     },
   },
   general: {

@@ -5,4 +5,5 @@ export interface ICard extends IComponentColorBase {
    * Activate hover effect
    */
   hoverable?: boolean;
+  onClick?: () => void;
 }

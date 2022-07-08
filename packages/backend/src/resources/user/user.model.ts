@@ -12,10 +12,6 @@ const UserSchema = new Schema<User>(
       unique: true,
       trim: true,
     },
-    username: {
-      type: String,
-      required: true,
-    },
     firstName: {
       type: String,
       required: true,
@@ -39,6 +35,18 @@ const UserSchema = new Schema<User>(
     virtualAccount: {
       type: VirtualAccountSchema,
       required: true,
+    },
+    stripeCustomerId: {
+      type: String,
+    },
+    meanRating: {
+      type: Number,
+      min: 0,
+      max: 5,
+    },
+    countRatings: {
+      type: Number,
+      min: 0,
     },
   },
   { timestamps: true }

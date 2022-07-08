@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "reflect-metadata";
 import { render } from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./app/app.scss";

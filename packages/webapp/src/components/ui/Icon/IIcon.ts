@@ -72,6 +72,7 @@ export const AIconType = [
   "envelope",
   "send",
   "arrowClockwise",
+  "coin",
 ] as const;
 
 export interface IIcon {
@@ -87,4 +88,5 @@ export interface IIcon {
    * color of the icon
    */
   color?: TBootstrapPaletteTypography;
+  className?: string;
 }

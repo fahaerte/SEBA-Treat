@@ -1,10 +1,10 @@
-import { model, Schema, Types } from "mongoose";
-import MealOffer from "../mealOffer/mealOffer.interface";
+import { Model, model, Schema, Types } from "mongoose";
+import { MealOfferDocument } from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import MealCategory from "../mealCategory/mealCategory.enum";
 import MealAllergen from "../mealAllergen/mealAllergen.enum";
 
-const MealOfferSchema = new Schema<MealOffer>(
+const MealOfferSchema = new Schema<MealOfferDocument>(
   {
     title: {
       type: String,
@@ -47,7 +47,6 @@ const MealOfferSchema = new Schema<MealOffer>(
     },
     pickUpDetails: {
       type: String,
-      required: true,
     },
     price: {
       type: Number,
@@ -64,4 +63,38 @@ const MealOfferSchema = new Schema<MealOffer>(
   { timestamps: true }
 );
 
-export default model<MealOffer>("MealOffer", MealOfferSchema);
+export interface MealOfferModel extends Model<MealOfferDocument> {
+  findSentMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
+}
+
+MealOfferSchema.statics.findSentMealOfferRequests = async function (
+  this: Model<MealOfferDocument>,
+  userId: string
+) {
+  return this.find(
+    { reservations: { $elemMatch: { buyer: userId } } },
+    {
+      description: 1,
+      user: 1,
+      portions: 1,
+      startDate: 1,
+      endDate: 1,
+      price: 1,
+      title: 1,
+      reservations: {
+        $filter: {
+          input: "$reservations",
+          as: "reservation",
+          cond: { $eq: ["$$reservation.buyer", userId] },
+        },
+      },
+    }
+  )
+    .populate("user", "firstName lastName")
+    .exec();
+};
+
+export default model<MealOfferDocument, MealOfferModel>(
+  "MealOffer",
+  MealOfferSchema
+);

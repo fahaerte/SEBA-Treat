@@ -7,8 +7,10 @@ const Card = ({
   hoverable = false,
   className = "",
   children,
+  onClick = () => undefined,
 }: ICard) => (
   <SCCard
+    onClick={onClick}
     color={color}
     className={["card", hoverable ? "card-hover" : "", className].join(" ")}
   >

@@ -9,6 +9,8 @@ interface MealTransaction extends Document {
   amount: number;
   transactionFee: number;
   transactionState: MealTransactionState;
+  buyerRating: number;
+  sellerRating: number;
 }
 
 export default MealTransaction;

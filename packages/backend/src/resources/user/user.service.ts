@@ -5,8 +5,10 @@ import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import User from "../user/user.interface";
 import { Service } from "typedi";
-import { USER_STARTING_BALANCE } from "@treat/lib-common/src/constants/index";
+import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
+import { IUser } from "@treat/lib-common";
+import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
 
 @Service()
 class UserService {
@@ -16,14 +18,18 @@ class UserService {
   /**
    * Register a new user
    */
-  public async register(newUser: User): Promise<string | Error> {
+  public async register(
+    newUser: IUser
+  ): Promise<{ user: User; token: string }> {
     try {
-      // create account
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
       );
-      const user = await this.userModel.create(newUser);
-      return token.createToken(user);
+      const user = await this.userModel.create({
+        ...newUser,
+        stripeCustomerId: "",
+      });
+      return { user, token: token.createToken(user) };
     } catch (error: any) {
       throw new Error(error.message as string);
     }
@@ -32,22 +38,43 @@ class UserService {
   /**
    * Attempt to log in a user
    */
-  public async login(email: string, password: string): Promise<string | Error> {
-    try {
-      const user = await this.userModel.findOne({ email });
+  public async login(
+    email: string,
+    password: string
+  ): Promise<{ user: User; token: string }> {
+    const user = await this.userModel.findOne({ email });
 
-      if (!user) {
-        throw new Error("Unable to find user with that email address");
-      }
-
-      if (await user.isValidPassword(password)) {
-        return token.createToken(user);
-      } else {
-        throw new Error("Wrong credentials given");
-      }
-    } catch (error) {
-      throw new Error("Unable to create user");
+    if (!user) {
+      throw new Error("Unable to find user with that email address");
     }
+
+    if (await user.isValidPassword(password)) {
+      return { user, token: token.createToken(user) };
+    } else {
+      throw new Error("Wrong credentials given");
+    }
+  }
+
+  public async updateUser(
+    user: { _id: string } & Partial<IUser>
+  ): Promise<User | null> {
+    const { _id, ...updatedUser } = user;
+    await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
+    return this.userModel.findById(_id);
+  }
+
+  public async getUser(userId: string): Promise<Partial<User> | null> {
+    return this.userModel
+      .findById(userId)
+      .select([
+        "email",
+        "firstName",
+        "lastName",
+        "address",
+        "virtualAccount",
+        "brithDate",
+        "_id",
+      ]);
   }
 
   /**
@@ -73,28 +100,32 @@ class UserService {
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    try {
-      const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as User;
+    const newBalance = user.virtualAccount.balance - amount;
+    if (newBalance >= 0) {
       user.virtualAccount.balance -= amount;
       await user.save();
-      return user.virtualAccount.balance;
-    } catch (error) {
-      throw new Error("Unable to send transaction");
+    } else {
+      throw new accountBalanceInsufficientException(
+        userId as unknown as string
+      );
     }
+    return user.virtualAccount.balance;
   }
 
   public async receiveTransaction(
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    try {
-      const user = (await this.userModel.findById(userId)) as User;
-      user.virtualAccount.balance += amount;
-      await user.save();
-      return user.virtualAccount.balance;
-    } catch (error) {
-      throw new Error("Unable to receive transaction");
-    }
+    const user = (await this.userModel.findById(userId)) as User;
+    user.virtualAccount.balance += amount;
+    await user.save();
+    return user.virtualAccount.balance;
+  }
+
+  public async getAccountBalance(userId: ObjectId): Promise<number | Error> {
+    const user = (await this.userModel.findById(userId)) as User;
+    return user.virtualAccount.balance;
   }
 }
 

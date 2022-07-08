@@ -14,3 +14,5 @@ export * from "./Breadcrumb";
 export * from "./Skeleton";
 export * from "./TabBar";
 export * from "./Toast";
+export { default as PageHeading } from "./PageHeading/PageHeading";
+export { default as SectionHeading } from "./SectionHeading/SectionHeading";
