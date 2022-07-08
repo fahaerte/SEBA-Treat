@@ -57,10 +57,10 @@ const LoginScreen = () => {
   };
 
   if (data) {
-    const { user, token } = data;
+    const { userId, token, address } = data;
     userContext.setToken(token);
-    userContext.setUser(user);
-    userContext.setAddress(getStringFromIAddress(user.address));
+    userContext.setUserId(userId);
+    userContext.setAddress(getStringFromIAddress(address));
     navigate(from, { replace: true });
   }
 
