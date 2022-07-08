@@ -112,17 +112,18 @@ class MealTransactionService {
         if (participantType === MealTransactionParticipant.BUYER) {
           if (user._id.equals(transaction.receiverId)) {
             transaction.buyerRating = stars;
+            await this.userService.updateUserRating(transaction.receiverId, stars);
           } else {
             throw new Error("Only the seller can rate the buyer.");
           }
         } else {
           if (user._id.equals(transaction.senderId)) {
             transaction.sellerRating = stars;
+            await this.userService.updateUserRating(transaction.senderId, stars);
           } else {
             throw new Error("Only the buyer can rate the seller.");
           }
         }
-        transaction.sellerRating = stars;
         await transaction.save();
         return transaction;
       } else {
