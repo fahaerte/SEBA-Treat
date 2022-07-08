@@ -57,7 +57,6 @@ class MealTransactionController implements Controller {
       } else {
         const user = req.user;
         const userId = req.user._id;
-        console.log(typeof userId);
         const mealTransactionId = req.params.mealTransactionId;
         const stars = req.body.stars;
         const participantType = req.body.participantType;

@@ -7,12 +7,12 @@ export const RequireAuthRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { user } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
   const location = useLocation();
 
   return (
     <>
-      {user ? (
+      {userId ? (
         children
       ) : (
         <Navigate to={"/login"} replace state={{ from: location }} />
