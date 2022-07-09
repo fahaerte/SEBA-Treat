@@ -23,7 +23,7 @@ const LoginScreen = () => {
       userContext.setUserId(userId);
       userContext.setAddress(getStringFromIAddress(address));
       navigate(from, { replace: true });
-    }
+    },
   });
 
   const elements: IFormRow<IUserCredentials>[] = [
@@ -73,18 +73,19 @@ const LoginScreen = () => {
             <div>An error occurred: {loginMutation.error.message}</div>
           ) : null}
         </div>
-      <Form<IUserCredentials>
-        elements={elements}
-        onSubmit={handleSignIn}
-        formTitle={"Please sign in!"}
-        resetOnSubmit
-        abortButton={{
-          children: "Cancel",
-          color: "secondary",
-          className: "ms-3",
-          outline: true,
-        }}
-      /></div>
+        <Form<IUserCredentials>
+          elements={elements}
+          onSubmit={handleSignIn}
+          formTitle={"Please sign in!"}
+          resetOnSubmit
+          abortButton={{
+            children: "Cancel",
+            color: "secondary",
+            className: "ms-3",
+            outline: true,
+          }}
+        />
+      </div>
     </>
   );
 };
