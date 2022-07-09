@@ -23,9 +23,6 @@ const LoginScreen = () => {
       userContext.setUserId(userId);
       userContext.setAddress(getStringFromIAddress(address));
       navigate(from, { replace: true });
-    },
-    onError: (error) => {
-      console.log("error");
     }
   });
 
@@ -70,6 +67,12 @@ const LoginScreen = () => {
 
   return (
     <>
+      <div>
+        <div>
+          {loginMutation.isError ? (
+            <div>An error occurred: {loginMutation.error.message}</div>
+          ) : null}
+        </div>
       <Form<IUserCredentials>
         elements={elements}
         onSubmit={handleSignIn}
@@ -81,7 +84,7 @@ const LoginScreen = () => {
           className: "ms-3",
           outline: true,
         }}
-      />
+      /></div>
     </>
   );
 };
