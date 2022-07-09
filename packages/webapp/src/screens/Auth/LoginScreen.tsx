@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
-import { IUser, IUserCredentials } from "@treat/lib-common";
+import { IUserCredentials } from "@treat/lib-common";
 import { AuthContext } from "../../utils/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
-import { useUserLogInMutation } from "../../store/api";
+import { useMutation, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { login } from "../../api/authApi";
 
 const LoginScreen = () => {
   const userContext = useContext(AuthContext);
@@ -14,8 +15,19 @@ const LoginScreen = () => {
 
   const from = location.state?.from || "/alreadyLoggedIn";
 
-  const [login, { isLoading, isError, isSuccess, data }] =
-    useUserLogInMutation();
+  const loginMutation = useMutation(login, {
+    onSuccess: (response) => {
+      console.log(response.data);
+      const { userId, token, address } = response.data;
+      userContext.setToken(token);
+      userContext.setUserId(userId);
+      userContext.setAddress(getStringFromIAddress(address));
+      navigate(from, { replace: true });
+    },
+    onError: (error) => {
+      console.log("error");
+    }
+  });
 
   const elements: IFormRow<IUserCredentials>[] = [
     [
@@ -53,16 +65,8 @@ const LoginScreen = () => {
   const handleSignIn = (user: IUserCredentials) => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(user));
-    void login(user);
+    loginMutation.mutate(user);
   };
-
-  if (data) {
-    const { userId, token, address } = data;
-    userContext.setToken(token);
-    userContext.setUserId(userId);
-    userContext.setAddress(getStringFromIAddress(address));
-    navigate(from, { replace: true });
-  }
 
   return (
     <>

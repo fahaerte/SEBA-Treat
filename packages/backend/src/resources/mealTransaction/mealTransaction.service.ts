@@ -1,4 +1,4 @@
-import {ObjectId} from "mongoose";
+import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
 import MealTransactionState from "./mealTransactionState.enum";
@@ -10,125 +10,131 @@ import TransactionInWrongStateException from "../../utils/exceptions/transaction
 import User from "../user/user.interface";
 
 class MealTransactionService {
-    private mealTransactionModel = MealTransactionModel;
-    private virtualCentralAccountService = new VirtualCentralAccountService();
-    private userService = new UserService();
+  private mealTransactionModel = MealTransactionModel;
+  private virtualCentralAccountService = new VirtualCentralAccountService();
+  private userService = new UserService();
 
-    /**
-     * Create a new transaction
-     */
-    public async createTransaction(
-        mealOfferId: ObjectId,
-        mealReservationId: ObjectId,
-        senderId: ObjectId,
-        receiverId: ObjectId,
-        amount: number,
-        transactionFee: number
-    ): Promise<MealTransaction | Error> {
-        try {
-            return await this.mealTransactionModel.create({
-                mealOfferId,
-                mealReservationId,
-                senderId,
-                receiverId,
-                amount,
-                transactionFee,
-            });
-        } catch (error: any) {
-            throw new Error(error.message as string);
-        }
+  /**
+   * Create a new transaction
+   */
+  public async createTransaction(
+    mealOfferId: ObjectId,
+    mealReservationId: ObjectId,
+    senderId: ObjectId,
+    receiverId: ObjectId,
+    amount: number,
+    transactionFee: number
+  ): Promise<MealTransaction | Error> {
+    try {
+      return await this.mealTransactionModel.create({
+        mealOfferId,
+        mealReservationId,
+        senderId,
+        receiverId,
+        amount,
+        transactionFee,
+      });
+    } catch (error: any) {
+      throw new Error(error.message as string);
     }
+  }
 
-    /**
-     * Get all transactions (sent and received) for a specific user
-     */
-    public async getMealTransactions(
-        userId: ObjectId
-    ): Promise<MealTransaction[] | Error> {
-        return this.mealTransactionModel.find({
-            $or: [{senderId: userId}, {receiverId: userId}],
-        });
+  /**
+   * Get all transactions (sent and received) for a specific user
+   */
+  public async getMealTransactions(
+    userId: ObjectId
+  ): Promise<MealTransaction[] | Error> {
+    return this.mealTransactionModel.find({
+      $or: [{ senderId: userId }, { receiverId: userId }],
+    });
+  }
+
+  /**
+   * Perform transaction
+   */
+  public async performTransaction(
+    mealTransactionId: ObjectId
+  ): Promise<MealTransaction | Error> {
+    const mealTransaction = (await this.mealTransactionModel.findById(
+      mealTransactionId
+    )) as MealTransaction;
+    if (mealTransaction.transactionState === MealTransactionState.PENDING) {
+      const price = mealTransaction.amount;
+      const fee = mealTransaction.transactionFee;
+
+      // update sender account
+      await this.userService.sendTransaction(mealTransaction.senderId, price);
+
+      // update receiver account
+      await this.userService.receiveTransaction(
+        mealTransaction.receiverId,
+        price
+      );
+
+      // update central account
+      await this.virtualCentralAccountService.receiveTransaction(fee);
+
+      // update transaction state
+      await this.mealTransactionModel.findByIdAndUpdate(
+        { _id: mealTransactionId },
+        { transactionState: MealTransactionState.COMPLETED }
+      );
+
+      return (await this.mealTransactionModel.findById(
+        mealTransactionId
+      )) as MealTransaction;
+    } else {
+      return mealTransaction;
     }
+  }
 
-    /**
-     * Perform transaction
-     */
-    public async performTransaction(
-        mealTransactionId: ObjectId
-    ): Promise<MealTransaction | Error> {
-        const mealTransaction = (await this.mealTransactionModel.findById(
-            mealTransactionId
-        )) as MealTransaction;
-        if (mealTransaction.transactionState === MealTransactionState.PENDING) {
-            const price = mealTransaction.amount;
-            const fee = mealTransaction.transactionFee;
-
-            // update sender account
-            await this.userService.sendTransaction(mealTransaction.senderId, price);
-
-            // update receiver account
-            await this.userService.receiveTransaction(
-                mealTransaction.receiverId,
-                price
+  public async rateTransactionParticipant(
+    user: User,
+    transactionId: ObjectId,
+    stars: number,
+    participantType: MealTransactionParticipant
+  ): Promise<MealTransaction | Error> {
+    try {
+      const transaction = (await this.mealTransactionModel.findById(
+        transactionId
+      )) as MealTransaction;
+      if (!transaction) {
+        throw new TransactionNotFoundException(
+          transactionId as unknown as string
+        );
+      }
+      if (transaction.transactionState === MealTransactionState.COMPLETED) {
+        if (participantType === MealTransactionParticipant.BUYER) {
+          if (user._id.equals(transaction.receiverId)) {
+            transaction.buyerRating = stars;
+            await this.userService.updateUserRating(
+              transaction.receiverId,
+              stars
             );
-
-            // update central account
-            await this.virtualCentralAccountService.receiveTransaction(fee);
-
-            // update transaction state
-            await this.mealTransactionModel.findByIdAndUpdate(
-                {_id: mealTransactionId},
-                {transactionState: MealTransactionState.COMPLETED}
-            );
-
-            return (await this.mealTransactionModel.findById(
-                mealTransactionId
-            )) as MealTransaction;
+          } else {
+            throw new Error("Only the seller can rate the buyer.");
+          }
         } else {
-            return mealTransaction;
+          if (user._id.equals(transaction.senderId)) {
+            transaction.sellerRating = stars;
+            await this.userService.updateUserRating(
+              transaction.senderId,
+              stars
+            );
+          } else {
+            throw new Error("Only the buyer can rate the seller.");
+          }
         }
+        await transaction.save();
+        return transaction;
+      } else {
+        throw new TransactionInWrongStateException(transaction.id);
+      }
+    } catch (error: any) {
+      throw new Error(error.message as string);
     }
-
-    public async rateTransactionParticipant(
-        user: User,
-        transactionId: ObjectId,
-        stars: number,
-        participantType: MealTransactionParticipant
-    ): Promise<MealTransaction | Error> {
-        try {
-            const transaction = (await this.mealTransactionModel.findById(
-                transactionId
-            )) as MealTransaction;
-            if (!transaction) {
-                throw new TransactionNotFoundException(
-                    transactionId as unknown as string
-                );
-            }
-            if (transaction.transactionState === MealTransactionState.COMPLETED) {
-                if (participantType === MealTransactionParticipant.BUYER) {
-                    if (user._id.equals(transaction.receiverId)) {
-                        transaction.buyerRating = stars;
-                        await this.userService.updateUserRating(transaction.receiverId, stars);
-                    } else {
-                        throw new Error("Only the seller can rate the buyer.");
-                    }
-                } else {
-                    if (user._id.equals(transaction.senderId)) {
-                        transaction.sellerRating = stars;
-                        await this.userService.updateUserRating(transaction.senderId, stars);
-                    } else {
-                        throw new Error("Only the buyer can rate the seller.");
-                    }
-                }
-                await transaction.save();
-                return transaction;
-            } else {
-                throw new TransactionInWrongStateException(transaction.id);
-            }
-        } catch (error: any) {
-            throw new Error(error.message as string);
-        }
-    }
+  }
 }
 
 export default MealTransactionService;
