@@ -1,5 +1,6 @@
 import { Document, ObjectId } from "mongoose";
 import MealReservation from "../mealReservation/mealReservation.interface";
+import { Rating } from "../rating/rating.interface";
 
 export interface MealOffer {
   title: string;
@@ -14,6 +15,7 @@ export interface MealOffer {
   price: number;
   transactionFee: number;
   reservations: MealReservation[];
+  rating?: Rating;
 }
 
 export interface MealOfferDocument extends MealOffer, Document {

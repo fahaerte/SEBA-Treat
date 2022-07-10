@@ -43,10 +43,12 @@ const UserSchema = new Schema<User>(
       type: Number,
       min: 0,
       max: 5,
+      default: 0,
     },
     countRatings: {
       type: Number,
       min: 0,
+      default: 0,
     },
   },
   { timestamps: true }

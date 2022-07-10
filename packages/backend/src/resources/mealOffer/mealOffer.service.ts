@@ -15,7 +15,10 @@ import MealReservationNotFoundException from "../../utils/exceptions/mealReserva
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
-  private mealTransactionService = new MealTransactionService();
+
+  constructor(
+    private readonly mealTransactionService: MealTransactionService
+  ) {}
 
   public async create(
     newMealOffer: MealOffer,
@@ -69,7 +72,7 @@ class MealOfferService {
   ): Promise<MealOffer[] | Error> {
     return (await this.mealOffer
       .find({ user: user._id })
-      .populate("reservations.buyer", "firstName lastName")
+      .populate("reservations.buyer", "firstName lastName meanRating")
       .exec()) as MealOffer[];
   }
 
@@ -98,16 +101,21 @@ class MealOfferService {
     )) as MealOfferDocument;
     if (!user._id.equals(mealOfferDoc.user)) {
       const reservations = mealOfferDoc.reservations;
-      const result = reservations.find((reservation) =>
-        user._id.equals(reservation.buyer)
-      );
-      if (result === undefined) {
-        mealOfferDoc.reservations.push({ buyer: user._id } as MealReservation);
-        return await mealOfferDoc.save();
-      }
-      throw new InvalidMealReservationException(
-        "You can only make one reservation per meal offer"
-      );
+      reservations.forEach((reservation) => {
+        if (
+          reservation.reservationState === MealReservationState.BUYER_CONFIRMED
+        ) {
+          throw new InvalidMealReservationException(
+            "This mealOffer is not available for reservations anymore"
+          );
+        } else if (user._id.equals(reservation.buyer)) {
+          throw new InvalidMealReservationException(
+            "You can only make one reservation per meal offer"
+          );
+        }
+      });
+      mealOfferDoc.reservations.push({ buyer: user._id } as MealReservation);
+      return await mealOfferDoc.save();
     }
     throw new InvalidMealReservationException(
       "You can not make a reservation for your own meal offer"
@@ -268,7 +276,7 @@ class MealOfferService {
     }
   }
 
-  private async getMealOfferAndReservation(
+  public async getMealOfferAndReservation(
     user: User,
     mealOfferId: string,
     mealReservationId: string

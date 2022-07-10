@@ -12,8 +12,8 @@ import { IUser } from "@treat/lib-common";
 @Service()
 class UserService {
   private userModel = UserModel;
-  // TODO: importing service instead of model right way to do this?
-  private virtualAccountService = new VirtualAccountService();
+
+  constructor(private readonly virtualAccountService: VirtualAccountService) {}
 
   /**
    * Register a new user
@@ -71,11 +71,17 @@ class UserService {
     }
   }
 
-  public async getUser(userId: string): Promise<IUser | Error> {
+  public async getUser(userId: string): Promise<User | Error> {
     try {
       return (await this.userModel
         .findById(userId)
-        .select(["email", "firstName", "lastName"])) as unknown as IUser;
+        .select([
+          "email",
+          "firstName",
+          "lastName",
+          "meanRating",
+          "countRatings",
+        ])) as User;
     } catch (error) {
       throw new Error("No user found");
     }

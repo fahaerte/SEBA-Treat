@@ -3,7 +3,7 @@ class ApiService {
   private static BASE_URL = "http://localhost:5000/api";
 
   private static BEARER =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjQ0MzhkYzQ1OWE4YmJiOTUyZjg4ZiIsImlhdCI6MTY1NzAzODQ4NiwiZXhwIjoxNjU3MTI0ODg2fQ.FPZODEgVpVa6zSz0EdWg8qlKaQEpBgAv6lC4ASaTuJA";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyYjQ1NzdlNzJkNWZjNTJlMjUwMTM0MSIsImlhdCI6MTY1NzQ2Mzg1NCwiZXhwIjoxNjU3NTUwMjU0fQ.kw3CN5QhJsC9YZYgjGx3d33HYQFCvLxGzBybOC2Wk2c";
 
   private static headers = {
     "Content-Type": "application/json",

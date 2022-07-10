@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import UserService from "../../services/user.service";
 import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
+import { Icon } from "../ui";
 
 interface MealOfferRequestUserInfoProps {
   userId: string;
   firstName: string;
   lastName: string;
+  meanRating: number;
 }
 
 const ProfilePicture = styled.img`
@@ -20,6 +22,7 @@ export const MealOfferRequestUserInfo = ({
   userId,
   firstName,
   lastName,
+  meanRating,
 }: MealOfferRequestUserInfoProps) => {
   const [profilePicture, setProfilePicture] = useState("");
 
@@ -36,13 +39,25 @@ export const MealOfferRequestUserInfo = ({
   }, [fetchUserData]);
 
   return (
-    <Col className={"col-3"}>
+    <Col>
       <Row>
-        <Col className={"col-sm-auto"}>
-          <ProfilePicture src={profilePicture} />
+        <Col className={"col-3"}>
+          <Row>
+            <Col className={"col-sm-auto"}>
+              <ProfilePicture src={profilePicture} />
+            </Col>
+            <Col className={"col-sm-auto my-auto p-0"}>
+              {`${firstName} ${lastName}`}
+            </Col>
+          </Row>
         </Col>
-        <Col className={"col-sm-auto my-auto p-0"}>
-          {`${firstName} ${lastName}`}
+        <Col className={"d-flex align-items-center"}>
+          <Row>
+            <Col className={"col-sm-auto p-0"}>
+              <Icon type={"star-fill"}></Icon>
+            </Col>
+            <Col className={"col-sm-auto"}>{meanRating} Sterne</Col>
+          </Row>
         </Col>
       </Row>
     </Col>
