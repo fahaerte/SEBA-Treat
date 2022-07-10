@@ -1,15 +1,18 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../utils/AuthProvider";
 import { Button } from "../components";
+import { useNavigate } from "react-router-dom";
 
 const AuthStatus = () => {
   const userContext = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const signout = () => {
     userContext.setToken(undefined);
-    userContext.setUser(undefined);
+    userContext.setUserId(undefined);
     userContext.setAddress(undefined);
     console.log("logged out!");
+    navigate("/");
   };
 
   return (
@@ -18,7 +21,7 @@ const AuthStatus = () => {
         {userContext.token ? (
           <div>
             <p>Logged in! </p>
-            <p>{userContext.user?.email}</p>
+            <p>{userContext.userId}</p>
             <p>{userContext.token}</p>
             <Button onClick={signout}>Sign Out</Button>
           </div>

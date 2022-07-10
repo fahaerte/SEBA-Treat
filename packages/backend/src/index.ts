@@ -31,7 +31,10 @@ const app = new App(
     new MealOfferController(Container.get(MealOfferService)),
     new MealAllergenController(),
     new MealCategoryController(),
-    new StripeController(Container.get(StripeService)),
+    new StripeController(
+      Container.get(StripeService),
+      Container.get(UserService)
+    ),
     new CreditPackageController(),
     new RatingController(Container.get(RatingService)),
   ],

@@ -5,9 +5,14 @@ import { IUser, IUserCredentials } from "@treat/lib-common";
 import { AuthContext } from "../../utils/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useUserLogInMutation } from "../../store/api";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const LoginScreen = () => {
   const userContext = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/alreadyLoggedIn";
 
   const [login, { isLoading, isError, isSuccess, data }] =
     useUserLogInMutation();
@@ -52,15 +57,11 @@ const LoginScreen = () => {
   };
 
   if (data) {
-    console.log(data);
-    const { user, token } = data;
-
+    const { userId, token, address } = data;
     userContext.setToken(token);
-    userContext.setUser(user);
-    userContext.setAddress(getStringFromIAddress(user.address));
-    console.log("context is set!");
-    console.log(userContext.user);
-    console.log(userContext.token);
+    userContext.setUserId(userId);
+    userContext.setAddress(getStringFromIAddress(address));
+    navigate(from, { replace: true });
   }
 
   return (

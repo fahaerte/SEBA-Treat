@@ -32,24 +32,6 @@ export const RegisterScreen = () => {
         defaultValue: "max@mustermann.de",
       }),
       FormHelper.createInput({
-        formKey: "username",
-        label: "Username",
-        props: {
-          type: "text",
-        },
-        rules: {
-          required: {
-            value: true,
-            message: "Please provide a username!",
-          },
-          min: {
-            value: 5,
-            message: "Your username needs at least 5 characters!",
-          },
-        },
-        defaultValue: "maxi1234",
-      }),
-      FormHelper.createInput({
         formKey: "password",
         label: "Password",
         props: {
@@ -186,13 +168,12 @@ export const RegisterScreen = () => {
   };
 
   if (data) {
-    console.log(data);
-    const { user, token } = data;
+    const { userId, token, address } = data;
     userContext.setToken(token);
-    userContext.setUser(user);
-    userContext.setAddress(getStringFromIAddress(user.address));
+    userContext.setUserId(userId);
+    userContext.setAddress(getStringFromIAddress(address));
     console.log("context is set!");
-    console.log(userContext.user);
+    console.log(userContext.userId);
     console.log(userContext.token);
   }
 

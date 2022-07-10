@@ -22,9 +22,10 @@ const injectedStripeRtkApi = api.injectEndpoints({
 
     verifyPayment: build.query<VerifyPaymentApiResponse, VerifyPaymentApiArg>({
       query: (queryArg) => ({
-        url: `/payment/get-latest-payment?price=${queryArg.priceId}`,
+        url: `/payment/get-latest-payment?product=${queryArg.priceId}`,
         body: {
           customerId: queryArg.customerId,
+          userId: queryArg.userId,
         },
         method: "POST",
       }),
@@ -38,7 +39,7 @@ const injectedStripeRtkApi = api.injectEndpoints({
         method: "POST",
         body: {
           priceId: queryArg.priceId,
-          userId: queryArg.userId,
+          stripeCustomerId: queryArg.stripeCustomerId,
           couponId: queryArg.couponId,
         },
       }),
@@ -49,22 +50,19 @@ const injectedStripeRtkApi = api.injectEndpoints({
 export type CreateCheckoutSessionApiResponse = { url: string };
 export type CreateCheckoutSessionApiArg = {
   priceId: string;
-  userId: string;
+  stripeCustomerId: string;
   couponId?: string;
 };
 
 export type VerifyPaymentApiResponse = { message: string };
-export type VerifyPaymentApiArg = { customerId: string; priceId: string };
+export type VerifyPaymentApiArg = {
+  customerId: string;
+  priceId: string;
+  userId: string;
+};
 
 export type PaymentControllerGetProductsWithPricesApiResponse =
   IStripeProduct[];
-export type PaymentControllerGetPaymentIntentSecretApiResponse =
-  /** status 200  */ string;
-export type PaymentControllerGetPaymentIntentSecretApiArg = {
-  /** nanoid(12) */
-  // userId: string;
-  productId: string;
-};
 
 export const {
   usePaymentGetProductsWithPricesQuery,

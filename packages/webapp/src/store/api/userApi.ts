@@ -1,10 +1,10 @@
 import { emptyApi as api } from "../emptyApi";
-import { IUser, IUserCredentials } from "@treat/lib-common";
+import {IAddress, IUser, IUserCredentials} from "@treat/lib-common";
 
-export type UserControllerLogInResponse = { token: string; user: IUser };
+export type UserControllerLogInResponse = { token: string; userId: string, address: IAddress };
 export type UserControllerLogInArgs = IUserCredentials;
 
-export type UserControllerRegisterResponse = { token: string; user: IUser };
+export type UserControllerRegisterResponse = { token: string; userId: string, address: IAddress };
 export type UserControllerRegisterArgs = IUser;
 
 const injectedUserRtkApi = api.injectEndpoints({
@@ -30,19 +30,6 @@ const injectedUserRtkApi = api.injectEndpoints({
         url: `/users/register`,
         method: "POST",
         body: {
-          // email: queryArg.email,
-          // username: queryArg.username,
-          // firstName: queryArg.firstName,
-          // lastName: queryArg.lastName,
-          // password: queryArg.password,
-          // birthdate: queryArg.birthdate,
-          // address: {
-          //   street: queryArg.address.street,
-          //   houseNumber: queryArg.address.houseNumber,
-          //   postalCode: queryArg.address.postalCode,
-          //   city: queryArg.address.city,
-          //   country: queryArg.address.country,
-          // },
           queryArg,
         },
       }),
