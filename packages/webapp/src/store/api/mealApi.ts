@@ -1,14 +1,17 @@
 import { emptyApi as api } from "../emptyApi";
 import { IMealOffer } from "@treat/lib-common";
+import MealOffer from "../../types/interfaces/mealOffer.interface";
+
+const PATH = "/mealOffers";
 
 const injectedMealRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    mealControllerGetById: build.query<
-      MealControllerGetMealByIdResponse,
-      MealControllerGetMealByIdArgs
+    mealOfferSentReservations: build.query<
+      MealOffer[],
+        undefined
     >({
-      query: (queryArg) => ({
-        url: `/api/meals/${queryArg.id}`,
+      query: () => ({
+        url: `${PATH}/reservations/sent`,
         method: "GET",
       }),
     }),
@@ -26,14 +29,14 @@ const injectedMealRtkApi = api.injectEndpoints({
 });
 
 /** 200 status code */
-export type MealControllerGetMealByIdResponse = IMealOffer;
+export type MealControllerGetMealByIdResponse = MealOffer;
 export type MealControllerGetMealByIdArgs = { id: string };
 
 export type MealControllerCreateResponse = IMealOffer;
 export type MealControllerCreateArgs = IMealOffer;
 
 export const {
-  useMealControllerGetByIdQuery,
+  useMealOfferSentReservationsQuery,
   useMealControllerCreateMutation,
 } = injectedMealRtkApi;
 

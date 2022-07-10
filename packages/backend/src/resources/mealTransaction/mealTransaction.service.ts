@@ -8,11 +8,16 @@ import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 import TransactionNotFoundException from "../../utils/exceptions/transactionNotFound.exception";
 import TransactionInWrongStateException from "../../utils/exceptions/transactionInWrongState.exception";
 import User from "../user/user.interface";
+import { Service } from "typedi";
 
+@Service()
 class MealTransactionService {
-    private mealTransactionModel = MealTransactionModel;
-    private virtualCentralAccountService = new VirtualCentralAccountService();
-    private userService = new UserService();
+  private mealTransactionModel = MealTransactionModel;
+
+  constructor(
+    private readonly virtualCentralAccountService: VirtualCentralAccountService,
+    private readonly userService: UserService
+  ) {}
 
     /**
      * Create a new transaction
@@ -89,46 +94,76 @@ class MealTransactionService {
         }
     }
 
-    public async rateTransactionParticipant(
-        user: User,
-        transactionId: ObjectId,
-        stars: number,
-        participantType: MealTransactionParticipant
-    ): Promise<MealTransaction | Error> {
-        try {
-            const transaction = (await this.mealTransactionModel.findById(
-                transactionId
-            )) as MealTransaction;
-            if (!transaction) {
-                throw new TransactionNotFoundException(
-                    transactionId as unknown as string
-                );
-            }
-            if (transaction.transactionState === MealTransactionState.COMPLETED) {
-                if (participantType === MealTransactionParticipant.BUYER) {
-                    if (user._id.equals(transaction.receiverId)) {
-                        transaction.buyerRating = stars;
-                        await this.userService.updateUserRating(transaction.receiverId, stars);
-                    } else {
-                        throw new Error("Only the seller can rate the buyer.");
-                    }
-                } else {
-                    if (user._id.equals(transaction.senderId)) {
-                        transaction.sellerRating = stars;
-                        await this.userService.updateUserRating(transaction.senderId, stars);
-                    } else {
-                        throw new Error("Only the buyer can rate the seller.");
-                    }
-                }
-                await transaction.save();
-                return transaction;
-            } else {
-                throw new TransactionInWrongStateException(transaction.id);
-            }
-        } catch (error: any) {
-            throw new Error(error.message as string);
-        }
+  public async rateTransaction(
+    user: User,
+    mealOfferId: string,
+    rating: number
+  ): Promise<void | Error> {
+    const transaction = (await this.mealTransactionModel.findOne({
+      mealOfferId: mealOfferId,
+      $or: [{ senderId: user._id }, { receiverId: user._id }],
+    })) as MealTransaction;
+    if (!transaction) {
+      throw new TransactionNotFoundException(mealOfferId);
     }
+    if (transaction.transactionState !== MealTransactionState.COMPLETED) {
+      throw new TransactionInWrongStateException(transaction._id as string);
+    }
+    if (user._id.equals(transaction.senderId)) {
+      if (transaction.sellerRating === undefined) {
+        transaction.sellerRating = rating;
+      } else {
+        throw new Error("The transaction already has a sellerRating");
+      }
+    } else {
+      if (transaction.buyerRating === undefined) {
+        transaction.buyerRating = rating;
+      } else {
+        throw new Error("The transaction already has a buyerRating");
+      }
+    }
+    await transaction.save();
+  }
+
+  public async rateTransactionParticipant(
+    user: User,
+    transactionId: ObjectId,
+    stars: number,
+    participantType: MealTransactionParticipant
+  ): Promise<MealTransaction | Error> {
+    try {
+      const transaction = (await this.mealTransactionModel.findById(
+        transactionId
+      )) as MealTransaction;
+      if (!transaction) {
+        throw new TransactionNotFoundException(
+          transactionId as unknown as string
+        );
+      }
+      if (transaction.transactionState === MealTransactionState.COMPLETED) {
+        if (participantType === MealTransactionParticipant.BUYER) {
+          if (user._id.equals(transaction.receiverId)) {
+            transaction.buyerRating = stars;
+          } else {
+            throw new Error("Only the seller can rate the buyer.");
+          }
+        } else {
+          if (user._id.equals(transaction.senderId)) {
+            transaction.sellerRating = stars;
+          } else {
+            throw new Error("Only the buyer can rate the seller.");
+          }
+        }
+        transaction.sellerRating = stars;
+        await transaction.save();
+        return transaction;
+      } else {
+        throw new TransactionInWrongStateException(transaction.id);
+      }
+    } catch (error: any) {
+      throw new Error(error.message as string);
+    }
+  }
 }
 
 export default MealTransactionService;

@@ -4,4 +4,5 @@ export default interface User {
   firstName: string;
   lastName: string;
   birthdate: Date;
+  meanRating: number;
 }

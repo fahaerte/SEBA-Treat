@@ -13,7 +13,8 @@ import accountBalanceInsufficientException from "../../utils/exceptions/accountB
 @Service()
 class UserService {
   private userModel = UserModel;
-  private virtualAccountService = new VirtualAccountService();
+
+  constructor(private readonly virtualAccountService: VirtualAccountService) {}
 
   /**
    * Register a new user
@@ -73,6 +74,8 @@ class UserService {
         "address",
         "virtualAccount",
         "brithDate",
+        "meanRating",
+        "countRatings",
         "_id",
       ]);
   }

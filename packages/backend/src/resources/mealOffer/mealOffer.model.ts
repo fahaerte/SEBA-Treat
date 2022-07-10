@@ -3,6 +3,7 @@ import { MealOfferDocument } from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import MealCategory from "../mealCategory/mealCategory.enum";
 import MealAllergen from "../mealAllergen/mealAllergen.enum";
+import { RatingSchema } from "../rating/rating.model";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
   {
@@ -59,6 +60,9 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
       min: 0,
     },
     reservations: [MealReservationSchema],
+    rating: {
+      type: RatingSchema,
+    },
   },
   { timestamps: true }
 );
@@ -81,6 +85,7 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       endDate: 1,
       price: 1,
       title: 1,
+        rating:1,
       reservations: {
         $filter: {
           input: "$reservations",
@@ -90,7 +95,7 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       },
     }
   )
-    .populate("user", "firstName lastName")
+    .populate("user", "firstName lastName meanRating")
     .exec();
 };
 

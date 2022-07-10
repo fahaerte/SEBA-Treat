@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../ui/Grid";
-import { Button, Icon } from "../ui";
+import { Button } from "../ui";
 import UserService from "../../services/user.service";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
+import { RateUser } from "./RateUser";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -13,6 +14,8 @@ interface SentMealOfferRequestBottomProps {
   sellerFirstName: string;
   sellerLastName: string;
   reservation: MealReservation;
+  sellerRating: number | undefined;
+  sellerMeanRating: number;
 }
 
 export const SentMealReservation = ({
@@ -21,6 +24,8 @@ export const SentMealReservation = ({
   sellerFirstName,
   sellerLastName,
   reservation,
+  sellerRating,
+    sellerMeanRating,
 }: SentMealOfferRequestBottomProps) => {
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
@@ -35,7 +40,7 @@ export const SentMealReservation = ({
     }
   }, [sellerId]);
 
-  async function updateReservationState(newState: MealReservationState) {
+  const updateReservationState = async (newState: MealReservationState) => {
     try {
       await MealOfferService.updateMealReservationState(
         mealOfferId,
@@ -46,16 +51,16 @@ export const SentMealReservation = ({
     } catch (error: any) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchSellerData().catch((error) => console.error(error));
   }, [fetchSellerData]);
 
-  function getActionElement() {
+  const getActionElement = () => {
     if (reservationState == MealReservationState.PENDING) {
       return <span>Wait for the seller to respond to your request</span>;
-    } else if (reservationState == MealReservationState.SELLER_ACCEPTED) {
+    } else if (reservationState === MealReservationState.SELLER_ACCEPTED) {
       return (
         <Button
           onClick={() =>
@@ -65,18 +70,22 @@ export const SentMealReservation = ({
           Confirm Request
         </Button>
       );
-    } else if (reservationState == MealReservationState.SELLER_REJECTED) {
+    } else if (reservationState === MealReservationState.SELLER_REJECTED) {
       return <span>The seller rejected your request</span>;
-    } else if (reservationState == MealReservationState.BUYER_REJECTED) {
+    } else if (reservationState === MealReservationState.BUYER_REJECTED) {
       return <span>You cancelled your request</span>;
-    } else if (reservationState == MealReservationState.BUYER_CONFIRMED) {
+    } else if (reservationState === MealReservationState.BUYER_CONFIRMED) {
       return (
-        <Button onClick={() => console.log("Rate")}>Rate the seller</Button>
+        <RateUser
+          mealOfferId={mealOfferId}
+          mealReservationId={reservation._id}
+          existingRating={sellerRating}
+        />
       );
     }
-  }
+  };
 
-  function getActionBar() {
+  const getActionBar = () => {
     if (
       reservationState == MealReservationState.BUYER_CONFIRMED ||
       reservationState == MealReservationState.BUYER_REJECTED ||
@@ -106,7 +115,7 @@ export const SentMealReservation = ({
         </Row>
       );
     }
-  }
+  };
 
   return (
     <Row className={""}>
@@ -114,15 +123,9 @@ export const SentMealReservation = ({
         userId={sellerId}
         firstName={sellerFirstName}
         lastName={sellerLastName}
+        meanRating={sellerMeanRating}
       />
-      <Col className={""}>
-        <Row>
-          <Col className={"col-sm-auto"}>
-            <Icon type={"info"}></Icon>
-          </Col>
-          <Col className={"col-sm-auto"}>Sterne</Col>
-        </Row>
-      </Col>
+
       <Col className={"col-sm-auto"}>{getActionBar()}</Col>
     </Row>
   );
