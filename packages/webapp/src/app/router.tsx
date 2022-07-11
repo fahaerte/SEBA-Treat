@@ -66,7 +66,11 @@ export const AppRouter = () => {
     },
     {
       path: "/purchase-credits",
-      element: <RequireAuthRoute><CreditPackages /></RequireAuthRoute>,
+      element: (
+        <RequireAuthRoute>
+          <CreditPackages />
+        </RequireAuthRoute>
+      ),
     },
   ];
 

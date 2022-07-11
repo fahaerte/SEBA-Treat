@@ -228,14 +228,17 @@ class UserController implements Controller {
       return next(new HttpException(404, "No logged in user"));
     }
     try {
-      let user;
-      const userId = req.params.userId;
+       //TODO: fix userId
+      const urlParams = new URLSearchParams(req.url);
+      // const userId = urlParams.get('userId');
+      // res.status(404).send({user: userId});
+      const userId = "62cc75ba8a708498732805ce";
       if (userId) {
-        user = await this.userService.getUser(userId);
+        const user = await this.userService.getUser(userId);
+        res.status(200).send({ data: user });
       } else {
-        user = req.user;
+        res.status(404).send({ data: "user not found!" });
       }
-      res.status(200).send({ data: user });
     } catch (error: any) {
       next(error);
     }

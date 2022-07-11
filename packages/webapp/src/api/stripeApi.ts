@@ -2,20 +2,21 @@ import { baseApi } from "./baseApi";
 import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 
-export const paymentGetProductsWithPrices = async () => {
-  return await baseApi.get("/payment/products/");
+export const paymentGetProductsWithPrices = async (token: string) => {
+  return await baseApi(token).get("/payment/products/");
 };
 
-export const paymentGetDiscount = async () => {
-  return await baseApi.get("/payment/discounts/");
+export const paymentGetDiscount = async (token: string) => {
+  return await baseApi(token).get("/payment/discounts/");
 };
 
 export const verifyPayment = async ({
   customerId: customerId,
   priceId: priceId,
   userId: userId,
+  token: token,
 }: VerifyPaymentApiArg) => {
-  const response = await baseApi.post(
+  const response = await baseApi(token).post(
     `/payment/get-latest-payment?product=${priceId}`,
     {
       customerId,
@@ -29,12 +30,16 @@ export const createCheckoutSession = async ({
   priceId: priceId,
   stripeCustomerId: stripeCustomerId,
   couponId: couponId,
+  token: token,
 }: CreateCheckoutSessionApiArg) => {
-  const response = await baseApi.post("/payment/create-checkout-session", {
-    priceId,
-    stripeCustomerId,
-    couponId,
-  });
+  const response = await baseApi(token).post(
+    "/payment/create-checkout-session",
+    {
+      priceId,
+      stripeCustomerId,
+      couponId,
+    }
+  );
   return response.data;
 };
 

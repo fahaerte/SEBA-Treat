@@ -1,12 +1,13 @@
 import { baseApi, baseImageApi } from "./baseApi";
 
-export const getUser = async (userId: string) => {
-  console.log("execute getUser");
-  const response = await baseApi.get(`users/${userId}`);
+export const getUser = async (userId: string, token: string) => {
+  const response = await baseApi(token).get(`users/?userId=${userId}`);
   return response.data;
 };
 
-export const getProfilePictureURL = async (userId: string) => {
-  const response = await baseImageApi.get(`users/profile-picture/${userId}`);
+export const getProfilePictureURL = async (userId: string, token: string) => {
+  const response = await baseImageApi(token).get(
+    `users/profile-picture/${userId}`
+  );
   return URL.createObjectURL(response);
 };
