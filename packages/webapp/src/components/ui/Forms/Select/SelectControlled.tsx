@@ -1,7 +1,7 @@
 import React from "react";
 import { ISelect } from "./ISelect";
 import { SCFloatingForm, SCSelect } from "../styles";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 

@@ -3,7 +3,7 @@ import { IInput } from "./IInput";
 import { SCInput, SCFloatingForm } from "../styles";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 
 const InputControlled = ({
   wrapperClasses = "",

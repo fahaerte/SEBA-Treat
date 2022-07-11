@@ -8,7 +8,7 @@ import { SCFloatingForm } from "../styles";
 import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import { useTheme } from "styled-components";
 
 const TagSelectControlled = ({

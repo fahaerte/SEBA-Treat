@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { ITextArea } from "./ITextArea";
 import { SCFloatingForm, SCTextArea } from "../styles";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 
