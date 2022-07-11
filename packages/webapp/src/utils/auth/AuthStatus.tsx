@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../utils/AuthProvider";
-import { Button } from "../components";
+import { AuthContext } from "./AuthProvider";
+import { Button } from "../../components";
 import { useNavigate } from "react-router-dom";
 
 const AuthStatus = () => {
