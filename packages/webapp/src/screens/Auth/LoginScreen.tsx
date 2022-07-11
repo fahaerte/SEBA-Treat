@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
 import { IUserCredentials } from "@treat/lib-common";
-import { AuthContext } from "../../utils/AuthProvider";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
 
 const LoginScreen = () => {
-  const userContext = useContext(AuthContext);
+  const userContext = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
