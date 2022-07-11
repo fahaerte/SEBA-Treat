@@ -21,8 +21,6 @@ const AuthStatus = () => {
         {userContext.token ? (
           <div>
             <p>Logged in! </p>
-            <p>{userContext.userId}</p>
-            <p>{userContext.token}</p>
             <Button onClick={signout}>Sign Out</Button>
           </div>
         ) : (
