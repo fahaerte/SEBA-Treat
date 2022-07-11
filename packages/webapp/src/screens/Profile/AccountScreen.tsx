@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React from "react";
 import { Button, Card, Col, Row, SkeletonSquare } from "../../components";
 import { Container } from "react-bootstrap";
 import { Header } from "../../components/ui/Header/header";
@@ -20,7 +20,7 @@ import { useAuthContext } from "../../utils/auth/AuthProvider";
 export const AccountScreen = () => {
   const { userId } = useAuthContext();
 
-  const { data: user } = useQuery(["getUser", userId], () =>
+  const { data: user, isLoading: userIsLoading } = useQuery(["getUser", userId], () =>
     getUser(userId as string)
   );
 
@@ -65,7 +65,9 @@ export const AccountScreen = () => {
         </Row>
         <Row className={"pt-3"}>
           <SectionHeading>Balance</SectionHeading>
-          <Balance className="account-balance">{user.balance} Credits</Balance>
+          {/*<Balance className="account-balance">{user.balance} Credits</Balance>*/}
+          {/*TODO: fix user.balance*/}
+          <Balance className="account-balance">{0} Credits</Balance>
         </Row>
         <SectionHeading>Credit Packages</SectionHeading>
         <Row>

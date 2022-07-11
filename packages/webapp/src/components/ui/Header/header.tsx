@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../Grid";
 import { Button } from "../index";
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
@@ -40,7 +40,9 @@ export const Header = () => {
               <Container className={"w-100"}>
                 <Row className={"p-0"}>
                   <Col className={"col-sm-auto p-0"}>
-                    {user.balance} Credits
+                    {/*{user.balance} Credits*/}
+                    {/*TODO: fix user.balance*/}
+                    0 Credits
                   </Col>
                   <Col className={"col-sm-auto p-0 ms-2"}>Bild</Col>
                 </Row>

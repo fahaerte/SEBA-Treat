@@ -30,50 +30,36 @@ export const AppRouter = () => {
 
       {
         path: "/login",
-        element: <LoginScreen />,
+        element: <LoginScreen />
       },
       {
         path: "/register",
-        element: <RegisterScreen />,
+        element: <RegisterScreen />
       },
       {
         path: "/address",
-        element: <AddressInputScreen />,
+        element: <AddressInputScreen />
       },
-      // {
-      //   path: "/mealOfferRequests",
-      //   element: <MealOfferRequests />,
-      //   children: [
-      //     {
-      //       path: "sent",
-      //       element: <SentMealOfferRequests />,
-      //     },
-      //     {
-      //       path: "received",
-      //       element: <ReceivedMealOfferRequests />,
-      //     },
-      //   ],
-      // },
       {
         path: "/account",
-        element: <AccountScreen />,
+        element: <RequireAuthRoute><AccountScreen /></RequireAuthRoute>
       },
       {
         path: "/alreadyLoggedIn",
-        element: <Typography>User already logged in</Typography>,
-      },
-    ],
+        element: <Typography>User already logged in</Typography>
+      }
+    ]
   };
 
   const redirectRoutes = [
     {
       path: "/success/:priceId",
-      element: <PaymentSuccess />,
+      element: <PaymentSuccess />
     },
     {
       path: "/cancel",
-      element: <div>You canceled the purchase</div>,
-    },
+      element: <div>You canceled the purchase</div>
+    }
     // {
     //   path: "/purchase-credits",
     //   element: <CreditPackages />,
@@ -92,11 +78,11 @@ export const AppRouter = () => {
         children: [
           {
             path: "received/",
-            element: <Typography>Orders for user</Typography>,
-          },
-        ],
-      },
-    ],
+            element: <Typography>Orders for user</Typography>
+          }
+        ]
+      }
+    ]
   };
 
   const purchaseCreditRoutes = [
@@ -106,23 +92,22 @@ export const AppRouter = () => {
         <RequireAuthRoute>
           <CreditPackages />
         </RequireAuthRoute>
-      ),
+      )
     },
     {
       path: "/success/:priceId",
-      element: <PaymentSuccess />,
-    },
+      element: <PaymentSuccess />
+    }
   ];
 
   const mealRoutes = [
     {
-      // ALL THE MEALS
       path: "/mealoffers",
       element: (
         <RequireAddressRoute>
           <MealOfferScreen />
         </RequireAddressRoute>
-      ),
+      )
     },
     {
       path: "/mealOfferRequests",
@@ -134,14 +119,14 @@ export const AppRouter = () => {
       children: [
         {
           path: "sent",
-          element: <SentMealOfferRequests />,
+          element: <SentMealOfferRequests />
         },
         {
           path: "received",
-          element: <ReceivedMealOfferRequests />,
-        },
-      ],
-    },
+          element: <ReceivedMealOfferRequests />
+        }
+      ]
+    }
   ];
 
   const routing = useRoutes([
@@ -149,7 +134,7 @@ export const AppRouter = () => {
     profileRoutes,
     ...redirectRoutes,
     ...purchaseCreditRoutes,
-    ...mealRoutes,
+    ...mealRoutes
   ]);
 
   return (
