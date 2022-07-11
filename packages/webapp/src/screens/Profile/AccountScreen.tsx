@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Row, SkeletonSquare } from "../../components";
 import { Container } from "react-bootstrap";
 import { Header } from "../../components/ui/Header/header";
@@ -18,20 +18,33 @@ import { getUser } from "../../api/userApi";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const AccountScreen = () => {
-  const { userId } = useAuthContext();
+  const { userId, token } = useAuthContext();
 
-  const { data: user, isLoading: userIsLoading } = useQuery(["getUser", userId], () =>
-    getUser(userId as string)
+  const [balance, setBalance] = useState(0);
+
+  const { data: user, isLoading: userIsLoading } = useQuery(
+    ["getUser", userId],
+    () => getUser(userId as string, token as string),
+    {
+      onSuccess: (response) => {
+        setBalance(response.data.virtualAccount.balance);
+      },
+    }
   );
 
   const { data: products, isLoading: productsIsLoading } = useQuery(
     "products",
-    paymentGetProductsWithPrices
+    () => paymentGetProductsWithPrices(token as string)
   );
 
   const createCheckout = useMutation(
-    ({ priceId, stripeCustomerId, couponId }: CreateCheckoutSessionApiArg) =>
-      createCheckoutSession({ priceId, stripeCustomerId, couponId })
+    ({
+      priceId,
+      stripeCustomerId,
+      couponId,
+      token,
+    }: CreateCheckoutSessionApiArg) =>
+      createCheckoutSession({ priceId, stripeCustomerId, couponId, token })
   );
 
   const isMutation = useIsMutating({
@@ -44,6 +57,7 @@ export const AccountScreen = () => {
       createCheckout.mutate({
         priceId: priceId,
         stripeCustomerId: "62b776eafc0a00b0fa2d125e",
+        token: token as string,
       });
     } catch {
       return <div>Stripe Instance not available, 401</div>;
@@ -65,9 +79,7 @@ export const AccountScreen = () => {
         </Row>
         <Row className={"pt-3"}>
           <SectionHeading>Balance</SectionHeading>
-          {/*<Balance className="account-balance">{user.balance} Credits</Balance>*/}
-          {/*TODO: fix user.balance*/}
-          <Balance className="account-balance">{0} Credits</Balance>
+          <Balance className="account-balance">{balance} Credits</Balance>
         </Row>
         <SectionHeading>Credit Packages</SectionHeading>
         <Row>

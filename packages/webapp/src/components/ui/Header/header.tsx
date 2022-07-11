@@ -1,18 +1,22 @@
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../Grid";
 import { Button } from "../index";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
 import { useAuthContext } from "../../../utils/auth/AuthProvider";
 
 export const Header = () => {
-  const { userId } = useAuthContext();
+  const { userId, token } = useAuthContext();
 
-  const { data: user } = useQuery(["getUser", userId], () =>
-    getUser(userId as string)
-  );
+  const [balance, setBalance] = useState(0);
+
+  useQuery("getUser", () => getUser(userId as string, token as string), {
+    onSuccess: (response) => {
+      setBalance(response.data.virtualAccount.balance);
+    },
+  });
 
   const Header = styled.header`
     height: 110px;
@@ -39,11 +43,7 @@ export const Header = () => {
             <ProfileButton className={"btn btn-outline-primary"}>
               <Container className={"w-100"}>
                 <Row className={"p-0"}>
-                  <Col className={"col-sm-auto p-0"}>
-                    {/*{user.balance} Credits*/}
-                    {/*TODO: fix user.balance*/}
-                    0 Credits
-                  </Col>
+                  <Col className={"col-sm-auto p-0"}>{balance} Credits</Col>
                   <Col className={"col-sm-auto p-0 ms-2"}>Bild</Col>
                 </Row>
               </Container>

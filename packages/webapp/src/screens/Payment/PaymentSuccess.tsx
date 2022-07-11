@@ -11,16 +11,19 @@ import {
 import { useIsMutating, useMutation } from "react-query";
 import { verifyPayment } from "../../api/stripeApi";
 import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 const PaymentSuccess = () => {
   const { priceId } = useParams();
+  const { userId, token } = useAuthContext();
 
   const verifyPaymentMutation = useMutation(
-    ({ customerId, priceId, userId }: VerifyPaymentApiArg) =>
+    ({ customerId, priceId, userId, token }: VerifyPaymentApiArg) =>
       verifyPayment({
         customerId: "cus_M0y6NV1PXOlKwa",
         priceId,
         userId: "62c6f4b28622a1b6a1be844d",
+        token: token,
       })
   );
 

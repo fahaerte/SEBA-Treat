@@ -228,7 +228,7 @@ class UserController implements Controller {
       return next(new HttpException(404, "No logged in user"));
     }
     try {
-       //TODO: fix userId
+      //TODO: fix userId
       const urlParams = new URLSearchParams(req.url);
       // const userId = urlParams.get('userId');
       // res.status(404).send({user: userId});

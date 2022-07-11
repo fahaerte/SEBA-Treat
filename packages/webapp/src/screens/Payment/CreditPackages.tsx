@@ -22,25 +22,30 @@ import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/IC
 import { getUser } from "../../api/userApi";
 
 export const CreditPackages = () => {
-  const { userId } = useAuthContext();
+  const { userId, token } = useAuthContext();
 
-  const { data: user } = useQuery(["getUser", userId], () =>
-    getUser(userId as string)
+  const { data: user } = useQuery("getUser", () =>
+    getUser(userId as string, token as string)
   );
 
   const { data: products, isLoading: productsIsLoading } = useQuery(
     "products",
-    paymentGetProductsWithPrices
+    () => paymentGetProductsWithPrices(token as string)
   );
 
   const { data: discount, isLoading: discountIsLoading } = useQuery(
     "discounts",
-    paymentGetDiscount
+    () => paymentGetDiscount(token as string)
   );
 
   const createCheckout = useMutation(
-    ({ priceId, stripeCustomerId, couponId }: CreateCheckoutSessionApiArg) =>
-      createCheckoutSession({ priceId, stripeCustomerId, couponId })
+    ({
+      priceId,
+      stripeCustomerId,
+      couponId,
+      token,
+    }: CreateCheckoutSessionApiArg) =>
+      createCheckoutSession({ priceId, stripeCustomerId, couponId, token })
   );
 
   const isMutation = useIsMutating({
@@ -72,6 +77,7 @@ export const CreditPackages = () => {
         priceId: priceId,
         stripeCustomerId: user.stripeCustomerId,
         couponId: couponId || undefined,
+        token: token as string,
       });
     } catch {
       return <div>Stripe Instance not available, 401</div>;

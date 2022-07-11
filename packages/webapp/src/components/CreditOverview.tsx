@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, SectionHeading, Typography } from "./ui";
 import { useAuthContext } from "../utils/auth/AuthProvider";
 import { useQuery } from "react-query";
 import { getUser } from "../api/userApi";
 
 const CreditOverview = () => {
-  const { userId } = useAuthContext();
+  const { userId, token } = useAuthContext();
 
-  const { data, error, isError } = useQuery(["getUser", userId], () =>
-    getUser(userId as string)
+  const [balance, setBalance] = useState(0);
+
+  useQuery(
+    ["getUser", userId],
+    () => getUser(userId as string, token as string),
+    {
+      onSuccess: (response) => {
+        setBalance(response.data.virtualAccount.balance);
+      },
+    }
   );
 
   return (
@@ -16,7 +24,7 @@ const CreditOverview = () => {
       <Typography variant={"h1"}>Your account</Typography>
       <SectionHeading>Your account balance</SectionHeading>
       <Typography variant={"h1"} className={"fw-normal"}>
-        {userId ? data.virtualAccount.balance : "No"} Credits
+        {balance} Credits
       </Typography>
     </Col>
   );
