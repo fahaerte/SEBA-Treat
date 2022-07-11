@@ -5,9 +5,9 @@ import { RegisterScreen } from "../screens/Auth/RegisterScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { AddressInputScreen } from "../screens/AddressInputScreen";
 import { ErrorPage } from "../screens/Status/ErrorPage";
-import { AuthProvider } from "../utils/AuthProvider";
+import { AuthProvider } from "../utils/auth/AuthProvider";
 import { MealOfferScreen } from "../screens/MealOfferScreen";
-import { RequireAddressRoute } from "../utils/RequireAddressRoute";
+import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
@@ -15,7 +15,7 @@ import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequ
 import { AccountScreen } from "../screens/Profile/AccountScreen";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 import { CreditPackages } from "../screens/Payment/CreditPackages";
-import { RequireAuthRoute } from "../utils/RequireAuthRoute";
+import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 export const AppRouter = () => {
