@@ -1,19 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import { Button, Icon } from "../ui";
-import UserService from "../../services/user.service";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
-import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
-
-interface SentMealOfferRequestBottomProps {
-  mealOfferId: string;
-  sellerId: string;
-  sellerFirstName: string;
-  sellerLastName: string;
-  reservation: MealReservation;
-}
+import { SentMealOfferRequestBottomProps } from "@treat/lib-common/src/interfaces/ISentMealOfferRequestBottomProps";
 
 export const SentMealReservation = ({
   mealOfferId,
@@ -25,15 +16,6 @@ export const SentMealReservation = ({
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
-  const [profilePicture, setProfilePicture] = useState("");
-
-  const fetchSellerData = useCallback(async () => {
-    try {
-      setProfilePicture(await UserService.getProfilePictureURL(sellerId));
-    } catch (error: any) {
-      console.log(error);
-    }
-  }, [sellerId]);
 
   async function updateReservationState(newState: MealReservationState) {
     try {
@@ -47,10 +29,6 @@ export const SentMealReservation = ({
       console.log(error);
     }
   }
-
-  useEffect(() => {
-    fetchSellerData().catch((error) => console.error(error));
-  }, [fetchSellerData]);
 
   function getActionElement() {
     if (reservationState == MealReservationState.PENDING) {

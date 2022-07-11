@@ -3,9 +3,17 @@ import { Col, Row } from "../Grid";
 import { Button } from "../index";
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import UserService from "../../../services/user.service";
+import { useQuery } from "react-query";
+import { getUser } from "../../../api/userApi";
+import { useAuthContext } from "../../../utils/auth/AuthProvider";
 
 export const Header = () => {
+  const { userId } = useAuthContext();
+
+  const { data: user } = useQuery(["getUser", userId], () =>
+    getUser(userId as string)
+  );
+
   const Header = styled.header`
     height: 110px;
     border-bottom: 1px solid #cfcfcf;
@@ -16,18 +24,6 @@ export const Header = () => {
     border-radius: 50px;
     border-color: #cfcfcf;
   `;
-
-  const [balance, setBalance] = useState("Loading...");
-
-  const fetchData = useCallback(async () => {
-    const balance = await UserService.getAccountBalance();
-    console.log(balance);
-    setBalance(balance);
-  }, []);
-
-  useEffect(() => {
-    fetchData().catch(console.error);
-  }, [fetchData]);
 
   return (
     <Header>
@@ -43,7 +39,9 @@ export const Header = () => {
             <ProfileButton className={"btn btn-outline-primary"}>
               <Container className={"w-100"}>
                 <Row className={"p-0"}>
-                  <Col className={"col-sm-auto p-0"}>{balance} Credits</Col>
+                  <Col className={"col-sm-auto p-0"}>
+                    {user.balance} Credits
+                  </Col>
                   <Col className={"col-sm-auto p-0 ms-2"}>Bild</Col>
                 </Row>
               </Container>

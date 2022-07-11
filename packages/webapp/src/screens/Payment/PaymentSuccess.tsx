@@ -8,23 +8,34 @@ import {
   successToast,
   Typography,
 } from "../../components";
-import { useVerifyPaymentQuery } from "../../store/api/stripeApi";
+import { useIsMutating, useMutation } from "react-query";
+import { verifyPayment } from "../../api/stripeApi";
+import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 
 const PaymentSuccess = () => {
   const { priceId } = useParams();
-  const { data, isLoading, error, isSuccess } = useVerifyPaymentQuery({
-    customerId: "cus_M0y6NV1PXOlKwa",
-    priceId: priceId || "",
-    userId: "62c6f4b28622a1b6a1be844d",
+
+  const verifyPaymentMutation = useMutation(
+    ({ customerId, priceId, userId }: VerifyPaymentApiArg) =>
+      verifyPayment({
+        customerId: "cus_M0y6NV1PXOlKwa",
+        priceId,
+        userId: "62c6f4b28622a1b6a1be844d",
+      })
+  );
+
+  const isMutation = useIsMutating({
+    mutationKey: "isLoading",
+    exact: true,
   });
 
-  if (isSuccess) {
+  if (verifyPaymentMutation.isSuccess) {
     successToast({
       message: "Your purchased tokens have been added to your account!",
     });
   }
 
-  if (error) {
+  if (verifyPaymentMutation.isError) {
     dangerToast({
       message:
         "Your purchase was not successful or this link has already expired.",
@@ -34,7 +45,7 @@ const PaymentSuccess = () => {
 
   return (
     <>
-      {isLoading ? (
+      {isMutation ? (
         <Container className={"mt-5"}>
           <Row>
             <Col>

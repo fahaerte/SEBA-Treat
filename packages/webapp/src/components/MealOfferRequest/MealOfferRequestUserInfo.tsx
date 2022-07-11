@@ -1,13 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import UserService from "../../services/user.service";
 import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
-
-interface MealOfferRequestUserInfoProps {
-  userId: string;
-  firstName: string;
-  lastName: string;
-}
+import { MealOfferRequestUserInfoProps } from "@treat/lib-common/lib/interfaces/IMealOfferRequestUserInfoProps";
+import { useQuery } from "react-query";
+import { getProfilePictureURL, getUser } from "../../api/userApi";
 
 const ProfilePicture = styled.img`
   border-radius: 50%;
@@ -21,19 +17,9 @@ export const MealOfferRequestUserInfo = ({
   firstName,
   lastName,
 }: MealOfferRequestUserInfoProps) => {
-  const [profilePicture, setProfilePicture] = useState("");
-
-  const fetchUserData = useCallback(async () => {
-    try {
-      setProfilePicture(await UserService.getProfilePictureURL(String(userId)));
-    } catch (error: any) {
-      console.log(error);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    fetchUserData().catch((error) => console.error(error));
-  }, [fetchUserData]);
+  const { data: profilePicture } = useQuery(["getProfilePicture", userId], () =>
+    getProfilePictureURL(userId)
+  );
 
   return (
     <Col className={"col-3"}>
