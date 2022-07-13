@@ -110,15 +110,23 @@ export const AppRouter = () => {
 
   const mealRoutes = [
     {
-      path: "/mealoffers",
+      path: "mealoffers",
       element: (
-        <RequireAddressRoute>
-          <MealOfferScreen />
-        </RequireAddressRoute>
+        <RequireAuthRoute>
+          <RequireAddressRoute>
+            <MealOfferScreen />
+          </RequireAddressRoute>
+        </RequireAuthRoute>
       ),
+      children: [
+        {
+          path: "test/:mealOfferId",
+          element: <MealOfferScreen />,
+        },
+      ],
     },
     {
-      path: "/mealOfferRequests",
+      path: "mealOfferRequests",
       element: (
         <RequireAuthRoute>
           <MealOfferRequests />

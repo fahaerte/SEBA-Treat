@@ -80,6 +80,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
+      console.log(req.user);
       const mealOffer = await this.mealOfferService.getMealOffer(
         req.user,
         req.params.mealOfferId

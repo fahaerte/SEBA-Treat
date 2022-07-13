@@ -111,7 +111,7 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}/:userid?`, authenticate, this.getUser);
+    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
 
     /**
      * @swagger
@@ -228,11 +228,10 @@ class UserController implements Controller {
       return next(new HttpException(404, "No logged in user"));
     }
     try {
-      //TODO: fix userId
-      const urlParams = new URLSearchParams(req.url);
-      // const userId = urlParams.get('userId');
-      // res.status(404).send({user: userId});
-      const userId = "62cc75ba8a708498732805ce";
+      let userId = "62cc75ba8a708498732805ce";
+      if (req.params.userId) {
+        userId = req.params.userId;
+      }
       if (userId) {
         const user = await this.userService.getUser(userId);
         res.status(200).send({ data: user });
