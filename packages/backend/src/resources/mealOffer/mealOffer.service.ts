@@ -13,6 +13,7 @@ import MealReservationNotFoundException from "../../utils/exceptions/mealReserva
 import { EMealReservationState } from "@treat/lib-common/src/enums/EMealReservationState";
 import { IMealOffer } from "@treat/lib-common/src/interfaces/IMealOffer";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
+import { TRANSACTION_FEE } from "@treat/lib-common/src/constants";
 
 @Service()
 class MealOfferService {
@@ -27,6 +28,9 @@ class MealOfferService {
     user: UserDocument
   ): Promise<MealOfferDocument | Error> {
     newMealOffer.user = user._id;
+    newMealOffer.transactionFee = Math.round(
+      TRANSACTION_FEE * newMealOffer.price
+    );
     return (await this.mealOffer.create(newMealOffer)) as MealOfferDocument;
   }
 
