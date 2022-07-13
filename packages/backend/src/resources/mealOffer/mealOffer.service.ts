@@ -14,6 +14,8 @@ import { EMealReservationState } from "@treat/lib-common/src/enums/EMealReservat
 import { IMealOffer } from "@treat/lib-common/src/interfaces/IMealOffer";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/src/constants";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
 @Service()
 class MealOfferService {
@@ -48,6 +50,47 @@ class MealOfferService {
       return this.getMealOfferPreview(user, mealOfferDoc);
     }
     return mealOfferDoc;
+  }
+
+  public async getMealOfferPreviews(
+    category?: EMealCategory,
+    allergen?: EMealAllergen,
+    portions?: string,
+    sellerRating?: string,
+    startDate?: string,
+    endDate?: string,
+    price?: string,
+    search?: string
+  ): Promise<MealOfferDocument[]> {
+    const match: Record<string, any> = {};
+    if (search !== undefined) {
+      match["$or"] = [
+        {
+          title: {
+            $regex: new RegExp(search),
+            $options: "i",
+          },
+        },
+        {
+          description: {
+            $regex: new RegExp(search),
+            $options: "i",
+          },
+        },
+      ];
+    }
+    if (category !== undefined) match["categories"] = { $eq: category };
+    if (allergen !== undefined) match["allergens"] = { $eq: allergen };
+    if (portions !== undefined) match["portions"] = { $eq: Number(portions) };
+    if (startDate !== undefined)
+      match["startDate"] = { $gte: new Date(startDate) };
+    if (endDate !== undefined) match["startDate"] = { $lte: new Date(endDate) };
+    if (price !== undefined) match["price"] = { $lte: Number(price) };
+    if (sellerRating !== undefined)
+      match["user.meanRating"] = { $gte: Number(sellerRating) };
+    console.log(match);
+
+    return await this.mealOffer.aggregateMealOfferPreviews(match);
   }
 
   private getMealOfferPreview(

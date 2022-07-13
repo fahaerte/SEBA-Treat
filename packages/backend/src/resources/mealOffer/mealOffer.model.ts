@@ -69,6 +69,10 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
 
 export interface MealOfferModel extends Model<MealOfferDocument> {
   findSentMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
+
+  aggregateMealOfferPreviews(
+    match: Record<string, any>
+  ): Promise<MealOfferDocument[]>;
 }
 
 MealOfferSchema.statics.findSentMealOfferRequests = async function (
@@ -97,6 +101,49 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
   )
     .populate("user", "firstName lastName meanRating")
     .exec();
+};
+
+MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
+  this: Model<MealOfferDocument>,
+  match: Record<string, any>
+) {
+  return await this.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        startDate: 1,
+        endDate: 1,
+        price: 1,
+        portions: 1,
+        categories: 1,
+        allergens: 1,
+        user: {
+          $arrayElemAt: ["$user", 0],
+        },
+      },
+    },
+    {
+      $match: match,
+    },
+    {
+      $project: {
+        "user.password": 0,
+        "user.email": 0,
+        "user.birthdate": 0,
+        "user.address": 0,
+        "user.countRatings": 0,
+        "user.virtualAccount": 0,
+      },
+    },
+  ]).exec();
 };
 
 export default model<MealOfferDocument, MealOfferModel>(
