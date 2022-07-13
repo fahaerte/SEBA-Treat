@@ -1,5 +1,4 @@
-export interface IRating {
-  _id: string;
+export interface Rating {
   buyerRating?: number;
   sellerRating?: number;
 }

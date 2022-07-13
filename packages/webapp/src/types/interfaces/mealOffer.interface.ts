@@ -1,5 +1,6 @@
 import MealReservation from "./mealReservation.interface";
 import User from "./user.interface";
+import { Rating } from "./rating.interface";
 
 export default interface MealOffer {
   _id: string;
@@ -15,4 +16,5 @@ export default interface MealOffer {
   price: number;
   transactionFee: number;
   reservations: MealReservation[];
+  rating?: Rating;
 }

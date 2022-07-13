@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
-import { Button, Icon } from "../ui";
+import { Button } from "../ui";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
+import { RateUser } from "./RateUser";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
   reservation: MealReservation;
+  buyerRating: number | undefined;
 }
 
 export const ReceivedMealReservation = ({
   mealOfferId,
   reservation,
+  buyerRating,
 }: ReceivedMealReservationProps) => {
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
@@ -51,7 +54,11 @@ export const ReceivedMealReservation = ({
       return <span>The buyer cancelled the request</span>;
     } else if (reservationState == MealReservationState.BUYER_CONFIRMED) {
       return (
-        <Button onClick={() => console.log("Rate")}>Rate the seller</Button>
+        <RateUser
+          mealOfferId={mealOfferId}
+          mealReservationId={reservation._id}
+          existingRating={buyerRating}
+        />
       );
     }
   };
@@ -59,7 +66,8 @@ export const ReceivedMealReservation = ({
   function getActionBar() {
     if (
       reservationState == MealReservationState.BUYER_REJECTED ||
-      reservationState == MealReservationState.SELLER_REJECTED
+      reservationState == MealReservationState.SELLER_REJECTED ||
+      reservationState == MealReservationState.BUYER_CONFIRMED
     ) {
       return (
         <Row>
@@ -93,15 +101,8 @@ export const ReceivedMealReservation = ({
         userId={reservation.buyer._id}
         firstName={reservation.buyer.firstName}
         lastName={reservation.buyer.lastName}
+        meanRating={reservation.buyer.meanRating}
       />
-      <Col className={""}>
-        <Row className={"h-100"}>
-          <Col className={"col-sm-auto d-flex align-items-center"}>
-            <Icon type={"info"}></Icon>
-          </Col>
-          <Col className={"col-sm-auto my-auto"}>Sterne</Col>
-        </Row>
-      </Col>
       <Col className={"col-sm-auto d-flex align-items-center"}>
         {getActionBar()}
       </Col>

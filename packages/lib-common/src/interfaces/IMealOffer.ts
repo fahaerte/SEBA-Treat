@@ -1,17 +1,19 @@
-import { ObjectId } from "mongoose";
-import { IMealOfferReservation } from "./IMealOfferReservation";
+import { IMealReservation } from "./IMealReservation";
+import { IRating } from "./IRating";
 
-export interface IMealOffer extends Document {
+export interface IMealOffer {
+  _id: string;
   title: string;
   description: string;
-  user: ObjectId;
-  categories: ObjectId[];
-  allergens: ObjectId[];
+  user: string;
+  categories: string[];
+  allergens: string[];
   startDate: Date;
   endDate: Date;
   portions: number;
-  pickUpDetails: string;
+  pickUpDetails?: string;
   price: number;
   transactionFee: number;
-  reservations: IMealOfferReservation[];
+  reservations: IMealReservation[];
+  rating?: IRating;
 }

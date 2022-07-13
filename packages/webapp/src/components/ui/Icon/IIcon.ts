@@ -13,6 +13,7 @@ export const AIconType = [
   "plus",
   "search",
   "star",
+  "star-fill",
   "ellipsis",
   "write",
   "chevronLeft",

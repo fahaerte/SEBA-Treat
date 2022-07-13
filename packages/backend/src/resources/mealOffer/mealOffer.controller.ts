@@ -1,12 +1,12 @@
 import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
-import { MealOffer } from "./mealOffer.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
+import { IMealOffer } from "@treat/lib-common/src/interfaces/IMealOffer";
 
 @Service()
 class MealOfferController implements Controller {
@@ -63,7 +63,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOfferRequest = req.body as MealOffer;
+      const mealOfferRequest = req.body as IMealOffer;
       const newMealOffer = await this.mealOfferService.create(
         mealOfferRequest,
         req.user

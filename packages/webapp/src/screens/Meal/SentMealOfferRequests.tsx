@@ -33,7 +33,13 @@ export const SentMealOfferRequests = () => {
                     sellerId={mealOffer.user._id}
                     sellerFirstName={mealOffer.user.firstName}
                     sellerLastName={mealOffer.user.lastName}
+                    sellerMeanRating={mealOffer.user.meanRating}
                     reservation={reservation}
+                    sellerRating={
+                      mealOffer.rating === undefined
+                        ? undefined
+                        : mealOffer.rating.sellerRating
+                    }
                   />
                 );
               })}
