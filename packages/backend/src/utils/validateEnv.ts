@@ -1,4 +1,4 @@
-import { cleanEnv, str, port } from "envalid";
+import { cleanEnv, port, str } from "envalid";
 
 function validateEnv(): void {
   cleanEnv(process.env, {
@@ -9,7 +9,7 @@ function validateEnv(): void {
     PORT: port({ default: 5000 }),
     JWT_SECRET: str(),
     STRIPE_API_SECRET_KEY: str(),
-    // STRIPE_API_PUBLIC_KEY: str(),
+    GOOGLE_MAPS_API_KEY: str(),
   });
 }
 

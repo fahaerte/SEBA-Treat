@@ -6,7 +6,7 @@ import MealReservationState from "../mealReservation/mealReservationState.enum";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 import InvalidRatingException from "../../utils/exceptions/invalidRating.exception";
 import UserService from "../user/user.service";
-import { EMealReservationState } from "@treat/lib-common/src/enums/EMealReservationState";
+import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { RatingDocument } from "./rating.interface";
 

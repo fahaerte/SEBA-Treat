@@ -1,7 +1,7 @@
 import Joi from "joi";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import EMealCategory from "@treat/lib-common/src/enums/EMealCategory";
-import EMealAllergen from "@treat/lib-common/src/enums/EMealAllergen";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
 const createBody = Joi.object({
   title: Joi.string().required(),
@@ -48,6 +48,7 @@ const getMealOfferPreviewsQuery = Joi.object({
   endDate: Joi.date().iso().greater(Joi.ref("startDate")),
   price: Joi.number(),
   search: Joi.string().min(1),
+  distance: Joi.number()
 });
 
 const createMealOfferReservationParams = Joi.object({

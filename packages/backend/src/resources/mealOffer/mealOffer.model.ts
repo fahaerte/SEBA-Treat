@@ -1,9 +1,12 @@
 import { Model, model, Schema, Types } from "mongoose";
-import { MealOfferDocument } from "./mealOffer.interface";
+import {
+  MealOfferDocument,
+  MealOfferDocumentWithUser,
+} from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import { RatingSchema } from "../rating/rating.model";
-import EMealAllergen from "@treat/lib-common/src/enums/EMealAllergen";
-import EMealCategory from "@treat/lib-common/src/enums/EMealCategory";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
   {
@@ -72,7 +75,7 @@ export interface MealOfferModel extends Model<MealOfferDocument> {
 
   aggregateMealOfferPreviews(
     match: Record<string, any>
-  ): Promise<MealOfferDocument[]>;
+  ): Promise<MealOfferDocumentWithUser[]>;
 }
 
 MealOfferSchema.statics.findSentMealOfferRequests = async function (
@@ -138,7 +141,6 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
         "user.password": 0,
         "user.email": 0,
         "user.birthdate": 0,
-        "user.address": 0,
         "user.countRatings": 0,
         "user.virtualAccount": 0,
       },

@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
-import { IRating } from "@treat/lib-common/lib/interfaces/IRating";
+import { RatingDocument } from "./rating.interface";
 
-export const RatingSchema = new Schema<IRating>(
+export const RatingSchema = new Schema<RatingDocument>(
   {
     buyerRating: {
       type: Number,

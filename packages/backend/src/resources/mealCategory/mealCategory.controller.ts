@@ -2,7 +2,7 @@ import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
 import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
-import EMealCategory from "@treat/lib-common/src/enums/EMealCategory";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
 
 @Service()
 class MealCategoryController implements Controller {
