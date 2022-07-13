@@ -1,32 +1,41 @@
 import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
-import User from "../user/user.interface";
+import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
 import { ObjectId } from "mongoose";
-import { MealOffer, MealOfferDocument } from "./mealOffer.interface";
+import { MealOfferDocument } from "./mealOffer.interface";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
-import MealReservation from "../mealReservation/mealReservation.interface";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
+import { EMealReservationState } from "@treat/lib-common/src/enums/EMealReservationState";
+import { IMealOffer } from "@treat/lib-common/src/interfaces/IMealOffer";
+import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
+import { TRANSACTION_FEE } from "@treat/lib-common/src/constants";
 
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
-  private mealTransactionService = new MealTransactionService();
+
+  constructor(
+    private readonly mealTransactionService: MealTransactionService
+  ) {}
 
   public async create(
-    newMealOffer: MealOffer,
-    user: User
-  ): Promise<MealOffer | Error> {
+    newMealOffer: IMealOffer,
+    user: UserDocument
+  ): Promise<MealOfferDocument | Error> {
     newMealOffer.user = user._id;
-    return await this.mealOffer.create(newMealOffer);
+    newMealOffer.transactionFee = Math.round(
+      TRANSACTION_FEE * newMealOffer.price
+    );
+    return (await this.mealOffer.create(newMealOffer)) as MealOfferDocument;
   }
 
   public async getMealOffer(
-    user: User,
+    user: UserDocument,
     mealOfferId: string
   ): Promise<MealOfferDocument | Error> {
     const mealOfferDoc = (await this.mealOffer.findById(
@@ -42,7 +51,7 @@ class MealOfferService {
   }
 
   private getMealOfferPreview(
-    user: User,
+    user: UserDocument,
     mealOfferDoc: MealOfferDocument
   ): MealOfferDocument {
     mealOfferDoc.reservations = mealOfferDoc.reservations.filter(
@@ -50,7 +59,7 @@ class MealOfferService {
     );
     mealOfferDoc.reservations.forEach((reservation) => {
       if (
-        reservation.reservationState !== MealReservationState.BUYER_CONFIRMED
+        reservation.reservationState !== EMealReservationState.BUYER_CONFIRMED
       ) {
         mealOfferDoc.pickUpDetails = undefined;
       }
@@ -59,23 +68,23 @@ class MealOfferService {
   }
 
   public async getSentMealOfferRequests(
-    user: User
+    user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
     return await this.mealOffer.findSentMealOfferRequests(user._id);
   }
 
   public async getReceivedMealOfferRequests(
-    user: User
-  ): Promise<MealOffer[] | Error> {
+    user: UserDocument
+  ): Promise<MealOfferDocument[] | Error> {
     return (await this.mealOffer
       .find({ user: user._id })
-      .populate("reservations.buyer", "firstName lastName")
-      .exec()) as MealOffer[];
+      .populate("reservations.buyer", "firstName lastName meanRating")
+      .exec()) as MealOfferDocument[];
   }
 
   public async deleteMealOffer(
     mealOfferId: string,
-    user: User
+    user: UserDocument
   ): Promise<void | Error> {
     const mealOfferDoc = (await this.getMealOffer(
       user,
@@ -90,7 +99,7 @@ class MealOfferService {
 
   public async createMealOfferReservation(
     mealOfferId: string,
-    user: User
+    user: UserDocument
   ): Promise<MealOfferDocument | Error> {
     const mealOfferDoc = (await this.getMealOffer(
       user,
@@ -98,16 +107,23 @@ class MealOfferService {
     )) as MealOfferDocument;
     if (!user._id.equals(mealOfferDoc.user)) {
       const reservations = mealOfferDoc.reservations;
-      const result = reservations.find((reservation) =>
-        user._id.equals(reservation.buyer)
-      );
-      if (result === undefined) {
-        mealOfferDoc.reservations.push({ buyer: user._id } as MealReservation);
-        return await mealOfferDoc.save();
-      }
-      throw new InvalidMealReservationException(
-        "You can only make one reservation per meal offer"
-      );
+      reservations.forEach((reservation) => {
+        if (
+          reservation.reservationState === EMealReservationState.BUYER_CONFIRMED
+        ) {
+          throw new InvalidMealReservationException(
+            "This mealOffer is not available for reservations anymore"
+          );
+        } else if (user._id.equals(reservation.buyer)) {
+          throw new InvalidMealReservationException(
+            "You can only make one reservation per meal offer"
+          );
+        }
+      });
+      mealOfferDoc.reservations.push({
+        buyer: user._id,
+      } as MealReservationDocument);
+      return await mealOfferDoc.save();
     }
     throw new InvalidMealReservationException(
       "You can not make a reservation for your own meal offer"
@@ -116,7 +132,7 @@ class MealOfferService {
 
   public async updateMealOfferReservationState(
     mealOfferId: string,
-    user: User,
+    user: UserDocument,
     mealReservationId: string,
     newState: MealReservationState
   ): Promise<void | Error> {
@@ -155,7 +171,7 @@ class MealOfferService {
 
   private async updateMealOfferReservationToSellerAccepted(
     mealOfferId: string,
-    seller: User,
+    seller: UserDocument,
     mealReservationId: string
   ): Promise<void | Error> {
     const [mealOfferDoc, mealReservation] =
@@ -163,9 +179,9 @@ class MealOfferService {
         mealOfferId,
         mealReservationId,
         seller
-      )) as [MealOfferDocument, MealReservation];
-    if (mealReservation.reservationState === MealReservationState.PENDING) {
-      mealReservation.reservationState = MealReservationState.SELLER_ACCEPTED;
+      )) as [MealOfferDocument, MealReservationDocument];
+    if (mealReservation.reservationState === EMealReservationState.PENDING) {
+      mealReservation.reservationState = EMealReservationState.SELLER_ACCEPTED;
       await mealOfferDoc.save();
     } else {
       throw new InvalidMealReservationStateException(
@@ -176,7 +192,7 @@ class MealOfferService {
 
   private async updateMealOfferReservationToBuyerConfirmed(
     mealOfferId: string,
-    buyer: User,
+    buyer: UserDocument,
     mealReservationId: string
   ): Promise<void | Error> {
     const [mealOfferDoc, mealReservation] =
@@ -184,9 +200,9 @@ class MealOfferService {
         mealOfferId,
         mealReservationId,
         buyer
-      )) as [MealOfferDocument, MealReservation];
+      )) as [MealOfferDocument, MealReservationDocument];
     if (
-      mealReservation.reservationState === MealReservationState.SELLER_ACCEPTED
+      mealReservation.reservationState === EMealReservationState.SELLER_ACCEPTED
     ) {
       const mealTransaction =
         (await this.mealTransactionService.createTransaction(
@@ -202,9 +218,10 @@ class MealOfferService {
         mealTransaction._id as ObjectId
       );
       mealOfferDoc.reservations.forEach((reservation) => {
-        reservation.reservationState = mealReservation.equals(reservation)
-          ? MealReservationState.BUYER_CONFIRMED
-          : MealReservationState.SELLER_REJECTED;
+        reservation.reservationState =
+          mealReservation._id === reservation._id
+            ? EMealReservationState.BUYER_CONFIRMED
+            : EMealReservationState.SELLER_REJECTED;
       });
       await mealOfferDoc.save();
     } else {
@@ -216,7 +233,7 @@ class MealOfferService {
 
   private async updateMealOfferReservationToSellerRejected(
     mealOfferId: string,
-    seller: User,
+    seller: UserDocument,
     mealReservationId: string
   ): Promise<void | Error> {
     const [mealOfferDoc, mealReservation] =
@@ -224,12 +241,12 @@ class MealOfferService {
         mealOfferId,
         mealReservationId,
         seller
-      )) as [MealOfferDocument, MealReservation];
+      )) as [MealOfferDocument, MealReservationDocument];
     if (
-      mealReservation.reservationState === MealReservationState.PENDING ||
-      mealReservation.reservationState === MealReservationState.SELLER_ACCEPTED
+      mealReservation.reservationState === EMealReservationState.PENDING ||
+      mealReservation.reservationState === EMealReservationState.SELLER_ACCEPTED
     ) {
-      mealReservation.reservationState = MealReservationState.SELLER_REJECTED;
+      mealReservation.reservationState = EMealReservationState.SELLER_REJECTED;
       await mealOfferDoc.save();
     } else {
       throw new InvalidMealReservationStateException(
@@ -240,7 +257,7 @@ class MealOfferService {
 
   private async updateMealOfferReservationToBuyerRejected(
     mealOfferId: string,
-    buyer: User,
+    buyer: UserDocument,
     mealReservationId: string
   ): Promise<void | Error> {
     const [mealOfferDoc, mealReservation] =
@@ -248,13 +265,13 @@ class MealOfferService {
         mealOfferId,
         mealReservationId,
         buyer
-      )) as [MealOfferDocument, MealReservation];
+      )) as [MealOfferDocument, MealReservationDocument];
     if (
       mealReservation.reservationState ===
-        MealReservationState.SELLER_ACCEPTED ||
-      mealReservation.reservationState === MealReservationState.PENDING
+        EMealReservationState.SELLER_ACCEPTED ||
+      mealReservation.reservationState === EMealReservationState.PENDING
     ) {
-      mealReservation.reservationState = MealReservationState.BUYER_REJECTED;
+      mealReservation.reservationState = EMealReservationState.BUYER_REJECTED;
       console.log(mealOfferDoc);
       try {
         await mealOfferDoc.save();
@@ -268,18 +285,18 @@ class MealOfferService {
     }
   }
 
-  private async getMealOfferAndReservation(
-    user: User,
+  public async getMealOfferAndReservation(
+    user: UserDocument,
     mealOfferId: string,
     mealReservationId: string
-  ): Promise<[MealOffer, MealReservation] | Error> {
+  ): Promise<[MealOfferDocument, MealReservationDocument] | Error> {
     const mealOfferDoc = (await this.getMealOffer(
       user,
       mealOfferId
     )) as MealOfferDocument;
     const mealReservation = mealOfferDoc.reservations.find(
-      (reservation) => reservation._id == mealReservationId
-    ) as MealReservation;
+      (reservation) => String(reservation._id) === mealReservationId
+    ) as MealReservationDocument;
     if (mealReservation === undefined) {
       throw new MealReservationNotFoundException(
         mealOfferId,
@@ -292,14 +309,14 @@ class MealOfferService {
   private async getMealOfferAndReservationForSeller(
     mealOfferId: string,
     mealReservationId: string,
-    seller: User
-  ): Promise<[MealOffer, MealReservation] | Error> {
+    seller: UserDocument
+  ): Promise<[MealOfferDocument, MealReservationDocument] | Error> {
     const [mealOfferDoc, mealReservation] =
       (await this.getMealOfferAndReservation(
         seller,
         mealOfferId,
         mealReservationId
-      )) as [MealOffer, MealReservation];
+      )) as [MealOfferDocument, MealReservationDocument];
     if (seller._id.equals(mealOfferDoc.user)) {
       return [mealOfferDoc, mealReservation];
     }
@@ -309,14 +326,14 @@ class MealOfferService {
   private async getMealOfferAndReservationForBuyer(
     mealOfferId: string,
     mealReservationId: string,
-    buyer: User
-  ): Promise<[MealOfferDocument, MealReservation] | Error> {
+    buyer: UserDocument
+  ): Promise<[MealOfferDocument, MealReservationDocument] | Error> {
     const [mealOfferDoc, mealReservation] =
       (await this.getMealOfferAndReservation(
         buyer,
         mealOfferId,
         mealReservationId
-      )) as [MealOfferDocument, MealReservation];
+      )) as [MealOfferDocument, MealReservationDocument];
     if (buyer._id.equals(mealReservation.buyer)) {
       return [mealOfferDoc, mealReservation];
     }

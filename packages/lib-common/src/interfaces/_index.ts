@@ -6,7 +6,7 @@ export type { IMealOffer } from "./IMealOffer";
 export type { IRating } from "./IRating";
 export type { IUser } from "./IUser";
 export type { IVirtualAccount } from "./IVirtualAccount";
-export type { IMealOfferReservation } from "./IMealOfferReservation";
+export type { IMealReservation } from "./IMealReservation";
 export type { IUserCredentials } from "./IUserCredentials";
 export type { IStripeProduct } from "./ICreditPackage";
 export type { IStripeDiscount } from "./ICreditDiscount";

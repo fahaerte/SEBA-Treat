@@ -1,8 +1,8 @@
-import { Document, ObjectId } from "mongoose";
-import MealReservationState from "./mealReservationState.enum";
+import { ObjectId } from "mongoose";
+import { IMealReservation } from "@treat/lib-common/src/interfaces/IMealReservation";
 
-export default interface MealReservation extends Document {
-  _id: string;
+export interface MealReservationDocument
+  extends Omit<IMealReservation, "_id" | "buyer"> {
+  _id: ObjectId;
   buyer: ObjectId;
-  reservationState: MealReservationState;
 }
