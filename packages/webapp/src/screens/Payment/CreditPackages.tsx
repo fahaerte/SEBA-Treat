@@ -21,6 +21,7 @@ import {
 import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 import { getUser } from "../../api/userApi";
 
+//TODO: Fix bugs
 export const CreditPackages = () => {
   const { userId, token } = useAuthContext();
 
