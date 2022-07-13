@@ -1,8 +1,8 @@
 import Controller from "../../utils/interfaces/controller.interface";
-import { Response, Request, NextFunction, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { Service } from "typedi";
 import authenticate from "../../middleware/authenticated.middleware";
-import MealAllergenEnum from "./mealAllergen.enum";
+import EMealAllergen from "@treat/lib-common/src/enums/EMealAllergen";
 
 @Service()
 class MealAllergenController implements Controller {
@@ -23,7 +23,7 @@ class MealAllergenController implements Controller {
     next: NextFunction
   ): void => {
     try {
-      res.status(200).send({ data: Object.values(MealAllergenEnum) });
+      res.status(200).send({ data: Object.values(EMealAllergen) });
     } catch (error: any) {
       next(error);
     }

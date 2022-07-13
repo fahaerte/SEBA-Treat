@@ -1,10 +1,10 @@
 import { model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import User from "./user.interface";
+import UserDocument from "./user.interface";
 import { AddressSchema } from "../address/address.model";
 import { VirtualAccountSchema } from "../virtualAccount/virtualAccount.model";
 
-const UserSchema = new Schema<User>(
+const UserSchema = new Schema<UserDocument>(
   {
     email: {
       type: String,
@@ -54,7 +54,7 @@ const UserSchema = new Schema<User>(
   { timestamps: true }
 );
 
-UserSchema.pre<User>("save", async function (next) {
+UserSchema.pre<UserDocument>("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -70,4 +70,4 @@ UserSchema.methods.isValidPassword = async function (
   return await bcrypt.compare(password, this.password);
 };
 
-export default model<User>("User", UserSchema);
+export default model<UserDocument>("User", UserSchema);

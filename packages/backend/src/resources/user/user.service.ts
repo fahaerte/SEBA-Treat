@@ -3,11 +3,11 @@ import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import User from "../user/user.interface";
+import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
-import {IAddress, IUser} from "@treat/lib-common";
+import { IAddress, IUser } from "@treat/lib-common";
 import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
 
 @Service()
@@ -21,7 +21,7 @@ class UserService {
    */
   public async register(
     newUser: IUser
-  ): Promise<{ userId: string; token: string, address: IAddress }> {
+  ): Promise<{ userId: string; token: string; address: IAddress }> {
     try {
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
@@ -30,7 +30,11 @@ class UserService {
         ...newUser,
         stripeCustomerId: "",
       });
-      return { userId: user.id, token: token.createToken(user), address: user.address };
+      return {
+        userId: user.id,
+        token: token.createToken(user),
+        address: user.address,
+      };
     } catch (error: any) {
       throw new Error(error.message as string);
     }
@@ -42,7 +46,7 @@ class UserService {
   public async login(
     email: string,
     password: string
-  ): Promise<{ userId: string; token: string, address: IAddress }> {
+  ): Promise<{ userId: string; token: string; address: IAddress }> {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {
@@ -50,7 +54,11 @@ class UserService {
     }
 
     if (await user.isValidPassword(password)) {
-      return { userId: user.id, token: token.createToken(user), address: user.address };
+      return {
+        userId: user.id,
+        token: token.createToken(user),
+        address: user.address,
+      };
     } else {
       throw new Error("Wrong credentials given");
     }
@@ -58,13 +66,13 @@ class UserService {
 
   public async updateUser(
     user: { _id: string } & Partial<IUser>
-  ): Promise<User | null> {
+  ): Promise<UserDocument | null> {
     const { _id, ...updatedUser } = user;
     await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
     return this.userModel.findById(_id);
   }
 
-  public async getUser(userId: string): Promise<Partial<User> | null> {
+  public async getUser(userId: string): Promise<Partial<UserDocument> | null> {
     return this.userModel
       .findById(userId)
       .select([
@@ -103,7 +111,7 @@ class UserService {
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as UserDocument;
     const newBalance = user.virtualAccount.balance - amount;
     if (newBalance >= 0) {
       user.virtualAccount.balance -= amount;
@@ -120,14 +128,14 @@ class UserService {
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as UserDocument;
     user.virtualAccount.balance += amount;
     await user.save();
     return user.virtualAccount.balance;
   }
 
   public async getAccountBalance(userId: ObjectId): Promise<number | Error> {
-    const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as UserDocument;
     return user.virtualAccount.balance;
   }
 
@@ -136,7 +144,7 @@ class UserService {
     newRating: number
   ): Promise<number | Error> {
     try {
-      const user = (await this.userModel.findById(userId)) as User;
+      const user = (await this.userModel.findById(userId)) as UserDocument;
       const ratingVolume = user.meanRating * user.countRatings;
       user.countRatings += 1;
       const newMeanRating = (ratingVolume + newRating) / user.countRatings;

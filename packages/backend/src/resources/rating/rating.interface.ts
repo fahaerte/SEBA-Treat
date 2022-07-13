@@ -1,8 +1,6 @@
-import { Document } from "mongoose";
+import { ObjectId } from "mongoose";
+import { IRating } from "@treat/lib-common/src/interfaces/IRating";
 
-export interface Rating {
-  buyerRating?: number;
-  sellerRating?: number;
+export interface RatingDocument extends Omit<IRating, "_id"> {
+  _id: ObjectId;
 }
-
-export interface RatingDocument extends Rating, Document {}

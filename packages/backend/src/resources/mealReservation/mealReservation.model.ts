@@ -1,9 +1,8 @@
 import { Schema, Types } from "mongoose";
-import MealReservation from "./mealReservation.interface";
-import MealReservationStateEnum from "./mealReservationState.enum";
-import MealReservationState from "./mealReservationState.enum";
+import { EMealReservationState } from "@treat/lib-common/src/enums/EMealReservationState";
+import { MealReservationDocument } from "./mealReservation.interface";
 
-export const MealReservationSchema = new Schema<MealReservation>(
+export const MealReservationSchema = new Schema<MealReservationDocument>(
   {
     buyer: {
       type: Types.ObjectId,
@@ -12,9 +11,9 @@ export const MealReservationSchema = new Schema<MealReservation>(
     },
     reservationState: {
       type: String,
-      enum: Object.values(MealReservationStateEnum),
+      enum: Object.values(EMealReservationState),
       required: true,
-      default: MealReservationState.PENDING,
+      default: EMealReservationState.PENDING,
     },
   },
   {

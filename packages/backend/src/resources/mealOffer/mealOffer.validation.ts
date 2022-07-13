@@ -1,17 +1,17 @@
 import Joi from "joi";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import MealCategory from "../mealCategory/mealCategory.enum";
-import MealAllergen from "../mealAllergen/mealAllergen.enum";
+import EMealCategory from "@treat/lib-common/src/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/src/enums/EMealAllergen";
 
 const create = Joi.object({
   title: Joi.string().required(),
   description: Joi.string().required(),
   categories: Joi.array()
     .min(1)
-    .items(Joi.string().valid(...Object.values(MealCategory)))
+    .items(Joi.string().valid(...Object.values(EMealCategory)))
     .required(),
   allergens: Joi.array().items(
-    Joi.string().valid(...Object.values(MealAllergen))
+    Joi.string().valid(...Object.values(EMealAllergen))
   ),
   startDate: Joi.date().iso().required().min(Date.now()),
   endDate: Joi.date().iso().required().greater(Joi.ref("startDate")),

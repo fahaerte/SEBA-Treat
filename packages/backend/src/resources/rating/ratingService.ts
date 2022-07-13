@@ -1,13 +1,14 @@
 import { Service } from "typedi";
 import MealOfferService from "../mealOffer/mealOffer.service";
-import User from "../user/user.interface";
+import UserDocument from "../user/user.interface";
 import { MealOfferDocument } from "../mealOffer/mealOffer.interface";
-import MealReservation from "../mealReservation/mealReservation.interface";
 import MealReservationState from "../mealReservation/mealReservationState.enum";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 import InvalidRatingException from "../../utils/exceptions/invalidRating.exception";
-import { Rating } from "./rating.interface";
 import UserService from "../user/user.service";
+import { EMealReservationState } from "@treat/lib-common/src/enums/EMealReservationState";
+import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
+import { RatingDocument } from "./rating.interface";
 
 @Service()
 class RatingService {
@@ -17,7 +18,7 @@ class RatingService {
   ) {}
 
   public async rateUser(
-    user: User,
+    user: UserDocument,
     mealOfferId: string,
     mealReservationId: string,
     rating: number
@@ -27,9 +28,9 @@ class RatingService {
         user,
         mealOfferId,
         mealReservationId
-      )) as [MealOfferDocument, MealReservation];
+      )) as [MealOfferDocument, MealReservationDocument];
     if (
-      mealReservation.reservationState !== MealReservationState.BUYER_CONFIRMED
+      mealReservation.reservationState !== EMealReservationState.BUYER_CONFIRMED
     ) {
       throw new InvalidMealReservationStateException(
         `State should be ${MealReservationState.BUYER_CONFIRMED} in order to rate user`
@@ -52,14 +53,14 @@ class RatingService {
     rating: number
   ) {
     if (mealOffer.rating === undefined) {
-      mealOffer.rating = { buyerRating: rating } as Rating;
+      mealOffer.rating = { buyerRating: rating } as RatingDocument;
     } else {
       if (mealOffer.rating.buyerRating !== undefined) {
         throw new InvalidRatingException("There exists already a buyer rating");
       }
       mealOffer.rating.buyerRating = rating;
     }
-    const buyer = (await this.userService.getUser(buyerId)) as User;
+    const buyer = (await this.userService.getUser(buyerId)) as UserDocument;
     buyer.countRatings += 1;
     buyer.meanRating = (buyer.meanRating + rating) / buyer.countRatings;
     await buyer.save();
@@ -68,7 +69,7 @@ class RatingService {
 
   private async setSellerRating(mealOffer: MealOfferDocument, rating: number) {
     if (mealOffer.rating === undefined) {
-      mealOffer.rating = { sellerRating: rating } as Rating;
+      mealOffer.rating = { sellerRating: rating } as RatingDocument;
     } else {
       if (mealOffer.rating.sellerRating !== undefined) {
         throw new InvalidRatingException("There exists already a buyer rating");
@@ -77,7 +78,7 @@ class RatingService {
     }
     const seller = (await this.userService.getUser(
       String(mealOffer.user)
-    )) as User;
+    )) as UserDocument;
     seller.countRatings += 1;
     seller.meanRating = (seller.meanRating + rating) / seller.countRatings;
     await seller.save();
