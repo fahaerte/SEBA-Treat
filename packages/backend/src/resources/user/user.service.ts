@@ -88,6 +88,14 @@ class UserService {
       ]);
   }
 
+  public async getUserPreview(
+    userId: string
+  ): Promise<Partial<UserDocument> | null> {
+    return this.userModel
+      .findById(userId)
+      .select(["firstName", "meanRating", "countRatings"]);
+  }
+
   /**
    * Attempt to get path to profile picture
    * @param userid

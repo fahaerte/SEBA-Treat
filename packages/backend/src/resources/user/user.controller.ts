@@ -113,6 +113,8 @@ class UserController implements Controller {
      */
     this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
 
+    this.router.get(`${this.path}/preview/:userId?`, this.getUserPreview);
+
     /**
      * @swagger
      * /api/users/profile-picture:
@@ -235,6 +237,24 @@ class UserController implements Controller {
       if (userId) {
         const user = await this.userService.getUser(userId);
         res.status(200).send({ data: user });
+      } else {
+        res.status(404).send({ data: "user not found!" });
+      }
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getUserPreview = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      if (req.params.userId) {
+        const userId = req.params.userId;
+        const userPrev = await this.userService.getUserPreview(userId);
+        res.status(200).send({ data: userPrev });
       } else {
         res.status(404).send({ data: "user not found!" });
       }

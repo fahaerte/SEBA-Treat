@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import { Button } from "../ui";
-import UserService from "../../services/user.service";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
+import { getProfilePictureURL } from "../../api/userApi";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -34,7 +34,7 @@ export const SentMealReservation = ({
 
   const fetchSellerData = useCallback(async () => {
     try {
-      setProfilePicture(await UserService.getProfilePictureURL(sellerId));
+      setProfilePicture(await getProfilePictureURL(sellerId, "undefined"));
     } catch (error: any) {
       console.log(error);
     }

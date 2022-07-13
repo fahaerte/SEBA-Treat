@@ -34,6 +34,18 @@ class MealOfferService {
     return (await this.mealOffer.create(newMealOffer)) as MealOfferDocument;
   }
 
+  public async getMealOfferDetails(
+    mealOfferId: string
+  ): Promise<MealOfferDocument | Error> {
+    const mealOfferDoc = (await this.mealOffer.findById(
+      mealOfferId
+    )) as MealOfferDocument;
+    if (!mealOfferDoc) {
+      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
+    }
+    return mealOfferDoc;
+  }
+
   public async getMealOffer(
     user: UserDocument,
     mealOfferId: string

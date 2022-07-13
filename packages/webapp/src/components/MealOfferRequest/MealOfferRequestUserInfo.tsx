@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import UserService from "../../services/user.service";
 import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
 import { Icon } from "../ui";
+import { getProfilePictureURL } from "../../api/userApi";
 
 interface MealOfferRequestUserInfoProps {
   userId: string;
@@ -28,7 +28,9 @@ export const MealOfferRequestUserInfo = ({
 
   const fetchUserData = useCallback(async () => {
     try {
-      setProfilePicture(await UserService.getProfilePictureURL(String(userId)));
+      setProfilePicture(
+        await getProfilePictureURL(String(userId), "undefined")
+      );
     } catch (error: any) {
       console.log(error);
     }
