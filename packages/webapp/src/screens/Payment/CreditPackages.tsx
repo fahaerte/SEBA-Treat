@@ -21,9 +21,11 @@ import {
 import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 import { getUser } from "../../api/userApi";
 
-//TODO: Fix bugs
+//TODO: Debug
 export const CreditPackages = () => {
   const { userId, token } = useAuthContext();
+
+  const [url, setUrl] = useState('');
 
   const { data: user } = useQuery("getUser", () =>
     getUser(userId as string, token as string)
@@ -46,7 +48,12 @@ export const CreditPackages = () => {
       couponId,
       token,
     }: CreateCheckoutSessionApiArg) =>
-      createCheckoutSession({ priceId, stripeCustomerId, couponId, token })
+      createCheckoutSession({ priceId, stripeCustomerId, couponId, token }), {
+      onSuccess: (response) => {
+        console.log(response.data);
+        setUrl(response.data.url);
+      }
+    }
   );
 
   const isMutation = useIsMutating({
@@ -68,7 +75,7 @@ export const CreditPackages = () => {
     }
 
     if (createCheckout) {
-      window.location.replace(createCheckout.data.url);
+      window.location.replace(url);
     }
   }, [discount, products, createCheckout]);
 
