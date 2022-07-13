@@ -17,6 +17,7 @@ import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 import { CreditPackages } from "../screens/Payment/CreditPackages";
 import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -110,7 +111,7 @@ export const AppRouter = () => {
 
   const mealRoutes = [
     {
-      path: "/mealoffers",
+      path: "mealoffers",
       element: (
         <RequireAddressRoute>
           <MealOfferScreen />
@@ -118,7 +119,11 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/mealOfferRequests",
+      path: "mealoffers/:mealOfferId",
+      element: <MealOfferDetailScreen />,
+    },
+    {
+      path: "mealOfferRequests",
       element: (
         <RequireAuthRoute>
           <MealOfferRequests />

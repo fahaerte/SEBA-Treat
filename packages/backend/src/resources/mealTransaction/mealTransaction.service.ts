@@ -10,6 +10,7 @@ import TransactionInWrongStateException from "../../utils/exceptions/transaction
 import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
 
+@Service()
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
 

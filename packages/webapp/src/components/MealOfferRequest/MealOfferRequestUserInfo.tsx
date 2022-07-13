@@ -14,13 +14,12 @@ const ProfilePicture = styled.img`
   object-fit: cover;
 `;
 
-export const MealOfferRequestUserInfo = (
-  {
-    userId,
-    firstName,
-    lastName,
-    meanRating,
-  }: MealOfferRequestUserInfoProps) => {
+export const MealOfferRequestUserInfo = ({
+  userId,
+  firstName,
+  lastName,
+  meanRating,
+}: MealOfferRequestUserInfoProps) => {
   const { data: profilePicture } = useQuery("getProfilePicture", () =>
     getProfilePictureURL(userId, token as string)
   );

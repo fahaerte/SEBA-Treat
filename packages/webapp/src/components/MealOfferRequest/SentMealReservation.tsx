@@ -1,11 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../ui/Grid";
-import { Button, Icon } from "../ui";
+import { Button } from "../ui";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservationState from "../../types/enums/mealReservationState.enum";
+import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
-import { SentMealOfferRequestBottomProps } from "@treat/lib-common/src/interfaces/ISentMealOfferRequestBottomProps";
 import { RateUser } from "./RateUser";
+import { getProfilePictureURL } from "../../api/userApi";
+
+interface SentMealOfferRequestBottomProps {
+  mealOfferId: string;
+  sellerId: string;
+  sellerFirstName: string;
+  sellerLastName: string;
+  reservation: MealReservation;
+  sellerRating: number | undefined;
+  sellerMeanRating: number;
+}
 
 export const SentMealReservation = ({
   mealOfferId,
@@ -59,7 +70,7 @@ export const SentMealReservation = ({
         />
       );
     }
-  }
+  };
 
   const getActionBar = () => {
     if (

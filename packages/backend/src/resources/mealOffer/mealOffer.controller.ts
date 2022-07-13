@@ -24,11 +24,12 @@ class MealOfferController implements Controller {
       validationMiddleware(validate.create),
       this.create
     );
-    this.router.get(
-      `${this.path}/:mealOfferId`,
-      authenticate,
-      this.getMealOffer
-    );
+    // this.router.get(
+    //   `${this.path}/:mealOfferId`,
+    //   authenticate,
+    //   this.getMealOffer
+    // );
+    this.router.get(`${this.path}/:mealOfferId`, this.getMealOfferDetails);
     this.router.get(
       `${this.path}/reservations/sent`,
       authenticate,
@@ -69,6 +70,21 @@ class MealOfferController implements Controller {
         req.user
       );
       res.status(201).send({ data: newMealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getMealOfferDetails = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const mealOffer = await this.mealOfferService.getMealOfferDetails(
+        req.params.mealOfferId
+      );
+      res.status(200).send({ data: mealOffer });
     } catch (error: any) {
       next(error);
     }

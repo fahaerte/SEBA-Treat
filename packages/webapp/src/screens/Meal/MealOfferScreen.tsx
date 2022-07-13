@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import PageHeading from "../../components/ui/PageHeading/PageHeading";
 
 export const MealOfferScreen = () => {
   return (
     <>
-      <h3>Meal Offer SCREEN</h3>
+      <PageHeading>Meal Offer Overview</PageHeading>
     </>
   );
 };
