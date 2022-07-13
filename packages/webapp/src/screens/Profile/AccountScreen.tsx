@@ -16,7 +16,6 @@ import {
 } from "../../api/stripeApi";
 import { getUser } from "../../api/userApi";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
-import User from "../../../lib/types/interfaces/user.interface";
 
 export const AccountScreen = () => {
   const { userId, token } = useAuthContext();

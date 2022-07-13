@@ -10,7 +10,6 @@ import UserService from "../../resources/user/user.service";
 import { Service } from "typedi";
 import { ObjectId } from "mongoose";
 import StripeService from "../stripe/stripe.service";
-import token from "../../utils/token";
 
 // TODO: Update user
 @Service()
@@ -230,7 +229,7 @@ class UserController implements Controller {
       return next(new HttpException(404, "No logged in user"));
     }
     try {
-      let userId = "62cc75ba8a708498732805ce";
+      let userId = "62cc75ba8a708498732805ce"; // TODO: Remove later
       if (req.params.userId) {
         userId = req.params.userId;
       }
