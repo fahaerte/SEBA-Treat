@@ -70,7 +70,7 @@ export const SentMealReservation = ({
         />
       );
     }
-  };
+  }
 
   const getActionBar = () => {
     if (

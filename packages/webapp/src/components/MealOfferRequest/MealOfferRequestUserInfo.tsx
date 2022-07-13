@@ -24,7 +24,7 @@ export const MealOfferRequestUserInfo = ({
     getProfilePictureURL(userId, token as string)
   );
 
-  const {token} = useAuthContext();
+  const { token } = useAuthContext();
 
   return (
     <Col>
