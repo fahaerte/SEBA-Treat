@@ -1,4 +1,4 @@
-import {TBootstrapPaletteTypography} from "../Typography/ITypography";
+import { TBootstrapPaletteTypography } from "../Typography/ITypography";
 
 /**
  * Declaring array here to allow the select-control in stories

@@ -25,7 +25,7 @@ export const SentMealReservation = ({
   sellerLastName,
   reservation,
   sellerRating,
-    sellerMeanRating,
+  sellerMeanRating,
 }: SentMealOfferRequestBottomProps) => {
   const [reservationState, setReservationState] = useState(
     reservation.reservationState

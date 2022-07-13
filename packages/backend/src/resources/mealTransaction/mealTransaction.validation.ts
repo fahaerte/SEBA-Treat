@@ -7,7 +7,7 @@ const createTransaction = Joi.object({
 });
 
 const rateTransaction = Joi.object({
-  rating: Joi.number().min(1).max(5).required()
-})
+  rating: Joi.number().min(1).max(5).required(),
+});
 
-export default { createTransaction, rateTransaction};
+export default { createTransaction, rateTransaction };

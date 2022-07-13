@@ -1,4 +1,3 @@
-
 export interface IRating {
   _id: string;
   buyerRating?: number;
