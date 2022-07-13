@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Header } from "../../components/ui/Header/header";
 import { Container } from "react-bootstrap";
-import { Button, Card, Col, Row, SkeletonSquare } from "../../components";
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  SectionHeading,
+  SkeletonSquare,
+} from "../../components";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useQuery } from "react-query";
@@ -37,7 +44,6 @@ export const MealOfferDetailScreen = () => {
 
   useEffect(() => {
     if (seller) {
-      console.log("incoming");
       console.log(seller);
     }
   }, [seller]);
@@ -59,12 +65,62 @@ export const MealOfferDetailScreen = () => {
               <PageHeading>
                 <u>{mealOffer.data.title}</u>
               </PageHeading>
+              {mealOffer.data.categories.map((category: string) => (
+                <span key={category}>{category}</span>
+              ))}
+            </Row>
+            <Row>
               <p>{seller.data.firstName}</p>
               <p>
                 Star {seller.data.meanRating}/5 – {seller.data.countRatings}{" "}
                 Ratings
               </p>
-              <p>{mealOfferId}</p>
+            </Row>
+            <Row>
+              <div
+                style={{
+                  height: "400px",
+                  width: "100%",
+                  border: "1px solid grey",
+                  borderRadius: "1em",
+                }}
+              >
+                Meal Pictures
+              </div>
+            </Row>
+            <Row>
+              <span>Distance: unknown</span>
+              <span>Portions: {mealOffer.data.portions}</span>
+              <span>
+                {mealOffer.data.startDate} – {mealOffer.data.endDate}
+              </span>
+            </Row>
+            <Row>
+              <Col>
+                <SectionHeading>Description</SectionHeading>
+                <p>{mealOffer.data.description}</p>
+                <SectionHeading>Location</SectionHeading>
+                <p>{mealOffer.data.transactionFee}</p>
+                <SectionHeading>List of Allergens</SectionHeading>
+                <ul>
+                  {mealOffer.data.allergens.map((allergen: string) => (
+                    <li key={allergen}>{allergen}</li>
+                  ))}
+                </ul>
+              </Col>
+              <Col>
+                <div
+                  style={{
+                    height: "600px",
+                    width: "100%",
+                    border: "1px solid grey",
+                    borderRadius: "1em",
+                    boxShadow: "0px 2px 10px grey",
+                  }}
+                >
+                  Buy meal
+                </div>
+              </Col>
             </Row>
           </Container>
         ) : (

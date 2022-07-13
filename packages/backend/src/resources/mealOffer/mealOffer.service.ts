@@ -69,13 +69,6 @@ class MealOfferService {
     mealOfferDoc.reservations = mealOfferDoc.reservations.filter(
       (reservation) => user._id.equals(reservation.buyer)
     );
-    mealOfferDoc.reservations.forEach((reservation) => {
-      if (
-        reservation.reservationState !== EMealReservationState.BUYER_CONFIRMED
-      ) {
-        mealOfferDoc.pickUpDetails = undefined;
-      }
-    });
     return mealOfferDoc;
   }
 
