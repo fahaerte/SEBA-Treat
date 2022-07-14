@@ -14,6 +14,7 @@ const LoginScreen = () => {
   const location = useLocation();
 
   const from = location.state?.from || "/alreadyLoggedIn";
+  console.log("Coming from", from);
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {

@@ -16,7 +16,7 @@ import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 import { getUserPreview } from "../../api/userApi";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
-import { useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import axios, { AxiosError } from "axios";
 import { ConfigService } from "../../utils/ConfigService";
@@ -24,6 +24,7 @@ import { ConfigService } from "../../utils/ConfigService";
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
   const { userId, token } = useAuthContext();
+  const location = useLocation();
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
@@ -51,6 +52,8 @@ export const MealOfferDetailScreen = () => {
     },
   });
 
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+
   function handleRequestClick() {
     if (token) {
       const result = requestMealMutation.mutate({
@@ -58,10 +61,15 @@ export const MealOfferDetailScreen = () => {
         token: token,
       });
     } else {
-      infoToast({
-        message: "Please log in to reserve this meal.",
-      });
+      setRedirectToLogin(true);
     }
+  }
+
+  if (redirectToLogin) {
+    infoToast({
+      message: `Please log in to reserve this meal`,
+    });
+    return <Navigate to={"/login"} replace state={{ from: location }} />;
   }
 
   return (
