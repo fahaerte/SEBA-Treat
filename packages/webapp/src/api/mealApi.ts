@@ -23,17 +23,8 @@ export const requestMealOffer = async ({
   mealOfferId,
   token,
 }: requestMealOfferArgs) => {
-  try {
-    const result = await baseApi(token).post(
-      `/mealOffers/${mealOfferId}/reservations`
-    );
-    return result.data;
-  } catch (error: any) {
-    console.log(error);
-    throw {
-      code: error.code,
-      message: error.response.data,
-      responseStatus: error.response?.status,
-    };
-  }
+  const result = await baseApi(token).post(
+    `/mealOffers/${mealOfferId}/reservations`
+  );
+  return result;
 };
