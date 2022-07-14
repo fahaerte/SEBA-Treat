@@ -1,12 +1,15 @@
 import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
-import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import { IMealOffer } from "@treat/lib-common/src/interfaces/IMealOffer";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
+import ValidatePart from "../../utils/validation";
+import validationMiddleware from "../../middleware/validation.middleware";
+import { MealOfferDocument } from "./mealOffer.interface";
 
 @Service()
 class MealOfferController implements Controller {
@@ -21,15 +24,24 @@ class MealOfferController implements Controller {
     this.router.post(
       `${this.path}`,
       authenticate,
-      validationMiddleware(validate.create),
+      validationMiddleware(validate.createBody),
       this.create
     );
-    // this.router.get(
-    //   `${this.path}/:mealOfferId`,
-    //   authenticate,
-    //   this.getMealOffer
-    // );
-    this.router.get(`${this.path}/:mealOfferId`, this.getMealOfferDetails);
+    this.router.get(
+      `${this.path}/previews`,
+      authenticate,
+      validationMiddleware(
+        validate.getMealOfferPreviewsQuery,
+        ValidatePart.QUERY
+      ),
+      this.getMealOfferPreviews
+    );
+    this.router.get(
+      `${this.path}/:mealOfferId`,
+      authenticate,
+      validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
+      this.getMealOffer
+    );
     this.router.get(
       `${this.path}/reservations/sent`,
       authenticate,
@@ -43,12 +55,20 @@ class MealOfferController implements Controller {
     this.router.patch(
       `${this.path}/:mealOfferId/reservations/:mealReservationId`,
       authenticate,
-      validationMiddleware(validate.updateReservationState),
+      validationMiddleware(validate.updateReservationStateBody),
+      validationMiddleware(
+        validate.updateReservationStateParams,
+        ValidatePart.PARAMS
+      ),
       this.updateMealOfferReservation
     );
     this.router.post(
       `${this.path}/:mealOfferId/reservations`,
       authenticate,
+      validationMiddleware(
+        validate.createMealOfferReservationParams,
+        ValidatePart.PARAMS
+      ),
       this.createMealOfferReservation
     );
     this.router.delete(
@@ -64,7 +84,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOfferRequest = req.body as IMealOffer;
+      const mealOfferRequest = req.body as MealOfferDocument;
       const newMealOffer = await this.mealOfferService.create(
         mealOfferRequest,
         req.user
@@ -75,16 +95,26 @@ class MealOfferController implements Controller {
     }
   };
 
-  private getMealOfferDetails = async (
+  private getMealOfferPreviews = async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOffer = await this.mealOfferService.getMealOfferDetails(
-        req.params.mealOfferId
-      );
-      res.status(200).send({ data: mealOffer });
+      const mealOfferPreviews =
+        await this.mealOfferService.getMealOfferPreviews(
+          req.user,
+          req.query.category as EMealCategory,
+          req.query.allergen as EMealAllergen,
+          req.query.portions as string,
+          req.query.sellerRating as string,
+          req.query.startDate as string,
+          req.query.endDate as string,
+          req.query.price as string,
+          req.query.search as string,
+          req.query.distance as string
+        );
+      res.status(200).send({ data: mealOfferPreviews });
     } catch (error: any) {
       next(error);
     }
