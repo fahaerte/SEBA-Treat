@@ -9,6 +9,7 @@ import {
   infoToast,
   Row,
   SectionHeading,
+  successToast,
   warningToast,
 } from "../../components";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
@@ -38,6 +39,12 @@ export const MealOfferDetailScreen = () => {
   );
 
   const requestMealMutation = useMutation(requestMealOffer, {
+    onSuccess: () => {
+      successToast({
+        message:
+          "The meal has been reserved for you. Now, the chef can accept it.",
+      });
+    },
     onError: (error) => {
       console.log("onError:");
       if (error instanceof AxiosError && error.response) {
