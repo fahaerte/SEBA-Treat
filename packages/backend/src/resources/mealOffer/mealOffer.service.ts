@@ -112,6 +112,7 @@ class MealOfferService {
     )) as MealOfferDocument;
     if (!user._id.equals(mealOfferDoc.user)) {
       const reservations = mealOfferDoc.reservations;
+      console.log(reservations);
       reservations.forEach((reservation) => {
         if (
           reservation.reservationState === EMealReservationState.BUYER_CONFIRMED
