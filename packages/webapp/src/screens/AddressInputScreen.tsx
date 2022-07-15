@@ -10,7 +10,16 @@ export const AddressInputScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from || "/mealoffers";
+  type LocationState = {
+    from: {
+      pathname: string;
+    };
+  };
+
+  const locationState = location.state as LocationState;
+  const from = locationState?.from || "/mealoffers";
+
+  // const from = location.state?.from || "/mealoffers";
 
   const elements: IFormRow<IAddressLandingPage>[] = [
     FormHelper.createInput({

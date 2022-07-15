@@ -1,12 +1,13 @@
 import { baseApi } from "./baseApi";
 import { IUserCredentials } from "@treat/lib-common";
-import axios from "axios";
 
 export const getMealOffer = async (
   mealOfferId: string,
   token: string | undefined
 ) => {
-  const response = await baseApi(token).get(`/mealOffers/${mealOfferId}`);
+  const response = await baseApi(token).get(
+    `/mealOffers/${mealOfferId}/details`
+  );
   return response.data.data;
 };
 
@@ -23,8 +24,5 @@ export const requestMealOffer = async ({
   mealOfferId,
   token,
 }: requestMealOfferArgs) => {
-  const result = await baseApi(token).post(
-    `/mealOffers/${mealOfferId}/reservations`
-  );
-  return result;
+  return await baseApi(token).post(`/mealOffers/${mealOfferId}/reservations`);
 };

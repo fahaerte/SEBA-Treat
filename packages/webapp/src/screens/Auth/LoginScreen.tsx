@@ -21,7 +21,9 @@ const LoginScreen = () => {
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState.from || "/alreadyLoggedIn";
+  const from = locationState?.from || "/alreadyLoggedIn";
+
+  // const from = location.state?.from || "/alreadyLoggedIn";
 
   console.log("Coming from", from);
 

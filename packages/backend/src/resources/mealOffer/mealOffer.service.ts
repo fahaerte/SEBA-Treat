@@ -45,6 +45,7 @@ class MealOfferService {
     user: UserDocument,
     mealOfferId: string
   ): Promise<MealOfferDocument | Error> {
+    console.log("getMealOffer - service");
     const mealOfferDoc = (await this.mealOffer.findById(
       mealOfferId
     )) as MealOfferDocument;
@@ -53,6 +54,19 @@ class MealOfferService {
     }
     if (!user._id.equals(mealOfferDoc.user)) {
       return this.getMealOfferPreview(user, mealOfferDoc);
+    }
+    return mealOfferDoc;
+  }
+
+  public async getMealOfferDetails(
+    mealOfferId: string
+  ): Promise<MealOfferDocument | Error> {
+    console.log("getMealOfferDetails - service");
+    const mealOfferDoc = (await this.mealOffer.findById(
+      mealOfferId
+    )) as MealOfferDocument;
+    if (!mealOfferDoc) {
+      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
     return mealOfferDoc;
   }
