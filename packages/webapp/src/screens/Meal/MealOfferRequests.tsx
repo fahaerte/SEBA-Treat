@@ -28,7 +28,7 @@ export const MealOfferRequests = () => {
                 children: "Received requests",
               },
             ]}
-          ></TabBar>
+          />
           <Outlet />
         </Row>
       </Container>

@@ -8,7 +8,7 @@ export type TTab = {
   to: string;
 } & IComponentBase;
 
-export interface ITabBar extends IComponentColorBase {
+export interface ITabBar extends Omit<IComponentColorBase, "children"> {
   /**
    * Array of Tab Paths / Tab objects
    */
