@@ -75,7 +75,7 @@ class MealOfferService {
   public async getSentMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
-    return await this.mealOffer.findSentMealOfferRequests(user._id);
+    return await this.mealOffer.findSentMealOfferRequests(user._id as string);
   }
 
   public async getReceivedMealOfferRequests(
