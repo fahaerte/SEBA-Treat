@@ -49,7 +49,7 @@ const otherFilterElements: IFormRow<IMealFilter>[] = [
       options: [
         new Option("", ""),
         new Option(EMealAllergen.GLUTEN, EMealAllergen.GLUTEN),
-      ]
+      ],
     }),
   ],
   [
@@ -59,8 +59,8 @@ const otherFilterElements: IFormRow<IMealFilter>[] = [
       options: [
         new Option("", ""),
         new Option(EMealCategory.VEGAN, EMealCategory.VEGAN),
-        new Option(EMealCategory.VEGETARIAN, EMealCategory.VEGETARIAN)
-      ]
+        new Option(EMealCategory.VEGETARIAN, EMealCategory.VEGETARIAN),
+      ],
     }),
   ],
 ];
