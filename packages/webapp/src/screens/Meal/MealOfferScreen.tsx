@@ -51,11 +51,6 @@ export const MealOfferScreen = () => {
       <MealOfferScreenHeader />
       <Container className={""}>
         <Row>
-          <PageHeading className={"h4"}>
-            --------------------------------------------------------Categories--------------------------------------------------------
-          </PageHeading>
-        </Row>
-        <Row>
           <Col className={"col col-lg-2"}>
             <Row>
               <MealOfferFilterSide

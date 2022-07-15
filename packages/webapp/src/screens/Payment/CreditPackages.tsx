@@ -25,7 +25,7 @@ import { getUser } from "../../api/userApi";
 export const CreditPackages = () => {
   const { userId, token } = useAuthContext();
 
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
 
   const { data: user } = useQuery("getUser", () =>
     getUser(userId as string, token as string)
@@ -48,11 +48,12 @@ export const CreditPackages = () => {
       couponId,
       token,
     }: CreateCheckoutSessionApiArg) =>
-      createCheckoutSession({ priceId, stripeCustomerId, couponId, token }), {
+      createCheckoutSession({ priceId, stripeCustomerId, couponId, token }),
+    {
       onSuccess: (response) => {
         console.log(response.data);
         setUrl(response.data.url);
-      }
+      },
     }
   );
 

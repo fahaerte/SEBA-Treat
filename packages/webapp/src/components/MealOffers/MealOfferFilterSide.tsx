@@ -1,6 +1,8 @@
 import { Form, FormHelper, IFormRow } from "../ui";
 import { IMealFilter } from "@treat/lib-common";
 import React from "react";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
 const otherFilterElements: IFormRow<IMealFilter>[] = [
   [
@@ -33,28 +35,32 @@ const otherFilterElements: IFormRow<IMealFilter>[] = [
   [
     FormHelper.createInput({
       formKey: "maxDistance",
-      label: "Maximum Distance",
+      label: "Max. Distance (km)",
       props: {
         type: "number",
       },
+      defaultValue: 3,
     }),
   ],
   [
-    FormHelper.createInput({
-      formKey: "allergen",
-      label: "Allergene",
-      props: {
-        type: "text",
-      },
+    FormHelper.createSelect({
+      formKey: "allergene",
+      label: "Allergenes",
+      options: [
+        new Option("", ""),
+        new Option(EMealAllergen.GLUTEN, EMealAllergen.GLUTEN),
+      ]
     }),
   ],
   [
-    FormHelper.createInput({
+    FormHelper.createSelect({
       formKey: "category",
       label: "Category",
-      props: {
-        type: "text",
-      },
+      options: [
+        new Option("", ""),
+        new Option(EMealCategory.VEGAN, EMealCategory.VEGAN),
+        new Option(EMealCategory.VEGETARIAN, EMealCategory.VEGETARIAN)
+      ]
     }),
   ],
 ];
