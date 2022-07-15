@@ -1,10 +1,11 @@
 import React from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
-import { IUser } from "@treat/lib-common";
+import { IAddress, IUser } from "@treat/lib-common";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { register } from "../../api/authApi";
+import { AxiosError } from "axios";
 
 export const RegisterScreen = () => {
   const userContext = useAuthContext();
@@ -13,9 +14,9 @@ export const RegisterScreen = () => {
     onSuccess: (response) => {
       console.log(response.data);
       const { userId, token, address } = response.data;
-      userContext.setToken(token);
-      userContext.setUserId(userId);
-      userContext.setAddress(getStringFromIAddress(address));
+      userContext.setToken(token as string);
+      userContext.setUserId(userId as string);
+      userContext.setAddress(getStringFromIAddress(address as IAddress));
     },
   });
 
@@ -186,7 +187,13 @@ export const RegisterScreen = () => {
       <div>
         <div>
           {registerMutation.isError ? (
-            <div>An error occurred: {registerMutation.error.message}</div>
+            <div>
+              An error occurred:{" "}
+              {registerMutation.error instanceof AxiosError &&
+              registerMutation.error.message
+                ? registerMutation.error.message
+                : "unknown"}
+            </div>
           ) : null}
         </div>
         <Form<IUser>
