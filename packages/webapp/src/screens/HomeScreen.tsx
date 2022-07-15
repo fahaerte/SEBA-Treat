@@ -21,6 +21,9 @@ export const HomeScreen: React.FC = (): JSX.Element => {
             <Link to="/mealoffers">Meal Offer Screen</Link>
           </li>
           <li>
+            <Link to="/mealoffers/62b892ececd6c349da775ed1">Spagh Bollo 2</Link>
+          </li>
+          <li>
             <Link to="/mealOfferRequests">Meal Offer Requests Screen</Link>
           </li>
           <li>
