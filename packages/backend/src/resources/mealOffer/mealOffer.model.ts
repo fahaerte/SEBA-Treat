@@ -1,9 +1,12 @@
 import { Model, model, Schema, Types } from "mongoose";
-import { MealOfferDocument } from "./mealOffer.interface";
+import {
+  MealOfferDocument,
+  MealOfferDocumentWithUser,
+} from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import { RatingSchema } from "../rating/rating.model";
-import EMealAllergen from "@treat/lib-common/src/enums/EMealAllergen";
-import EMealCategory from "@treat/lib-common/src/enums/EMealCategory";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
   {
@@ -69,6 +72,10 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
 
 export interface MealOfferModel extends Model<MealOfferDocument> {
   findSentMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
+
+  aggregateMealOfferPreviews(
+    match: Record<string, any>
+  ): Promise<MealOfferDocumentWithUser[]>;
 }
 
 MealOfferSchema.statics.findSentMealOfferRequests = async function (
@@ -97,6 +104,48 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
   )
     .populate("user", "firstName lastName meanRating")
     .exec();
+};
+
+MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
+  this: Model<MealOfferDocument>,
+  match: Record<string, any>
+) {
+  return await this.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $project: {
+        title: 1,
+        startDate: 1,
+        endDate: 1,
+        price: 1,
+        portions: 1,
+        categories: 1,
+        allergens: 1,
+        user: {
+          $arrayElemAt: ["$user", 0],
+        },
+      },
+    },
+    {
+      $match: match,
+    },
+    {
+      $project: {
+        "user.password": 0,
+        "user.email": 0,
+        "user.birthdate": 0,
+        "user.countRatings": 0,
+        "user.virtualAccount": 0,
+      },
+    },
+  ]).exec();
 };
 
 export default model<MealOfferDocument, MealOfferModel>(

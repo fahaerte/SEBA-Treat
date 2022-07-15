@@ -2,14 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
 import { Icon } from "../ui";
-import { getProfilePictureURL } from "../../api/userApi";
-
-interface MealOfferRequestUserInfoProps {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  meanRating: number;
-}
+import { MealOfferRequestUserInfoProps } from "@treat/lib-common/lib/interfaces/IMealOfferRequestUserInfoProps";
+import { useQuery } from "react-query";
+import { getProfilePictureURL, getUser } from "../../api/userApi";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 const ProfilePicture = styled.img`
   border-radius: 50%;
@@ -24,21 +20,11 @@ export const MealOfferRequestUserInfo = ({
   lastName,
   meanRating,
 }: MealOfferRequestUserInfoProps) => {
-  const [profilePicture, setProfilePicture] = useState("");
+  const { data: profilePicture } = useQuery("getProfilePicture", () =>
+    getProfilePictureURL(userId, token as string)
+  );
 
-  const fetchUserData = useCallback(async () => {
-    try {
-      setProfilePicture(
-        await getProfilePictureURL(String(userId), "undefined")
-      );
-    } catch (error: any) {
-      console.log(error);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    fetchUserData().catch((error) => console.error(error));
-  }, [fetchUserData]);
+  const { token } = useAuthContext();
 
   return (
     <Col>

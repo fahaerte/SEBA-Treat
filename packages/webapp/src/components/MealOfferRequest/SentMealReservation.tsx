@@ -30,15 +30,6 @@ export const SentMealReservation = ({
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
-  const [profilePicture, setProfilePicture] = useState("");
-
-  const fetchSellerData = useCallback(async () => {
-    try {
-      setProfilePicture(await getProfilePictureURL(sellerId, "undefined"));
-    } catch (error: any) {
-      console.log(error);
-    }
-  }, [sellerId]);
 
   const updateReservationState = async (newState: MealReservationState) => {
     try {
@@ -53,11 +44,7 @@ export const SentMealReservation = ({
     }
   };
 
-  useEffect(() => {
-    fetchSellerData().catch((error) => console.error(error));
-  }, [fetchSellerData]);
-
-  const getActionElement = () => {
+  function getActionElement() {
     if (reservationState == MealReservationState.PENDING) {
       return <span>Wait for the seller to respond to your request</span>;
     } else if (reservationState === MealReservationState.SELLER_ACCEPTED) {
@@ -83,7 +70,7 @@ export const SentMealReservation = ({
         />
       );
     }
-  };
+  }
 
   const getActionBar = () => {
     if (

@@ -6,4 +6,6 @@ export interface SentMealOfferRequestBottomProps {
   sellerFirstName: string;
   sellerLastName: string;
   reservation: MealReservation;
+  sellerRating: number | undefined;
+  sellerMeanRating: number;
 }
