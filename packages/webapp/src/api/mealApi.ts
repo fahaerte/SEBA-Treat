@@ -31,8 +31,8 @@ export const getMealOffersByParams = async (
       endDate: endDate,
       price: price,
       search: search,
-      distance: distance
-    }
+      distance: distance,
+    },
   });
   return response.data;
 };

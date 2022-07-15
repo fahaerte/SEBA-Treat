@@ -13,19 +13,21 @@ import MealOfferFilterTop from "../../components/MealOffers/MealOfferFilterTop";
 import MealOfferFilterSide from "../../components/MealOffers/MealOfferFilterSide";
 
 export const MealOfferScreen = () => {
-
   const { token, address, setAddress } = useAuthContext();
 
   const navigate = useNavigate();
 
   const [filter, setFilter] = useState<IMealFilter>();
 
-  const { data: offers, isLoading } = useQuery("getOffers", () =>
-    getMealOffersByParams(address as string, token as string), {
-    onSuccess: (response) => {
-      console.log(offers);
+  const { data: offers, isLoading } = useQuery(
+    "getOffers",
+    () => getMealOffersByParams(address as string, token as string),
+    {
+      onSuccess: (response) => {
+        console.log(offers);
+      },
     }
-  });
+  );
 
   const redirectToMealDetails = (mealId: string) => {
     console.log(mealId);
@@ -36,34 +38,40 @@ export const MealOfferScreen = () => {
     console.log(search);
   };
 
-  const handleSort = (sort:string) => {
+  const handleSort = (sort: string) => {
     console.log(sort);
   };
 
   const handleFiltering = (filter: IMealFilter) => {
     console.log(filter);
-  }
+  };
 
   return (
     <>
       <MealOfferScreenHeader />
       <Container className={""}>
         <Row>
-          <PageHeading className={"h4"}>--------------------------------------------------------Categories--------------------------------------------------------</PageHeading>
+          <PageHeading className={"h4"}>
+            --------------------------------------------------------Categories--------------------------------------------------------
+          </PageHeading>
         </Row>
         <Row>
           <Col className={"col col-lg-2"}>
             <Row>
-              <MealOfferFilterSide currentFilter={filter as IMealFilter} handleFiltering={handleFiltering} />
+              <MealOfferFilterSide
+                currentFilter={filter as IMealFilter}
+                handleFiltering={handleFiltering}
+              />
             </Row>
           </Col>
           <Col>
             <Row>
-              <MealOfferFilterTop handleSearch={handleSearch} handleSort={handleSort} />
+              <MealOfferFilterTop
+                handleSearch={handleSearch}
+                handleSort={handleSort}
+              />
             </Row>
-            <Row>
-              {offers ? offers.data.length : "No"  } Offers found
-            </Row>
+            <Row>{offers ? offers.data.length : "No"} Offers found</Row>
             <Row>
               <Col>
                 <Container>
@@ -89,7 +97,8 @@ export const MealOfferScreen = () => {
                                 onClickAction={redirectToMealDetails}
                                 endDate={mealOffer.endDate}
                                 sellerName={"FirstName of Seller"}
-                                startDate={mealOffer.endDate} />
+                                startDate={mealOffer.endDate}
+                              />
                             </Row>
                           ))}
                     </>
@@ -101,5 +110,5 @@ export const MealOfferScreen = () => {
         </Row>
       </Container>
     </>
-);
+  );
 };

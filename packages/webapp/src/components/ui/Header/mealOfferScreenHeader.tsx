@@ -26,12 +26,11 @@ export const MealOfferScreenHeader = () => {
             <h2 className={""}>ADDRESS INPUT</h2>
           </Col>
           <Col className={""}>
-            {userId? (
+            {userId ? (
               <h2 className={""}>See Profile</h2>
-            ): (
+            ) : (
               <Button>Sign In</Button>
             )}
-
           </Col>
         </Row>
       </Container>

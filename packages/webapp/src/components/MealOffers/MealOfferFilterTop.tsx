@@ -9,10 +9,10 @@ const searchElement: IFormRow<string>[] = [
       formKey: "searchString",
       label: "Search by name",
       props: {
-        type: "text"
-      }
-    })
-  ]
+        type: "text",
+      },
+    }),
+  ],
 ];
 
 const sortElement: IFormRow<string>[] = [
@@ -23,19 +23,19 @@ const sortElement: IFormRow<string>[] = [
       options: [
         new Option("price ascending", "priceAsc"),
         new Option("rating descending", "ratingDesc"),
-        new Option("distance descending", "distDesc")
-      ]
-    })
-  ]
+        new Option("distance descending", "distDesc"),
+      ],
+    }),
+  ],
 ];
 
-const MealOfferFilterTop = (
-  { handleSearch, handleSort }:
-    {
-      handleSearch: (search: string) => void;
-      handleSort: (sort: string) => void;
-    }
-) => {
+const MealOfferFilterTop = ({
+  handleSearch,
+  handleSort,
+}: {
+  handleSearch: (search: string) => void;
+  handleSort: (sort: string) => void;
+}) => {
   return (
     <Row>
       <Col>

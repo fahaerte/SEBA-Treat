@@ -3,7 +3,7 @@ import {
   FieldValues,
   FormProvider,
   SubmitHandler,
-  useForm
+  useForm,
 } from "react-hook-form";
 import { IForm } from "./IForm";
 import Typography from "../Typography/Typography";
@@ -11,23 +11,23 @@ import FormRowList from "./FormRow/FormRowList";
 import Button from "../Button/Button";
 
 const Form = <TFormValues extends FieldValues>({
-                                                 className = "",
-                                                 submitButton = {
-                                                   color: "primary",
-                                                   children: "Submit"
-                                                 },
-                                                 autocomplete = "on",
-                                                 resetOnSubmit = true,
-                                                 isLoading = false,
-                                                 formFieldErrors,
-                                                 formTitle,
-                                                 abortButton,
-                                                 hookProps,
-                                                 onSubmit,
-                                                 elements,
-                                                 feedback,
-                                                 ...props
-                                               }: IForm<TFormValues>) => {
+  className = "",
+  submitButton = {
+    color: "primary",
+    children: "Submit",
+  },
+  autocomplete = "on",
+  resetOnSubmit = true,
+  isLoading = false,
+  formFieldErrors,
+  formTitle,
+  abortButton,
+  hookProps,
+  onSubmit,
+  elements,
+  feedback,
+  ...props
+}: IForm<TFormValues>) => {
   const { handleSubmit, formState, reset, setError, ...rest } =
     useForm<TFormValues>(hookProps);
 

@@ -8,66 +8,69 @@ const otherFilterElements: IFormRow<IMealFilter>[] = [
       formKey: "portions",
       label: "Portions",
       props: {
-        type: "number"
-      }
-    })
-  ], [
+        type: "number",
+      },
+    }),
+  ],
+  [
     FormHelper.createInput({
       formKey: "minSellerRating",
       label: "Minimum Seller Rating",
       props: {
-        type: "number"
-      }
-    })
-  ], [
+        type: "number",
+      },
+    }),
+  ],
+  [
     FormHelper.createInput({
       formKey: "maxPrice",
       label: "Maximum Price",
       props: {
-        type: "number"
-      }
-    })
-  ], [
+        type: "number",
+      },
+    }),
+  ],
+  [
     FormHelper.createInput({
       formKey: "maxDistance",
       label: "Maximum Distance",
       props: {
-        type: "number"
-      }
-    })
-  ], [
+        type: "number",
+      },
+    }),
+  ],
+  [
     FormHelper.createInput({
       formKey: "allergen",
       label: "Allergene",
       props: {
-        type: "text"
-      }
-    })
-  ], [
+        type: "text",
+      },
+    }),
+  ],
+  [
     FormHelper.createInput({
       formKey: "category",
       label: "Category",
       props: {
-        type: "text"
-      }
-    })
-  ]
+        type: "text",
+      },
+    }),
+  ],
 ];
 
-
-const MealOfferFilterSide = (
-  { currentFilter, handleFiltering }:
-    {
-      currentFilter: IMealFilter;
-      handleFiltering: (filter: IMealFilter) => void;
-  },
-
-) => {
+const MealOfferFilterSide = ({
+  currentFilter,
+  handleFiltering,
+}: {
+  currentFilter: IMealFilter;
+  handleFiltering: (filter: IMealFilter) => void;
+}) => {
   return (
     <Form<IMealFilter>
-    elements={otherFilterElements}
-    onSubmit={handleFiltering}
-  />
+      elements={otherFilterElements}
+      onSubmit={handleFiltering}
+    />
   );
 };
 
