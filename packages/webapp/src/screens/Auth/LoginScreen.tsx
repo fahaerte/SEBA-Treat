@@ -1,27 +1,39 @@
 import React from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
-import { IUserCredentials } from "@treat/lib-common";
+import { IAddress, IUserCredentials } from "@treat/lib-common";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
+import { AxiosError } from "axios";
 
 const LoginScreen = () => {
   const userContext = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from || "/alreadyLoggedIn";
+  type LocationState = {
+    from: {
+      pathname: string;
+    };
+  };
+
+  const locationState = location.state as LocationState;
+  const from = locationState?.from || "/alreadyLoggedIn";
+
+  // const from = location.state?.from || "/alreadyLoggedIn";
+
+  console.log("Coming from", from);
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
       console.log(response.data);
       const { userId, token, address } = response.data;
-      userContext.setToken(token);
-      userContext.setUserId(userId);
-      userContext.setAddress(getStringFromIAddress(address));
+      userContext.setToken(token as string);
+      userContext.setUserId(userId as string);
+      userContext.setAddress(getStringFromIAddress(address as IAddress));
       navigate(from, { replace: true });
     },
   });
@@ -70,7 +82,13 @@ const LoginScreen = () => {
       <div>
         <div>
           {loginMutation.isError ? (
-            <div>An error occurred: {loginMutation.error.message}</div>
+            <div>
+              An error occurred:{" "}
+              {loginMutation.error instanceof AxiosError &&
+              loginMutation.error.message
+                ? loginMutation.error.message
+                : "unknown"}
+            </div>
           ) : null}
         </div>
         <Form<IUserCredentials>

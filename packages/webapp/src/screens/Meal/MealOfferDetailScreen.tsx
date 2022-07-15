@@ -5,24 +5,27 @@ import {
   Button,
   Card,
   Col,
+  dangerToast,
+  infoToast,
   Row,
   SectionHeading,
-  SkeletonSquare,
+  successToast,
+  warningToast,
 } from "../../components";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getUserPreview } from "../../api/userApi";
-import { getMealOffer } from "../../api/mealApi";
-import { useParams } from "react-router-dom";
+import { getMealOffer, requestMealOffer } from "../../api/mealApi";
+import { Link, Navigate, useLocation, useParams } from "react-router-dom";
+import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
+import axios, { AxiosError } from "axios";
+import { ConfigService } from "../../utils/ConfigService";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
   const { userId, token } = useAuthContext();
-
-  // const { data: user } = useQuery("getUser", () =>
-  //   getUser(userId as string, token as string)
-  // );
+  const location = useLocation();
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
@@ -31,26 +34,57 @@ export const MealOfferDetailScreen = () => {
 
   const { data: seller, isLoading: sellerIsLoading } = useQuery(
     ["getSeller", mealOffer],
-    () => getUserPreview(mealOffer.data.user as string)
+    () => getUserPreview(mealOffer.user as string),
+    { enabled: !!mealOffer }
   );
 
-  useEffect(() => {
-    if (mealOffer) {
-      console.log(mealOffer);
-      console.log(mealOffer.data.user);
-      console.log(mealOffer.data.allergens);
-    }
-  }, [mealOffer]);
+  const requestMealMutation = useMutation(requestMealOffer, {
+    onSuccess: () => {
+      successToast({
+        message:
+          "The meal has been reserved for you. Now, the chef can accept it.",
+      });
+    },
+    onError: (error) => {
+      console.log("onError:");
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message: "Unexpected server error. The meal could not be reserved.",
+        });
+      }
+    },
+  });
 
-  useEffect(() => {
-    if (seller) {
-      console.log(seller);
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
+
+  function handleRequestClick() {
+    if (token) {
+      const result = requestMealMutation.mutate({
+        mealOfferId: mealOfferId as string,
+        token: token,
+      });
+    } else {
+      setRedirectToLogin(true);
     }
-  }, [seller]);
+  }
+
+  if (redirectToLogin) {
+    infoToast({
+      message: `Please log in to reserve this meal`,
+    });
+    return <Navigate to={"/login"} replace state={{ from: location }} />;
+  }
 
   return (
     <>
       <div>
+        <p>UserID: {userId}</p>
+        <p>Token: {token}</p>
+        <p>MealOfferID: {mealOfferId}</p>
         {mealOfferIsLoading || sellerIsLoading ? (
           <Container className={""}>
             <Row className={"pt-5"}>
@@ -63,9 +97,9 @@ export const MealOfferDetailScreen = () => {
           <Container className={""}>
             <Row className={"pt-5"}>
               <PageHeading>
-                <u>{mealOffer.data.title}</u>
+                <u>{mealOffer.title}</u>
               </PageHeading>
-              {mealOffer.data.categories.map((category: string) => (
+              {mealOffer.categories.map((category: string) => (
                 <span key={category}>{category}</span>
               ))}
             </Row>
@@ -90,36 +124,32 @@ export const MealOfferDetailScreen = () => {
             </Row>
             <Row>
               <span>Distance: unknown</span>
-              <span>Portions: {mealOffer.data.portions}</span>
+              <span>Portions: {mealOffer.portions}</span>
               <span>
-                {mealOffer.data.startDate} – {mealOffer.data.endDate}
+                {mealOffer.startDate} – {mealOffer.endDate}
               </span>
             </Row>
             <Row>
               <Col>
                 <SectionHeading>Description</SectionHeading>
-                <p>{mealOffer.data.description}</p>
+                <p>{mealOffer.description}</p>
                 <SectionHeading>Location</SectionHeading>
-                <p>{mealOffer.data.transactionFee}</p>
+                <p>{mealOffer.transactionFee}</p>
                 <SectionHeading>List of Allergens</SectionHeading>
                 <ul>
-                  {mealOffer.data.allergens.map((allergen: string) => (
+                  {mealOffer.allergens.map((allergen: string) => (
                     <li key={allergen}>{allergen}</li>
                   ))}
                 </ul>
               </Col>
               <Col>
-                <div
-                  style={{
-                    height: "600px",
-                    width: "100%",
-                    border: "1px solid grey",
-                    borderRadius: "1em",
-                    boxShadow: "0px 2px 10px grey",
-                  }}
-                >
-                  Buy meal
-                </div>
+                <MealRequestCard
+                  key={mealOffer._id}
+                  productName={mealOffer.title}
+                  mealPrice={mealOffer.price}
+                  transactionFee={mealOffer.transactionFee}
+                  buttonAction={() => handleRequestClick()}
+                />
               </Col>
             </Row>
           </Container>

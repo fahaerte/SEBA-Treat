@@ -43,16 +43,31 @@ class MealOfferService {
 
   public async getMealOffer(
     user: UserDocument,
-    mealOfferId: string
+    mealOfferId: string,
+    preview = true
   ): Promise<MealOfferDocument | Error> {
+    console.log("getMealOffer - service");
     const mealOfferDoc = (await this.mealOffer.findById(
       mealOfferId
     )) as MealOfferDocument;
     if (!mealOfferDoc) {
       throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
-    if (!user._id.equals(mealOfferDoc.user)) {
+    if (!user._id.equals(mealOfferDoc.user) && preview) {
       return this.getMealOfferPreview(user, mealOfferDoc);
+    }
+    return mealOfferDoc;
+  }
+
+  public async getMealOfferDetails(
+    mealOfferId: string
+  ): Promise<MealOfferDocument | Error> {
+    console.log("getMealOfferDetails - service");
+    const mealOfferDoc = (await this.mealOffer.findById(
+      mealOfferId
+    )) as MealOfferDocument;
+    if (!mealOfferDoc) {
+      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
     return mealOfferDoc;
   }
@@ -144,7 +159,7 @@ class MealOfferService {
   public async getSentMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
-    return await this.mealOffer.findSentMealOfferRequests(user._id);
+    return await this.mealOffer.findSentMealOfferRequests(user._id as string);
   }
 
   public async getReceivedMealOfferRequests(
@@ -177,10 +192,12 @@ class MealOfferService {
   ): Promise<MealOfferDocument | Error> {
     const mealOfferDoc = (await this.getMealOffer(
       user,
-      mealOfferId
+      mealOfferId,
+      false
     )) as MealOfferDocument;
     if (!user._id.equals(mealOfferDoc.user)) {
       const reservations = mealOfferDoc.reservations;
+      console.log(reservations);
       reservations.forEach((reservation) => {
         if (
           reservation.reservationState === EMealReservationState.BUYER_CONFIRMED
@@ -194,10 +211,11 @@ class MealOfferService {
           );
         }
       });
-      mealOfferDoc.reservations.push({
+      reservations.push({
         buyer: user._id,
       } as MealReservationDocument);
-      return await mealOfferDoc.save();
+      await mealOfferDoc.save();
+      return this.getMealOfferPreview(user, mealOfferDoc);
     }
     throw new InvalidMealReservationException(
       "You can not make a reservation for your own meal offer"

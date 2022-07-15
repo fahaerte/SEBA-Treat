@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { ICard } from "./ICard";
+import { ICard } from "../ui/Card/ICard";
 
-export const SCCard = styled.div<ICard>`
+export const SCMealRequestCard = styled.div<ICard>`
   background-color: ${({ theme, color }) =>
     color ? theme.palette[color].main : theme.card.background.main};
   color: ${({ theme, color }) =>
@@ -9,11 +9,10 @@ export const SCCard = styled.div<ICard>`
       ? theme.palette[color].contrastText
       : theme.card.background.contrastText};
   margin-bottom: ${({ theme }) => theme.spacings.lg};
-  //box-shadow: ${({ theme }) => theme.shadows.md};
-  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: ${({ theme }) => theme.shadows.md};
   border: 2px solid ${({ theme }) => theme.palette["primary"].main};
   // TODO: Theme value?
-  border-radius: 20px;
+  border-radius: 10px;
 
   &.card-hover {
     cursor: pointer;
@@ -27,5 +26,11 @@ export const SCCard = styled.div<ICard>`
       transform: scale(1.01);
       box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
     }
+  }
+
+  > b {
+    font-weight: bold;
+    // TODO: helper
+    margin: 15px 0 20px 0;
   }
 `;
