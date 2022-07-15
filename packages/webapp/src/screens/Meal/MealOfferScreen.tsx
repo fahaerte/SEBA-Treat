@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { MouseEvent, useContext, useState } from "react";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import { Col, Container, Row } from "../../components";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
@@ -28,11 +28,6 @@ export const MealOfferScreen = () => {
       },
     }
   );
-
-  const redirectToMealDetails = (mealId: string) => {
-    console.log(mealId);
-    // navigate("") TODO: Navigate to MealOfferDetail
-  };
 
   const handleSearch = (search: string) => {
     console.log(search);
@@ -81,15 +76,12 @@ export const MealOfferScreen = () => {
                           .map((mealOffer: IMealOfferCard) => (
                             <Row key={`${mealOffer._id}-container`}>
                               <MealOffer
+                                mealId={mealOffer._id}
                                 price={mealOffer.price}
                                 distance={mealOffer.distance}
-                                buttonAction={() =>
-                                  redirectToMealDetails(mealOffer._id)
-                                }
                                 mealTitle={mealOffer.title}
                                 portions={mealOffer.portions}
                                 sellerRating={mealOffer.rating}
-                                onClickAction={redirectToMealDetails}
                                 endDate={mealOffer.endDate}
                                 sellerName={"FirstName of Seller"}
                                 startDate={mealOffer.endDate}
