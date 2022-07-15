@@ -7,10 +7,11 @@ import {
   Icon,
   Col,
   Container,
-  Row
+  Row,
 } from "../ui";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { IMealFilter } from "@treat/lib-common";
 
 const MealOfferImage = styled.img`
   width: 160px;
@@ -19,30 +20,29 @@ const MealOfferImage = styled.img`
   border: 1px solid red;
 `;
 
-const MealOffer = (
-  {
-    mealId = "",
-    mealTitle = "",
-    price = 0,
-    sellerRating = 1,
-    distance = 0,
-    portions = 1,
-    sellerName = "",
-    startDate = "",
-    endDate = "",
-  }: {
-    mealId: string;
-    mealTitle: string;
-    price: number;
-    sellerRating: number;
-    distance: number;
-    portions: number;
-    sellerName: string;
-    buttonAction: () => void;
-    startDate: string;
-    endDate: string;
-  }) => {
-// TODO: Format Dates
+const MealOffer = ({
+  mealId = "",
+  mealTitle = "",
+  price = 0,
+  sellerRating = 1,
+  distance = 0,
+  portions = 1,
+  sellerName = "",
+  startDate = "",
+  endDate = "",
+}: {
+  mealId: string;
+  mealTitle: string;
+  price: number;
+  sellerRating: number;
+  distance: number;
+  portions: number;
+  sellerName: string;
+  buttonAction: (filter: IMealFilter) => void;
+  startDate: string;
+  endDate: string;
+}) => {
+  // TODO: Format Dates
 
   const navigate = useNavigate();
 
@@ -105,9 +105,7 @@ const MealOffer = (
             </Row>
           </Col>
           <Col>
-            <Button onClick={handleSelect}>
-              Select
-            </Button>
+            <Button onClick={handleSelect}>Select</Button>
           </Col>
         </Row>
       </Container>

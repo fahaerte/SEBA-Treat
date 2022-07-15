@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
-import { IAddressLandingPage } from "@treat/lib-common";
+import { IStringObject } from "@treat/lib-common";
 import { AuthContext } from "../utils/auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -19,11 +19,9 @@ export const AddressInputScreen = () => {
   const locationState = location.state as LocationState;
   const from = locationState?.from || "/mealoffers";
 
-  // const from = location.state?.from || "/mealoffers";
-
-  const elements: IFormRow<IAddressLandingPage>[] = [
+  const elements: IFormRow<IStringObject>[] = [
     FormHelper.createInput({
-      formKey: "address",
+      formKey: "returnedString",
       label: "Address",
       props: {
         type: "text",
@@ -35,9 +33,9 @@ export const AddressInputScreen = () => {
     }),
   ];
 
-  const handleAddress = (data: IAddressLandingPage) => {
+  const handleAddress = (data: IStringObject) => {
     console.log(JSON.stringify(data));
-    userContext.setAddress(data.address);
+    userContext.setAddress(data.returnedString);
     navigate(from, { replace: true });
   };
 
@@ -48,7 +46,7 @@ export const AddressInputScreen = () => {
         Find Offers in your neighbourhood or provide your leftovers to others!
       </h4>
       <br />
-      <Form<IAddressLandingPage> elements={elements} onSubmit={handleAddress} />
+      <Form<IStringObject> elements={elements} onSubmit={handleAddress} />
     </>
   );
 };

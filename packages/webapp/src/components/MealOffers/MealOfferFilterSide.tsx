@@ -44,8 +44,8 @@ const otherFilterElements: IFormRow<IMealFilter>[] = [
   ],
   [
     FormHelper.createSelect({
-      formKey: "allergene",
-      label: "Allergenes",
+      formKey: "allergen",
+      label: "Allergen",
       options: [
         new Option("", ""),
         new Option(EMealAllergen.GLUTEN, EMealAllergen.GLUTEN),

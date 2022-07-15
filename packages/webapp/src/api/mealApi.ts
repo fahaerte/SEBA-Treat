@@ -30,7 +30,7 @@ export const requestMealOffer = async ({
 export const getMealOffersByParams = async (
   address: string,
   token: string,
-  portions?: string,
+  portions?: number,
   category?: string,
   allergen?: string,
   sellerRating?: number,
@@ -38,7 +38,7 @@ export const getMealOffersByParams = async (
   endDate?: string,
   price?: number,
   search?: string,
-  distance?: string
+  distance?: number
 ) => {
   const response = await baseApi(token).get(`/mealOffers/previews`, {
     params: {
