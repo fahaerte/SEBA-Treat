@@ -10,7 +10,6 @@ import UserService from "../../resources/user/user.service";
 import { Service } from "typedi";
 import { ObjectId } from "mongoose";
 import StripeService from "../stripe/stripe.service";
-import token from "../../utils/token";
 
 // TODO: Update user
 @Service()
@@ -111,7 +110,9 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}/:userid?`, authenticate, this.getUser);
+    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
+
+    this.router.get(`${this.path}/preview/:userId?`, this.getUserPreview);
 
     /**
      * @swagger
@@ -228,14 +229,34 @@ class UserController implements Controller {
       return next(new HttpException(404, "No logged in user"));
     }
     try {
-      let user;
-      const userId = req.params.userId;
-      if (userId) {
-        user = await this.userService.getUser(userId);
-      } else {
-        user = req.user;
+      let userId = "62cc75ba8a708498732805ce"; // TODO: Remove later
+      if (req.params.userId) {
+        userId = req.params.userId;
       }
-      res.status(200).send({ data: user });
+      if (userId) {
+        const user = await this.userService.getUser(userId);
+        res.status(200).send({ data: user });
+      } else {
+        res.status(404).send({ data: "user not found!" });
+      }
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getUserPreview = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      if (req.params.userId) {
+        const userId = req.params.userId;
+        const userPrev = await this.userService.getUserPreview(userId);
+        res.status(200).send({ data: userPrev });
+      } else {
+        res.status(404).send({ data: "user not found!" });
+      }
     } catch (error: any) {
       next(error);
     }

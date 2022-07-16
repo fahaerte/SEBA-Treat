@@ -11,7 +11,7 @@ export const MealOfferRequests = () => {
       <Container>
         <Row className={"pt-5"}>
           <PageHeading>
-            <Typography variant={"h1"}>
+            <Typography>
               Your <u>orders</u>
             </Typography>
           </PageHeading>

@@ -14,6 +14,9 @@ import UserService from "./resources/user/user.service";
 import CreditPackageController from "./resources/creditPackage/creditPackage.controller";
 import StripeService from "./resources/stripe/stripe.service";
 import StripeController from "./resources/stripe/stripe.controller";
+import MealTransactionService from "./resources/mealTransaction/mealTransaction.service";
+import RatingController from "./resources/rating/ratingController";
+import RatingService from "./resources/rating/ratingService";
 
 validateEnv();
 
@@ -24,8 +27,7 @@ const app = new App(
       Container.get(StripeService)
     ),
 
-    new MealTransactionController(),
-
+    new MealTransactionController(Container.get(MealTransactionService)),
     new MealOfferController(Container.get(MealOfferService)),
     new MealAllergenController(),
     new MealCategoryController(),
@@ -33,8 +35,8 @@ const app = new App(
       Container.get(StripeService),
       Container.get(UserService)
     ),
-
     new CreditPackageController(),
+    new RatingController(Container.get(RatingService)),
   ],
   Number(process.env.PORT)
 );

@@ -5,20 +5,23 @@ import { RegisterScreen } from "../screens/Auth/RegisterScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { AddressInputScreen } from "../screens/AddressInputScreen";
 import { ErrorPage } from "../screens/Status/ErrorPage";
-import { AuthProvider } from "../utils/AuthProvider";
-import { MealOfferScreen } from "../screens/MealOfferScreen";
-import { RequireAddressRoute } from "../utils/RequireAddressRoute";
+import { AuthProvider } from "../utils/auth/AuthProvider";
+import { MealOfferScreen } from "../screens/Meal/MealOfferScreen";
+import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
 import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
 import { AccountScreen } from "../screens/Profile/AccountScreen";
-// import { CreditPackages } from "../screens/Payment/CreditPackages";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 import { CreditPackages } from "../screens/Payment/CreditPackages";
-import { RequireAuthRoute } from "../utils/RequireAuthRoute";
+import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 
 export const AppRouter = () => {
+  const reactQueryClient = new QueryClient();
+
   const mainRoutes = {
     path: "/",
     element: <HomeScreen />,
@@ -38,23 +41,13 @@ export const AppRouter = () => {
         path: "/address",
         element: <AddressInputScreen />,
       },
-      // {
-      //   path: "/mealOfferRequests",
-      //   element: <MealOfferRequests />,
-      //   children: [
-      //     {
-      //       path: "sent",
-      //       element: <SentMealOfferRequests />,
-      //     },
-      //     {
-      //       path: "received",
-      //       element: <ReceivedMealOfferRequests />,
-      //     },
-      //   ],
-      // },
       {
         path: "/account",
-        element: <AccountScreen />,
+        element: (
+          <RequireAuthRoute>
+            <AccountScreen />
+          </RequireAuthRoute>
+        ),
       },
       {
         path: "/alreadyLoggedIn",
@@ -64,17 +57,17 @@ export const AppRouter = () => {
   };
 
   const redirectRoutes = [
-    {
-      path: "/success/:priceId",
-      element: <PaymentSuccess />,
-    },
-    {
-      path: "/cancel",
-      element: <div>You canceled the purchase</div>,
-    },
+    // {
+    //   path: "/success/:priceId",
+    //   element: <PaymentSuccess />,
+    // },
     // {
     //   path: "/purchase-credits",
-    //   element: <CreditPackages />,
+    //   element: (
+    //     <RequireAuthRoute>
+    //       <CreditPackages />
+    //     </RequireAuthRoute>
+    //   ),
     // },
   ];
 
@@ -114,8 +107,7 @@ export const AppRouter = () => {
 
   const mealRoutes = [
     {
-      // ALL THE MEALS
-      path: "/mealoffers",
+      path: "mealoffers",
       element: (
         <RequireAddressRoute>
           <MealOfferScreen />
@@ -123,7 +115,11 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/mealOfferRequests",
+      path: "mealoffers/:mealOfferId",
+      element: <MealOfferDetailScreen />,
+    },
+    {
+      path: "mealOfferRequests",
       element: (
         <RequireAuthRoute>
           <MealOfferRequests />
@@ -145,10 +141,14 @@ export const AppRouter = () => {
   const routing = useRoutes([
     mainRoutes,
     profileRoutes,
-    ...redirectRoutes,
+    // ...redirectRoutes,
     ...purchaseCreditRoutes,
     ...mealRoutes,
   ]);
 
-  return <AuthProvider>{routing}</AuthProvider>;
+  return (
+    <QueryClientProvider client={reactQueryClient}>
+      <AuthProvider>{routing}</AuthProvider>
+    </QueryClientProvider>
+  );
 };

@@ -1,7 +1,11 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import Joi from "joi";
+import ValidatePart from "../utils/validation";
 
-function validationMiddleware(schema: Joi.Schema): RequestHandler {
+function validationMiddleware(
+  schema: Joi.Schema,
+  validatePart: ValidatePart = ValidatePart.BODY
+): RequestHandler {
   return async (
     req: Request,
     res: Response,
@@ -14,7 +18,13 @@ function validationMiddleware(schema: Joi.Schema): RequestHandler {
     };
 
     try {
-      req.body = await schema.validateAsync(req.body, validationOptions);
+      if (validatePart === ValidatePart.BODY) {
+        req.body = await schema.validateAsync(req.body, validationOptions);
+      } else if (validatePart === ValidatePart.PARAMS) {
+        req.params = await schema.validateAsync(req.params, validationOptions);
+      } else if (validatePart === ValidatePart.QUERY) {
+        req.query = await schema.validateAsync(req.query, validationOptions);
+      }
       next();
     } catch (error: any) {
       const errors: string[] = [];

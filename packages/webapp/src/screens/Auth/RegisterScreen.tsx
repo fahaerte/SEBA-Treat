@@ -1,15 +1,24 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
-import { IUser } from "@treat/lib-common";
-import { AuthContext } from "../../utils/AuthProvider";
-import { useUserRegistrationMutation } from "../../store/api";
+import { IAddress, IUser } from "@treat/lib-common";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
+import { useMutation } from "react-query";
+import { register } from "../../api/authApi";
+import { AxiosError } from "axios";
 
 export const RegisterScreen = () => {
-  const userContext = useContext(AuthContext);
+  const userContext = useAuthContext();
 
-  const [register, { isLoading, isError, isSuccess, data }] =
-    useUserRegistrationMutation();
+  const registerMutation = useMutation(register, {
+    onSuccess: (response) => {
+      console.log(response.data);
+      const { userId, token, address } = response.data;
+      userContext.setToken(token as string);
+      userContext.setUserId(userId as string);
+      userContext.setAddress(getStringFromIAddress(address as IAddress));
+    },
+  });
 
   const elements: IFormRow<IUser>[] = [
     [
@@ -85,6 +94,12 @@ export const RegisterScreen = () => {
         props: {
           type: "date",
         },
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide a name!",
+          },
+        },
       }),
     ],
     [
@@ -106,7 +121,7 @@ export const RegisterScreen = () => {
         formKey: "address.houseNumber",
         label: "Housenumber",
         props: {
-          type: "number",
+          type: "text",
         },
         rules: {
           required: {
@@ -114,13 +129,13 @@ export const RegisterScreen = () => {
             message: "Please provide your house number!",
           },
         },
-        defaultValue: 123,
+        defaultValue: "123",
       }),
       FormHelper.createInput({
         formKey: "address.postalCode",
         label: "Postal Code",
         props: {
-          type: "number",
+          type: "text",
         },
         rules: {
           required: {
@@ -128,7 +143,7 @@ export const RegisterScreen = () => {
             message: "Please provide a postal code!",
           },
         },
-        defaultValue: 80335,
+        defaultValue: "80335",
       }),
       FormHelper.createInput({
         formKey: "address.city",
@@ -167,30 +182,32 @@ export const RegisterScreen = () => {
     void register(data);
   };
 
-  if (data) {
-    const { userId, token, address } = data;
-    userContext.setToken(token);
-    userContext.setUserId(userId);
-    userContext.setAddress(getStringFromIAddress(address));
-    console.log("context is set!");
-    console.log(userContext.userId);
-    console.log(userContext.token);
-  }
-
   return (
     <>
-      <Form<IUser>
-        elements={elements}
-        onSubmit={handleRegister}
-        formTitle={"Please register!"}
-        resetOnSubmit
-        abortButton={{
-          children: "Cancel",
-          color: "secondary",
-          className: "ms-3",
-          outline: true,
-        }}
-      />
+      <div>
+        <div>
+          {registerMutation.isError ? (
+            <div>
+              An error occurred:{" "}
+              {registerMutation.error instanceof AxiosError &&
+              registerMutation.error.message
+                ? registerMutation.error.message
+                : "unknown"}
+            </div>
+          ) : null}
+        </div>
+        <Form<IUser>
+          elements={elements}
+          onSubmit={handleRegister}
+          formTitle={"Please register!"}
+          abortButton={{
+            children: "Cancel",
+            color: "secondary",
+            className: "ms-3",
+            outline: true,
+          }}
+        />
+      </div>
     </>
   );
 };

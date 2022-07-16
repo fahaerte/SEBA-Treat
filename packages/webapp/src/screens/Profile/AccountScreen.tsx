@@ -1,51 +1,71 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Row, SkeletonSquare } from "../../components";
 import { Container } from "react-bootstrap";
 import { Header } from "../../components/ui/Header/header";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import SectionHeading from "../../components/ui/SectionHeading/SectionHeading";
 import CreditPackageCard from "../../components/CreditPackageCard/CreditPackageCard";
-import UserService from "../../services/user.service";
 import Balance from "../../components/ui/Balance/Balance";
-import {
-  usePaymentGetProductsWithPricesQuery,
-  useCreateCheckoutSessionMutation,
-} from "../../store/api";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
+import { useIsMutating, useMutation, useQuery } from "react-query";
+import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
+import {
+  createCheckoutSession,
+  paymentGetProductsWithPrices,
+} from "../../api/stripeApi";
+import { getUser } from "../../api/userApi";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const AccountScreen = () => {
-  const [balance, setBalance] = useState<string | number>("Loading...");
+  const { userId, token } = useAuthContext();
 
-  const fetchData = useCallback(() => {
-    // const balance = await UserService.getAccountBalance();
-    const balance = 1;
-    console.log(balance);
-    setBalance(balance);
-  }, []);
+  const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    fetchData().catch(console.error);
-  }, [fetchData]);
+  const { data: user, isLoading: userIsLoading } = useQuery(
+    ["getUser", userId],
+    () => getUser(userId as string, token as string),
+    {
+      onSuccess: (response) => {
+        setBalance(response.data.virtualAccount.balance);
+      },
+    }
+  );
 
-  const { data: products, isLoading: productsIsLoading } =
-    usePaymentGetProductsWithPricesQuery({});
+  const { data: products, isLoading: productsIsLoading } = useQuery(
+    "products",
+    () => paymentGetProductsWithPrices(token as string)
+  );
 
-  const [createCheckout, { isLoading, isError, data }] =
-    useCreateCheckoutSessionMutation();
+  const createCheckout = useMutation(
+    ({
+      priceId,
+      stripeCustomerId,
+      couponId,
+      token,
+    }: CreateCheckoutSessionApiArg) =>
+      createCheckoutSession({ priceId, stripeCustomerId, couponId, token })
+  );
+
+  const isMutation = useIsMutating({
+    mutationKey: "isLoading",
+    exact: true,
+  });
 
   const redirectToCheckout = (priceId: string) => {
-    void createCheckout({
-      priceId,
-      userId: "62b776eafc0a00b0fa2d125e",
-    });
-    if (isError) {
+    try {
+      createCheckout.mutate({
+        priceId: priceId,
+        stripeCustomerId: "62b776eafc0a00b0fa2d125e",
+        token: token as string,
+      });
+    } catch {
       return <div>Stripe Instance not available, 401</div>;
     }
   };
 
-  if (data) {
-    window.location.replace(data.url);
+  if (createCheckout.data) {
+    window.location.replace(createCheckout.data.url);
   }
 
   return (
@@ -63,7 +83,7 @@ export const AccountScreen = () => {
         </Row>
         <SectionHeading>Credit Packages</SectionHeading>
         <Row>
-          {productsIsLoading || isLoading ? (
+          {productsIsLoading || isMutation ? (
             <>
               <Col>
                 <Card>
@@ -84,7 +104,7 @@ export const AccountScreen = () => {
           ) : (
             <>
               {/*TODO: sort by price in ascending order*/}
-              {products?.map((creditPackage: IStripeProduct) => (
+              {products?.data.map((creditPackage: IStripeProduct) => (
                 <Col key={`${creditPackage.id}-container`}>
                   <CreditPackage
                     key={creditPackage.id}

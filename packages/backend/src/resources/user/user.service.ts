@@ -3,7 +3,7 @@ import token from "../../utils/token";
 import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
-import User from "../user/user.interface";
+import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
@@ -13,7 +13,8 @@ import accountBalanceInsufficientException from "../../utils/exceptions/accountB
 @Service()
 class UserService {
   private userModel = UserModel;
-  private virtualAccountService = new VirtualAccountService();
+
+  constructor(private readonly virtualAccountService: VirtualAccountService) {}
 
   /**
    * Register a new user
@@ -65,13 +66,13 @@ class UserService {
 
   public async updateUser(
     user: { _id: string } & Partial<IUser>
-  ): Promise<User | null> {
+  ): Promise<UserDocument | null> {
     const { _id, ...updatedUser } = user;
     await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
     return this.userModel.findById(_id);
   }
 
-  public async getUser(userId: string): Promise<Partial<User> | null> {
+  public async getUser(userId: string): Promise<Partial<UserDocument> | null> {
     return this.userModel
       .findById(userId)
       .select([
@@ -81,8 +82,18 @@ class UserService {
         "address",
         "virtualAccount",
         "brithDate",
+        "meanRating",
+        "countRatings",
         "_id",
       ]);
+  }
+
+  public async getUserPreview(
+    userId: string
+  ): Promise<Partial<UserDocument> | null> {
+    return this.userModel
+      .findById(userId)
+      .select(["firstName", "meanRating", "countRatings"]);
   }
 
   /**
@@ -108,7 +119,7 @@ class UserService {
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as UserDocument;
     const newBalance = user.virtualAccount.balance - amount;
     if (newBalance >= 0) {
       user.virtualAccount.balance -= amount;
@@ -125,14 +136,14 @@ class UserService {
     userId: ObjectId,
     amount: number
   ): Promise<number | Error> {
-    const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as UserDocument;
     user.virtualAccount.balance += amount;
     await user.save();
     return user.virtualAccount.balance;
   }
 
   public async getAccountBalance(userId: ObjectId): Promise<number | Error> {
-    const user = (await this.userModel.findById(userId)) as User;
+    const user = (await this.userModel.findById(userId)) as UserDocument;
     return user.virtualAccount.balance;
   }
 
@@ -141,7 +152,7 @@ class UserService {
     newRating: number
   ): Promise<number | Error> {
     try {
-      const user = (await this.userModel.findById(userId)) as User;
+      const user = (await this.userModel.findById(userId)) as UserDocument;
       const ratingVolume = user.meanRating * user.countRatings;
       user.countRatings += 1;
       const newMeanRating = (ratingVolume + newRating) / user.countRatings;

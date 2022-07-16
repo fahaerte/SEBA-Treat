@@ -9,7 +9,11 @@ export const SCCard = styled.div<ICard>`
       ? theme.palette[color].contrastText
       : theme.card.background.contrastText};
   margin-bottom: ${({ theme }) => theme.spacings.lg};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
+  //box-shadow: ${({ theme }) => theme.shadows.md};
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
+  border: 2px solid ${({ theme }) => theme.palette["primary"].main};
+  // TODO: Theme value?
+  border-radius: 20px;
 
   &.card-hover {
     cursor: pointer;

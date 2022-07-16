@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import AuthStatus from "../utils/AuthStatus";
+import AuthStatus from "../utils/auth/AuthStatus";
 
 export const HomeScreen: React.FC = (): JSX.Element => {
   return (
@@ -19,6 +19,9 @@ export const HomeScreen: React.FC = (): JSX.Element => {
           </li>
           <li>
             <Link to="/mealoffers">Meal Offer Screen</Link>
+          </li>
+          <li>
+            <Link to="/mealoffers/62b892ececd6c349da775ed1">Spagh Bollo 2</Link>
           </li>
           <li>
             <Link to="/mealOfferRequests">Meal Offer Requests Screen</Link>

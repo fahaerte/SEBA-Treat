@@ -13,7 +13,7 @@ import Datepicker from "../Datepicker/Datepicker";
 import RadioCheckSwitch from "../RadioCheckSwitch/RadioCheckSwitch";
 import RadioCheckSwitchGroup from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckSwitchGroup";
 import RadioCheckGroupItem from "../RadioCheckSwitch/RadioCheckSwitchGroup/RadioCheckGroupItem";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import Input from "../Input/Input";
 import FileInput from "../FileInput/FileInput";
 import Select from "../Select/Select";

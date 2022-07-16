@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { IDatePicker } from "./IDatePicker";
 import { SCFloatingForm, SCInput } from "../styles";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 

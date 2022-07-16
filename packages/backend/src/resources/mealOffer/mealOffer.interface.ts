@@ -1,23 +1,19 @@
 import { Document, ObjectId } from "mongoose";
-import MealReservation from "../mealReservation/mealReservation.interface";
+import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
+import { RatingDocument } from "../rating/rating.interface";
+import UserDocument from "../user/user.interface";
+import { IMealOffer } from "@treat/lib-common/lib/interfaces/IMealOffer";
 
-export interface MealOffer {
-  title: string;
-  description: string;
+export interface MealOfferDocument
+  extends Omit<IMealOffer, "_id" | "user" | "reservations" | "rating">,
+    Document {
+  _id: ObjectId;
   user: ObjectId;
-  categories: string[];
-  allergens: string[];
-  startDate: Date;
-  endDate: Date;
-  portions: number;
-  pickUpDetails?: string;
-  price: number;
-  transactionFee: number;
-  reservations: MealReservation[];
+  reservations: MealReservationDocument[];
+  rating?: RatingDocument;
 }
 
-export interface MealOfferDocument extends MealOffer, Document {
-  // categories: Types.Array<string>
-  // allergens: Types.Array<string>
-  // reservations: Types.Array<MealReservation>
+export interface MealOfferDocumentWithUser
+  extends Omit<MealOfferDocument, "user"> {
+  user: UserDocument;
 }

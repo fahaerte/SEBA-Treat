@@ -1,5 +1,4 @@
 import React from "react";
-import { IAddressLandingPage, IUser } from "@treat/lib-common";
 
 export const AuthContext = React.createContext<{
   token?: string;

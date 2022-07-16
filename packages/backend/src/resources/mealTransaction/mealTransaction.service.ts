@@ -7,12 +7,17 @@ import UserService from "../user/user.service";
 import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 import TransactionNotFoundException from "../../utils/exceptions/transactionNotFound.exception";
 import TransactionInWrongStateException from "../../utils/exceptions/transactionInWrongState.exception";
-import User from "../user/user.interface";
+import UserDocument from "../user/user.interface";
+import { Service } from "typedi";
 
+@Service()
 class MealTransactionService {
   private mealTransactionModel = MealTransactionModel;
-  private virtualCentralAccountService = new VirtualCentralAccountService();
-  private userService = new UserService();
+
+  constructor(
+    private readonly virtualCentralAccountService: VirtualCentralAccountService,
+    private readonly userService: UserService
+  ) {}
 
   /**
    * Create a new transaction
@@ -89,8 +94,39 @@ class MealTransactionService {
     }
   }
 
+  public async rateTransaction(
+    user: UserDocument,
+    mealOfferId: string,
+    rating: number
+  ): Promise<void | Error> {
+    const transaction = (await this.mealTransactionModel.findOne({
+      mealOfferId: mealOfferId,
+      $or: [{ senderId: user._id }, { receiverId: user._id }],
+    })) as MealTransaction;
+    if (!transaction) {
+      throw new TransactionNotFoundException(mealOfferId);
+    }
+    if (transaction.transactionState !== MealTransactionState.COMPLETED) {
+      throw new TransactionInWrongStateException(transaction._id as string);
+    }
+    if (user._id.equals(transaction.senderId)) {
+      if (transaction.sellerRating === undefined) {
+        transaction.sellerRating = rating;
+      } else {
+        throw new Error("The transaction already has a sellerRating");
+      }
+    } else {
+      if (transaction.buyerRating === undefined) {
+        transaction.buyerRating = rating;
+      } else {
+        throw new Error("The transaction already has a buyerRating");
+      }
+    }
+    await transaction.save();
+  }
+
   public async rateTransactionParticipant(
-    user: User,
+    user: UserDocument,
     transactionId: ObjectId,
     stars: number,
     participantType: MealTransactionParticipant
@@ -126,6 +162,7 @@ class MealTransactionService {
             throw new Error("Only the buyer can rate the seller.");
           }
         }
+        transaction.sellerRating = stars;
         await transaction.save();
         return transaction;
       } else {

@@ -3,7 +3,7 @@ import { IFormRadioCheckSwitch } from "./IRadioCheckSwitch";
 import { SCCheckbox } from "../styles";
 import { generateRegisterOptions } from "../_utils/useFormRuleConverter";
 import { FieldValues, useFormContext } from "react-hook-form";
-import { getEncodedString } from "../../../../utils/getEncodedString";
+import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 
 /**
  * Warning: disabled property is currently not supported.

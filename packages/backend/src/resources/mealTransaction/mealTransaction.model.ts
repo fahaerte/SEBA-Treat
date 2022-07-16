@@ -8,10 +8,12 @@ const MealTransactionSchema = new Schema<MealTransaction>(
     mealOfferId: {
       type: Types.ObjectId,
       required: true,
+      unique: true,
     },
     mealReservationId: {
       type: Types.ObjectId,
       required: true,
+      unique: true,
     },
     senderId: {
       type: Types.ObjectId,
@@ -37,12 +39,12 @@ const MealTransactionSchema = new Schema<MealTransaction>(
     },
     buyerRating: {
       type: Number,
-      min: 0,
+      min: 1,
       max: 5,
     },
     sellerRating: {
       type: Number,
-      min: 0,
+      min: 1,
       max: 5,
     },
   },

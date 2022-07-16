@@ -6,27 +6,61 @@ import {
   SectionHeading,
   Typography,
 } from "../../components";
-import {
-  usePaymentGetProductsWithPricesQuery,
-  useCreateCheckoutSessionMutation,
-  usePaymentGetDiscountQuery,
-} from "../../store/api";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
 import CreditOverview from "../../components/CreditOverview";
 import CreditDiscount from "../../components/CreditProducts/CreditDiscount";
-import { useAuthContext } from "../../utils/AuthProvider";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
+import { useIsMutating, useMutation, useQuery } from "react-query";
+import {
+  createCheckoutSession,
+  paymentGetDiscount,
+  paymentGetProductsWithPrices,
+} from "../../api/stripeApi";
+import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
+import { getUser } from "../../api/userApi";
 
+//TODO: Debug
 export const CreditPackages = () => {
-  const { user } = useAuthContext();
-  const { data: products, isLoading: productsIsLoading } =
-    usePaymentGetProductsWithPricesQuery({});
-  const { data: discount, isLoading: discountIsLoading } =
-    usePaymentGetDiscountQuery({});
+  const { userId, token } = useAuthContext();
 
-  const [createCheckout, { isLoading, isError, data }] =
-    useCreateCheckoutSessionMutation();
+  const [url, setUrl] = useState("");
+
+  const { data: user } = useQuery("getUser", () =>
+    getUser(userId as string, token as string)
+  );
+
+  const { data: products, isLoading: productsIsLoading } = useQuery(
+    "products",
+    () => paymentGetProductsWithPrices(token as string)
+  );
+
+  const { data: discount, isLoading: discountIsLoading } = useQuery(
+    "discounts",
+    () => paymentGetDiscount(token as string)
+  );
+
+  const createCheckout = useMutation(
+    ({
+      priceId,
+      stripeCustomerId,
+      couponId,
+      token,
+    }: CreateCheckoutSessionApiArg) =>
+      createCheckoutSession({ priceId, stripeCustomerId, couponId, token }),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        setUrl(response.data.url);
+      },
+    }
+  );
+
+  const isMutation = useIsMutating({
+    mutationKey: "isLoading",
+    exact: true,
+  });
 
   const [discountedProduct, setDiscountedProduct] = useState<
     IStripeProduct | undefined
@@ -34,24 +68,27 @@ export const CreditPackages = () => {
 
   useEffect(() => {
     if (discount && products) {
-      const findProduct = products?.find(
-        (product) => product.id === discount?.applies_to?.products[0]
+      const findProduct = products?.data.find(
+        (product: { id: any }) =>
+          product.id === discount?.data.applies_to?.products[0]
       );
       setDiscountedProduct(findProduct);
     }
 
-    if (data) {
-      window.location.replace(data.url);
+    if (createCheckout) {
+      window.location.replace(url);
     }
-  }, [discount, products, data]);
+  }, [discount, products, createCheckout]);
 
   const redirectToCheckout = (priceId: string, couponId?: string) => {
-    void createCheckout({
-      priceId,
-      stripeCustomerId: user?.stripeCustomerId || "cus_M0y6NV1PXOlKwa",
-      couponId,
-    });
-    if (isError) {
+    try {
+      createCheckout.mutate({
+        priceId: priceId,
+        stripeCustomerId: user.stripeCustomerId,
+        couponId: couponId || undefined,
+        token: token as string,
+      });
+    } catch {
       return <div>Stripe Instance not available, 401</div>;
     }
   };
@@ -62,15 +99,15 @@ export const CreditPackages = () => {
         <CreditOverview />
         {discount && (
           <CreditDiscount
-            discountTitle={discount.name || ""}
-            discountDeadline={discount.redeem_by || 0}
-            discountValue={discount.amount_off || 0}
+            discountTitle={discount.data.name || ""}
+            discountDeadline={discount.data.redeem_by || 0}
+            discountValue={discount.data.amount_off || 0}
             productLabel={discountedProduct?.name || ""}
             productPrice={discountedProduct?.default_price.unit_amount || 0}
             onClick={() =>
               redirectToCheckout(
                 discountedProduct?.default_price.id || "",
-                discount.id
+                discount.data.id
               )
             }
           />
@@ -79,25 +116,30 @@ export const CreditPackages = () => {
       <SectionHeading>Buy packages</SectionHeading>
       <Container>
         <Row>
-          {productsIsLoading || isLoading || discountIsLoading ? (
+          {productsIsLoading || isMutation || discountIsLoading ? (
             <LoadingPackages />
           ) : (
             <>
               {products &&
-                products
+                products.data
                   .slice()
-                  .sort((p1, p2) => {
-                    if (
-                      p1.default_price.unit_amount !== null &&
-                      p2.default_price.unit_amount !== null
-                    ) {
-                      return (
-                        p1.default_price.unit_amount -
-                        p2.default_price.unit_amount
-                      );
+                  .sort(
+                    (
+                      p1: { default_price: { unit_amount: number | null } },
+                      p2: { default_price: { unit_amount: number | null } }
+                    ) => {
+                      if (
+                        p1.default_price.unit_amount !== null &&
+                        p2.default_price.unit_amount !== null
+                      ) {
+                        return (
+                          p1.default_price.unit_amount -
+                          p2.default_price.unit_amount
+                        );
+                      }
+                      return -1;
                     }
-                    return -1;
-                  })
+                  )
                   .map((creditPackage: IStripeProduct) => (
                     <Col key={`${creditPackage.id}-container`}>
                       <CreditPackage

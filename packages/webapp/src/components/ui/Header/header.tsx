@@ -1,11 +1,23 @@
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../Grid";
 import { Button } from "../index";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import UserService from "../../../services/user.service";
+import { useQuery } from "react-query";
+import { getUser } from "../../../api/userApi";
+import { useAuthContext } from "../../../utils/auth/AuthProvider";
 
 export const Header = () => {
+  const { userId, token } = useAuthContext();
+
+  const [balance, setBalance] = useState(0);
+
+  useQuery("getUser", () => getUser(userId as string, token as string), {
+    onSuccess: (response) => {
+      setBalance(response.data.virtualAccount.balance);
+    },
+  });
+
   const Header = styled.header`
     height: 110px;
     border-bottom: 1px solid #cfcfcf;
@@ -16,18 +28,6 @@ export const Header = () => {
     border-radius: 50px;
     border-color: #cfcfcf;
   `;
-
-  const [balance, setBalance] = useState("Loading...");
-
-  const fetchData = useCallback(async () => {
-    const balance = await UserService.getAccountBalance();
-    console.log(balance);
-    setBalance(balance);
-  }, []);
-
-  useEffect(() => {
-    fetchData().catch(console.error);
-  }, [fetchData]);
 
   return (
     <Header>

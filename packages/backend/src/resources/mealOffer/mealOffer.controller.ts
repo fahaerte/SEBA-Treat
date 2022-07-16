@@ -1,12 +1,15 @@
 import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
-import { MealOffer } from "./mealOffer.interface";
-import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
+import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
+import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
+import ValidatePart from "../../utils/validation";
+import validationMiddleware from "../../middleware/validation.middleware";
+import { MealOfferDocument } from "./mealOffer.interface";
 
 @Service()
 class MealOfferController implements Controller {
@@ -21,13 +24,29 @@ class MealOfferController implements Controller {
     this.router.post(
       `${this.path}`,
       authenticate,
-      validationMiddleware(validate.create),
+      validationMiddleware(validate.createBody),
       this.create
+    );
+    this.router.get(
+      `${this.path}/previews`,
+      authenticate,
+      validationMiddleware(
+        validate.getMealOfferPreviewsQuery,
+        ValidatePart.QUERY
+      ),
+      this.getMealOfferPreviews
     );
     this.router.get(
       `${this.path}/:mealOfferId`,
       authenticate,
+      validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
       this.getMealOffer
+    );
+    this.router.get(
+      `${this.path}/:mealOfferId/details`,
+      // authenticate,
+      // validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
+      this.getMealOfferDetails
     );
     this.router.get(
       `${this.path}/reservations/sent`,
@@ -42,12 +61,20 @@ class MealOfferController implements Controller {
     this.router.patch(
       `${this.path}/:mealOfferId/reservations/:mealReservationId`,
       authenticate,
-      validationMiddleware(validate.updateReservationState),
+      validationMiddleware(validate.updateReservationStateBody),
+      validationMiddleware(
+        validate.updateReservationStateParams,
+        ValidatePart.PARAMS
+      ),
       this.updateMealOfferReservation
     );
     this.router.post(
       `${this.path}/:mealOfferId/reservations`,
       authenticate,
+      validationMiddleware(
+        validate.createMealOfferReservationParams,
+        ValidatePart.PARAMS
+      ),
       this.createMealOfferReservation
     );
     this.router.delete(
@@ -63,12 +90,37 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOfferRequest = req.body as MealOffer;
+      const mealOfferRequest = req.body as MealOfferDocument;
       const newMealOffer = await this.mealOfferService.create(
         mealOfferRequest,
         req.user
       );
       res.status(201).send({ data: newMealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getMealOfferPreviews = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const mealOfferPreviews =
+        await this.mealOfferService.getMealOfferPreviews(
+          req.user,
+          req.query.category as EMealCategory,
+          req.query.allergen as EMealAllergen,
+          req.query.portions as string,
+          req.query.sellerRating as string,
+          req.query.startDate as string,
+          req.query.endDate as string,
+          req.query.price as string,
+          req.query.search as string,
+          req.query.distance as string
+        );
+      res.status(200).send({ data: mealOfferPreviews });
     } catch (error: any) {
       next(error);
     }
@@ -82,6 +134,22 @@ class MealOfferController implements Controller {
     try {
       const mealOffer = await this.mealOfferService.getMealOffer(
         req.user,
+        req.params.mealOfferId
+      );
+      res.status(200).send({ data: mealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getMealOfferDetails = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    console.log("getMealOfferDetails - controller");
+    try {
+      const mealOffer = await this.mealOfferService.getMealOfferDetails(
         req.params.mealOfferId
       );
       res.status(200).send({ data: mealOffer });

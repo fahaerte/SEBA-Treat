@@ -1,21 +1,42 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
-import { IUser, IUserCredentials } from "@treat/lib-common";
-import { AuthContext } from "../../utils/AuthProvider";
+import { IAddress, IUserCredentials } from "@treat/lib-common";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
-import { useUserLogInMutation } from "../../store/api";
+import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { login } from "../../api/authApi";
+import { AxiosError } from "axios";
 
 const LoginScreen = () => {
-  const userContext = useContext(AuthContext);
+  const userContext = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from || "/alreadyLoggedIn";
+  type LocationState = {
+    from: {
+      pathname: string;
+    };
+  };
 
-  const [login, { isLoading, isError, isSuccess, data }] =
-    useUserLogInMutation();
+  const locationState = location.state as LocationState;
+  const from = locationState?.from || "/alreadyLoggedIn";
+
+  // const from = location.state?.from || "/alreadyLoggedIn";
+
+  console.log("Coming from", from);
+
+  const loginMutation = useMutation(login, {
+    onSuccess: (response) => {
+      console.log(response.data);
+      const { userId, token, address } = response.data;
+      userContext.setToken(token as string);
+      userContext.setUserId(userId as string);
+      userContext.setAddress(getStringFromIAddress(address as IAddress));
+      navigate(from, { replace: true });
+    },
+  });
 
   const elements: IFormRow<IUserCredentials>[] = [
     [
@@ -53,31 +74,36 @@ const LoginScreen = () => {
   const handleSignIn = (user: IUserCredentials) => {
     console.log("Trying to log in...");
     console.log(JSON.stringify(user));
-    void login(user);
+    loginMutation.mutate(user);
   };
-
-  if (data) {
-    const { userId, token, address } = data;
-    userContext.setToken(token);
-    userContext.setUserId(userId);
-    userContext.setAddress(getStringFromIAddress(address));
-    navigate(from, { replace: true });
-  }
 
   return (
     <>
-      <Form<IUserCredentials>
-        elements={elements}
-        onSubmit={handleSignIn}
-        formTitle={"Please sign in!"}
-        resetOnSubmit
-        abortButton={{
-          children: "Cancel",
-          color: "secondary",
-          className: "ms-3",
-          outline: true,
-        }}
-      />
+      <div>
+        <div>
+          {loginMutation.isError ? (
+            <div>
+              An error occurred:{" "}
+              {loginMutation.error instanceof AxiosError &&
+              loginMutation.error.message
+                ? loginMutation.error.message
+                : "unknown"}
+            </div>
+          ) : null}
+        </div>
+        <Form<IUserCredentials>
+          elements={elements}
+          onSubmit={handleSignIn}
+          formTitle={"Please sign in!"}
+          resetOnSubmit
+          abortButton={{
+            children: "Cancel",
+            color: "secondary",
+            className: "ms-3",
+            outline: true,
+          }}
+        />
+      </div>
     </>
   );
 };

@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Form, FormHelper } from "@treat/webapp/src/components/";
 import { IFormRow } from "@treat/webapp/src/components/";
 import { IAddressLandingPage } from "@treat/lib-common";
-import { AuthContext } from "../utils/AuthProvider";
+import { AuthContext } from "../utils/auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const AddressInputScreen = () => {
@@ -10,7 +10,16 @@ export const AddressInputScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from || "/mealoffers";
+  type LocationState = {
+    from: {
+      pathname: string;
+    };
+  };
+
+  const locationState = location.state as LocationState;
+  const from = locationState?.from || "/mealoffers";
+
+  // const from = location.state?.from || "/mealoffers";
 
   const elements: IFormRow<IAddressLandingPage>[] = [
     FormHelper.createInput({
