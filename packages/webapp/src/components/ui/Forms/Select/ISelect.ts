@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
-import { IComponentSize } from "../../../types/ComponentProps";
 import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
+import { IComponentSize } from "../../../../assets/theme/types/IComponentSize";
 
 export interface ISelectProps extends IComponentSize {}
 
@@ -15,6 +15,7 @@ export interface IFormSelect<TFormValues>
     | React.ReactElement<HTMLOptionElement>[]
     | React.ReactElement<HTMLOptionElement>;
 }
+
 export interface IFormSelectConfig<TFormValues>
   extends IFormElement<TFormValues> {
   props?: ISelectProps;
