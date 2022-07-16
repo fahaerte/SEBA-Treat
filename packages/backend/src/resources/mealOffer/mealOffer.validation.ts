@@ -48,7 +48,7 @@ const getMealOfferPreviewsQuery = Joi.object({
   endDate: Joi.date().iso().greater(Joi.ref("startDate")),
   price: Joi.number(),
   search: Joi.string().min(1),
-  distance: Joi.number()
+  distance: Joi.number(),
 });
 
 const createMealOfferReservationParams = Joi.object({
