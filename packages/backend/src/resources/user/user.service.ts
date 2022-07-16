@@ -7,7 +7,7 @@ import User from "../user/user.interface";
 import { Service } from "typedi";
 import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
-import {IAddress, IUser} from "@treat/lib-common";
+import { IAddress, IUser } from "@treat/lib-common";
 import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
 
 @Service()
@@ -20,7 +20,7 @@ class UserService {
    */
   public async register(
     newUser: IUser
-  ): Promise<{ userId: string; token: string, address: IAddress }> {
+  ): Promise<{ userId: string; token: string; address: IAddress }> {
     try {
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
@@ -29,7 +29,11 @@ class UserService {
         ...newUser,
         stripeCustomerId: "",
       });
-      return { userId: user.id, token: token.createToken(user), address: user.address };
+      return {
+        userId: user.id,
+        token: token.createToken(user),
+        address: user.address,
+      };
     } catch (error: any) {
       throw new Error(error.message as string);
     }
@@ -41,7 +45,7 @@ class UserService {
   public async login(
     email: string,
     password: string
-  ): Promise<{ userId: string; token: string, address: IAddress }> {
+  ): Promise<{ userId: string; token: string; address: IAddress }> {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {
@@ -49,7 +53,11 @@ class UserService {
     }
 
     if (await user.isValidPassword(password)) {
-      return { userId: user.id, token: token.createToken(user), address: user.address };
+      return {
+        userId: user.id,
+        token: token.createToken(user),
+        address: user.address,
+      };
     } else {
       throw new Error("Wrong credentials given");
     }

@@ -1,10 +1,18 @@
 import { emptyApi as api } from "../emptyApi";
-import {IAddress, IUser, IUserCredentials} from "@treat/lib-common";
+import { IAddress, IUser, IUserCredentials } from "@treat/lib-common";
 
-export type UserControllerLogInResponse = { token: string; userId: string, address: IAddress };
+export type UserControllerLogInResponse = {
+  token: string;
+  userId: string;
+  address: IAddress;
+};
 export type UserControllerLogInArgs = IUserCredentials;
 
-export type UserControllerRegisterResponse = { token: string; userId: string, address: IAddress };
+export type UserControllerRegisterResponse = {
+  token: string;
+  userId: string;
+  address: IAddress;
+};
 export type UserControllerRegisterArgs = IUser;
 
 const injectedUserRtkApi = api.injectEndpoints({
