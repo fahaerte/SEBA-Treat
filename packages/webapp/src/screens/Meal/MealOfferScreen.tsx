@@ -12,13 +12,11 @@ import MealOfferFilterSide from "../../components/MealOffers/MealOfferFilterSide
 
 export const MealOfferScreen = () => {
   const { token, address, setAddress } = useAuthContext();
-  const [search, setSearch] = useState<string>();
+  const [search, setSearch] = useState<string | undefined>(undefined);
   const [sortingRule, setSortingRule] = useState<string>();
   const [distance, setDistance] = useState<number | undefined>(undefined);
   const [price, setPrice] = useState<number | undefined>(undefined);
-  const [sellerRating, setSellerRating] = useState<number | undefined>(
-    undefined
-  );
+  const [sellerRating, setSellerRating] = useState<number | undefined>(undefined);
   const [portions, setPortions] = useState<number | undefined>(undefined);
   const [allergen, setAllergen] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
@@ -65,13 +63,20 @@ export const MealOfferScreen = () => {
         } else {
           setDistance(Number(event.target.value));
         }
-
         break;
       case "max.-price-number":
-        setPrice(Number(event.target.value));
+        if (Number(event.target.value) <= 1) {
+          setPrice(1);
+        } else {
+          setPrice(Number(event.target.value));
+        }
         break;
       case "portions-number":
-        setPortions(Number(event.target.value));
+        if (Number(event.target.value) <= 1) {
+          setPortions(1);
+        } else {
+          setPortions(Number(event.target.value));
+        }
         break;
       case "min.-seller-rating":
         setSellerRating(Number(event.target.value));
@@ -96,6 +101,16 @@ export const MealOfferScreen = () => {
     }
   };
 
+  const resetFilters = () => {
+    setPortions(undefined);
+    setPrice(undefined);
+    setDistance(undefined);
+    setSearch(undefined);
+    setAllergen(undefined);
+    setCategory(undefined);
+    setSellerRating(undefined);
+  };
+
   return (
     <>
       <MealOfferScreenHeader />
@@ -111,6 +126,7 @@ export const MealOfferScreen = () => {
                 maxPrice={price}
                 portions={portions}
                 sellerRating={sellerRating}
+                buttonAction={resetFilters}
               />
             </Row>
           </Col>
