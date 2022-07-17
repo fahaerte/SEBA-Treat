@@ -1,33 +1,53 @@
-import { Button, Form, FormHelper, IFormRow, InputControlled, SelectControlled } from "../ui";
+import {
+  Button,
+  Form,
+  FormHelper,
+  IFormRow,
+  InputControlled,
+  SelectControlled,
+} from "../ui";
 import { IMealFilter } from "@treat/lib-common";
 import React from "react";
 import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
 import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
-
-const MealOfferFilterSide = (
-  {
-    handleChangedFilter,
-    distance,
-    maxPrice,
-    portions,
-    sellerRating,
-    category,
-    allergen
-  }: {
-    handleChangedFilter: (event: any) => void;
-    distance: number | undefined;
-    maxPrice: number | undefined;
-    portions: number | undefined;
-    sellerRating: number | undefined;
-    category: string | undefined;
-    allergen: string | undefined;
-  }) => {
+const MealOfferFilterSide = ({
+  handleChangedFilter,
+  distance,
+  maxPrice,
+  portions,
+  sellerRating,
+  category,
+  allergen,
+}: {
+  handleChangedFilter: (event: any) => void;
+  distance: number | undefined;
+  maxPrice: number | undefined;
+  portions: number | undefined;
+  sellerRating: number | undefined;
+  category: string | undefined;
+  allergen: string | undefined;
+}) => {
   return (
     <div>
-      <InputControlled type={"number"} value={String(distance)} label={"Max. Distance"} onChange={handleChangedFilter}/>
-      <InputControlled type={"number"} value={String(maxPrice)} label={"Max. Price"} onChange={handleChangedFilter}/>
-      <InputControlled type={"number"} value={String(portions)} label={"Portions"} onChange={handleChangedFilter}/>
+      <InputControlled
+        type={"number"}
+        value={String(distance)}
+        label={"Max. Distance"}
+        onChange={handleChangedFilter}
+      />
+      <InputControlled
+        type={"number"}
+        value={String(maxPrice)}
+        label={"Max. Price"}
+        onChange={handleChangedFilter}
+      />
+      <InputControlled
+        type={"number"}
+        value={String(portions)}
+        label={"Portions"}
+        onChange={handleChangedFilter}
+      />
       <SelectControlled
         label={"Min. Seller Rating"}
         value={String(sellerRating)}
@@ -47,7 +67,9 @@ const MealOfferFilterSide = (
       >
         <option value={undefined}>None</option>
         <option value={EMealCategory.VEGAN}>{EMealCategory.VEGAN}</option>
-        <option value={EMealCategory.VEGETARIAN}>{EMealCategory.VEGETARIAN}</option>
+        <option value={EMealCategory.VEGETARIAN}>
+          {EMealCategory.VEGETARIAN}
+        </option>
       </SelectControlled>
       <SelectControlled
         label={"Allergens"}

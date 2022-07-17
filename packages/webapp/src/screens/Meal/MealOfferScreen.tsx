@@ -16,7 +16,9 @@ export const MealOfferScreen = () => {
   const [sortingRule, setSortingRule] = useState<string>();
   const [distance, setDistance] = useState<number | undefined>(undefined);
   const [price, setPrice] = useState<number | undefined>(undefined);
-  const [sellerRating, setSellerRating] = useState<number | undefined>(undefined);
+  const [sellerRating, setSellerRating] = useState<number | undefined>(
+    undefined
+  );
   const [portions, setPortions] = useState<number | undefined>(undefined);
   const [allergen, setAllergen] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
@@ -58,7 +60,12 @@ export const MealOfferScreen = () => {
   const handleChangedFilter = (event: any) => {
     switch (event.target.id) {
       case "max.-distance-number":
-        setDistance(Number(event.target.value));
+        if (Number(event.target.value) <= 1) {
+          setDistance(1);
+        } else {
+          setDistance(Number(event.target.value));
+        }
+
         break;
       case "max.-price-number":
         setPrice(Number(event.target.value));
@@ -103,7 +110,8 @@ export const MealOfferScreen = () => {
                 category={category}
                 maxPrice={price}
                 portions={portions}
-                sellerRating={sellerRating} />
+                sellerRating={sellerRating}
+              />
             </Row>
           </Col>
           <Col>
