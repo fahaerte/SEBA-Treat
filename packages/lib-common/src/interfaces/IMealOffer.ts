@@ -16,4 +16,5 @@ export interface IMealOffer {
   transactionFee: number;
   reservations: IMealReservation[];
   rating?: IRating;
+  alergensVerified: boolean;
 }

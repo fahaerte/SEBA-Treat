@@ -21,20 +21,20 @@ const CreateMealForm = () => {
           },
         },
       }),
-      FormHelper.createFileInput({
-        formKey: "images",
-        label: "Upload images for your meal",
-        props: {
-          fileType: "images/*",
-          multiple: true,
-        },
-        rules: {
-          required: {
-            value: true,
-            message: "Please provide images, so others can can get hungry!",
-          },
-        },
-      }),
+      // FormHelper.createFileInput({
+      //   formKey: "images",
+      //   label: "Upload images for your meal",
+      //   props: {
+      //     fileType: "images/*",
+      //     multiple: true,
+      //   },
+      //   rules: {
+      //     required: {
+      //       value: true,
+      //       message: "Please provide images, so others can can get hungry!",
+      //     },
+      //   },
+      // }),
     ],
 
     FormHelper.createTextArea({
@@ -124,21 +124,19 @@ const CreateMealForm = () => {
   };
 
   return (
-    <AppPage>
-      <Form<IMealOffer>
-        elements={elements}
-        onSubmit={handleSubmit}
-        formTitle={"Having leftovers? Create an offer!"}
-        resetOnSubmit
-        submitButton={{ children: "Publish your offer!" }}
-        abortButton={{
-          children: "Cancel",
-          color: "secondary",
-          className: "ms-3",
-          outline: true,
-        }}
-      />
-    </AppPage>
+    <Form<IMealOffer>
+      elements={elements}
+      onSubmit={handleSubmit}
+      formTitle={"Having leftovers? Create an offer!"}
+      resetOnSubmit
+      submitButton={{ children: "Publish your offer!" }}
+      abortButton={{
+        children: "Cancel",
+        color: "secondary",
+        className: "ms-3",
+        outline: true,
+      }}
+    />
   );
 };
 

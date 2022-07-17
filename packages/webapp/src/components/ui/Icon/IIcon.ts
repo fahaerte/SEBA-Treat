@@ -74,6 +74,7 @@ export const AIconType = [
   "send",
   "arrowClockwise",
   "coin",
+  "logout",
 ] as const;
 
 export interface IIcon {
