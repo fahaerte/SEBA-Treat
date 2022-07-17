@@ -29,9 +29,8 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers, isLoading } = useQuery(
-    queryKey,
-    () => getMealOffersByParams(
+  const { data: offers, isLoading } = useQuery(queryKey, () =>
+    getMealOffersByParams(
       address as string,
       token as string,
       portions,
@@ -42,7 +41,8 @@ export const MealOfferScreen = () => {
       enddate,
       maxprice,
       search,
-      distance)
+      distance
+    )
   );
 
   useEffect(() => {
@@ -57,9 +57,8 @@ export const MealOfferScreen = () => {
     }
   };
 
-  const handleSort = (sort: IStringObject) => {
-    console.log(sort);
-    setSortingrule(sort.returnedString);
+  const handleSort = (event: any) => {
+    setSortingrule(event.target.value);
   };
 
   const handleFiltering = (filter: IMealFilter) => {
@@ -68,9 +67,9 @@ export const MealOfferScreen = () => {
 
   const sortRule = (meal1: IMealOfferCard, meal2: IMealOfferCard) => {
     switch (sortingrule) {
-      case "rating":
+      case "ratingDesc":
         return meal2.rating - meal1.rating;
-      case "price":
+      case "priceAsc":
         return meal1.price - meal2.price;
       default:
         return meal1.distance - meal2.distance;
@@ -96,7 +95,8 @@ export const MealOfferScreen = () => {
                 handleSearch={handleSearch}
                 handleSort={handleSort}
                 currentSearchString={search}
-                currentSortingRule={sortingrule} />
+                currentSortingRule={sortingrule ? sortingrule : "distanceAsc"}
+              />
             </Row>
             <Row>{offers ? offers.data.length : "No"} Offers found</Row>
             <Row>
@@ -122,7 +122,8 @@ export const MealOfferScreen = () => {
                                 endDate={mealOffer.endDate}
                                 sellerName={"FirstName of Seller"}
                                 startDate={mealOffer.endDate}
-                                buttonAction={handleFiltering} />
+                                buttonAction={handleFiltering}
+                              />
                             </Row>
                           ))}
                     </>
