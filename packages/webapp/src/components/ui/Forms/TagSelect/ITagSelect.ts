@@ -1,9 +1,10 @@
 import { IFormElement, TIFormElementOmit } from "../_interfaces/IFormElement";
-import { IColorProp, ILoadingProp } from "../../../types/ComponentProps";
+import { IComponentColorBase } from "../../../../assets/theme/types/IComponentColorBase";
 import { IFormElementControlled } from "../_interfaces/IFormElementControlled";
 import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 
-export interface ITagSelectProps extends IColorProp, ILoadingProp {
+export interface ITagSelectProps
+  extends Omit<IComponentColorBase, "children" | "className"> {
   /**
    * Prefilled options, user can select from
    */
@@ -16,11 +17,16 @@ export interface ITagSelectProps extends IColorProp, ILoadingProp {
    * This is shown in the dropdown, while the options are loading
    */
   loadingMessage?: string;
+  /**
+   * Passed loading state
+   */
+  isLoading?: boolean;
 }
 
 export interface IFormTagSelect<TFormValues>
   extends IFormElement<TFormValues>,
     ITagSelectProps {}
+
 export interface IFormTagSelectConfig<TFormValues>
   extends IFormElement<TFormValues> {
   props: ITagSelectProps;
