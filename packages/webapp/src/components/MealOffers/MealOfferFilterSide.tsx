@@ -32,7 +32,6 @@ const MealOfferFilterSide = ({
   allergen: string | undefined;
   buttonAction: () => void;
 }) => {
-
   return (
     <Col>
       <Row className={"m-2"}>
@@ -41,7 +40,7 @@ const MealOfferFilterSide = ({
           value={String(distance)}
           onChange={handleChangedFilter}
         >
-          <option value={undefined}>Choose</option>
+          <option value={0}>Choose</option>
           <option value={1}>1 km</option>
           <option value={2}>2 km</option>
           <option value={3}>3 km</option>
@@ -57,7 +56,7 @@ const MealOfferFilterSide = ({
           value={String(maxPrice)}
           onChange={handleChangedFilter}
         >
-          <option value={undefined}>Choose</option>
+          <option value={0}>Choose</option>
           <option value={100}>100 Credits</option>
           <option value={200}>200 Credits</option>
           <option value={300}>300 Credits</option>
@@ -71,7 +70,7 @@ const MealOfferFilterSide = ({
           value={String(portions)}
           onChange={handleChangedFilter}
         >
-          <option value={undefined}>Choose</option>
+          <option value={0}>Choose</option>
           <option value={1}>1 Portions</option>
           <option value={2}>2 Portions</option>
           <option value={3}>3 Portions</option>
@@ -85,7 +84,7 @@ const MealOfferFilterSide = ({
           value={String(sellerRating)}
           onChange={handleChangedFilter}
         >
-          <option value={undefined}>Choose</option>
+          <option value={0}>Choose</option>
           <option value={1}>1 Star</option>
           <option value={2}>2 Stars</option>
           <option value={3}>3 Stars</option>
@@ -99,7 +98,7 @@ const MealOfferFilterSide = ({
           value={category as string}
           onChange={handleChangedFilter}
         >
-          <option value={undefined}>None</option>
+          <option value={'None'}>None</option>
           <option value={EMealCategory.VEGAN}>{EMealCategory.VEGAN}</option>
           <option value={EMealCategory.VEGETARIAN}>
             {EMealCategory.VEGETARIAN}
@@ -112,7 +111,7 @@ const MealOfferFilterSide = ({
           value={allergen as string}
           onChange={handleChangedFilter}
         >
-          <option value={undefined}>None</option>
+          <option value={'None'}>None</option>
           <option value={EMealAllergen.GLUTEN}>{EMealAllergen.GLUTEN}</option>
         </SelectControlled>
       </Row>

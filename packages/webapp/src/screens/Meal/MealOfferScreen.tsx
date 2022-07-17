@@ -42,14 +42,15 @@ export const MealOfferScreen = () => {
   );
 
   useEffect(() => {
-    queryClient.invalidateQueries(queryKey);
+    queryClient.fetchQuery(queryKey);
   }, [search, distance, price, allergen, category, sellerRating, portions]);
 
-  const handleSearch = (searchStringObject: IStringObject) => {
-    if (searchStringObject.returnedString === "") {
+  const handleSearch = (event: any) => {
+    console.log(event.target.value);
+    if (event.target.value === '') {
       setSearch(undefined);
     } else {
-      setSearch(searchStringObject.returnedString);
+      setSearch(event.target.value); //Problem: on every keyboard stroke a request is sent --> expensive
     }
   };
 
@@ -60,22 +61,22 @@ export const MealOfferScreen = () => {
   const handleChangedFilter = (event: any) => {
     switch (event.target.id) {
       case "max.-distance":
-        setDistance(Number(event.target.value));
+        setDistance(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
         break;
       case "max.-price":
-        setPrice(Number(event.target.value));
+        setPrice(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
         break;
       case "portions":
-        setPortions(Number(event.target.value));
+        setPortions(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
         break;
       case "min.-seller-rating":
-        setSellerRating(Number(event.target.value));
+        setSellerRating(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
         break;
       case "category":
-        setCategory(event.target.value);
+        setCategory(() => event.target.value === 'None'? undefined : event.target.value);
         break;
       case "allergens":
-        setAllergen(event.target.value);
+        setAllergen(() => event.target.value === 'None'? undefined : event.target.value);
         break;
     }
   };
@@ -129,7 +130,9 @@ export const MealOfferScreen = () => {
                 currentSortingRule={sortingRule ? sortingRule : "distanceAsc"}
               />
             </Row>
-            <Row className={"m-2 row justify-content-center"}>{offers ? offers.data.length : "No"} Offers found</Row>
+            <Row className={"m-2 row justify-content-center"}>
+              {offers ? offers.data.length : "No"} Offers found
+            </Row>
             <Row>
               <Col>
                 <Container>
