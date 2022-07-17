@@ -18,7 +18,7 @@ import {
   paymentGetDiscount,
   paymentGetProductsWithPrices,
 } from "../../api/stripeApi";
-import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
+import { CreateCheckoutSessionApiArg } from "@treat/lib-common/src/interfaces/ICreateCheckoutSessionApiArg";
 import { getUser } from "../../api/userApi";
 
 //TODO: Debug

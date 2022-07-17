@@ -1,5 +1,5 @@
 import { baseApi } from "./baseApi";
-import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
+import { CreateCheckoutSessionApiArg } from "@treat/lib-common/src/interfaces/ICreateCheckoutSessionApiArg";
 import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 
 export const paymentGetProductsWithPrices = async (token: string) => {
