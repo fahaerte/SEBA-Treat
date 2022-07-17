@@ -5,10 +5,10 @@ import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { MealOfferScreenHeader } from "../../components/ui/Header/mealOfferScreenHeader";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
-import { IMealOfferCard, IStringObject } from "@treat/lib-common";
+import { IMealOfferCard} from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
-import MealOfferFilterTop from "../../components/MealOffers/MealOfferFilterTop";
-import MealOfferFilterSide from "../../components/MealOffers/MealOfferFilterSide";
+import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
+import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 
 export const MealOfferScreen = () => {
   const { token, address, setAddress } = useAuthContext();
@@ -47,7 +47,7 @@ export const MealOfferScreen = () => {
 
   const handleSearch = (event: any) => {
     console.log(event.target.value);
-    if (event.target.value === '') {
+    if (event.target.value === "") {
       setSearch(undefined);
     } else {
       setSearch(event.target.value); //Problem: on every keyboard stroke a request is sent --> expensive
@@ -61,22 +61,42 @@ export const MealOfferScreen = () => {
   const handleChangedFilter = (event: any) => {
     switch (event.target.id) {
       case "max.-distance":
-        setDistance(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
+        setDistance(() =>
+          Number(event.target.value) === 0
+            ? undefined
+            : Number(event.target.value)
+        );
         break;
       case "max.-price":
-        setPrice(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
+        setPrice(() =>
+          Number(event.target.value) === 0
+            ? undefined
+            : Number(event.target.value)
+        );
         break;
       case "portions":
-        setPortions(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
+        setPortions(() =>
+          Number(event.target.value) === 0
+            ? undefined
+            : Number(event.target.value)
+        );
         break;
       case "min.-seller-rating":
-        setSellerRating(() => Number(event.target.value) === 0? undefined : Number(event.target.value));
+        setSellerRating(() =>
+          Number(event.target.value) === 0
+            ? undefined
+            : Number(event.target.value)
+        );
         break;
       case "category":
-        setCategory(() => event.target.value === 'None'? undefined : event.target.value);
+        setCategory(() =>
+          event.target.value === "None" ? undefined : event.target.value
+        );
         break;
       case "allergens":
-        setAllergen(() => event.target.value === 'None'? undefined : event.target.value);
+        setAllergen(() =>
+          event.target.value === "None" ? undefined : event.target.value
+        );
         break;
     }
   };
@@ -109,7 +129,7 @@ export const MealOfferScreen = () => {
         <Row>
           <Col className={"col col-lg-2"}>
             <Row>
-              <MealOfferFilterSide
+              <MealOfferFilterSideBar
                 distance={distance}
                 handleChangedFilter={handleChangedFilter}
                 allergen={allergen}
@@ -123,7 +143,7 @@ export const MealOfferScreen = () => {
           </Col>
           <Col>
             <Row>
-              <MealOfferFilterTop
+              <MealOfferFilterTopBar
                 handleSearch={handleSearch}
                 handleSort={handleSort}
                 currentSearchString={search}

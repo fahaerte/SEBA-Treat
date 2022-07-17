@@ -13,7 +13,7 @@ import React from "react";
 import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
 import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
-const MealOfferFilterSide = ({
+const MealOfferFilterSideBar = ({
   handleChangedFilter,
   distance,
   maxPrice,
@@ -98,7 +98,7 @@ const MealOfferFilterSide = ({
           value={category as string}
           onChange={handleChangedFilter}
         >
-          <option value={'None'}>None</option>
+          <option value={"None"}>None</option>
           <option value={EMealCategory.VEGAN}>{EMealCategory.VEGAN}</option>
           <option value={EMealCategory.VEGETARIAN}>
             {EMealCategory.VEGETARIAN}
@@ -111,7 +111,7 @@ const MealOfferFilterSide = ({
           value={allergen as string}
           onChange={handleChangedFilter}
         >
-          <option value={'None'}>None</option>
+          <option value={"None"}>None</option>
           <option value={EMealAllergen.GLUTEN}>{EMealAllergen.GLUTEN}</option>
         </SelectControlled>
       </Row>
@@ -122,4 +122,4 @@ const MealOfferFilterSide = ({
   );
 };
 
-export default MealOfferFilterSide;
+export default MealOfferFilterSideBar;

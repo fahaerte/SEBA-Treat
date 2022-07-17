@@ -1,4 +1,12 @@
-import { Col, Form, FormHelper, IFormRow, InputControlled, Row, SelectControlled } from "../ui";
+import {
+  Col,
+  Form,
+  FormHelper,
+  IFormRow,
+  InputControlled,
+  Row,
+  SelectControlled,
+} from "../ui";
 import React from "react";
 import { text } from "stream/consumers";
 import { IStringObject } from "@treat/lib-common";
@@ -15,11 +23,14 @@ const MealOfferFilterTop = ({
   currentSearchString: string | undefined;
   currentSortingRule: string;
 }) => {
-
   return (
     <Row className={"m-2"}>
       <Col className={"m-2"}>
-        <InputControlled value={currentSearchString as string} label={"search"} onChange={handleSearch}/>
+        <InputControlled
+          value={currentSearchString as string}
+          label={"search"}
+          onChange={handleSearch}
+        />
       </Col>
       <Col className={"m-2"}>
         <SelectControlled
