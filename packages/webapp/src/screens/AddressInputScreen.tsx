@@ -34,7 +34,6 @@ export const AddressInputScreen = () => {
   ];
 
   const handleAddress = (data: IStringObject) => {
-    console.log(JSON.stringify(data));
     userContext.setAddress(data.returnedString);
     navigate(from, { replace: true });
   };
