@@ -37,7 +37,7 @@ export const customStyles: (
           ? theme.palette.danger.main
           : state.isFocused
           ? theme.palette[color].main
-          : theme.general.border.color
+          : theme.general.border.color.secondary
       }`,
       minHeight: theme.form.control.height,
       fontFamily: theme.typography.body.family,
@@ -45,7 +45,7 @@ export const customStyles: (
         isInvalid
           ? theme.palette.danger.main
           : state.isFocused
-          ? `0 0 0 calc(${theme.typography.size.xxs} / 10) ${theme.palette[color].main}`
+          ? "0 0 0 0.15rem #8e9e9b"
           : ""
       }`,
       ":hover": {

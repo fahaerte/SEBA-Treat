@@ -1,8 +1,8 @@
 import React from "react";
-import { Form, FormHelper, IFormRow, Typography } from "../../components";
-import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
-import { IMealOffer } from "@treat/lib-common";
+import {Form, FormHelper, IFormRow, TOptionValuePair} from "../../components";
+import {Navigate} from "react-router-dom";
+import {useAuthContext} from "../../utils/auth/AuthProvider";
+import {IMealOffer, EMealAllergen, EMealCategory} from "@treat/lib-common";
 
 /**
  * TODO:
@@ -12,7 +12,26 @@ import { IMealOffer } from "@treat/lib-common";
  * -
  */
 const CreateMeal = () => {
-  const { userId } = useAuthContext();
+  const {userId} = useAuthContext();
+  const createAllergensOptions = (): TOptionValuePair[] => {
+    const allergenValues = Object.values(EMealAllergen);
+    const allergens: TOptionValuePair[] = [];
+    allergenValues.forEach((allergen) =>
+        allergens.push({value: allergen, label: allergen})
+    );
+    console.log(Object.values(EMealAllergen));
+    return allergens;
+  };
+  const createCategoriesOptions = () => {
+    const categoryValues = Object.values(EMealCategory);
+    const categories: TOptionValuePair[] = [];
+    categoryValues.forEach((category) =>
+        categories.push({value: category, label: category})
+    );
+    console.log(Object.values(EMealCategory));
+    return categories;
+  };
+
   const elements: IFormRow<IMealOffer>[] = [
     [
       FormHelper.createInput({
@@ -91,10 +110,32 @@ const CreateMeal = () => {
           max: {
             value: 200,
             message:
-              "Even if you added caviar and truffles, please make it affordable",
+                "Even if you added caviar and truffles, please make it affordable",
           },
         },
       }),
+    ],
+    [
+      FormHelper.createTagSelect({
+        formKey: "allergens",
+        label: "Allergens",
+        props: {
+          autocompleteOptions: createAllergensOptions()
+        }
+      }),
+      FormHelper.createTagSelect({
+        formKey: "categories",
+        label: "Category Labels",
+        rules: {
+          required: {
+            value: true,
+            message: "You have to indicate at least one category for your offer."
+          }
+        },
+        props: {
+          autocompleteOptions: createCategoriesOptions()
+        }
+      })
     ],
     [
       FormHelper.createDatePicker({
@@ -110,7 +151,7 @@ const CreateMeal = () => {
       }),
     ],
     FormHelper.createTextArea({
-      formKey: "pickupDetails",
+      formKey: "pickUpDetails",
       label: "Add pick up details if necessary, e.g. which floor or c/o",
       props: {
         sendWithNewLines: true,
@@ -119,7 +160,7 @@ const CreateMeal = () => {
     }),
 
     FormHelper.createRadioCheckSwitch({
-      formKey: "allergenVerified",
+      formKey: "alergensVerified",
       label: "Have you checked your meal for allergens?",
       props: {
         type: "switch",
@@ -132,25 +173,25 @@ const CreateMeal = () => {
   };
 
   return (
-    <>
-      {userId ? (
-        <Form<IMealOffer>
-          elements={elements}
-          onSubmit={handleSubmit}
-          formTitle={"Having leftovers? Create an offer!"}
-          resetOnSubmit
-          submitButton={{ children: "Publish your offer!" }}
-          abortButton={{
-            children: "Cancel",
-            color: "secondary",
-            className: "ms-3",
-            outline: true,
-          }}
-        />
-      ) : (
-        <Navigate to={"/"} />
-      )}
-    </>
+      <>
+        {userId ? (
+            <Form<IMealOffer>
+                elements={elements}
+                onSubmit={handleSubmit}
+                formTitle={"Having leftovers? Create an offer!"}
+                resetOnSubmit
+                submitButton={{children: "Publish your offer!"}}
+                abortButton={{
+                  children: "Cancel",
+                  color: "secondary",
+                  className: "ms-3",
+                  outline: true,
+                }}
+            />
+        ) : (
+            <Navigate to={"/"}/>
+        )}
+      </>
   );
 };
 

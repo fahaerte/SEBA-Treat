@@ -16,11 +16,11 @@ export interface ITagSelectProps
   /**
    * This is shown in the dropdown, while the options are loading
    */
-  loadingMessage?: string;
+  // loadingMessage?: string;
   /**
    * Passed loading state
    */
-  isLoading?: boolean;
+  // isLoading?: boolean;
 }
 
 export interface IFormTagSelect<TFormValues>

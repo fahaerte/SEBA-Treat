@@ -1,5 +1,5 @@
 import React from "react";
-import CreatableSelect from "react-select/creatable";
+import TagSelect from "react-select";
 import { OnChangeValue } from "react-select";
 import makeAnimated from "react-select/animated";
 import { ITagSelect } from "./ITagSelect";
@@ -17,8 +17,8 @@ const TagSelectControlled = ({
   color = "primary",
   disabled = false,
   noOptionsMessage = "No options",
-  loadingMessage = "loading...",
-  isLoading = false,
+  // loadingMessage = "loading...",
+  // isLoading = false,
   onChange = () => undefined,
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
@@ -32,22 +32,19 @@ const TagSelectControlled = ({
     <SCFloatingForm
       className={`form-floating multi-select-wrapper ${wrapperClasses}`}
     >
-      <CreatableSelect<TOptionValuePair, true>
+      <TagSelect<TOptionValuePair, true>
         id={getEncodedString(label)}
         isMulti
         onChange={(newValue: OnChangeValue<TOptionValuePair, true>) =>
           onChange(newValue as TOptionValuePair[])
         }
-        onCreateOption={(inputValue) =>
-          onChange([...value, { value: "", label: inputValue }])
-        }
-        options={isLoading ? [] : autocompleteOptions}
+        options={autocompleteOptions}
         styles={customStyles(color, isInvalid, theme)}
         className={className}
         isDisabled={disabled}
-        isLoading={isLoading}
+        // isLoading={isLoading}
         noOptionsMessage={() => noOptionsMessage}
-        loadingMessage={() => loadingMessage}
+        // loadingMessage={() => loadingMessage}
         placeholder={label}
         components={makeAnimated()}
         value={value}

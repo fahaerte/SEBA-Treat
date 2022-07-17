@@ -1,5 +1,33 @@
-enum EMealAllergen {
+export enum EMealAllergen {
   GLUTEN = "gluten",
+  WHEAT = "wheat",
+  CEREAL = "cereal",
+  GARLIC = "garlic",
+  RYE = "rye",
+  BARLEY = "barley",
+  OAT = "oat",
+  SPELT = "spelt",
+  SHELLFISH = "shellfish",
+  EGG = "egg",
+  PEANUT = "peanut",
+  SOY = "soy",
+  MILK = "milk",
+  LACTOSE = "lactose",
+  ALMONDS = "almonds",
+  HAZELNUTS = "hazelnuts",
+  WALNUTS = "walnuts",
+  CASHEWS = "cashews",
+  PECANS = "pecans",
+  PISTACHIOS = "pistachios",
+  MACADEMIAS = "macademias",
+  CELERY = "celery",
+  MSUTARD = "mustard",
+  SESAME = "sesame",
+  SULPHURS = "sulphurs",
+  SULFITES = "sulfites",
+  LUPIN = "lupin",
+  MOLLUSCS = "molluscs",
+  SHELLFRUITS = "shell fruits",
 }
 
-export default EMealAllergen;
+// export default EMealAllergen;
