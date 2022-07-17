@@ -1,25 +1,37 @@
 import React from "react";
-import { Form, FormHelper, IFormRow, TOptionValuePair } from "../../components";
-import { Navigate } from "react-router-dom";
+import {
+  dangerToast,
+  Form,
+  FormHelper,
+  IFormRow,
+  TOptionValuePair,
+} from "../../components";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { IMealOffer, EMealAllergen, EMealCategory } from "@treat/lib-common";
 
+interface IMealOfferForm
+  extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
+  allergens: TOptionValuePair[];
+  categories: TOptionValuePair[];
+}
+
 /**
  * TODO:
- * - fetch allergies
- * - fetch categories
- * - Create Form
+ * - Image upload
  * -
  */
 const CreateMeal = () => {
   const { userId } = useAuthContext();
-  const createAllergensOptions = (): TOptionValuePair[] => {
+  const navigate = useNavigate();
+
+  const createAllergensOptions = () => {
     const allergenValues = Object.values(EMealAllergen);
     const allergens: TOptionValuePair[] = [];
     allergenValues.forEach((allergen) =>
       allergens.push({ value: allergen, label: allergen })
     );
-    console.log(Object.values(EMealAllergen));
+    // console.log(Object.values(EMealAllergen));
     return allergens;
   };
   const createCategoriesOptions = () => {
@@ -28,16 +40,14 @@ const CreateMeal = () => {
     categoryValues.forEach((category) =>
       categories.push({ value: category, label: category })
     );
-    console.log(Object.values(EMealCategory));
     return categories;
   };
 
-  const elements: IFormRow<IMealOffer>[] = [
+  const elements: IFormRow<IMealOfferForm>[] = [
     [
       FormHelper.createInput({
         formKey: "title",
         label: "Title of your offer",
-        defaultValue: "Pizza Margeritha",
         props: {
           type: "text",
         },
@@ -101,7 +111,7 @@ const CreateMeal = () => {
       }),
       FormHelper.createInput({
         formKey: "price",
-        label: "Price",
+        label: "Price in virtual credits",
         defaultValue: 15,
         props: {
           type: "number",
@@ -110,7 +120,7 @@ const CreateMeal = () => {
           max: {
             value: 200,
             message:
-              "Even if you added caviar and truffles, please make it affordable",
+              "Even if you added caviar and truffles, please make it affordable.",
           },
         },
       }),
@@ -142,6 +152,12 @@ const CreateMeal = () => {
       FormHelper.createDatePicker({
         formKey: "startDate",
         label: "Starting date of your offer",
+        rules: {
+          required: {
+            value: true,
+            message: "Please indicate from when your offer can be picked up.",
+          },
+        },
         props: {
           type: "datetime-local",
         },
@@ -149,6 +165,15 @@ const CreateMeal = () => {
       FormHelper.createDatePicker({
         formKey: "endDate",
         label: "End date of your offer",
+        rules: {
+          required: {
+            value: true,
+            message: "Please indicate until when your offer can be picked up.",
+          },
+        },
+        props: {
+          type: "datetime-local",
+        },
       }),
     ],
     FormHelper.createTextArea({
@@ -161,32 +186,56 @@ const CreateMeal = () => {
     }),
 
     FormHelper.createRadioCheckSwitch({
-      formKey: "alergensVerified",
+      formKey: "allergensVerified",
       label: "Have you checked your meal for allergens?",
+      defaultValue: false,
       props: {
         type: "switch",
       },
     }),
   ];
 
-  const handleSubmit = (data: IMealOffer) => {
-    console.log(data);
+  const handleSubmit = (data: IMealOfferForm) => {
+    if (userId) {
+      const { startDate, endDate, categories, allergens } = data;
+      const categoryValues: string[] = [];
+      categories.forEach((category) => categoryValues.push(category.value));
+
+      const allergenValues: string[] = [];
+      allergens.forEach((allergen) => allergenValues.push(allergen.value));
+
+      const newOffer: Omit<
+        IMealOffer,
+        "_id" | "rating" | "transactionFee" | "reservations"
+      > = {
+        user: userId,
+        ...data,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        categories: categoryValues,
+        allergens: allergenValues,
+      };
+      console.log(newOffer);
+    } else {
+      dangerToast({ message: "User not authenticated!" });
+      navigate("/login");
+    }
   };
 
   return (
     <>
       {userId ? (
-        <Form<IMealOffer>
+        <Form<IMealOfferForm>
           elements={elements}
           onSubmit={handleSubmit}
           formTitle={"Having leftovers? Create an offer!"}
-          resetOnSubmit
           submitButton={{ children: "Publish your offer!" }}
           abortButton={{
             children: "Cancel",
             color: "secondary",
             className: "ms-3",
             outline: true,
+            onClick: () => navigate("/"),
           }}
         />
       ) : (

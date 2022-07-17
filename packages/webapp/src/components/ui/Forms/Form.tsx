@@ -55,7 +55,7 @@ const Form = <TFormValues extends FieldValues>({
       {...rest}
     >
       {formTitle && (
-        <Typography variant="h2" component="div">
+        <Typography variant="h2" component="div" className={"mb-3"}>
           {formTitle}
         </Typography>
       )}

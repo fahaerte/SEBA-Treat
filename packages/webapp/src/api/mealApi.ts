@@ -1,5 +1,5 @@
 import { baseApi } from "./baseApi";
-import { IUserCredentials } from "@treat/lib-common";
+import { IMealOffer, IUserCredentials } from "@treat/lib-common";
 
 export const getMealOffer = async (
   mealOfferId: string,
@@ -25,4 +25,21 @@ export const requestMealOffer = async ({
   token,
 }: requestMealOfferArgs) => {
   return await baseApi(token).post(`/mealOffers/${mealOfferId}/reservations`);
+};
+
+interface CreateMealOfferArgs {
+  mealOffer: Omit<IMealOffer, "_id">;
+  token: string;
+}
+
+/**
+ * - user Id
+ * - MealOfferDocument
+ */
+
+export const createMealOffer = async ({
+  mealOffer,
+  token,
+}: CreateMealOfferArgs) => {
+  return await baseApi(token).post("/mealOffers", mealOffer);
 };
