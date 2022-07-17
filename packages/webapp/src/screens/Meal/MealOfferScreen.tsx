@@ -4,14 +4,13 @@ import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { MealOfferScreenHeader } from "../../components/ui/Header/mealOfferScreenHeader";
-import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
 import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 
 export const MealOfferScreen = () => {
-  const { token, address, setAddress } = useAuthContext();
+  const { token, address } = useAuthContext();
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [sortingRule, setSortingRule] = useState<string>();
   const [distance, setDistance] = useState<number | undefined>(undefined);
@@ -27,7 +26,7 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers, isLoading } = useQuery(queryKey, () =>
+  const { data: offers } = useQuery(queryKey, () =>
     getMealOffersByParams(
       address as string,
       token as string,
@@ -156,9 +155,6 @@ export const MealOfferScreen = () => {
             <Row>
               <Col>
                 <Container>
-                  {isLoading ? (
-                    <LoadingPackages />
-                  ) : (
                     <>
                       {offers &&
                         offers.data
@@ -180,7 +176,6 @@ export const MealOfferScreen = () => {
                             </Row>
                           ))}
                     </>
-                  )}
                 </Container>
               </Col>
             </Row>

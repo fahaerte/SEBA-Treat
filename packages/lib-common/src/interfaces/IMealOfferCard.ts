@@ -4,8 +4,8 @@ export interface IMealOfferCard {
   user: string;
   categories: string[];
   allergens: string[];
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   portions: number;
   price: number;
   rating: number;

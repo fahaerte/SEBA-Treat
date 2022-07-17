@@ -30,7 +30,6 @@ export const MealOfferScreenHeader = () => {
             <Row>
               <Link to="/address">Change Address</Link>
             </Row>
-
           </Col>
           <Col className={""}>
             {userId ? (

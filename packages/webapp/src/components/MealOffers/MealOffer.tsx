@@ -1,12 +1,5 @@
 import React, { MouseEvent } from "react";
-import {
-  Card,
-  Typography,
-  Button,
-  Col,
-  Container,
-  Row,
-} from "../ui";
+import { Card, Typography, Button, Col, Container, Row } from "../ui";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -18,15 +11,15 @@ const MealOfferImage = styled.img`
 `;
 
 const MealOffer = ({
-  mealId = "",
-  mealTitle = "",
-  price = 0,
-  sellerRating = 1,
-  distance = 0,
-  portions = 1,
-  sellerName = "",
-  startDate = "",
-  endDate = "",
+  mealId,
+  mealTitle,
+  price,
+  sellerRating,
+  distance,
+  portions,
+  sellerName,
+  startDate,
+  endDate,
 }: {
   mealId: string;
   mealTitle: string;
@@ -35,10 +28,9 @@ const MealOffer = ({
   distance: number;
   portions: number;
   sellerName: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 }) => {
-  // TODO: Format Dates
 
   const navigate = useNavigate();
 
@@ -46,6 +38,9 @@ const MealOffer = ({
     navigate(`/mealoffers/${mealId}`);
     return mealId;
   };
+
+  const startDateAsString = (new Date(startDate)).toLocaleDateString();
+  const endDateAsString = (new Date(endDate)).toLocaleDateString();
 
   return (
     <Card>
@@ -90,12 +85,12 @@ const MealOffer = ({
             <Row>
               <Col>
                 <Typography variant={"h3"} className={"fw-normal mb-3"}>
-                  Start: {startDate}
+                  Start: {startDateAsString}
                 </Typography>
               </Col>
               <Col>
                 <Typography variant={"h3"} className={"fw-normal mb-3"}>
-                  End: {endDate}
+                  End: {endDateAsString}
                 </Typography>
               </Col>
             </Row>
