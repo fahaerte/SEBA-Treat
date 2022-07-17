@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { MealOfferScreenHeader } from "../../components/ui/Header/mealOfferScreenHeader";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
-import { IMealOfferCard} from "@treat/lib-common";
+import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";

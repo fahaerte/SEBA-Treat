@@ -1,3 +1,3 @@
 export interface IStringObject {
-    returnedString: string;
+  returnedString: string;
 }
