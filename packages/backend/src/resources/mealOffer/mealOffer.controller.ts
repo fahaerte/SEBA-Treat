@@ -5,8 +5,8 @@ import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
-import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
+import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
 import ValidatePart from "../../utils/validation";
 import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
@@ -92,8 +92,9 @@ class MealOfferController implements Controller {
     try {
       const mealOfferRequest = req.body as MealOfferDocument;
       const newMealOffer = await this.mealOfferService.create(
-        mealOfferRequest,
-        req.user
+        mealOfferRequest
+        //   ,
+        // req.user
       );
       res.status(201).send({ data: newMealOffer });
     } catch (error: any) {
@@ -110,8 +111,8 @@ class MealOfferController implements Controller {
       const mealOfferPreviews =
         await this.mealOfferService.getMealOfferPreviews(
           req.user,
-          req.query.category as EMealCategory,
-          req.query.allergen as EMealAllergen,
+          req.query.category as EMealCategory[],
+          req.query.allergen as EMealAllergen[],
           req.query.portions as string,
           req.query.sellerRating as string,
           req.query.startDate as string,

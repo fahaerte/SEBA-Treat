@@ -27,8 +27,11 @@ export const requestMealOffer = async ({
   return await baseApi(token).post(`/mealOffers/${mealOfferId}/reservations`);
 };
 
-interface CreateMealOfferArgs {
-  mealOffer: Omit<IMealOffer, "_id">;
+export interface CreateMealOfferArgs {
+  mealOffer: Omit<
+    IMealOffer,
+    "_id" | "rating" | "transactionFee" | "reservations"
+  >;
   token: string;
 }
 

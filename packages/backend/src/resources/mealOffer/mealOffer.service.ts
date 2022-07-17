@@ -16,8 +16,8 @@ import MealReservationNotFoundException from "../../utils/exceptions/mealReserva
 import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
-import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
-import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
+import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
 import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
 import UserService from "../user/user.service";
 
@@ -31,10 +31,10 @@ class MealOfferService {
   ) {}
 
   public async create(
-    newMealOffer: MealOfferDocument,
-    user: UserDocument
+    newMealOffer: MealOfferDocument
+    // user: UserDocument
   ): Promise<MealOfferDocument | Error> {
-    newMealOffer.user = user._id;
+    // newMealOffer.user = user._id;
     newMealOffer.transactionFee = Math.round(
       TRANSACTION_FEE * newMealOffer.price
     );
@@ -74,8 +74,8 @@ class MealOfferService {
 
   public async getMealOfferPreviews(
     user: UserDocument,
-    category?: EMealCategory,
-    allergen?: EMealAllergen,
+    category?: EMealCategory[],
+    allergen?: EMealAllergen[],
     portions?: string,
     sellerRating?: string,
     startDate?: string,

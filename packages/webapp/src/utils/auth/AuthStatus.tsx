@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "./AuthProvider";
-import { Button } from "../../components";
-import { useNavigate } from "react-router-dom";
+// import { Button } from "../../components";
+// import { useNavigate } from "react-router-dom";
 
 const AuthStatus = () => {
   const userContext = useContext(AuthContext);

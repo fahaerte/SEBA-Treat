@@ -46,6 +46,7 @@ export const Header = () => {
               color={"secondary"}
               display={"button"}
               buttonProps={{ outline: true }}
+              route
             >
               {userId ? `${balance} Credits Bild` : "Sign In"}
             </Link>

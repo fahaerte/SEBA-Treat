@@ -4,11 +4,14 @@ import {
   Form,
   FormHelper,
   IFormRow,
+  successToast,
   TOptionValuePair,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { IMealOffer, EMealAllergen, EMealCategory } from "@treat/lib-common";
+import { createMealOffer, CreateMealOfferArgs } from "../../api/mealApi";
+import { useMutation } from "react-query";
 
 interface IMealOfferForm
   extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
@@ -19,11 +22,23 @@ interface IMealOfferForm
 /**
  * TODO:
  * - Image upload
- * -
+ * - Redirect to detail page on success
  */
 const CreateMeal = () => {
-  const { userId } = useAuthContext();
+  const { userId, token } = useAuthContext();
   const navigate = useNavigate();
+
+  const createOfferMutation = useMutation(
+    ({ mealOffer, token }: CreateMealOfferArgs) =>
+      createMealOffer({ mealOffer, token }),
+    {
+      onSuccess: (response) => {
+        successToast({ message: "Your meal offer has been created!" });
+        console.log(response);
+      },
+      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
+    }
+  );
 
   const createAllergensOptions = () => {
     const allergenValues = Object.values(EMealAllergen);
@@ -34,6 +49,7 @@ const CreateMeal = () => {
     // console.log(Object.values(EMealAllergen));
     return allergens;
   };
+
   const createCategoriesOptions = () => {
     const categoryValues = Object.values(EMealCategory);
     const categories: TOptionValuePair[] = [];
@@ -215,6 +231,7 @@ const CreateMeal = () => {
         categories: categoryValues,
         allergens: allergenValues,
       };
+      createOfferMutation.mutate({ mealOffer: newOffer, token });
       console.log(newOffer);
     } else {
       dangerToast({ message: "User not authenticated!" });
@@ -230,6 +247,7 @@ const CreateMeal = () => {
           onSubmit={handleSubmit}
           formTitle={"Having leftovers? Create an offer!"}
           submitButton={{ children: "Publish your offer!" }}
+          isLoading={createOfferMutation.isLoading}
           abortButton={{
             children: "Cancel",
             color: "secondary",
