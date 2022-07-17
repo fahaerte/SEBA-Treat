@@ -8,7 +8,6 @@ import {
   Row,
   SelectControlled,
 } from "../ui";
-import { IMealFilter, IStringObject } from "@treat/lib-common";
 import React from "react";
 import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
 import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";

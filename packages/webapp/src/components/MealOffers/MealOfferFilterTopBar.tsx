@@ -8,9 +8,6 @@ import {
   SelectControlled,
 } from "../ui";
 import React from "react";
-import { text } from "stream/consumers";
-import { IStringObject } from "@treat/lib-common";
-import Select from "../ui/Forms/Select/Select";
 
 const MealOfferFilterTop = ({
   handleSearch,

@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAuthContext } from "../../../utils/auth/AuthProvider";
 import { Button } from "../index";
+import { Link } from "react-router-dom";
 
 export const MealOfferScreenHeader = () => {
-  const { address, setAddress, userId } = useAuthContext();
+  const { address, userId } = useAuthContext();
 
   const Header = styled.header`
     height: 110px;
@@ -22,8 +23,14 @@ export const MealOfferScreenHeader = () => {
             <h2 className={""}>TREAT</h2>
             {/*TODO: Link to get Back to Address-Input (like lieferando)*/}
           </Col>
-          <Col className={""}>
-            <h2 className={""}>ADDRESS INPUT</h2>
+          <Col className={"justify-content-center"}>
+            <Row>
+              <h4 className={""}>{address}</h4>
+            </Row>
+            <Row>
+              <Link to="/address">Change Address</Link>
+            </Row>
+
           </Col>
           <Col className={""}>
             {userId ? (

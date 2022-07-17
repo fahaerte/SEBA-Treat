@@ -1,17 +1,14 @@
 import React, { MouseEvent } from "react";
 import {
-  CardBody,
   Card,
   Typography,
   Button,
-  Icon,
   Col,
   Container,
   Row,
 } from "../ui";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { IMealFilter } from "@treat/lib-common";
 
 const MealOfferImage = styled.img`
   width: 160px;
