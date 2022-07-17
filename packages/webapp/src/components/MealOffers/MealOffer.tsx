@@ -38,7 +38,6 @@ const MealOffer = ({
   distance: number;
   portions: number;
   sellerName: string;
-  buttonAction: (filter: IMealFilter) => void;
   startDate: string;
   endDate: string;
 }) => {

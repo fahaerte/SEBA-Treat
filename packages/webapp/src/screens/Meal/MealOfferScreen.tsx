@@ -5,25 +5,21 @@ import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { MealOfferScreenHeader } from "../../components/ui/Header/mealOfferScreenHeader";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
-import { IMealFilter, IMealOfferCard, IStringObject } from "@treat/lib-common";
+import { IMealOfferCard, IStringObject } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTop from "../../components/MealOffers/MealOfferFilterTop";
 import MealOfferFilterSide from "../../components/MealOffers/MealOfferFilterSide";
 
 export const MealOfferScreen = () => {
   const { token, address, setAddress } = useAuthContext();
-
-  const [filter, setFilter] = useState<IMealFilter>();
-  const [portions, setPortions] = useState<number>();
-  const [distance, setDistance] = useState<number>();
-  const [maxprice, setMaxprice] = useState<number>();
-  const [allergen, setAllergen] = useState<string>();
-  const [category, setCategory] = useState<string>();
-  const [sellerrating, setSellerrating] = useState<number>();
-  const [startdate, setStartdate] = useState<string>();
-  const [enddate, setEnddate] = useState<string>();
   const [search, setSearch] = useState<string>();
-  const [sortingrule, setSortingrule] = useState<string>();
+  const [sortingRule, setSortingRule] = useState<string>();
+  const [distance, setDistance] = useState<number | undefined>(undefined);
+  const [price, setPrice] = useState<number | undefined>(undefined);
+  const [sellerRating, setSellerRating] = useState<number | undefined>(undefined);
+  const [portions, setPortions] = useState<number | undefined>(undefined);
+  const [allergen, setAllergen] = useState<string | undefined>(undefined);
+  const [category, setCategory] = useState<string | undefined>(undefined);
 
   const queryClient = useQueryClient();
 
@@ -36,10 +32,8 @@ export const MealOfferScreen = () => {
       portions,
       category,
       allergen,
-      sellerrating,
-      startdate,
-      enddate,
-      maxprice,
+      sellerRating,
+      price,
       search,
       distance
     )
@@ -47,7 +41,7 @@ export const MealOfferScreen = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries(queryKey);
-  }, [search, enddate, startdate, portions, maxprice, sellerrating]);
+  }, [search, distance, price, allergen, category, sellerRating, portions]);
 
   const handleSearch = (searchStringObject: IStringObject) => {
     if (searchStringObject.returnedString === "") {
@@ -58,15 +52,34 @@ export const MealOfferScreen = () => {
   };
 
   const handleSort = (event: any) => {
-    setSortingrule(event.target.value);
+    setSortingRule(event.target.value);
   };
 
-  const handleFiltering = (filter: IMealFilter) => {
-    console.log(filter);
+  const handleChangedFilter = (event: any) => {
+    switch (event.target.id) {
+      case "max.-distance-number":
+        setDistance(Number(event.target.value));
+        break;
+      case "max.-price-number":
+        setPrice(Number(event.target.value));
+        break;
+      case "portions-number":
+        setPortions(Number(event.target.value));
+        break;
+      case "min.-seller-rating":
+        setSellerRating(Number(event.target.value));
+        break;
+      case "category":
+        setCategory(event.target.value);
+        break;
+      case "allergens":
+        setAllergen(event.target.value);
+        break;
+    }
   };
 
   const sortRule = (meal1: IMealOfferCard, meal2: IMealOfferCard) => {
-    switch (sortingrule) {
+    switch (sortingRule) {
       case "ratingDesc":
         return meal2.rating - meal1.rating;
       case "priceAsc":
@@ -84,9 +97,13 @@ export const MealOfferScreen = () => {
           <Col className={"col col-lg-2"}>
             <Row>
               <MealOfferFilterSide
-                currentFilter={filter as IMealFilter}
-                handleFiltering={handleFiltering}
-              />
+                distance={distance}
+                handleChangedFilter={handleChangedFilter}
+                allergen={allergen}
+                category={category}
+                maxPrice={price}
+                portions={portions}
+                sellerRating={sellerRating} />
             </Row>
           </Col>
           <Col>
@@ -95,7 +112,7 @@ export const MealOfferScreen = () => {
                 handleSearch={handleSearch}
                 handleSort={handleSort}
                 currentSearchString={search}
-                currentSortingRule={sortingrule ? sortingrule : "distanceAsc"}
+                currentSortingRule={sortingRule ? sortingRule : "distanceAsc"}
               />
             </Row>
             <Row>{offers ? offers.data.length : "No"} Offers found</Row>
@@ -122,7 +139,6 @@ export const MealOfferScreen = () => {
                                 endDate={mealOffer.endDate}
                                 sellerName={"FirstName of Seller"}
                                 startDate={mealOffer.endDate}
-                                buttonAction={handleFiltering}
                               />
                             </Row>
                           ))}
