@@ -1,23 +1,23 @@
 import React from "react";
-import {Navigate, useRoutes} from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 import LoginScreen from "../screens/Auth/LoginScreen";
-import {RegisterScreen} from "../screens/Auth/RegisterScreen";
-import {HomeScreen} from "../screens/HomeScreen";
-import {AddressInputScreen} from "../screens/AddressInputScreen";
-import {ErrorPage} from "../screens/Status/ErrorPage";
-import {AuthProvider} from "../utils/auth/AuthProvider";
-import {MealOfferScreen} from "../screens/Meal/MealOfferScreen";
-import {RequireAddressRoute} from "../utils/auth/RequireAddressRoute";
-import {Typography} from "../components/ui";
-import {MealOfferRequests} from "../screens/Meal/MealOfferRequests";
-import {SentMealOfferRequests} from "../screens/Meal/SentMealOfferRequests";
-import {ReceivedMealOfferRequests} from "../screens/Meal/ReceivedMealOfferRequests";
-import {AccountScreen} from "../screens/Profile/AccountScreen";
+import { RegisterScreen } from "../screens/Auth/RegisterScreen";
+import { HomeScreen } from "../screens/HomeScreen";
+import { AddressInputScreen } from "../screens/AddressInputScreen";
+import { ErrorPage } from "../screens/Status/ErrorPage";
+import { AuthProvider } from "../utils/auth/AuthProvider";
+import { MealOfferScreen } from "../screens/Meal/MealOfferScreen";
+import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
+import { Typography } from "../components/ui";
+import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
+import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
+import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
+import { AccountScreen } from "../screens/Profile/AccountScreen";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
-import {CreditPackages} from "../screens/Payment/CreditPackages";
-import {RequireAuthRoute} from "../utils/auth/RequireAuthRoute";
-import {QueryClientProvider, QueryClient} from "react-query";
-import {MealOfferDetailScreen} from "../screens/Meal/MealOfferDetailScreen";
+import { CreditPackages } from "../screens/Payment/CreditPackages";
+import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
 
@@ -27,25 +27,25 @@ export const AppRouter = () => {
   const mainRoutes = {
     path: "/",
     element: (
-        <AppLayout>
-          <HomeScreen/>
-        </AppLayout>
+      <AppLayout>
+        <HomeScreen />
+      </AppLayout>
     ),
     children: [
-      {path: "*", element: <Navigate to="/404"/>},
-      {path: "/404", element: <ErrorPage/>},
+      { path: "*", element: <Navigate to="/404" /> },
+      { path: "/404", element: <ErrorPage /> },
 
       {
         path: "/login",
-        element: <LoginScreen/>,
+        element: <LoginScreen />,
       },
       {
         path: "/register",
-        element: <RegisterScreen/>,
+        element: <RegisterScreen />,
       },
       {
         path: "/address",
-        element: <AddressInputScreen/>,
+        element: <AddressInputScreen />,
       },
       {
         path: "/alreadyLoggedIn",
@@ -92,36 +92,36 @@ export const AppRouter = () => {
     {
       path: "/account",
       element: (
-          <AppLayout>
-            <RequireAuthRoute>
-              <AccountScreen/>
-            </RequireAuthRoute>
-          </AppLayout>
+        <AppLayout>
+          <RequireAuthRoute>
+            <AccountScreen />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
     },
     {
       path: "/purchase-credits/:userId/:token",
       element: (
-          <AppLayout>
-            <RequireAuthRoute>
-              <CreditPackages/>
-            </RequireAuthRoute>
-          </AppLayout>
+        <AppLayout>
+          <RequireAuthRoute>
+            <CreditPackages />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
     },
     {
       path: "/purchase-credits",
       element: (
-          <AppLayout>
-            <RequireAuthRoute>
-              <CreditPackages/>
-            </RequireAuthRoute>
-          </AppLayout>
+        <AppLayout>
+          <RequireAuthRoute>
+            <CreditPackages />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
     },
     {
       path: "/success/:priceId/:customerId/:token/:userId",
-      element: <PaymentSuccess/>,
+      element: <PaymentSuccess />,
     },
   ];
 
@@ -129,41 +129,40 @@ export const AppRouter = () => {
     {
       path: "createMeal",
       element: (
-          <AppLayout>
-            <RequireAuthRoute>
-              <CreateMeal/>
-            </RequireAuthRoute>
-          </AppLayout>
-
+        <AppLayout>
+          <RequireAuthRoute>
+            <CreateMeal />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
     },
     {
       path: "mealoffers",
       element: (
-          <RequireAddressRoute>
-            <MealOfferScreen/>
-          </RequireAddressRoute>
+        <RequireAddressRoute>
+          <MealOfferScreen />
+        </RequireAddressRoute>
       ),
     },
     {
       path: "mealoffers/:mealOfferId",
-      element: <MealOfferDetailScreen/>,
+      element: <MealOfferDetailScreen />,
     },
     {
       path: "mealOfferRequests",
       element: (
-          <RequireAuthRoute>
-            <MealOfferRequests/>
-          </RequireAuthRoute>
+        <RequireAuthRoute>
+          <MealOfferRequests />
+        </RequireAuthRoute>
       ),
       children: [
         {
           path: "sent",
-          element: <SentMealOfferRequests/>,
+          element: <SentMealOfferRequests />,
         },
         {
           path: "received",
-          element: <ReceivedMealOfferRequests/>,
+          element: <ReceivedMealOfferRequests />,
         },
       ],
     },
@@ -178,8 +177,8 @@ export const AppRouter = () => {
   ]);
 
   return (
-      <QueryClientProvider client={reactQueryClient}>
-        <AuthProvider>{routing}</AuthProvider>
-      </QueryClientProvider>
+    <QueryClientProvider client={reactQueryClient}>
+      <AuthProvider>{routing}</AuthProvider>
+    </QueryClientProvider>
   );
 };

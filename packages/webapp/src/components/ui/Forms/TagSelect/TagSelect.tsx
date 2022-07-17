@@ -12,6 +12,7 @@ import {
 
 const TagSelect = <TFormValues extends FieldValues>({
   formKey,
+  label,
   defaultValue = [],
   disabled = false,
   rules,
@@ -29,6 +30,7 @@ const TagSelect = <TFormValues extends FieldValues>({
   return (
     <TagSelectControlled
       disabled={disabled}
+      label={rules?.required?.value ? `${label} *` : label}
       onChange={field.onChange}
       value={field.value}
       isInvalid={fieldState.invalid}
