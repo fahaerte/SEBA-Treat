@@ -4,6 +4,7 @@ import { MouseEvent } from "react";
 import { IComponentColorBase } from "../../../assets/theme/types/IComponentColorBase";
 
 type TExcludeButtonProps =
+  | "children"
   | "disabled"
   | "htmlType"
   | "onClick"

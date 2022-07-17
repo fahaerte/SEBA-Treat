@@ -8,8 +8,8 @@ import {
   successToast,
   Typography,
 } from "../../components";
-import { useIsMutating, useMutation, useQuery } from "react-query";
-import { verifyPayment, VerifyPaymentApiArg } from "../../api/stripeApi";
+import { useQuery } from "react-query";
+import { verifyPayment } from "../../api/stripeApi";
 // import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 

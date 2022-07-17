@@ -9,6 +9,7 @@ interface ICustomLink extends NavLinkProps {
 
 export const SCLink = styled.a<ICustomLink>`
   color: ${({ theme, color }) => theme.palette[color as string].main};
+  text-decoration: ${({ $underline }) => ($underline ? "underline" : "none")};
 
   &.link {
     &-sm {
@@ -27,5 +28,6 @@ export const SCLink = styled.a<ICustomLink>`
   &:active,
   &:hover {
     text-decoration: ${({ $underline }) => ($underline ? "underline" : "none")};
+    color: ${({ theme, color }) => theme.palette[color as string].hover};
   }
 `;

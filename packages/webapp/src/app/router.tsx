@@ -18,13 +18,18 @@ import { CreditPackages } from "../screens/Payment/CreditPackages";
 import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
+import AppLayout from "../components/AppLayout";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
 
   const mainRoutes = {
     path: "/",
-    element: <HomeScreen />,
+    element: (
+      <AppLayout>
+        <HomeScreen />
+      </AppLayout>
+    ),
     children: [
       { path: "*", element: <Navigate to="/404" /> },
       { path: "/404", element: <ErrorPage /> },
@@ -40,14 +45,6 @@ export const AppRouter = () => {
       {
         path: "/address",
         element: <AddressInputScreen />,
-      },
-      {
-        path: "/account",
-        element: (
-          <RequireAuthRoute>
-            <AccountScreen />
-          </RequireAuthRoute>
-        ),
       },
       {
         path: "/alreadyLoggedIn",
@@ -92,19 +89,33 @@ export const AppRouter = () => {
 
   const purchaseCreditRoutes = [
     {
+      path: "/account",
+      element: (
+        <AppLayout>
+          <RequireAuthRoute>
+            <AccountScreen />
+          </RequireAuthRoute>
+        </AppLayout>
+      ),
+    },
+    {
       path: "/purchase-credits/:userId/:token",
       element: (
-        <RequireAuthRoute>
-          <CreditPackages />
-        </RequireAuthRoute>
+        <AppLayout>
+          <RequireAuthRoute>
+            <CreditPackages />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
     },
     {
       path: "/purchase-credits",
       element: (
-        <RequireAuthRoute>
-          <CreditPackages />
-        </RequireAuthRoute>
+        <AppLayout>
+          <RequireAuthRoute>
+            <CreditPackages />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
     },
     {

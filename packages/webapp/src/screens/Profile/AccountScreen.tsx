@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Card, Col, Row, SkeletonSquare } from "../../components";
 import { Container } from "react-bootstrap";
-import { Header } from "../../components/ui/Header/header";
+import { Header } from "../../components/ui/Header/Header";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import SectionHeading from "../../components/ui/SectionHeading/SectionHeading";
 import CreditPackageCard from "../../components/CreditPackageCard/CreditPackageCard";

@@ -82,7 +82,7 @@ class MealTransactionController implements Controller {
         return next(new HttpException(404, "No logged in user"));
       } else {
         const user = req.user;
-        const userId = req.user._id;
+        // const userId = req.user._id;
         const mealTransactionId = req.params.mealTransactionId;
         const stars = req.body.stars;
         const participantType = req.body.participantType;
