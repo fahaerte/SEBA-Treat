@@ -52,10 +52,7 @@ const cssCustom = (props: ThemeProps<DefaultTheme>) => {
 export const SCSkeleton = styled.div<ISkeletonSquare>`
   ${(props) => cssCustom(props)};
   cursor: default;
-  ${(props) =>
-    props.rounded
-      ? `border-radius: ${props.theme.general.border.radius};`
-      : ""};
+  ${(props) => (props.rounded ? `border-radius: 20px;` : "")};
   height: ${(props) => props.height};
   width: ${(props) => props.width};
 

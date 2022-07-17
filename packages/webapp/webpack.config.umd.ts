@@ -1,8 +1,7 @@
-import * as path from "path";
 import * as webpack from "webpack";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 
-module.exports = (env: { production?: boolean } = {}) => ({
+module.exports = () => ({
   mode: "development",
   entry: {
     app: ["./src/index"],

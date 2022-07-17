@@ -24,13 +24,14 @@ class StripeService {
   public async createCheckoutSession(
     priceId: string,
     customerId: string,
+    token: string,
+    userId: string,
     couponId?: string
   ) {
     try {
       return await this.stripe.checkout.sessions.create({
         line_items: [
           {
-            // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
             price: priceId,
             quantity: 1,
           },
@@ -41,8 +42,10 @@ class StripeService {
         discounts: couponId ? [{ coupon: couponId }] : undefined,
         success_url: `${this.configService.get(
           "CLIENT_URL"
-        )}/success/${priceId}`,
-        cancel_url: `${this.configService.get("CLIENT_URL")}/purchase-credits`,
+        )}/success/${priceId}/${customerId}/${token}/${userId}`,
+        cancel_url: `${this.configService.get(
+          "CLIENT_URL"
+        )}/purchase-credits/${userId}/${token}`,
         automatic_tax: { enabled: true },
       });
     } catch (error: any) {

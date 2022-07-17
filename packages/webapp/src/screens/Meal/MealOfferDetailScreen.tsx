@@ -1,26 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Header } from "../../components/ui/Header/header";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import {
-  Button,
-  Card,
   Col,
   dangerToast,
   infoToast,
   Row,
   SectionHeading,
   successToast,
-  warningToast,
 } from "../../components";
 import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 import { getUserPreview } from "../../api/userApi";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
-import { Link, Navigate, useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
-import axios, { AxiosError } from "axios";
-import { ConfigService } from "../../utils/ConfigService";
+import { AxiosError } from "axios";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();

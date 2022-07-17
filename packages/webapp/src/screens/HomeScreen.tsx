@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import AuthStatus from "../utils/auth/AuthStatus";
+import LoadingPackages from "../components/CreditProducts/LoadingPackages";
 
 export const HomeScreen: React.FC = (): JSX.Element => {
   return (

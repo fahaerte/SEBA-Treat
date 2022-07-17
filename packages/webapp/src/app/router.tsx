@@ -92,6 +92,14 @@ export const AppRouter = () => {
 
   const purchaseCreditRoutes = [
     {
+      path: "/purchase-credits/:userId/:token",
+      element: (
+        <RequireAuthRoute>
+          <CreditPackages />
+        </RequireAuthRoute>
+      ),
+    },
+    {
       path: "/purchase-credits",
       element: (
         <RequireAuthRoute>
@@ -100,7 +108,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/success/:priceId",
+      path: "/success/:priceId/:customerId/:token/:userId",
       element: <PaymentSuccess />,
     },
   ];

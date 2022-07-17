@@ -4,19 +4,13 @@ import { Card, Col, SkeletonSquare } from "../index";
 const LoadingPackages = () => (
   <>
     <Col>
-      <Card>
-        <SkeletonSquare height={"150px"} rounded={false} />
-      </Card>
+      <SkeletonSquare height={"150px"} rounded />
     </Col>
     <Col>
-      <Card>
-        <SkeletonSquare height={"150px"} rounded={false} />
-      </Card>
+      <SkeletonSquare height={"150px"} rounded />
     </Col>
     <Col>
-      <Card>
-        <SkeletonSquare height={"150px"} rounded={false} />
-      </Card>
+      <SkeletonSquare height={"150px"} rounded />
     </Col>
   </>
 );

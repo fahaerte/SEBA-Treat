@@ -8,47 +8,55 @@ import {
   successToast,
   Typography,
 } from "../../components";
-import { useIsMutating, useMutation } from "react-query";
-import { verifyPayment } from "../../api/stripeApi";
-import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
+import { useIsMutating, useMutation, useQuery } from "react-query";
+import { verifyPayment, VerifyPaymentApiArg } from "../../api/stripeApi";
+// import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 const PaymentSuccess = () => {
-  const { priceId } = useParams();
-  const { userId, token } = useAuthContext();
+  const { priceId, customerId, token, userId } = useParams();
+  const { setUserId, setToken } = useAuthContext();
 
-  const verifyPaymentMutation = useMutation(
-    ({ customerId, priceId, userId, token }: VerifyPaymentApiArg) =>
-      verifyPayment({
-        customerId: "cus_M0y6NV1PXOlKwa",
+  const { isLoading, isSuccess, isError } = useQuery("verifyPayment", () => {
+    setUserId(userId);
+    setToken(token);
+    console.log({
+      customerId,
+      priceId,
+      userId,
+      token,
+    });
+
+    if (customerId && userId && priceId && token) {
+      console.log("ist hier drin");
+      return verifyPayment({
+        customerId,
         priceId,
-        userId: "62c6f4b28622a1b6a1be844d",
-        token: token,
-      })
-  );
-
-  const isMutation = useIsMutating({
-    mutationKey: "isLoading",
-    exact: true,
+        userId,
+        token,
+      });
+    }
+    return;
   });
 
-  if (verifyPaymentMutation.isSuccess) {
+  if (isSuccess) {
     successToast({
       message: "Your purchased tokens have been added to your account!",
     });
   }
 
-  if (verifyPaymentMutation.isError) {
+  if (isError) {
     dangerToast({
       message:
         "Your purchase was not successful or this link has already expired.",
     });
+
     return <Navigate to={"/purchase-credits"} />;
   }
 
   return (
     <>
-      {isMutation ? (
+      {isLoading ? (
         <Container className={"mt-5"}>
           <Row>
             <Col>

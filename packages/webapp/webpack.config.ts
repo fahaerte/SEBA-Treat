@@ -1,5 +1,4 @@
 import * as path from "path";
-import * as webpack from "webpack";
 
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import DotenvWebpackPlugin from "dotenv-webpack";

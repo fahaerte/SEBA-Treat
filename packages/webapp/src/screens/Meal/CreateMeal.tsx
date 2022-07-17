@@ -1,8 +1,7 @@
 import React from "react";
-import { FormHelper, IFormRow, Form, Typography } from "../../components";
-import { IMealOffer } from "@treat/lib-common";
-import { useAuthContext } from "../../utils/AuthProvider";
+import { Typography } from "../../components";
 import { Navigate } from "react-router-dom";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 /**
  * TODO:

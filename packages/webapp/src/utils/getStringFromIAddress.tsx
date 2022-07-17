@@ -1,4 +1,4 @@
-import { IAddress, IAddressLandingPage } from "@treat/lib-common";
+import { IAddress } from "@treat/lib-common";
 
 export const getStringFromIAddress = (input: IAddress) => {
   let address = input.street;

@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Col,
-  Container,
-  Row,
-  SectionHeading,
-  Typography,
-} from "../../components";
+import { Col, Container, Row, SectionHeading } from "../../components";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
@@ -15,18 +9,17 @@ import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useIsMutating, useMutation, useQuery } from "react-query";
 import {
   createCheckoutSession,
+  CreateCheckoutSessionApiArg,
   paymentGetDiscount,
   paymentGetProductsWithPrices,
 } from "../../api/stripeApi";
-import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
+// import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 import { getUser } from "../../api/userApi";
+import { useParams } from "react-router-dom";
 
-//TODO: Debug
 export const CreditPackages = () => {
-  const { userId, token } = useAuthContext();
-
-  const [url, setUrl] = useState("");
-
+  const { userId: userIdParam, token: userTokenParam } = useParams();
+  const { userId, setUserId, token, setToken } = useAuthContext();
   const { data: user } = useQuery("getUser", () =>
     getUser(userId as string, token as string)
   );
@@ -47,12 +40,20 @@ export const CreditPackages = () => {
       stripeCustomerId,
       couponId,
       token,
-    }: CreateCheckoutSessionApiArg) =>
-      createCheckoutSession({ priceId, stripeCustomerId, couponId, token }),
+      userId,
+    }: CreateCheckoutSessionApiArg) => {
+      return createCheckoutSession({
+        priceId,
+        stripeCustomerId,
+        couponId,
+        token,
+        userId,
+      });
+    },
     {
       onSuccess: (response) => {
-        console.log(response.data);
-        setUrl(response.data.url);
+        console.log(response);
+        window.location.replace(response.url);
       },
     }
   );
@@ -67,16 +68,16 @@ export const CreditPackages = () => {
   >();
 
   useEffect(() => {
+    if (!userId && !token) {
+      setUserId(userIdParam);
+      setToken(userTokenParam);
+    }
     if (discount && products) {
       const findProduct = products?.data.find(
-        (product: { id: any }) =>
+        (product: { id: string }) =>
           product.id === discount?.data.applies_to?.products[0]
       );
       setDiscountedProduct(findProduct);
-    }
-
-    if (createCheckout) {
-      window.location.replace(url);
     }
   }, [discount, products, createCheckout]);
 
@@ -84,9 +85,10 @@ export const CreditPackages = () => {
     try {
       createCheckout.mutate({
         priceId: priceId,
-        stripeCustomerId: user.stripeCustomerId,
+        stripeCustomerId: user.data.stripeCustomerId,
         couponId: couponId || undefined,
         token: token as string,
+        userId: userId as string,
       });
     } catch {
       return <div>Stripe Instance not available, 401</div>;

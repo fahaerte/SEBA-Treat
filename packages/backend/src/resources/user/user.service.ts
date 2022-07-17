@@ -77,6 +77,7 @@ class UserService {
       .findById(userId)
       .select([
         "email",
+        "stripeCustomerId",
         "firstName",
         "lastName",
         "address",

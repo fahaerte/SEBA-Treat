@@ -12,7 +12,6 @@ export const SCCard = styled.div<ICard>`
   //box-shadow: ${({ theme }) => theme.shadows.md};
   box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
   border: 2px solid ${({ theme }) => theme.palette["primary"].main};
-  // TODO: Theme value?
   border-radius: 20px;
 
   &.card-hover {

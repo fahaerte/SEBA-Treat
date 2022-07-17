@@ -110,10 +110,14 @@ class StripeController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { priceId, stripeCustomerId } = req.body;
+      const token = req.headers.authorization?.split(" ")[1];
+      console.log(token);
+      const { priceId, stripeCustomerId, userId } = req.body;
       const session = await this.stripeService.createCheckoutSession(
         priceId as string,
         stripeCustomerId as string,
+        token as string,
+        userId as string,
         req.body.couponId ? req.body.couponId : undefined
       );
       if (session.url) {
