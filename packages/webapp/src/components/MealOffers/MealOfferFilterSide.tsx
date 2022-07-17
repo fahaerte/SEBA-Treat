@@ -1,64 +1,85 @@
 import {
-  Button, Col,
+  Button,
+  Col,
   Form,
   FormHelper,
   IFormRow,
-  InputControlled, Row,
-  SelectControlled
+  InputControlled,
+  Row,
+  SelectControlled,
 } from "../ui";
-import { IMealFilter } from "@treat/lib-common";
+import { IMealFilter, IStringObject } from "@treat/lib-common";
 import React from "react";
 import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
 import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
 
-const MealOfferFilterSide = (
-  {
-    handleChangedFilter,
-    distance,
-    maxPrice,
-    portions,
-    sellerRating,
-    category,
-    allergen,
-    buttonAction
-  }: {
-    handleChangedFilter: (event: any) => void;
-    distance: number | undefined;
-    maxPrice: number | undefined;
-    portions: number | undefined;
-    sellerRating: number | undefined;
-    category: string | undefined;
-    allergen: string | undefined;
-    buttonAction: () => void;
-  }) => {
+const MealOfferFilterSide = ({
+  handleChangedFilter,
+  distance,
+  maxPrice,
+  portions,
+  sellerRating,
+  category,
+  allergen,
+  buttonAction,
+}: {
+  handleChangedFilter: (event: any) => void;
+  distance: number | undefined;
+  maxPrice: number | undefined;
+  portions: number | undefined;
+  sellerRating: number | undefined;
+  category: string | undefined;
+  allergen: string | undefined;
+  buttonAction: () => void;
+}) => {
+
   return (
     <Col>
-      <Row>
-        <InputControlled
-          type={"number"}
+      <Row className={"m-2"}>
+        <SelectControlled
+          label={"Max. distance"}
           value={String(distance)}
-          label={"Max. Distance"}
-
           onChange={handleChangedFilter}
-        />
+        >
+          <option value={undefined}>Choose</option>
+          <option value={1}>1 km</option>
+          <option value={2}>2 km</option>
+          <option value={3}>3 km</option>
+          <option value={4}>4 km</option>
+          <option value={5}>5 km</option>
+          <option value={10}>10 km</option>
+          <option value={20}>20 km</option>
+        </SelectControlled>
       </Row>
-      <Row>
-        <InputControlled
-          type={"number"}
+      <Row className={"m-2"}>
+        <SelectControlled
+          label={"Max. price"}
           value={String(maxPrice)}
-          label={"Max. Price"}
           onChange={handleChangedFilter}
-        />
+        >
+          <option value={undefined}>Choose</option>
+          <option value={100}>100 Credits</option>
+          <option value={200}>200 Credits</option>
+          <option value={300}>300 Credits</option>
+          <option value={400}>400 Credits</option>
+          <option value={500}>500 Credits</option>
+        </SelectControlled>
       </Row>
-      <Row>
-        <InputControlled
-          type={"number"}
-          value={String(portions)}
+      <Row className={"m-2"}>
+        <SelectControlled
           label={"Portions"}
+          value={String(portions)}
           onChange={handleChangedFilter}
-        />
+        >
+          <option value={undefined}>Choose</option>
+          <option value={1}>1 Portions</option>
+          <option value={2}>2 Portions</option>
+          <option value={3}>3 Portions</option>
+          <option value={4}>4 Portions</option>
+          <option value={5}>5 Portions</option>
+        </SelectControlled>
       </Row>
-      <Row>
+      <Row className={"m-2"}>
         <SelectControlled
           label={"Min. Seller Rating"}
           value={String(sellerRating)}
@@ -72,7 +93,7 @@ const MealOfferFilterSide = (
           <option value={5}>5 Stars</option>
         </SelectControlled>
       </Row>
-      <Row>
+      <Row className={"m-2"}>
         <SelectControlled
           label={"Category"}
           value={category as string}
@@ -85,7 +106,7 @@ const MealOfferFilterSide = (
           </option>
         </SelectControlled>
       </Row>
-      <Row>
+      <Row className={"m-2"}>
         <SelectControlled
           label={"Allergens"}
           value={allergen as string}
@@ -95,10 +116,8 @@ const MealOfferFilterSide = (
           <option value={EMealAllergen.GLUTEN}>{EMealAllergen.GLUTEN}</option>
         </SelectControlled>
       </Row>
-      <Row>
-        <Button onClick={buttonAction}>
-          Reset Filters
-        </Button>
+      <Row className={"m-2"}>
+        <Button onClick={buttonAction}>Reset Filters</Button>
       </Row>
     </Col>
   );

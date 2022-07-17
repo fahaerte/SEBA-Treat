@@ -16,7 +16,9 @@ export const MealOfferScreen = () => {
   const [sortingRule, setSortingRule] = useState<string>();
   const [distance, setDistance] = useState<number | undefined>(undefined);
   const [price, setPrice] = useState<number | undefined>(undefined);
-  const [sellerRating, setSellerRating] = useState<number | undefined>(undefined);
+  const [sellerRating, setSellerRating] = useState<number | undefined>(
+    undefined
+  );
   const [portions, setPortions] = useState<number | undefined>(undefined);
   const [allergen, setAllergen] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
@@ -57,26 +59,14 @@ export const MealOfferScreen = () => {
 
   const handleChangedFilter = (event: any) => {
     switch (event.target.id) {
-      case "max.-distance-number":
-        if (Number(event.target.value) <= 1) {
-          setDistance(1);
-        } else {
-          setDistance(Number(event.target.value));
-        }
+      case "max.-distance":
+        setDistance(Number(event.target.value));
         break;
-      case "max.-price-number":
-        if (Number(event.target.value) <= 1) {
-          setPrice(1);
-        } else {
-          setPrice(Number(event.target.value));
-        }
+      case "max.-price":
+        setPrice(Number(event.target.value));
         break;
-      case "portions-number":
-        if (Number(event.target.value) <= 1) {
-          setPortions(1);
-        } else {
-          setPortions(Number(event.target.value));
-        }
+      case "portions":
+        setPortions(Number(event.target.value));
         break;
       case "min.-seller-rating":
         setSellerRating(Number(event.target.value));
@@ -139,7 +129,7 @@ export const MealOfferScreen = () => {
                 currentSortingRule={sortingRule ? sortingRule : "distanceAsc"}
               />
             </Row>
-            <Row>{offers ? offers.data.length : "No"} Offers found</Row>
+            <Row className={"m-2 row justify-content-center"}>{offers ? offers.data.length : "No"} Offers found</Row>
             <Row>
               <Col>
                 <Container>

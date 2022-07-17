@@ -24,20 +24,21 @@ const MealOfferFilterTop = ({
           type: "text",
         },
         defaultValue: currentSearchString,
+
       }),
     ],
   ];
 
   return (
-    <Row>
-      <Col>
+    <Row className={"m-2"}>
+      <Col className={"m-2"}>
         <Form<IStringObject>
           elements={searchElement}
           onSubmit={handleSearch}
           submitButton={null}
         />
       </Col>
-      <Col>
+      <Col className={"m-2"}>
         <SelectControlled
           label={"Sort by"}
           value={currentSortingRule}
