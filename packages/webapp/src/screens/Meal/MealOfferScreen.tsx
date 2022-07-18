@@ -123,7 +123,6 @@ export const MealOfferScreen = () => {
 
   return (
     <>
-      <MealOfferScreenHeader />
       <Container className={""}>
         <Row>
           <Col className={"col col-lg-2"}>

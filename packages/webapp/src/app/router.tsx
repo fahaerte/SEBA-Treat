@@ -19,6 +19,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
+import {RequireAddressRoute} from "../utils/auth/RequireAddressRoute";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -28,6 +29,7 @@ export const AppRouter = () => {
     element: (
       <AppLayout>
         <HomeScreen />
+        {/*<MealOfferScreen />*/}
       </AppLayout>
     ),
     children: [
@@ -52,21 +54,6 @@ export const AppRouter = () => {
       },
     ],
   };
-
-  const redirectRoutes = [
-    // {
-    //   path: "/success/:priceId",
-    //   element: <PaymentSuccess />,
-    // },
-    // {
-    //   path: "/purchase-credits",
-    //   element: (
-    //     <RequireAuthRoute>
-    //       <AccountScreen />
-    //     </RequireAuthRoute>
-    //   ),
-    // },
-  ];
 
   const profileRoutes = {
     path: "profile/:profileId/",
@@ -128,14 +115,20 @@ export const AppRouter = () => {
     {
       path: "mealoffers",
       element: (
-        <RequireAuthRoute>
-          <MealOfferScreen />
-        </RequireAuthRoute>
+        <AppLayout>
+          <RequireAddressRoute>
+            <MealOfferScreen />
+          </RequireAddressRoute>
+        </AppLayout>
       ),
     },
     {
       path: "mealoffers/:mealOfferId",
-      element: <MealOfferDetailScreen />,
+      element:(
+        <RequireAddressRoute>
+          <MealOfferDetailScreen />
+        </RequireAddressRoute>
+      ),
     },
     {
       path: "mealOfferRequests",
