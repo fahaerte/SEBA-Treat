@@ -4,10 +4,10 @@ import { Container } from "./ui";
 import { Header } from "./ui/Header/Header";
 
 const AppLayout = ({ children }: { children?: React.ReactNode }) => (
-  <div className={"layout-app grid-app"}>
+  <div className={"mb-5"}>
     <Header />
-    <main className="main p-3">
-      <div className={"content bg-white"}>
+    <main className="p-3">
+      <div>
         <Container>{children || <Outlet />}</Container>
       </div>
     </main>

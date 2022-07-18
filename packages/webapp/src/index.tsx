@@ -1,31 +1,30 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import "reflect-metadata";
-import {render} from "react-dom";
+import { render } from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
-import {AppRouter} from "./app/router";
-import {BrowserRouter} from "react-router-dom";
+import { AppRouter } from "./app/router";
+import { BrowserRouter } from "react-router-dom";
 
 class Root extends Component {
   render() {
     return (
-        <React.StrictMode>
-          <div className="h-100">
-            <CustomThemeProvider>
-              <BrowserRouter>
-                <AppRouter/>
-              </BrowserRouter>
-            </CustomThemeProvider>
-          </div>
-        </React.StrictMode>
-
+      <React.StrictMode>
+        <div className="h-100">
+          <CustomThemeProvider>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+          </CustomThemeProvider>
+        </div>
+      </React.StrictMode>
     );
   }
 }
 
 export default Root;
 
-render(<Root/>, document.getElementById("root"));
+render(<Root />, document.getElementById("root"));
 
 // if (module.hot) {
 //   // https://github.com/webpack/webpack/issues/418#issuecomment-53398056

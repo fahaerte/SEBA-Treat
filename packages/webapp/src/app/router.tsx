@@ -89,7 +89,7 @@ export const AppRouter = () => {
 
   const purchaseCreditRoutes = [
     {
-      path: "/purchase-credits/:userId/:token",
+      path: "/account/:userId/:token",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -99,7 +99,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/purchase-credits",
+      path: "/account",
       element: (
         <AppLayout>
           <RequireAuthRoute>
