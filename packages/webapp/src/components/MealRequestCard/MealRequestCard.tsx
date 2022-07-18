@@ -47,7 +47,7 @@ const MealRequestCard = ({
           <Typography>Meal Price</Typography>
         </Col>
         <Col>
-          <Typography style={{ textAlign: "right" }}>{mealPrice} Cr</Typography>
+          <Typography align={"start"}>{mealPrice} Cr</Typography>
         </Col>
       </Row>
       <Row>
@@ -57,9 +57,7 @@ const MealRequestCard = ({
           </Typography>
         </Col>
         <Col>
-          <Typography style={{ textAlign: "right" }}>
-            {transactionFee} Cr
-          </Typography>
+          <Typography align={"start"}>{transactionFee} Cr</Typography>
         </Col>
       </Row>
       <hr />
@@ -68,7 +66,7 @@ const MealRequestCard = ({
           <Typography variant={"h3"}>Total</Typography>
         </Col>
         <Col>
-          <Typography variant={"h3"} style={{ textAlign: "right" }}>
+          <Typography variant={"h3"} align={"start"}>
             {mealPrice + transactionFee} Cr
           </Typography>
         </Col>
