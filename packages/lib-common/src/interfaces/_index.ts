@@ -1,5 +1,4 @@
 export type { IAddress } from "./IAddress";
-export type { IAddressLandingPage } from "./IAddressLandingPage";
 export type { IAllergens } from "./IAllergens";
 export type { IMealCategory } from "./IMealCategory";
 export type { IMealOffer } from "./IMealOffer";
@@ -14,3 +13,4 @@ export type { ICreditDiscount } from "./ICreditDiscount";
 export type { ICreditPackageLegacy } from "./ICreditPackageLegacy";
 export type { IMealOfferCard } from "./IMealOfferCard";
 export type { IStringObject } from "./IStringObject";
+export type { VerifyPaymentApiArg } from "./IVerifyPaymentApiArg";

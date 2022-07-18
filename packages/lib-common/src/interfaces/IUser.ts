@@ -1,7 +1,6 @@
 import { IAddress } from "./IAddress";
 import { IVirtualAccount } from "./IVirtualAccount";
 
-// Interface
 export interface IUser {
   email: string;
   password: string;
