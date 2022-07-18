@@ -114,6 +114,37 @@ export const AppRouter = () => {
     },
   ];
 
+  const mealOfferRequestsRoute = {
+    path: "mealOfferRequests",
+    element: (
+      <RequireAuthRoute>
+        <AppLayout />
+      </RequireAuthRoute>
+    ),
+    children: [
+      {
+        path: "",
+        element: <Navigate to={"./sent"} replace={true} />,
+      },
+      {
+        path: "sent",
+        element: (
+          <MealOfferRequests>
+            <SentMealOfferRequests />
+          </MealOfferRequests>
+        ),
+      },
+      {
+        path: "received",
+        element: (
+          <MealOfferRequests>
+            <ReceivedMealOfferRequests />
+          </MealOfferRequests>
+        ),
+      },
+    ],
+  };
+
   const mealRoutes = [
     {
       path: "createMeal",
@@ -137,29 +168,30 @@ export const AppRouter = () => {
       path: "mealoffers/:mealOfferId",
       element: <MealOfferDetailScreen />,
     },
-    {
-      path: "mealOfferRequests",
-      element: (
-        <RequireAuthRoute>
-          <MealOfferRequests />
-        </RequireAuthRoute>
-      ),
-      children: [
-        {
-          path: "sent",
-          element: <SentMealOfferRequests />,
-        },
-        {
-          path: "received",
-          element: <ReceivedMealOfferRequests />,
-        },
-      ],
-    },
+    // {
+    //   path: "mealOfferRequests",
+    //   element: (
+    //     <RequireAuthRoute>
+    //       <MealOfferRequests />
+    //     </RequireAuthRoute>
+    //   ),
+    //   children: [
+    //     {
+    //       path: "sent",
+    //       element: <SentMealOfferRequests />,
+    //     },
+    //     {
+    //       path: "received",
+    //       element: <ReceivedMealOfferRequests />,
+    //     },
+    //   ],
+    // },
   ];
 
   const routing = useRoutes([
     mainRoutes,
     profileRoutes,
+    mealOfferRequestsRoute,
     // ...redirectRoutes,
     ...purchaseCreditRoutes,
     ...mealRoutes,

@@ -9,8 +9,8 @@ import {
   SelectControlled,
 } from "../ui";
 import React from "react";
-import EMealCategory from "@treat/lib-common/lib/enums/EMealCategory";
-import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
+import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
 
 const MealOfferFilterSideBar = ({
   handleChangedFilter,
