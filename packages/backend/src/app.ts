@@ -10,14 +10,17 @@ import helmet from "helmet";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import { User } from "./resources/user/user.validation";
+import { ConfigService } from "./utils/ConfigService";
 
 class App {
   public express: Application;
   public port: number;
+  public configService: ConfigService;
 
   constructor(controllers: Controller[], port: number) {
     this.express = express();
     this.port = port;
+    this.configService = new ConfigService();
 
     this.initialiseDatabaseConnection();
     this.initialiseMiddleware();
@@ -30,7 +33,11 @@ class App {
     this.express.use(helmet());
     this.express.use(
       cors({
-        origin: ["https://checkout.stripe.com", "http://localhost:3000", "*"],
+        origin: [
+          this.configService.get("STRIPE_CHECKOUT"),
+          this.configService.get("CLIENT_URL"),
+          "*",
+        ],
       })
     );
     this.express.use(morgan("dev"));
@@ -50,9 +57,12 @@ class App {
   }
 
   private initialiseDatabaseConnection(): void {
-    const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
     void mongoose.connect(
-      `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_PATH}.ar7en.mongodb.net`
+      `mongodb+srv://${this.configService.get(
+        "MONGO_USER"
+      )}:${this.configService.get("MONGO_PASSWORD")}@${this.configService.get(
+        "MONGO_PATH"
+      )}.ar7en.mongodb.net`
     );
   }
 

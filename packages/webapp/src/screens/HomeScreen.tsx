@@ -1,11 +1,14 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import AuthStatus from "../utils/auth/AuthStatus";
+import { Rating } from "../components/Profile/Rating";
 
-export const HomeScreen: React.FC = (): JSX.Element => {
+export const HomeScreen = () => {
   return (
     <>
       <AuthStatus />
+      <Rating rating={3.5} />
+
       <nav>
         <ul>
           <li>

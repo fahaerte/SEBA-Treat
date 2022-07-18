@@ -52,7 +52,7 @@ export const Header = () => {
             </Link>
             {userId && (
               <Button color={"secondary"} className={"ms-3"} onClick={signout}>
-                <Icon type={"logout"} />
+                <Icon type={"box-arrow-right"} />
               </Button>
             )}
           </Col>

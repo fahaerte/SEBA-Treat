@@ -18,7 +18,6 @@ export const AIconType = [
   "write",
   "chevronLeft",
   "chevronRight",
-  "chevronDown",
   "chevronUp",
   "fullscreen",
   "threeDots",
@@ -74,7 +73,7 @@ export const AIconType = [
   "send",
   "arrowClockwise",
   "coin",
-  "logout",
+  "box-arrow-right",
 ] as const;
 
 export interface IIcon {

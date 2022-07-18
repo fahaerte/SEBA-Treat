@@ -17,9 +17,11 @@ import StripeController from "./resources/stripe/stripe.controller";
 import MealTransactionService from "./resources/mealTransaction/mealTransaction.service";
 import RatingController from "./resources/rating/ratingController";
 import RatingService from "./resources/rating/ratingService";
+import { ConfigService } from "./utils/ConfigService";
 
 validateEnv();
 
+const configService = new ConfigService();
 const app = new App(
   [
     new UserController(
@@ -38,7 +40,7 @@ const app = new App(
     new CreditPackageController(),
     new RatingController(Container.get(RatingService)),
   ],
-  Number(process.env.PORT)
+  Number(configService.get("PORT"))
 );
 
 app.listen();

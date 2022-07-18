@@ -9,7 +9,7 @@ const Icon = ({ type, size = "md", color, className = "" }: IIcon) => (
   <>
     <SCIcon
       color={color}
-      fill="currentColor"
+      fill={color || "currentColor"}
       className={[`bi`, `bi-${type}`, `svg-${size}`, className].join(" ")}
     >
       <use xlinkHref={`#${type}`} />

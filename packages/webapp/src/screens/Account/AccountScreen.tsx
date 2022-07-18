@@ -3,7 +3,7 @@ import { Col, Container, Row, SectionHeading } from "../../components";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
-import CreditOverview from "../../components/CreditOverview";
+import ProfileOverview from "../../components/Profile/ProfileOverview";
 import CreditDiscount from "../../components/CreditProducts/CreditDiscount";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useIsMutating, useMutation, useQuery } from "react-query";
@@ -16,8 +16,9 @@ import {
 // import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 import { getUser } from "../../api/userApi";
 import { useParams } from "react-router-dom";
+import { UserOverview } from "../../components/Profile/UserOverview";
 
-export const CreditPackages = () => {
+export const AccountScreen = () => {
   const { userId: userIdParam, token: userTokenParam } = useParams();
   const { userId, setUserId, token, setToken } = useAuthContext();
   const { data: user } = useQuery("getUser", () =>
@@ -72,9 +73,9 @@ export const CreditPackages = () => {
       setToken(userTokenParam);
     }
     if (discount && products) {
-      const findProduct: IStripeProduct | undefined = products?.data.find(
+      const findProduct: IStripeProduct | undefined = products.find(
         (product: { id: string }) =>
-          product.id === discount?.data.applies_to?.products[0]
+          product.id === discount?.applies_to?.products[0]
       );
       setDiscountedProduct(findProduct);
     }
@@ -107,18 +108,18 @@ export const CreditPackages = () => {
   return (
     <>
       <Row>
-        <CreditOverview />
+        <ProfileOverview />
         {discount && (
           <CreditDiscount
-            discountTitle={discount.data.name || ""}
-            discountDeadline={discount.data.redeem_by || 0}
-            discountValue={discount.data.amount_off || 0}
+            discountTitle={discount.name || ""}
+            discountDeadline={discount.redeem_by || 0}
+            discountValue={discount.amount_off || 0}
             productLabel={discountedProduct?.name || ""}
             productPrice={discountedProduct?.default_price.unit_amount || 0}
             onClick={() =>
               redirectToCheckout(
                 discountedProduct?.default_price.id || "",
-                discount.data.id
+                discount.id
               )
             }
           />
@@ -132,7 +133,7 @@ export const CreditPackages = () => {
           ) : (
             <>
               {products &&
-                products.data
+                products
                   .slice()
                   .sort(
                     (
@@ -166,6 +167,7 @@ export const CreditPackages = () => {
             </>
           )}
         </Row>
+        <UserOverview />
       </Container>
     </>
   );
