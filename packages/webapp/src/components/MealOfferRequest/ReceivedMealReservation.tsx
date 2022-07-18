@@ -20,19 +20,21 @@ export const ReceivedMealReservation = ({
   reservation,
   buyerRating,
 }: ReceivedMealReservationProps) => {
-
-  const {token} = useAuthContext();
+  const { token } = useAuthContext();
 
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
 
-  const updateReservationStateMutation = useMutation( (newState: EMealReservationState) => updateMealReservationState(
-    token as string,
-    mealOfferId,
-    reservation._id,
-    newState
-  ));
+  const updateReservationStateMutation = useMutation(
+    (newState: EMealReservationState) =>
+      updateMealReservationState(
+        token as string,
+        mealOfferId,
+        reservation._id,
+        newState
+      )
+  );
 
   const updateReservationState = (newState: EMealReservationState) => {
     updateReservationStateMutation.mutate(newState);
@@ -45,7 +47,7 @@ export const ReceivedMealReservation = ({
         <Button
           onClick={() =>
             updateReservationState(EMealReservationState.SELLER_ACCEPTED)
-        }
+          }
         >
           Accept offer
         </Button>

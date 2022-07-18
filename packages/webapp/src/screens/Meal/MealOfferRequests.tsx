@@ -6,7 +6,6 @@ import { Outlet } from "react-router-dom";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const MealOfferRequests = () => {
-
   const { token } = useAuthContext();
 
   return (
@@ -25,12 +24,12 @@ export const MealOfferRequests = () => {
             tabs={[
               {
                 to: "/mealOfferRequests/sent",
-                children: "Your requests"
+                children: "Your requests",
               },
               {
                 to: "/mealOfferRequests/received",
-                children: "Received requests"
-              }
+                children: "Received requests",
+              },
             ]}
           />
           <Outlet />
