@@ -7,11 +7,9 @@ import MealOfferService from "./mealOffer.service";
 import ValidatePart from "../../utils/validation";
 import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
-import {
-  EMealAllergen,
-  EMealCategory,
-  EMealReservationState,
-} from "@treat/lib-common";
+import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
+import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 
 @Service()
 class MealOfferController implements Controller {
