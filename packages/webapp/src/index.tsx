@@ -2,27 +2,22 @@ import React, { Component } from "react";
 import "reflect-metadata";
 import { render } from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./app/app.scss";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import { AppRouter } from "./app/router";
 import { BrowserRouter } from "react-router-dom";
 
-/**
- * TODO:
- * - Authenticator
- * - Installation and usage of lib-common, (API implementation)
- */
-
 class Root extends Component {
   render() {
     return (
-      <div className="app h-100">
-        <CustomThemeProvider>
-          <BrowserRouter>
-            <AppRouter />
-          </BrowserRouter>
-        </CustomThemeProvider>
-      </div>
+      <React.StrictMode>
+        <div className="h-100">
+          <CustomThemeProvider>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+          </CustomThemeProvider>
+        </div>
+      </React.StrictMode>
     );
   }
 }
@@ -31,12 +26,12 @@ export default Root;
 
 render(<Root />, document.getElementById("root"));
 
-if (module.hot) {
-  // https://github.com/webpack/webpack/issues/418#issuecomment-53398056
-  module.hot.accept((err) => {
-    if (err) console.error(err.message); // eslint-disable-line no-console
-  });
-}
+// if (module.hot) {
+//   // https://github.com/webpack/webpack/issues/418#issuecomment-53398056
+//   module.hot.accept((err) => {
+//     if (err) console.error(err.message); // eslint-disable-line no-console
+//   });
+// }
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -11,6 +11,8 @@ export const configValues = {
   CENTRAL_BANK_ID: Joi.string(),
   CLIENT_URL: Joi.string(),
   STRIPE_API_SECRET_KEY: Joi.string(),
+  STRIPE_CHECKOUT: Joi.string(),
+  GOOGLE_MAPS_API_KEY: Joi.string(),
 };
 
 export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
@@ -25,6 +27,8 @@ export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
       STRIPE_API_SECRET_KEY: process.env.STRIPE_API_SECRET_KEY,
       CLIENT_URL: process.env.CLIENT_URL,
       CENTRAL_BANK_ID: process.env.CENTRAL_BANK_ID,
+      STRIPE_CHECKOUT: process.env.STRIPE_CHECKOUT,
+      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
     });
   }
 }

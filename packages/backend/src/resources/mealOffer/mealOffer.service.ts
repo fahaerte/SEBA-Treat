@@ -21,10 +21,12 @@ import {
 } from "../../utils/address";
 import Logger, { ILogMessage } from "../../utils/logger";
 import UserDocument from "../user/user.interface";
+import { ConfigService } from "../../utils/ConfigService";
 
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
+  private configSerivce = new ConfigService();
 
   constructor(
     private readonly mealTransactionService: MealTransactionService,
