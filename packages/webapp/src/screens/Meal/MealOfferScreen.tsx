@@ -60,9 +60,7 @@ export const MealOfferScreen = () => {
     switch (event.target.id) {
       case "max.-distance":
         setDistance(() =>
-          Number(event.target.value) === 0
-            ? 5
-            : Number(event.target.value)
+          Number(event.target.value) === 0 ? 5 : Number(event.target.value)
         );
         break;
       case "max.-price":
@@ -167,9 +165,9 @@ export const MealOfferScreen = () => {
                               distance={mealOffer.distance}
                               mealTitle={mealOffer.title}
                               portions={mealOffer.portions}
-                              sellerRating={mealOffer.rating}
+                              sellerRating={mealOffer.user.meanRating}
                               endDate={mealOffer.endDate}
-                              sellerName={"FirstName of Seller"}
+                              sellerName={mealOffer.user.firstName}
                               startDate={mealOffer.endDate}
                             />
                           </Row>

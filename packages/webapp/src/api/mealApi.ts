@@ -55,7 +55,7 @@ export const getMealOffersByParams = async (
   allergen?: string | undefined,
   sellerRating?: number | undefined,
   price?: number | undefined,
-  search?: string | undefined,
+  search?: string | undefined
 ) => {
   const response = await baseApi(undefined).get(`/mealOffers/previews`, {
     params: {
