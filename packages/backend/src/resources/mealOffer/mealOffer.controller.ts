@@ -7,7 +7,11 @@ import MealOfferService from "./mealOffer.service";
 import ValidatePart from "../../utils/validation";
 import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
-import { EMealAllergen, EMealCategory, EMealReservationState } from "@treat/lib-common";
+import {
+  EMealAllergen,
+  EMealCategory,
+  EMealReservationState,
+} from "@treat/lib-common";
 
 @Service()
 class MealOfferController implements Controller {

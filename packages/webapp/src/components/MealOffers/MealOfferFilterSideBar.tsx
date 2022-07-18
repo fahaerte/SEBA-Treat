@@ -1,9 +1,4 @@
-import {
-  Button,
-  Col,
-  Row,
-  SelectControlled,
-} from "../ui";
+import { Button, Col, Row, SelectControlled } from "../ui";
 import React from "react";
 import { EMealAllergen, EMealCategory } from "@treat/lib-common";
 

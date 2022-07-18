@@ -1,5 +1,9 @@
 import Joi from "joi";
-import { EMealCategory, EMealAllergen, EMealReservationState } from "@treat/lib-common";
+import {
+  EMealCategory,
+  EMealAllergen,
+  EMealReservationState,
+} from "@treat/lib-common";
 import { IMealOffer } from "@treat/lib-common";
 
 const createBody = Joi.object<Partial<IMealOffer>>({

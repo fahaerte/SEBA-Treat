@@ -1,9 +1,4 @@
-import {
-  Col,
-  InputControlled,
-  Row,
-  SelectControlled,
-} from "../ui";
+import { Col, InputControlled, Row, SelectControlled } from "../ui";
 import React from "react";
 
 const MealOfferFilterTop = ({

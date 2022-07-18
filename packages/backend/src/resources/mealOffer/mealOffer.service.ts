@@ -14,7 +14,11 @@ import InvalidMealReservationException from "../../utils/exceptions/invalidMealR
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
-import { EMealCategory, EMealAllergen, EMealReservationState } from "@treat/lib-common";
+import {
+  EMealCategory,
+  EMealAllergen,
+  EMealReservationState,
+} from "@treat/lib-common";
 import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
 import UserService from "../user/user.service";
 
