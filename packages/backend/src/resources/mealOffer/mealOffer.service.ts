@@ -21,10 +21,12 @@ import {
 } from "@treat/lib-common";
 import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
 import UserService from "../user/user.service";
+import { ConfigService } from "../../utils/ConfigService";
 
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
+  private configSerivce = new ConfigService();
 
   constructor(
     private readonly mealTransactionService: MealTransactionService,
