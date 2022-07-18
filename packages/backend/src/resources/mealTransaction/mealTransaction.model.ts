@@ -1,7 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 import MealTransaction from "./mealTransaction.interface";
-import MealTransactionState from "@treat/lib-common/lib/enums/ETransactionState";
-import MealTransactionStateEnum from "@treat/lib-common/lib/enums/ETransactionState";
+import { ETransactionState } from "@treat/lib-common";
 
 const MealTransactionSchema = new Schema<MealTransaction>(
   {
@@ -33,9 +32,9 @@ const MealTransactionSchema = new Schema<MealTransaction>(
     },
     transactionState: {
       type: String,
-      enum: Object.keys(MealTransactionStateEnum),
+      enum: Object.keys(ETransactionState),
       required: true,
-      default: MealTransactionState.PENDING,
+      default: ETransactionState.PENDING,
     },
     buyerRating: {
       type: Number,

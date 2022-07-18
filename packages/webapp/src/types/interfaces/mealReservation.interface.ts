@@ -1,8 +1,8 @@
-import MealReservationState from "../enums/mealReservationState.enum";
 import User from "./user.interface";
+import { EMealReservationState } from "@treat/lib-common";
 
 export default interface MealReservation {
   _id: string;
   buyer: User;
-  reservationState: MealReservationState;
+  reservationState: EMealReservationState;
 }

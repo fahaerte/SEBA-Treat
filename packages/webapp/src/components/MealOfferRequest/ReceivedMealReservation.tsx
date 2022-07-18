@@ -3,9 +3,9 @@ import { Col, Row } from "../ui/Grid";
 import { Button } from "../ui";
 import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
-import MealReservationState from "../../types/enums/mealReservationState.enum";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
+import { EMealReservationState } from "@treat/lib-common";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -22,7 +22,7 @@ export const ReceivedMealReservation = ({
     reservation.reservationState
   );
 
-  const updateReservationState = async (newState: MealReservationState) => {
+  const updateReservationState = async (newState: EMealReservationState) => {
     try {
       await MealOfferService.updateMealReservationState(
         String(mealOfferId),
@@ -36,23 +36,23 @@ export const ReceivedMealReservation = ({
   };
 
   const getActionButton = () => {
-    if (reservationState == MealReservationState.PENDING) {
+    if (reservationState == EMealReservationState.PENDING) {
       return (
         <Button
           onClick={() =>
-            updateReservationState(MealReservationState.SELLER_ACCEPTED)
+            updateReservationState(EMealReservationState.SELLER_ACCEPTED)
           }
         >
           Accept offer
         </Button>
       );
-    } else if (reservationState == MealReservationState.SELLER_ACCEPTED) {
+    } else if (reservationState == EMealReservationState.SELLER_ACCEPTED) {
       return <span>You accepted the request, wait for buyer</span>;
-    } else if (reservationState == MealReservationState.SELLER_REJECTED) {
+    } else if (reservationState == EMealReservationState.SELLER_REJECTED) {
       return <span>You rejected the request</span>;
-    } else if (reservationState == MealReservationState.BUYER_REJECTED) {
+    } else if (reservationState == EMealReservationState.BUYER_REJECTED) {
       return <span>The buyer cancelled the request</span>;
-    } else if (reservationState == MealReservationState.BUYER_CONFIRMED) {
+    } else if (reservationState == EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
           mealOfferId={mealOfferId}
@@ -65,9 +65,9 @@ export const ReceivedMealReservation = ({
 
   function getActionBar() {
     if (
-      reservationState == MealReservationState.BUYER_REJECTED ||
-      reservationState == MealReservationState.SELLER_REJECTED ||
-      reservationState == MealReservationState.BUYER_CONFIRMED
+      reservationState == EMealReservationState.BUYER_REJECTED ||
+      reservationState == EMealReservationState.SELLER_REJECTED ||
+      reservationState == EMealReservationState.BUYER_CONFIRMED
     ) {
       return (
         <Row>
@@ -81,7 +81,7 @@ export const ReceivedMealReservation = ({
             <Button
               color={"light"}
               onClick={() =>
-                updateReservationState(MealReservationState.SELLER_REJECTED)
+                updateReservationState(EMealReservationState.SELLER_REJECTED)
               }
             >
               Decline offer

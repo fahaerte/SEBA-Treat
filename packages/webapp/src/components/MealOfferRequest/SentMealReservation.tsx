@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import { Button } from "../ui";
 import MealOfferService from "../../services/mealOffer.service";
-import MealReservationState from "../../types/enums/mealReservationState.enum";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
-
-// import { getProfilePictureURL } from "../../api/userApi";
+import { EMealReservationState } from "@treat/lib-common";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -32,7 +30,7 @@ export const SentMealReservation = ({
     reservation.reservationState
   );
 
-  const updateReservationState = async (newState: MealReservationState) => {
+  const updateReservationState = async (newState: EMealReservationState) => {
     try {
       await MealOfferService.updateMealReservationState(
         mealOfferId,
@@ -46,23 +44,23 @@ export const SentMealReservation = ({
   };
 
   function getActionElement() {
-    if (reservationState == MealReservationState.PENDING) {
+    if (reservationState == EMealReservationState.PENDING) {
       return <span>Wait for the seller to respond to your request</span>;
-    } else if (reservationState === MealReservationState.SELLER_ACCEPTED) {
+    } else if (reservationState === EMealReservationState.SELLER_ACCEPTED) {
       return (
         <Button
           onClick={() =>
-            updateReservationState(MealReservationState.BUYER_CONFIRMED)
+            updateReservationState(EMealReservationState.BUYER_CONFIRMED)
           }
         >
           Confirm Request
         </Button>
       );
-    } else if (reservationState === MealReservationState.SELLER_REJECTED) {
+    } else if (reservationState === EMealReservationState.SELLER_REJECTED) {
       return <span>The seller rejected your request</span>;
-    } else if (reservationState === MealReservationState.BUYER_REJECTED) {
+    } else if (reservationState === EMealReservationState.BUYER_REJECTED) {
       return <span>You cancelled your request</span>;
-    } else if (reservationState === MealReservationState.BUYER_CONFIRMED) {
+    } else if (reservationState === EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
           mealOfferId={mealOfferId}
@@ -75,9 +73,9 @@ export const SentMealReservation = ({
 
   const getActionBar = () => {
     if (
-      reservationState == MealReservationState.BUYER_CONFIRMED ||
-      reservationState == MealReservationState.BUYER_REJECTED ||
-      reservationState == MealReservationState.SELLER_REJECTED
+      reservationState == EMealReservationState.BUYER_CONFIRMED ||
+      reservationState == EMealReservationState.BUYER_REJECTED ||
+      reservationState == EMealReservationState.SELLER_REJECTED
     ) {
       return (
         <Row>
@@ -91,7 +89,7 @@ export const SentMealReservation = ({
             <Button
               color={"light"}
               onClick={() =>
-                updateReservationState(MealReservationState.BUYER_REJECTED)
+                updateReservationState(EMealReservationState.BUYER_REJECTED)
               }
             >
               Cancel Request

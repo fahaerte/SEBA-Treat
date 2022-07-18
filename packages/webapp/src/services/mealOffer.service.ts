@@ -1,6 +1,6 @@
 import ApiService from "./api.service";
-import MealReservationState from "../types/enums/mealReservationState.enum";
 import MealOffer from "../types/interfaces/mealOffer.interface";
+import { EMealReservationState } from "@treat/lib-common";
 
 class MealOfferService {
   private static PATH = "/mealOffers";
@@ -26,7 +26,7 @@ class MealOfferService {
   public static updateMealReservationState = async (
     mealOfferId: string,
     mealOfferReservationId: string,
-    newReservationState: MealReservationState
+    newReservationState: EMealReservationState
   ): Promise<void | Error> => {
     const newStateObject = {
       reservationState: newReservationState,

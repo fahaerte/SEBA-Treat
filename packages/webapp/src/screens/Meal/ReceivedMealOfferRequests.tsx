@@ -14,6 +14,7 @@ const MainDivider = styled.hr`
   height: 1px;
 `;
 
+// TODO: Use react-query
 export const ReceivedMealOfferRequests = () => {
   const [receivedMealOfferRequests, setReceivedMealOfferRequests] = useState<
     MealOffer[]

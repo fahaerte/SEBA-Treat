@@ -1,7 +1,6 @@
 import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
-import MealTransactionState from "@treat/lib-common/lib/enums/ETransactionState";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 import UserService from "../user/user.service";
 import MealTransactionParticipant from "./mealTransactionParticipant.enum";
@@ -9,6 +8,7 @@ import TransactionNotFoundException from "../../utils/exceptions/transactionNotF
 import TransactionInWrongStateException from "../../utils/exceptions/transactionInWrongState.exception";
 import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
+import { ETransactionState } from "@treat/lib-common";
 
 @Service()
 class MealTransactionService {
@@ -64,7 +64,7 @@ class MealTransactionService {
     const mealTransaction = (await this.mealTransactionModel.findById(
       mealTransactionId
     )) as MealTransaction;
-    if (mealTransaction.transactionState === MealTransactionState.PENDING) {
+    if (mealTransaction.transactionState === ETransactionState.PENDING) {
       const price = mealTransaction.amount;
       const fee = mealTransaction.transactionFee;
 
@@ -83,7 +83,7 @@ class MealTransactionService {
       // update transaction state
       await this.mealTransactionModel.findByIdAndUpdate(
         { _id: mealTransactionId },
-        { transactionState: MealTransactionState.COMPLETED }
+        { transactionState: ETransactionState.COMPLETED }
       );
 
       return (await this.mealTransactionModel.findById(
@@ -106,7 +106,7 @@ class MealTransactionService {
     if (!transaction) {
       throw new TransactionNotFoundException(mealOfferId);
     }
-    if (transaction.transactionState !== MealTransactionState.COMPLETED) {
+    if (transaction.transactionState !== ETransactionState.COMPLETED) {
       throw new TransactionInWrongStateException(transaction._id as string);
     }
     if (user._id.equals(transaction.senderId)) {
@@ -140,7 +140,7 @@ class MealTransactionService {
           transactionId as unknown as string
         );
       }
-      if (transaction.transactionState === MealTransactionState.COMPLETED) {
+      if (transaction.transactionState === ETransactionState.COMPLETED) {
         if (participantType === MealTransactionParticipant.BUYER) {
           if (user._id.equals(transaction.receiverId)) {
             transaction.buyerRating = stars;

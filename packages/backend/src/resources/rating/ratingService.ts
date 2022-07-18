@@ -2,13 +2,12 @@ import { Service } from "typedi";
 import MealOfferService from "../mealOffer/mealOffer.service";
 import UserDocument from "../user/user.interface";
 import { MealOfferDocument } from "../mealOffer/mealOffer.interface";
-import MealReservationState from "../mealReservation/mealReservationState.enum";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 import InvalidRatingException from "../../utils/exceptions/invalidRating.exception";
 import UserService from "../user/user.service";
-import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { RatingDocument } from "./rating.interface";
+import { EMealReservationState } from "@treat/lib-common";
 
 @Service()
 class RatingService {
@@ -33,7 +32,7 @@ class RatingService {
       mealReservation.reservationState !== EMealReservationState.BUYER_CONFIRMED
     ) {
       throw new InvalidMealReservationStateException(
-        `State should be ${MealReservationState.BUYER_CONFIRMED} in order to rate user`
+        `State should be ${EMealReservationState.BUYER_CONFIRMED} in order to rate user`
       );
     }
     if (user._id.equals(mealOffer.user)) {
