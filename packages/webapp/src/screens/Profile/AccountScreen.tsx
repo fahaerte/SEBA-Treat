@@ -9,7 +9,7 @@ import Balance from "../../components/ui/Balance/Balance";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import { useIsMutating, useMutation, useQuery } from "react-query";
-import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
+import { CreateCheckoutSessionApiArg } from "@treat/lib-common/src/interfaces/ICreateCheckoutSessionApiArg";
 import {
   createCheckoutSession,
   paymentGetProductsWithPrices,

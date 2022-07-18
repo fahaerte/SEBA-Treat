@@ -46,3 +46,28 @@ export const createMealOffer = async ({
 }: CreateMealOfferArgs) => {
   return await baseApi(token).post("/mealOffers", mealOffer);
 };
+
+export const getMealOffersByParams = async (
+  address: string,
+  token: string,
+  portions?: number | undefined,
+  category?: string | undefined,
+  allergen?: string | undefined,
+  sellerRating?: number | undefined,
+  price?: number | undefined,
+  search?: string | undefined,
+  distance?: number | undefined
+) => {
+  const response = await baseApi(token).get(`/mealOffers/previews`, {
+    params: {
+      address: address,
+      portions: portions,
+      category: category,
+      sellerRating: sellerRating,
+      price: price,
+      search: search,
+      distance: distance,
+    },
+  });
+  return response.data;
+};

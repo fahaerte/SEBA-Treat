@@ -18,7 +18,7 @@ export interface IForm<TFormValues> extends Pick<IComponentBase, "className"> {
   /**
    * Submit Label
    */
-  submitButton?: Omit<IButton, "htmlType" | "disabled" | "isLoading">;
+  submitButton?: Omit<IButton, "htmlType" | "disabled" | "isLoading"> | null;
   /**
    * Abort Label
    */

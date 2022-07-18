@@ -139,9 +139,9 @@ export const AppRouter = () => {
     {
       path: "mealoffers",
       element: (
-        <RequireAddressRoute>
+        <RequireAuthRoute>
           <MealOfferScreen />
-        </RequireAddressRoute>
+        </RequireAuthRoute>
       ),
     },
     {

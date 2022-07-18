@@ -30,4 +30,5 @@ export interface ISelect<TFormValues>
     Omit<IFormSelect<TFormValues>, TIFormElementOmit> {
   onChange?: (event: ChangeEvent<HTMLSelectElement>) => void;
   value: string;
+  size?: string;
 }

@@ -72,14 +72,16 @@ const Form = <TFormValues extends FieldValues>({
             {feedback.message}
           </Typography>
         ) : null}
-        <Button
-          htmlType="submit"
-          disabled={isLoading}
-          isLoading={isLoading}
-          {...submitButton}
-        >
-          {submitButton?.children}
-        </Button>
+        {submitButton ? (
+          <Button
+            htmlType="submit"
+            disabled={isLoading}
+            isLoading={isLoading}
+            {...submitButton}
+          >
+            {submitButton?.children}
+          </Button>
+        ) : null}
         {abortButton ? (
           <Button
             htmlType="reset"

@@ -12,3 +12,5 @@ export type { IStripeProduct } from "./ICreditPackage";
 export type { IStripeDiscount } from "./ICreditDiscount";
 export type { ICreditDiscount } from "./ICreditDiscount";
 export type { ICreditPackageLegacy } from "./ICreditPackageLegacy";
+export type { IMealOfferCard } from "./IMealOfferCard";
+export type { IStringObject } from "./IStringObject";
