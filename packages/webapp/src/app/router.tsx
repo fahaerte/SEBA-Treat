@@ -13,7 +13,7 @@ import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
 import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
-import { CreditPackages } from "../screens/Payment/CreditPackages";
+import { AccountScreen } from "../screens/Account/AccountScreen";
 import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
@@ -62,7 +62,7 @@ export const AppRouter = () => {
     //   path: "/purchase-credits",
     //   element: (
     //     <RequireAuthRoute>
-    //       <CreditPackages />
+    //       <AccountScreen />
     //     </RequireAuthRoute>
     //   ),
     // },
@@ -89,21 +89,21 @@ export const AppRouter = () => {
 
   const purchaseCreditRoutes = [
     {
-      path: "/purchase-credits/:userId/:token",
+      path: "/account/:userId/:token",
       element: (
         <AppLayout>
           <RequireAuthRoute>
-            <CreditPackages />
+            <AccountScreen />
           </RequireAuthRoute>
         </AppLayout>
       ),
     },
     {
-      path: "/purchase-credits",
+      path: "/account",
       element: (
         <AppLayout>
           <RequireAuthRoute>
-            <CreditPackages />
+            <AccountScreen />
           </RequireAuthRoute>
         </AppLayout>
       ),

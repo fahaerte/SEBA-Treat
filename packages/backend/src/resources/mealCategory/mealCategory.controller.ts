@@ -4,6 +4,7 @@ import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import { EMealCategory } from "@treat/lib-common";
 
+// TODO: Throw out? Not necessary, since hard coded definition
 @Service()
 class MealCategoryController implements Controller {
   public path = "/mealCategories";

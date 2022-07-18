@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../Grid";
-import { Button, Icon, Link } from "../index";
+import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
@@ -10,7 +10,8 @@ import Logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const { userId, setUserId, setToken, setAddress, token } = useAuthContext();
+  const { userId, setUserId, setToken, setAddress, token, address } =
+    useAuthContext();
   const navigate = useNavigate();
   const [balance, setBalance] = useState(0);
 
@@ -28,13 +29,20 @@ export const Header = () => {
   };
   return (
     <SCHeader>
-      <Container className={"h-100 w-100"}>
+      <div className={"px-3 h-100 w-100"}>
         <Row className={"h-100"}>
           <Col className={"col-sm-auto my-auto"}>
             <Link display={"text"} to={"/"} underline={false}>
               <img src={Logo} alt={"TREAT Logo"} />
             </Link>
           </Col>
+          {address && (
+            <Col className={"my-auto"}>
+              <Typography variant={"h4"} className={"fw-normal"}>
+                <Icon type={"geo-alt"} /> {address}
+              </Typography>
+            </Col>
+          )}
           <Col className={"justify-content-end d-flex align-items-center"}>
             {userId && (
               <Link to={"/createMeal"} display={"button"} className={"me-3"}>
@@ -52,12 +60,12 @@ export const Header = () => {
             </Link>
             {userId && (
               <Button color={"secondary"} className={"ms-3"} onClick={signout}>
-                <Icon type={"logout"} />
+                <Icon type={"box-arrow-right"} />
               </Button>
             )}
           </Col>
         </Row>
-      </Container>
+      </div>
     </SCHeader>
   );
 };

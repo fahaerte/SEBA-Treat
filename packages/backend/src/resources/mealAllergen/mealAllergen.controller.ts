@@ -4,6 +4,7 @@ import { Service } from "typedi";
 import authenticate from "../../middleware/authenticated.middleware";
 import { EMealAllergen } from "@treat/lib-common";
 
+// TODO: Throw out? Not really necessary?
 @Service()
 class MealAllergenController implements Controller {
   public path = "/mealAllergens";

@@ -3,7 +3,8 @@ import { baseApi } from "./baseApi";
 // import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 
 export const paymentGetProductsWithPrices = async (token: string) => {
-  return await baseApi(token).get("/payment/products/");
+  const response = await baseApi(token).get("/payment/products/");
+  return response.data;
 };
 
 export const paymentGetDiscount = async (token: string) => {

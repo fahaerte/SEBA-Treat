@@ -2,10 +2,9 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import AuthStatus from "../utils/auth/AuthStatus";
 
-export const HomeScreen: React.FC = (): JSX.Element => {
+export const HomeScreen = () => {
   return (
     <>
-      <AuthStatus />
       <nav>
         <ul>
           <li>
@@ -28,9 +27,6 @@ export const HomeScreen: React.FC = (): JSX.Element => {
           </li>
           <li>
             <Link to="/address">Address Input Screen (Landing Page)</Link>
-          </li>
-          <li>
-            <Link to="/purchase-credits">Purchase Credits</Link>
           </li>
           <li>
             <Link to="/account/">Account Screen</Link>
