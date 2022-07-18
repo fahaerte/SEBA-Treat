@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import { Button } from "../ui";
-import MealOfferService from "../../services/mealOffer.service";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
 import { EMealReservationState } from "@treat/lib-common";
+import { useMutation } from "react-query";
+import { updateMealReservationState } from "../../api/mealApi";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -18,21 +20,23 @@ export const ReceivedMealReservation = ({
   reservation,
   buyerRating,
 }: ReceivedMealReservationProps) => {
+
+  const {token} = useAuthContext();
+
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
 
-  const updateReservationState = async (newState: EMealReservationState) => {
-    try {
-      await MealOfferService.updateMealReservationState(
-        String(mealOfferId),
-        reservation._id,
-        newState
-      );
-      setReservationState(newState);
-    } catch (error: any) {
-      console.log(error);
-    }
+  const updateReservationStateMutation = useMutation( (newState: EMealReservationState) => updateMealReservationState(
+    token as string,
+    mealOfferId,
+    reservation._id,
+    newState
+  ));
+
+  const updateReservationState = (newState: EMealReservationState) => {
+    updateReservationStateMutation.mutate(newState);
+    setReservationState(newState);
   };
 
   const getActionButton = () => {
@@ -41,7 +45,7 @@ export const ReceivedMealReservation = ({
         <Button
           onClick={() =>
             updateReservationState(EMealReservationState.SELLER_ACCEPTED)
-          }
+        }
         >
           Accept offer
         </Button>

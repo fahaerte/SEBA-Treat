@@ -36,7 +36,11 @@ export const MealOfferScreen = () => {
       sellerRating,
       price,
       search
-    )
+    ), {
+    onSuccess: (response) => {
+      console.log(response);
+  }
+    }
   );
 
   useEffect(() => {

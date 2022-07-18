@@ -3,9 +3,12 @@ import { Container, PageHeading, Row, Typography } from "../../components/ui";
 import { Header } from "../../components/ui/Header/Header";
 import TabBar from "../../components/ui/TabBar/TabBar";
 import { Outlet } from "react-router-dom";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const MealOfferRequests = () => {
-  // TODO: token einbinden und requests richtig machen
+
+  const { token } = useAuthContext();
+
   return (
     <div>
       <Header />
@@ -22,12 +25,12 @@ export const MealOfferRequests = () => {
             tabs={[
               {
                 to: "/mealOfferRequests/sent",
-                children: "Your requests",
+                children: "Your requests"
               },
               {
                 to: "/mealOfferRequests/received",
-                children: "Received requests",
-              },
+                children: "Received requests"
+              }
             ]}
           />
           <Outlet />
