@@ -5,8 +5,7 @@ import {
 } from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import { RatingSchema } from "../rating/rating.model";
-import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
-import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealCategory, EMealAllergen } from "@treat/lib-common";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
   {

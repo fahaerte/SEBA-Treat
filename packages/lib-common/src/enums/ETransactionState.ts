@@ -1,5 +1,5 @@
 export enum ETransactionState {
-  PENDING = "pending",
-  COMPLETED = "completed",
-  CANCELLED = "cancelled",
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
 }

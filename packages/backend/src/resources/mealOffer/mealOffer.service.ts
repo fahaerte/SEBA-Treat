@@ -9,15 +9,12 @@ import {
   MealOfferDocument,
   MealOfferDocumentWithUser,
 } from "./mealOffer.interface";
-import MealReservationState from "../mealReservation/mealReservationState.enum";
 import InvalidMealReservationStateException from "../../utils/exceptions/invalidMealReservationState.exception";
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
-import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
-import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
-import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealCategory, EMealAllergen, EMealReservationState } from "@treat/lib-common";
 import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
 import UserService from "../user/user.service";
 
@@ -226,35 +223,35 @@ class MealOfferService {
     mealOfferId: string,
     user: UserDocument,
     mealReservationId: string,
-    newState: MealReservationState
+    newState: EMealReservationState
   ): Promise<void | Error> {
-    if (newState === MealReservationState.SELLER_ACCEPTED) {
+    if (newState === EMealReservationState.SELLER_ACCEPTED) {
       await this.updateMealOfferReservationToSellerAccepted(
         mealOfferId,
         user,
         mealReservationId
       );
-    } else if (newState === MealReservationState.SELLER_REJECTED) {
+    } else if (newState === EMealReservationState.SELLER_REJECTED) {
       await this.updateMealOfferReservationToSellerRejected(
         mealOfferId,
         user,
         mealReservationId
       );
-    } else if (newState === MealReservationState.BUYER_CONFIRMED) {
+    } else if (newState === EMealReservationState.BUYER_CONFIRMED) {
       await this.updateMealOfferReservationToBuyerConfirmed(
         mealOfferId,
         user,
         mealReservationId
       );
-    } else if (newState === MealReservationState.BUYER_REJECTED) {
+    } else if (newState === EMealReservationState.BUYER_REJECTED) {
       await this.updateMealOfferReservationToBuyerRejected(
         mealOfferId,
         user,
         mealReservationId
       );
-    } else if (newState === MealReservationState.PENDING) {
+    } else if (newState === EMealReservationState.PENDING) {
       throw new InvalidMealReservationStateException(
-        `State can not be set to ${MealReservationState.PENDING}`
+        `State can not be set to ${EMealReservationState.PENDING}`
       );
     } else {
       throw new InvalidMealReservationStateException("Unknown state");
@@ -277,7 +274,7 @@ class MealOfferService {
       await mealOfferDoc.save();
     } else {
       throw new InvalidMealReservationStateException(
-        `State should be ${MealReservationState.PENDING}`
+        `State should be ${EMealReservationState.PENDING}`
       );
     }
   }
@@ -318,7 +315,7 @@ class MealOfferService {
       await mealOfferDoc.save();
     } else {
       throw new InvalidMealReservationStateException(
-        `State should be ${MealReservationState.SELLER_ACCEPTED}`
+        `State should be ${EMealReservationState.SELLER_ACCEPTED}`
       );
     }
   }
@@ -342,7 +339,7 @@ class MealOfferService {
       await mealOfferDoc.save();
     } else {
       throw new InvalidMealReservationStateException(
-        `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
+        `State should be ${EMealReservationState.PENDING} or ${EMealReservationState.SELLER_ACCEPTED}`
       );
     }
   }
@@ -372,7 +369,7 @@ class MealOfferService {
       }
     } else {
       throw new InvalidMealReservationStateException(
-        `State should be ${MealReservationState.PENDING} or ${MealReservationState.SELLER_ACCEPTED}`
+        `State should be ${EMealReservationState.PENDING} or ${EMealReservationState.SELLER_ACCEPTED}`
       );
     }
   }

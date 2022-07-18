@@ -1,5 +1,5 @@
 import { Schema, Types } from "mongoose";
-import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
+import { EMealReservationState } from "@treat/lib-common";
 import { MealReservationDocument } from "./mealReservation.interface";
 
 export const MealReservationSchema = new Schema<MealReservationDocument>(

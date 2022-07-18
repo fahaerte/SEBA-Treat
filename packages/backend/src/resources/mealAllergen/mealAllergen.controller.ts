@@ -2,7 +2,7 @@ import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
 import { Service } from "typedi";
 import authenticate from "../../middleware/authenticated.middleware";
-import EMealAllergen from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealAllergen } from "@treat/lib-common";
 
 @Service()
 class MealAllergenController implements Controller {

@@ -1,7 +1,7 @@
 import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
 import MealTransaction from "./mealTransaction.interface";
-import MealTransactionState from "./mealTransactionState.enum";
+import MealTransactionState from "@treat/lib-common/lib/enums/ETransactionState";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 import UserService from "../user/user.service";
 import MealTransactionParticipant from "./mealTransactionParticipant.enum";

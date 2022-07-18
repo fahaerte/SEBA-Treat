@@ -1,7 +1,5 @@
 import Joi from "joi";
-import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
-import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
+import { EMealCategory, EMealAllergen, EMealReservationState } from "@treat/lib-common";
 import { IMealOffer } from "@treat/lib-common";
 
 const createBody = Joi.object<Partial<IMealOffer>>({
@@ -27,7 +25,7 @@ const createBody = Joi.object<Partial<IMealOffer>>({
 
 const updateReservationStateBody = Joi.object({
   reservationState: Joi.string()
-    .valid(...Object.values(MealReservationStateEnum))
+    .valid(...Object.values(EMealReservationState))
     .required(),
 });
 

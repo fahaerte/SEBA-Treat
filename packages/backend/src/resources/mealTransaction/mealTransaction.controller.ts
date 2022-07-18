@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-// import validationMiddleware from "../../middleware/validation.middleware";
 import HttpException from "../../utils/exceptions/http.exception";
-// import validate from "./mealTransaction.validation";
 import MealTransactionService from "./mealTransaction.service";
 import { ObjectId } from "mongoose";
 import authenticate from "../../middleware/authenticated.middleware";

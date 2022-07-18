@@ -1,5 +1,5 @@
 import { Document, ObjectId } from "mongoose";
-import MealTransactionState from "./mealTransactionState.enum";
+import { ETransactionState } from "@treat/lib-common";
 
 interface MealTransaction extends Document {
   mealOfferId: ObjectId;
@@ -8,7 +8,7 @@ interface MealTransaction extends Document {
   receiverId: ObjectId;
   amount: number;
   transactionFee: number;
-  transactionState: MealTransactionState;
+  transactionState: ETransactionState;
   buyerRating: number;
   sellerRating: number;
 }

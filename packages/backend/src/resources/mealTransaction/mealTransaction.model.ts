@@ -1,7 +1,7 @@
 import { model, Schema, Types } from "mongoose";
 import MealTransaction from "./mealTransaction.interface";
-import MealTransactionState from "./mealTransactionState.enum";
-import MealTransactionStateEnum from "./mealTransactionState.enum";
+import MealTransactionState from "@treat/lib-common/lib/enums/ETransactionState";
+import MealTransactionStateEnum from "@treat/lib-common/lib/enums/ETransactionState";
 
 const MealTransactionSchema = new Schema<MealTransaction>(
   {

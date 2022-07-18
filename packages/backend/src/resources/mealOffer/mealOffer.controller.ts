@@ -4,12 +4,10 @@ import validate from "../mealOffer/mealOffer.validation";
 import authenticate from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
-import MealReservationStateEnum from "../mealReservation/mealReservationState.enum";
-import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
-import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
 import ValidatePart from "../../utils/validation";
 import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
+import { EMealAllergen, EMealCategory, EMealReservationState } from "@treat/lib-common";
 
 @Service()
 class MealOfferController implements Controller {
@@ -232,7 +230,7 @@ class MealOfferController implements Controller {
         req.params.mealOfferId,
         req.user,
         req.params.mealReservationId,
-        reservationState as MealReservationStateEnum
+        reservationState as EMealReservationState
       );
       res.sendStatus(204);
     } catch (error: any) {
