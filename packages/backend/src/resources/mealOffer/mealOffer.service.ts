@@ -1,6 +1,5 @@
 import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
-import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import MealTransaction from "../mealTransaction/mealTransaction.interface";
@@ -13,14 +12,15 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { TRANSACTION_FEE } from "@treat/lib-common";
-import {
-  EMealCategory,
-  EMealAllergen,
-  EMealReservationState,
-} from "@treat/lib-common";
-import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
+import { EMealReservationState, TRANSACTION_FEE } from "@treat/lib-common";
 import UserService from "../user/user.service";
+import { MealOfferQuery } from "./mealOfferQuery.interface";
+import {
+  getDistanceBetweenAddressesInKm,
+  getUserAddressString,
+} from "../../utils/address";
+import Logger, { ILogMessage } from "../../utils/logger";
+import UserDocument from "../user/user.interface";
 import { ConfigService } from "../../utils/ConfigService";
 
 @Service()
@@ -76,77 +76,50 @@ class MealOfferService {
   }
 
   public async getMealOfferPreviews(
-    user: UserDocument,
-    category?: EMealCategory[],
-    allergen?: EMealAllergen[],
-    portions?: string,
-    sellerRating?: string,
-    startDate?: string,
-    endDate?: string,
-    price?: string,
-    search?: string,
-    distance?: string
+    mealOfferQuery: MealOfferQuery
   ): Promise<MealOfferDocumentWithUser[]> {
-    const match: Record<string, any> = {};
-    if (search !== undefined) {
-      match["$or"] = [
-        {
-          title: {
-            $regex: new RegExp(search),
-            $options: "i",
-          },
-        },
-        {
-          description: {
-            $regex: new RegExp(search),
-            $options: "i",
-          },
-        },
-      ];
-    }
-    if (category !== undefined) match["categories"] = { $eq: category };
-    if (allergen !== undefined) match["allergens"] = { $eq: allergen };
-    if (portions !== undefined) match["portions"] = { $eq: Number(portions) };
-    if (startDate !== undefined)
-      match["startDate"] = { $gte: new Date(startDate) };
-    if (endDate !== undefined) match["startDate"] = { $lte: new Date(endDate) };
-    if (price !== undefined) match["price"] = { $lte: Number(price) };
-    if (sellerRating !== undefined)
-      match["user.meanRating"] = { $gte: Number(sellerRating) };
-
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
-      match
+      mealOfferQuery
     );
+    const filteredPreviews = await this.filterMealOfferPreviewsForDistance(
+      mealOfferPreviews,
+      mealOfferQuery.address,
+      mealOfferQuery.distance
+    );
+    filteredPreviews.forEach((preview) => (preview.user.address = undefined));
+    return filteredPreviews;
+  }
 
-    if (distance !== undefined) {
-      const newMealOfferPreviewList = [] as MealOfferDocumentWithUser[];
-      const completeUser = (await this.userService.getUser(
-        user._id as string
-      )) as UserDocument;
-      const client = new Client({});
-      const userAddress = completeUser.address;
-      const userAddressStr = `${userAddress.street} ${userAddress.houseNumber} ${userAddress.postalCode} ${userAddress.city} ${userAddress.country}`;
-      for (const mealOfferPreview of mealOfferPreviews) {
-        const sellerAddress = mealOfferPreview.user.address;
-        const sellerAddressStr = `${sellerAddress.street} ${sellerAddress.houseNumber} ${sellerAddress.postalCode} ${sellerAddress.city} ${sellerAddress.country}`;
-        const { GOOGLE_MAPS_API_KEY } = process.env;
-        const res = await client.distancematrix({
-          params: {
-            origins: [userAddressStr] as LatLngString[],
-            destinations: [sellerAddressStr] as LatLngString[],
-            key: GOOGLE_MAPS_API_KEY as string,
-          },
-        });
-        const calcDistance = res.data.rows[0].elements[0].distance;
-        console.log(`Distance: ${calcDistance.value}`);
-        if (calcDistance.value / 1000 <= Number(distance)) {
-          newMealOfferPreviewList.push(mealOfferPreview);
-        }
+  private async filterMealOfferPreviewsForDistance(
+    mealOfferPreviews: MealOfferDocumentWithUser[],
+    compareAddress: string,
+    compareDistance: number
+  ): Promise<MealOfferDocumentWithUser[]> {
+    const filteredMealOffers = [];
+    for (const mealOfferPreview of mealOfferPreviews) {
+      const addressString = getUserAddressString(
+        mealOfferPreview.user.address!
+      );
+      const distance = await getDistanceBetweenAddressesInKm(
+        addressString,
+        compareAddress
+      );
+      if (distance <= compareDistance) {
+        Logger.info({
+          functionName: "filterMealOfferPreviewsForDistance",
+          message: "Distance comparison",
+          details: `calculated distance: ${distance} is smaller/equals than ${compareDistance} km`,
+        } as ILogMessage);
+        filteredMealOffers.push(mealOfferPreview);
+      } else {
+        Logger.info({
+          functionName: "filterMealOfferPreviewsForDistance",
+          message: "Distance comparison",
+          details: `calculated distance: ${distance} is bigger than ${compareDistance} km`,
+        } as ILogMessage);
       }
-      return newMealOfferPreviewList;
     }
-
-    return mealOfferPreviews;
+    return filteredMealOffers;
   }
 
   private getMealOfferPreview(

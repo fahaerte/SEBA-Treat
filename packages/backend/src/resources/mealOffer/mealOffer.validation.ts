@@ -1,7 +1,7 @@
 import Joi from "joi";
 import {
-  EMealCategory,
   EMealAllergen,
+  EMealCategory,
   EMealReservationState,
   IMealOffer,
 } from "@treat/lib-common";
@@ -53,9 +53,10 @@ const getMealOfferPreviewsQuery = Joi.object({
   sellerRating: Joi.number(),
   startDate: Joi.date().iso().min(Date.now()),
   endDate: Joi.date().iso().greater(Joi.ref("startDate")),
-  price: Joi.number(),
+  price: Joi.number().min(1),
   search: Joi.string().min(1),
-  distance: Joi.number(),
+  distance: Joi.number().min(1).required(),
+  address: Joi.string().min(1).required(),
 });
 
 const createMealOfferReservationParams = Joi.object({
