@@ -21,7 +21,6 @@ export const MealOfferScreenHeader = () => {
         <Row className={"h-100"}>
           <Col className={""}>
             <h2 className={""}>TREAT</h2>
-            {/*TODO: Link to get Back to Address-Input (like lieferando)*/}
           </Col>
           <Col className={"justify-content-center"}>
             <Row>

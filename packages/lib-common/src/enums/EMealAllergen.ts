@@ -21,7 +21,7 @@ export enum EMealAllergen {
   PISTACHIOS = "pistachios",
   MACADEMIAS = "macademias",
   CELERY = "celery",
-  MSUTARD = "mustard",
+  MUSTARD = "mustard",
   SESAME = "sesame",
   SULPHURS = "sulphurs",
   SULFITES = "sulfites",
