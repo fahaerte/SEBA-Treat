@@ -19,7 +19,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
-import {RequireAddressRoute} from "../utils/auth/RequireAddressRoute";
+import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -28,8 +28,9 @@ export const AppRouter = () => {
     path: "/",
     element: (
       <AppLayout>
-        <HomeScreen />
-        {/*<MealOfferScreen />*/}
+        <RequireAddressRoute>
+          <MealOfferScreen />
+        </RequireAddressRoute>
       </AppLayout>
     ),
     children: [
@@ -45,14 +46,19 @@ export const AppRouter = () => {
         element: <RegisterScreen />,
       },
       {
-        path: "/address",
-        element: <AddressInputScreen />,
-      },
-      {
         path: "/alreadyLoggedIn",
         element: <Typography>User already logged in</Typography>,
       },
     ],
+  };
+
+  const addressRoute = {
+    path: "address",
+    element: (
+      <AppLayout>
+        <AddressInputScreen />
+      </AppLayout>
+    ),
   };
 
   const profileRoutes = {
@@ -124,7 +130,7 @@ export const AppRouter = () => {
     },
     {
       path: "mealoffers/:mealOfferId",
-      element:(
+      element: (
         <RequireAddressRoute>
           <MealOfferDetailScreen />
         </RequireAddressRoute>
@@ -152,6 +158,7 @@ export const AppRouter = () => {
 
   const routing = useRoutes([
     mainRoutes,
+    addressRoute,
     profileRoutes,
     // ...redirectRoutes,
     ...purchaseCreditRoutes,
