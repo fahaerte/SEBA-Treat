@@ -23,13 +23,10 @@ const LoginScreen = () => {
   const locationState = location.state as LocationState;
   const from = locationState?.from || "/alreadyLoggedIn";
 
-  // const from = location.state?.from || "/alreadyLoggedIn";
-
-  console.log("Coming from", from);
+  // TODO: Link to register screen einbinden
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
-      console.log(response.data);
       const { userId, token, address } = response.data;
       userContext.setToken(token as string);
       userContext.setUserId(userId as string);
@@ -72,8 +69,6 @@ const LoginScreen = () => {
   ];
 
   const handleSignIn = (user: IUserCredentials) => {
-    console.log("Trying to log in...");
-    console.log(JSON.stringify(user));
     loginMutation.mutate(user);
   };
 

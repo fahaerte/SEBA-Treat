@@ -1,7 +1,9 @@
+import { IUser } from "./IUser";
+
 export interface IMealOfferCard {
   _id: string;
   title: string;
-  user: string;
+  user: IUser;
   categories: string[];
   allergens: string[];
   startDate: Date;

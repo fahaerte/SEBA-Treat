@@ -7,9 +7,8 @@ import MealOfferService from "./mealOffer.service";
 import ValidatePart from "../../utils/validation";
 import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
-import { EMealCategory } from "@treat/lib-common/lib/enums/EMealCategory";
-import { EMealAllergen } from "@treat/lib-common/lib/enums/EMealAllergen";
 import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
+import { MealOfferQuery } from "./mealOfferQuery.interface";
 
 @Service()
 class MealOfferController implements Controller {
@@ -29,7 +28,6 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}/previews`,
-      authenticate,
       validationMiddleware(
         validate.getMealOfferPreviewsQuery,
         ValidatePart.QUERY
@@ -109,19 +107,26 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
+      const mealOfferQuery = {
+        distance: Number(req.query.distance),
+        address: req.query.address,
+        category: req.query.category,
+        allergen: req.query.allergen,
+        portions: req.query.portions ? Number(req.query.portions) : undefined,
+        sellerRating: req.query.sellerRating
+          ? Number(req.query.sellerRating)
+          : undefined,
+        startDate: req.query.startDate
+          ? new Date(req.query.startDate as string)
+          : undefined,
+        endDate: req.query.endDate
+          ? new Date(req.query.endDate as string)
+          : undefined,
+        price: req.query.price ? Number(req.query.price) : undefined,
+        search: req.query.search as string,
+      } as MealOfferQuery;
       const mealOfferPreviews =
-        await this.mealOfferService.getMealOfferPreviews(
-          req.user,
-          req.query.category as EMealCategory[],
-          req.query.allergen as EMealAllergen[],
-          req.query.portions as string,
-          req.query.sellerRating as string,
-          req.query.startDate as string,
-          req.query.endDate as string,
-          req.query.price as string,
-          req.query.search as string,
-          req.query.distance as string
-        );
+        await this.mealOfferService.getMealOfferPreviews(mealOfferQuery);
       res.status(200).send({ data: mealOfferPreviews });
     } catch (error: any) {
       next(error);

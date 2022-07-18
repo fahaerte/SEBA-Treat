@@ -5,7 +5,8 @@ import {
 } from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import { RatingSchema } from "../rating/rating.model";
-import { EMealCategory, EMealAllergen } from "@treat/lib-common";
+import { EMealAllergen, EMealCategory } from "@treat/lib-common";
+import { MealOfferQuery } from "./mealOfferQuery.interface";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
   {
@@ -107,8 +108,39 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
 
 MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
   this: Model<MealOfferDocument>,
-  match: Record<string, any>
+  mealOfferQuery: MealOfferQuery
 ) {
+  const match: Record<string, any> = {};
+  if (mealOfferQuery.search !== undefined) {
+    match["$or"] = [
+      {
+        title: {
+          $regex: new RegExp(mealOfferQuery.search),
+          $options: "i",
+        },
+      },
+      {
+        description: {
+          $regex: new RegExp(mealOfferQuery.search),
+          $options: "i",
+        },
+      },
+    ];
+  }
+  if (mealOfferQuery.category !== undefined)
+    match["categories"] = { $eq: mealOfferQuery.category };
+  if (mealOfferQuery.allergen !== undefined)
+    match["allergens"] = { $eq: mealOfferQuery.allergen };
+  if (mealOfferQuery.portions !== undefined)
+    match["portions"] = { $eq: Number(mealOfferQuery.portions) };
+  if (mealOfferQuery.startDate !== undefined)
+    match["startDate"] = { $gte: mealOfferQuery.startDate };
+  if (mealOfferQuery.endDate !== undefined)
+    match["startDate"] = { $lte: mealOfferQuery.endDate };
+  if (mealOfferQuery.price !== undefined)
+    match["price"] = { $lte: mealOfferQuery.price };
+  if (mealOfferQuery.sellerRating !== undefined)
+    match["user.meanRating"] = { $gte: mealOfferQuery.sellerRating };
   return await this.aggregate([
     {
       $lookup: {

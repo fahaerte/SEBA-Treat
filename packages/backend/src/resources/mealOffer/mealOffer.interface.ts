@@ -1,7 +1,7 @@
 import { Document, ObjectId } from "mongoose";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { RatingDocument } from "../rating/rating.interface";
-import UserDocument from "../user/user.interface";
+import { UserWithOptionalAddressDocument } from "../user/user.interface";
 import { IMealOffer } from "@treat/lib-common";
 
 export interface MealOfferDocument
@@ -15,5 +15,5 @@ export interface MealOfferDocument
 
 export interface MealOfferDocumentWithUser
   extends Omit<MealOfferDocument, "user"> {
-  user: UserDocument;
+  user: UserWithOptionalAddressDocument;
 }

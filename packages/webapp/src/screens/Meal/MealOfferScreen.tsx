@@ -10,10 +10,10 @@ import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTo
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 
 export const MealOfferScreen = () => {
-  const { token, address } = useAuthContext();
+  const { address } = useAuthContext();
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [sortingRule, setSortingRule] = useState<string>();
-  const [distance, setDistance] = useState<number | undefined>(undefined);
+  const [distance, setDistance] = useState<number>(5);
   const [price, setPrice] = useState<number | undefined>(undefined);
   const [sellerRating, setSellerRating] = useState<number | undefined>(
     undefined
@@ -26,18 +26,24 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers } = useQuery(queryKey, () =>
-    getMealOffersByParams(
-      address as string,
-      token as string,
-      portions,
-      category,
-      allergen,
-      sellerRating,
-      price,
-      search,
-      distance
-    )
+  const { data: offers } = useQuery(
+    queryKey,
+    () =>
+      getMealOffersByParams(
+        address as string,
+        distance,
+        portions,
+        category,
+        allergen,
+        sellerRating,
+        price,
+        search
+      ),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+      },
+    }
   );
 
   useEffect(() => {
@@ -61,9 +67,7 @@ export const MealOfferScreen = () => {
     switch (event.target.id) {
       case "max.-distance":
         setDistance(() =>
-          Number(event.target.value) === 0
-            ? undefined
-            : Number(event.target.value)
+          Number(event.target.value) === 0 ? 5 : Number(event.target.value)
         );
         break;
       case "max.-price":
@@ -114,7 +118,7 @@ export const MealOfferScreen = () => {
   const resetFilters = () => {
     setPortions(undefined);
     setPrice(undefined);
-    setDistance(undefined);
+    setDistance(5);
     setSearch(undefined);
     setAllergen(undefined);
     setCategory(undefined);
@@ -167,9 +171,9 @@ export const MealOfferScreen = () => {
                               distance={mealOffer.distance}
                               mealTitle={mealOffer.title}
                               portions={mealOffer.portions}
-                              sellerRating={mealOffer.rating}
+                              sellerRating={mealOffer.user.meanRating}
                               endDate={mealOffer.endDate}
-                              sellerName={"FirstName of Seller"}
+                              sellerName={mealOffer.user.firstName}
                               startDate={mealOffer.endDate}
                             />
                           </Row>
