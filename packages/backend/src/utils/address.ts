@@ -1,6 +1,6 @@
 import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
 import { IAddress } from "@treat/lib-common/lib/interfaces/IAddress";
-import HttpException from "../../lib/utils/exceptions/http.exception";
+import HttpException from "./exceptions/http.exception";
 import Logger, { ILogMessage } from "./logger";
 
 export const getDistanceBetweenAddressesInKm = async (

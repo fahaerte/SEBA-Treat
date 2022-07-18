@@ -6,7 +6,8 @@ interface UserDocument extends Document, IUser {
   isValidPassword(password: string): Promise<Error | boolean>;
 }
 
-export interface UserWithOptionalAddressDocument extends Omit<UserDocument, "address">{
+export interface UserWithOptionalAddressDocument
+  extends Omit<UserDocument, "address"> {
   address?: IAddress;
 }
 

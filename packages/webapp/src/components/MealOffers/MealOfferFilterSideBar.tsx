@@ -3,15 +3,15 @@ import React from "react";
 import { EMealAllergen, EMealCategory } from "@treat/lib-common";
 
 const MealOfferFilterSideBar = ({
-                                  handleChangedFilter,
-                                  distance,
-                                  maxPrice,
-                                  portions,
-                                  sellerRating,
-                                  category,
-                                  allergen,
-                                  buttonAction
-                                }: {
+  handleChangedFilter,
+  distance,
+  maxPrice,
+  portions,
+  sellerRating,
+  category,
+  allergen,
+  buttonAction,
+}: {
   handleChangedFilter: (event: any) => void;
   distance: number | undefined;
   maxPrice: number | undefined;
@@ -95,7 +95,9 @@ const MealOfferFilterSideBar = ({
           <option value={EMealCategory.RAW}>{EMealCategory.RAW}</option>
           <option value={EMealCategory.ASIAN}>{EMealCategory.ASIAN}</option>
           <option value={EMealCategory.BEEF}>{EMealCategory.BEEF}</option>
-          <option value={EMealCategory.BAKEDGOODS}>{EMealCategory.BAKEDGOODS}</option>
+          <option value={EMealCategory.BAKEDGOODS}>
+            {EMealCategory.BAKEDGOODS}
+          </option>
           <option value={EMealCategory.CHINESE}>{EMealCategory.CHINESE}</option>
           <option value={EMealCategory.DESSERT}>{EMealCategory.DESSERT}</option>
           <option value={EMealCategory.GERMAN}>{EMealCategory.GERMAN}</option>
@@ -126,24 +128,40 @@ const MealOfferFilterSideBar = ({
           <option value={EMealAllergen.CELERY}>{EMealAllergen.CELERY}</option>
           <option value={EMealAllergen.CEREAL}>{EMealAllergen.CEREAL}</option>
           <option value={EMealAllergen.GARLIC}>{EMealAllergen.GARLIC}</option>
-          <option value={EMealAllergen.HAZELNUTS}>{EMealAllergen.HAZELNUTS}</option>
+          <option value={EMealAllergen.HAZELNUTS}>
+            {EMealAllergen.HAZELNUTS}
+          </option>
           <option value={EMealAllergen.LACTOSE}>{EMealAllergen.LACTOSE}</option>
           <option value={EMealAllergen.LUPIN}>{EMealAllergen.LUPIN}</option>
-          <option value={EMealAllergen.MACADEMIAS}>{EMealAllergen.MACADEMIAS}</option>
+          <option value={EMealAllergen.MACADEMIAS}>
+            {EMealAllergen.MACADEMIAS}
+          </option>
           <option value={EMealAllergen.MILK}>{EMealAllergen.MILK}</option>
-          <option value={EMealAllergen.MOLLUSCS}>{EMealAllergen.MOLLUSCS}</option>
+          <option value={EMealAllergen.MOLLUSCS}>
+            {EMealAllergen.MOLLUSCS}
+          </option>
           <option value={EMealAllergen.MUSTARD}>{EMealAllergen.MUSTARD}</option>
           <option value={EMealAllergen.PEANUT}>{EMealAllergen.PEANUT}</option>
           <option value={EMealAllergen.PECANS}>{EMealAllergen.PECANS}</option>
-          <option value={EMealAllergen.PISTACHIOS}>{EMealAllergen.PISTACHIOS}</option>
+          <option value={EMealAllergen.PISTACHIOS}>
+            {EMealAllergen.PISTACHIOS}
+          </option>
           <option value={EMealAllergen.WALNUTS}>{EMealAllergen.WALNUTS}</option>
           <option value={EMealAllergen.SESAME}>{EMealAllergen.SESAME}</option>
-          <option value={EMealAllergen.SHELLFISH}>{EMealAllergen.SHELLFISH}</option>
-          <option value={EMealAllergen.SHELLFRUITS}>{EMealAllergen.SHELLFRUITS}</option>
+          <option value={EMealAllergen.SHELLFISH}>
+            {EMealAllergen.SHELLFISH}
+          </option>
+          <option value={EMealAllergen.SHELLFRUITS}>
+            {EMealAllergen.SHELLFRUITS}
+          </option>
           <option value={EMealAllergen.SOY}>{EMealAllergen.SOY}</option>
           <option value={EMealAllergen.SPELT}>{EMealAllergen.SPELT}</option>
-          <option value={EMealAllergen.SULFITES}>{EMealAllergen.SULFITES}</option>
-          <option value={EMealAllergen.SULPHURS}>{EMealAllergen.SULPHURS}</option>
+          <option value={EMealAllergen.SULFITES}>
+            {EMealAllergen.SULFITES}
+          </option>
+          <option value={EMealAllergen.SULPHURS}>
+            {EMealAllergen.SULPHURS}
+          </option>
         </SelectControlled>
       </Row>
       <Row className={"m-2"}>

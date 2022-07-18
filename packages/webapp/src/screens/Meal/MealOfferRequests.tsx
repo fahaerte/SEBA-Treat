@@ -5,6 +5,7 @@ import TabBar from "../../components/ui/TabBar/TabBar";
 import { Outlet } from "react-router-dom";
 
 export const MealOfferRequests = () => {
+  // TODO: token einbinden und requests richtig machen
   return (
     <div>
       <Header />
