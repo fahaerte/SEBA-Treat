@@ -212,7 +212,7 @@ const CreateMeal = () => {
   ];
 
   const handleSubmit = (data: IMealOfferForm) => {
-    if (userId) {
+    if (userId && token) {
       const { startDate, endDate, categories, allergens } = data;
       const categoryValues: string[] = [];
       categories.forEach((category) => categoryValues.push(category.value));
@@ -232,7 +232,6 @@ const CreateMeal = () => {
         allergens: allergenValues,
       };
       createOfferMutation.mutate({ mealOffer: newOffer, token });
-      console.log(newOffer);
     } else {
       dangerToast({ message: "User not authenticated!" });
       navigate("/login");

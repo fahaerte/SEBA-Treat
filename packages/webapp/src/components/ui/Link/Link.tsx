@@ -19,7 +19,7 @@ const Link = ({
   underline = true,
   children,
   onClick = () => undefined,
-  ...props
+  buttonProps,
 }: ILink) => {
   return (
     <SCLink
@@ -34,7 +34,6 @@ const Link = ({
         display === "text" ? `link-${color} link-${size}` : ""
       } ${className}`}
       color={color}
-      {...props}
     >
       {display === "text" ? (
         children
@@ -43,8 +42,8 @@ const Link = ({
           color={color}
           size={size}
           className={className}
-          {...props.buttonProps}
           as={"div"}
+          {...buttonProps}
         >
           {children}
         </Button>

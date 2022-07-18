@@ -3,7 +3,7 @@ import { IButton } from "../Button/IButton";
 import { MouseEvent } from "react";
 import { IComponentColorBase } from "../../../assets/theme/types/IComponentColorBase";
 
-type TExcludeButtonProps =
+export type TExcludeButtonProps =
   | "children"
   | "disabled"
   | "htmlType"

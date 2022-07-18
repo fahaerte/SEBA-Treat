@@ -91,6 +91,7 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOfferRequest = req.body as MealOfferDocument;
+      console.log(mealOfferRequest);
       const newMealOffer = await this.mealOfferService.create(
         mealOfferRequest
         //   ,
