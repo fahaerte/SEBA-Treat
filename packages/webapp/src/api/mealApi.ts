@@ -49,16 +49,15 @@ export const createMealOffer = async ({
 
 export const getMealOffersByParams = async (
   address: string,
-  token: string,
+  distance: number,
   portions?: number | undefined,
   category?: string | undefined,
   allergen?: string | undefined,
   sellerRating?: number | undefined,
   price?: number | undefined,
   search?: string | undefined,
-  distance?: number | undefined
 ) => {
-  const response = await baseApi(token).get(`/mealOffers/previews`, {
+  const response = await baseApi(undefined).get(`/mealOffers/previews`, {
     params: {
       address: address,
       portions: portions,

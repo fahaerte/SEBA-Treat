@@ -10,10 +10,10 @@ import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTo
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 
 export const MealOfferScreen = () => {
-  const { token, address } = useAuthContext();
+  const { address } = useAuthContext();
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [sortingRule, setSortingRule] = useState<string>();
-  const [distance, setDistance] = useState<number | undefined>(undefined);
+  const [distance, setDistance] = useState<number>(5);
   const [price, setPrice] = useState<number | undefined>(undefined);
   const [sellerRating, setSellerRating] = useState<number | undefined>(
     undefined
@@ -29,14 +29,13 @@ export const MealOfferScreen = () => {
   const { data: offers } = useQuery(queryKey, () =>
     getMealOffersByParams(
       address as string,
-      token as string,
+      distance,
       portions,
       category,
       allergen,
       sellerRating,
       price,
-      search,
-      distance
+      search
     )
   );
 
@@ -62,7 +61,7 @@ export const MealOfferScreen = () => {
       case "max.-distance":
         setDistance(() =>
           Number(event.target.value) === 0
-            ? undefined
+            ? 5
             : Number(event.target.value)
         );
         break;
@@ -114,7 +113,7 @@ export const MealOfferScreen = () => {
   const resetFilters = () => {
     setPortions(undefined);
     setPrice(undefined);
-    setDistance(undefined);
+    setDistance(5);
     setSearch(undefined);
     setAllergen(undefined);
     setCategory(undefined);

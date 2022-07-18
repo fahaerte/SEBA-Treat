@@ -6,7 +6,7 @@ export const baseApi = (token: string | undefined) =>
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token || new ConfigService().get("BEARER")}`,
+      Authorization: `Bearer ${token || undefined}`,
     },
   });
 
@@ -15,6 +15,6 @@ export const baseImageApi = (token: string | undefined) =>
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
       "Content-Type": "image/png",
-      Authorization: `Bearer ${token || new ConfigService().get("BEARER")}`,
+      Authorization: `Bearer ${token || undefined}`,
     },
   });
