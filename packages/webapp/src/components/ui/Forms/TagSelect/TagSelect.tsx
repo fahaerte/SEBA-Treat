@@ -18,7 +18,7 @@ const TagSelect = <TFormValues extends FieldValues>({
   rules,
   ...props
 }: IFormTagSelect<TFormValues>) => {
-  const { control, setValue } = useFormContext<TFormValues>();
+  const { control } = useFormContext<TFormValues>();
 
   const { field, fieldState } = useController<TFormValues>({
     control,

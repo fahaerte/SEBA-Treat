@@ -7,12 +7,11 @@ import { AddressInputScreen } from "../screens/AddressInputScreen";
 import { ErrorPage } from "../screens/Status/ErrorPage";
 import { AuthProvider } from "../utils/auth/AuthProvider";
 import { MealOfferScreen } from "../screens/Meal/MealOfferScreen";
-import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
+// import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
 import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
-import { AccountScreen } from "../screens/Profile/AccountScreen";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
 import { CreditPackages } from "../screens/Payment/CreditPackages";
 import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
@@ -89,16 +88,6 @@ export const AppRouter = () => {
   };
 
   const purchaseCreditRoutes = [
-    {
-      path: "/account",
-      element: (
-        <AppLayout>
-          <RequireAuthRoute>
-            <AccountScreen />
-          </RequireAuthRoute>
-        </AppLayout>
-      ),
-    },
     {
       path: "/purchase-credits/:userId/:token",
       element: (

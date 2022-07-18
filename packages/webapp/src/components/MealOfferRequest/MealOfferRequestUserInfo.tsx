@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Icon } from "../ui";
 import { MealOfferRequestUserInfoProps } from "@treat/lib-common/lib/interfaces/IMealOfferRequestUserInfoProps";
 import { useQuery } from "react-query";
-import { getProfilePictureURL, getUser } from "../../api/userApi";
+import { getProfilePictureURL } from "../../api/userApi";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 const ProfilePicture = styled.img`

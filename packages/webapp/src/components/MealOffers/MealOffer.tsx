@@ -1,4 +1,4 @@
-import React, { MouseEvent } from "react";
+import React from "react";
 import { Card, Typography, Button, Col, Container, Row } from "../ui";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
