@@ -54,7 +54,7 @@ export const RateUser = ({
     if (existingRating !== undefined) {
       updateRating(existingRating - 1);
     }
-  }, []);
+  }, [existingRating, updateRating]);
 
   return (
     <Row className={""}>

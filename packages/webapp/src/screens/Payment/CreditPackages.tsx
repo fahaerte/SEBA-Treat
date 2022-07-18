@@ -51,8 +51,7 @@ export const CreditPackages = () => {
       });
     },
     {
-      onSuccess: (response) => {
-        console.log(response);
+      onSuccess: (response: { url: string }) => {
         window.location.replace(response.url);
       },
     }
@@ -73,13 +72,23 @@ export const CreditPackages = () => {
       setToken(userTokenParam);
     }
     if (discount && products) {
-      const findProduct = products?.data.find(
+      const findProduct: IStripeProduct | undefined = products?.data.find(
         (product: { id: string }) =>
           product.id === discount?.data.applies_to?.products[0]
       );
       setDiscountedProduct(findProduct);
     }
-  }, [discount, products, createCheckout]);
+  }, [
+    discount,
+    products,
+    createCheckout,
+    userId,
+    token,
+    userTokenParam,
+    userIdParam,
+    setToken,
+    setUserId,
+  ]);
 
   const redirectToCheckout = (priceId: string, couponId?: string) => {
     try {

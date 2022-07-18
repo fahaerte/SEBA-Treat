@@ -1,7 +1,7 @@
 import React from "react";
-import { ICard } from "../ui/Card/ICard";
-import { SCMealRequestCard } from "./styles";
-import { Button, Card, CardBody, Col, Icon, Row, Typography } from "../";
+// import { ICard } from "../ui/Card/ICard";
+// import { SCMealRequestCard } from "./styles";
+import { Button, Card, CardBody, Col, Row, Typography } from "../";
 
 // TODO: replace inline styles with component styles
 

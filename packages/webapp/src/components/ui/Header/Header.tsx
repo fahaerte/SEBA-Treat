@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../Grid";
-import { Button, Icon, Link, Typography } from "../index";
+import { Button, Icon, Link } from "../index";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";

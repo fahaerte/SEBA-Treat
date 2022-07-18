@@ -34,7 +34,8 @@ const CreateMeal = () => {
     {
       onSuccess: (response) => {
         successToast({ message: "Your meal offer has been created!" });
-        console.log(response);
+        const mealId = response.data._id;
+        navigate("/");
       },
       onError: () => dangerToast({ message: "Sorry, something went wrong." }),
     }
