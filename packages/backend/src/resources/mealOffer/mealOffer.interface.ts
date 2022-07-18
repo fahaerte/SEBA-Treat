@@ -2,7 +2,7 @@ import { Document, ObjectId } from "mongoose";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
 import { RatingDocument } from "../rating/rating.interface";
 import UserDocument from "../user/user.interface";
-import { IMealOffer } from "@treat/lib-common/lib/interfaces/IMealOffer";
+import { IMealOffer } from "@treat/lib-common";
 
 export interface MealOfferDocument
   extends Omit<IMealOffer, "_id" | "user" | "reservations" | "rating">,

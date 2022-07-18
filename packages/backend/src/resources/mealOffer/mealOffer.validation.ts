@@ -3,8 +3,8 @@ import {
   EMealCategory,
   EMealAllergen,
   EMealReservationState,
+  IMealOffer
 } from "@treat/lib-common";
-import { IMealOffer } from "@treat/lib-common";
 
 const createBody = Joi.object<Partial<IMealOffer>>({
   title: Joi.string().required(),

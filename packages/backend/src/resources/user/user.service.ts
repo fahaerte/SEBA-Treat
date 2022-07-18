@@ -5,9 +5,8 @@ import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
-import { USER_STARTING_BALANCE } from "@treat/lib-common/";
 import { ObjectId } from "mongoose";
-import { IAddress, IUser } from "@treat/lib-common";
+import { IAddress, IUser, USER_STARTING_BALANCE } from "@treat/lib-common";
 import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
 
 @Service()

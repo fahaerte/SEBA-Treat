@@ -13,7 +13,7 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
+import { TRANSACTION_FEE } from "@treat/lib-common";
 import {
   EMealCategory,
   EMealAllergen,
