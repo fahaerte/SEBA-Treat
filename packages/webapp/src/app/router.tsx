@@ -28,46 +28,46 @@ export const AppRouter = () => {
     path: "/",
     element: (
       <AppLayout>
-        <HomeScreen />
+        <RequireAddressRoute>
+          <MealOfferScreen />
+        </RequireAddressRoute>
       </AppLayout>
     ),
-    children: [
-      { path: "*", element: <Navigate to="/404" /> },
-      { path: "/404", element: <ErrorPage /> },
-
-      {
-        path: "/login",
-        element: <LoginScreen />,
-      },
-      {
-        path: "/register",
-        element: <RegisterScreen />,
-      },
-      {
-        path: "/address",
-        element: <AddressInputScreen />,
-      },
-      {
-        path: "/alreadyLoggedIn",
-        element: <Typography>User already logged in</Typography>,
-      },
-    ],
+    children: [{ path: "*", element: <Navigate to="/404" /> }],
   };
 
-  const redirectRoutes = [
-    // {
-    //   path: "/success/:priceId",
-    //   element: <PaymentSuccess />,
-    // },
-    // {
-    //   path: "/purchase-credits",
-    //   element: (
-    //     <RequireAuthRoute>
-    //       <AccountScreen />
-    //     </RequireAuthRoute>
-    //   ),
-    // },
+  const authRoute = {
+    path: "login",
+    element: (
+      <AppLayout>
+        <LoginScreen />
+      </AppLayout>
+    ),
+  };
+
+  const authRoutes = [
+    {
+      path: "register",
+      element: (
+        <AppLayout>
+          <RegisterScreen />
+        </AppLayout>
+      ),
+    },
+    {
+      path: "alreadyLoggedIn",
+      element: <Typography>User already logged in</Typography>,
+    },
   ];
+
+  const addressRoute = {
+    path: "address",
+    element: (
+      <AppLayout>
+        <AddressInputScreen />
+      </AppLayout>
+    ),
+  };
 
   const profileRoutes = {
     path: "profile/:profileId/",
@@ -138,7 +138,13 @@ export const AppRouter = () => {
     },
     {
       path: "mealoffers/:mealOfferId",
-      element: <MealOfferDetailScreen />,
+      element: (
+        <AppLayout>
+          <RequireAddressRoute>
+            <MealOfferDetailScreen />
+          </RequireAddressRoute>
+        </AppLayout>
+      ),
     },
     {
       path: "mealOfferRequests",
@@ -162,6 +168,9 @@ export const AppRouter = () => {
 
   const routing = useRoutes([
     mainRoutes,
+    authRoute,
+    ...authRoutes,
+    addressRoute,
     profileRoutes,
     // ...redirectRoutes,
     ...purchaseCreditRoutes,

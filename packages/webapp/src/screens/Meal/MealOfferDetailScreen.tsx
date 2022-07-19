@@ -77,9 +77,6 @@ export const MealOfferDetailScreen = () => {
   return (
     <>
       <div>
-        <p>UserID: {userId}</p>
-        <p>Token: {token}</p>
-        <p>MealOfferID: {mealOfferId}</p>
         {mealOfferIsLoading || sellerIsLoading ? (
           <Container className={""}>
             <Row className={"pt-5"}>
@@ -157,7 +154,6 @@ export const MealOfferDetailScreen = () => {
             </Row>
           </Container>
         )}
-        )
       </div>
     </>
   );
