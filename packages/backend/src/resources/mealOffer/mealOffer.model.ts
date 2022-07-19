@@ -71,12 +71,35 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
 );
 
 export interface MealOfferModel extends Model<MealOfferDocument> {
+  findByIdWithUser(mealOfferId: string): Promise<MealOfferDocumentWithUser>;
+
   findSentMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
+
+  findReceivedMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
 
   aggregateMealOfferPreviews(
     match: Record<string, any>
   ): Promise<MealOfferDocumentWithUser[]>;
 }
+
+MealOfferSchema.statics.findByIdWithUser = async function (
+  this: Model<MealOfferDocument>,
+  mealOfferId: string
+) {
+  return this.findById(mealOfferId).populate(
+    "user",
+    "firstName lastName meanRating"
+  );
+};
+
+MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
+  this: Model<MealOfferDocument>,
+  userId: string
+) {
+  return this.find({ user: userId })
+    .populate("user reservations.buyer", "firstName lastName meanRating")
+    .exec();
+};
 
 MealOfferSchema.statics.findSentMealOfferRequests = async function (
   this: Model<MealOfferDocument>,
@@ -102,7 +125,7 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       },
     }
   )
-    .populate("user", "firstName lastName meanRating")
+    .populate("user reservations.buyer", "firstName lastName meanRating")
     .exec();
 };
 

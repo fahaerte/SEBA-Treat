@@ -1,7 +1,10 @@
 import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
 import validate from "../mealOffer/mealOffer.validation";
-import authenticate from "../../middleware/authenticated.middleware";
+import {
+  authenticatedMiddleware,
+  optionalAuthenticatedMiddleware,
+} from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import ValidatePart from "../../utils/validation";
@@ -22,7 +25,7 @@ class MealOfferController implements Controller {
   private initializeRoutes(): void {
     this.router.post(
       `${this.path}`,
-      authenticate,
+      authenticatedMiddleware,
       validationMiddleware(validate.createBody),
       this.create
     );
@@ -36,7 +39,7 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}/:mealOfferId`,
-      authenticate,
+      optionalAuthenticatedMiddleware,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
       this.getMealOffer
     );
@@ -48,17 +51,17 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}/reservations/sent`,
-      authenticate,
+      authenticatedMiddleware,
       this.getSentMealOfferRequests
     );
     this.router.get(
       `${this.path}/reservations/received`,
-      authenticate,
+      authenticatedMiddleware,
       this.getReceivedMealOfferRequests
     );
     this.router.patch(
       `${this.path}/:mealOfferId/reservations/:mealReservationId`,
-      authenticate,
+      authenticatedMiddleware,
       validationMiddleware(validate.updateReservationStateBody),
       validationMiddleware(
         validate.updateReservationStateParams,
@@ -68,7 +71,7 @@ class MealOfferController implements Controller {
     );
     this.router.post(
       `${this.path}/:mealOfferId/reservations`,
-      authenticate,
+      authenticatedMiddleware,
       validationMiddleware(
         validate.createMealOfferReservationParams,
         ValidatePart.PARAMS
@@ -77,7 +80,7 @@ class MealOfferController implements Controller {
     );
     this.router.delete(
       `${this.path}/:mealOfferId`,
-      authenticate,
+      authenticatedMiddleware,
       this.deleteMealOffer
     );
   }
@@ -91,9 +94,8 @@ class MealOfferController implements Controller {
       const mealOfferRequest = req.body as MealOfferDocument;
       console.log(mealOfferRequest);
       const newMealOffer = await this.mealOfferService.create(
-        mealOfferRequest
-        //   ,
-        // req.user
+        mealOfferRequest,
+        req.user
       );
       res.status(201).send({ data: newMealOffer });
     } catch (error: any) {
@@ -139,9 +141,10 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOffer = await this.mealOfferService.getMealOffer(
-        req.user,
-        req.params.mealOfferId
+      const mealOffer = await this.mealOfferService.getMealOfferWithUser(
+        req.params.mealOfferId,
+        false,
+        req.user
       );
       res.status(200).send({ data: mealOffer });
     } catch (error: any) {
