@@ -8,7 +8,6 @@ function errorMiddleware(
   _next: NextFunction
 ): void {
   const errorName = error.name;
-  console.log(errorName);
   let status = error.status || 500;
   const message = error.message || "Something went wrong";
 

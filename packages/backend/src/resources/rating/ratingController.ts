@@ -2,7 +2,7 @@ import Controller from "../../utils/interfaces/controller.interface";
 import { Service } from "typedi";
 import RatingService from "./ratingService";
 import { NextFunction, Request, Response, Router } from "express";
-import authenticate from "../../middleware/authenticated.middleware";
+import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
 import validate from "./rating.validation";
 import validationMiddleware from "../../middleware/validation.middleware";
 
@@ -18,7 +18,7 @@ class RatingController implements Controller {
   private initializeRoutes(): void {
     this.router.patch(
       `${this.path}/mealOffer/:mealOfferId/reservation/:mealReservationId`,
-      authenticate,
+      authenticatedMiddleware,
       validationMiddleware(validate.rate),
       this.rateUserForMealOffer
     );

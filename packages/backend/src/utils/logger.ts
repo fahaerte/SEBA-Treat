@@ -25,8 +25,8 @@ export default class Logger {
 
   private static logMessage(logLevel: ELogLevel, message: ILogMessage): string {
     if (message.details) {
-      return `${logLevel}: FUNCTION: [${message.functionName}], MESSAGE: ${message.message}, DETAILS: ${message.details}`;
+      return `${logLevel}: FUNCTION: [${message.functionName}], MESSAGE: [${message.message}], DETAILS: [${message.details}]`;
     }
-    return `${logLevel}: FUNCTION: [${message.functionName}], MESSAGE: ${message.message}`;
+    return `${logLevel}: FUNCTION: [${message.functionName}], MESSAGE: [${message.message}]`;
   }
 }

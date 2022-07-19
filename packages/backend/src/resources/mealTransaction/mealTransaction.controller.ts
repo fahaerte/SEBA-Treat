@@ -3,7 +3,7 @@ import Controller from "../../utils/interfaces/controller.interface";
 import HttpException from "../../utils/exceptions/http.exception";
 import MealTransactionService from "./mealTransaction.service";
 import { ObjectId } from "mongoose";
-import authenticate from "../../middleware/authenticated.middleware";
+import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
 import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 import validate from "./mealTransaction.validation";
 import { Service } from "typedi";
@@ -19,16 +19,20 @@ class MealTransactionController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.get(`${this.path}`, authenticate, this.getMealTransactions);
+    this.router.get(
+      `${this.path}`,
+      authenticatedMiddleware,
+      this.getMealTransactions
+    );
     this.router.patch(
       `${this.path}/ratings/mealOffer/:mealOfferId`,
-      authenticate,
+      authenticatedMiddleware,
       validationMiddleware(validate.rateTransaction),
       this.rateTransaction
     );
     this.router.post(
       `${this.path}/:mealTransactionId/rate`,
-      authenticate,
+      authenticatedMiddleware,
       this.rateTransactionParticipant
     );
   }
