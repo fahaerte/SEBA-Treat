@@ -54,9 +54,14 @@ export const Header = () => {
             </Col>
           )}
           <Col className={"justify-content-end d-flex align-items-center"}>
-            {userId && (
+            {/*{userId && (*/}
+            {/*  <Link to={"/createMeal"} display={"button"} className={"me-3"}>*/}
+            {/*    Create Offer*/}
+            {/*  </Link>*/}
+            {/*)}*/}
+            {location.pathname !== "/createMeal" && (
               <Link to={"/createMeal"} display={"button"} className={"me-3"}>
-                Create Offer
+                Offer meal
               </Link>
             )}
             {/*<Link*/}
@@ -68,13 +73,21 @@ export const Header = () => {
             {/*>*/}
             {/*  {userId ? `${balance} Credits Bild` : "Sign In"}*/}
             {/*</Link>*/}
-            {!userId && (
+            {userId ? (
               <Button
                 color={"secondary"}
                 outline={true}
                 onClick={handleNavButton}
               >
-                {userId ? `${balance} Credits Bild` : "Sign In"}
+                {`${balance} Credits Bild`}
+              </Button>
+            ) : (
+              <Button
+                color={"secondary"}
+                outline={true}
+                onClick={handleNavButton}
+              >
+                Sign in
               </Button>
             )}
             {userId && (
