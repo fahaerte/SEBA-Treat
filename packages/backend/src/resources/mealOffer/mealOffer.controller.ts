@@ -144,6 +144,7 @@ class MealOfferController implements Controller {
       const mealOffer = await this.mealOfferService.getMealOfferWithUser(
         req.params.mealOfferId,
         false,
+        true,
         req.user
       );
       res.status(200).send({ data: mealOffer });

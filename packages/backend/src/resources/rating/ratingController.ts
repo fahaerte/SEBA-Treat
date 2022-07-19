@@ -16,7 +16,7 @@ class RatingController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.patch(
+    this.router.post(
       `${this.path}/mealOffer/:mealOfferId/reservation/:mealReservationId`,
       authenticatedMiddleware,
       validationMiddleware(validate.rate),
