@@ -1,17 +1,18 @@
 import { Col, Row } from "../Grid";
-import { Button, Icon, Link, Typography } from "../index";
+import { Button, Icon, infoToast, Link, Typography } from "../index";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
 import { useAuthContext } from "../../../utils/auth/AuthProvider";
 import { SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const { userId, setUserId, setToken, setAddress, token, address } =
     useAuthContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const [balance, setBalance] = useState(0);
 
   useQuery("getUser", () => getUser(userId as string, token as string), {
@@ -20,12 +21,22 @@ export const Header = () => {
     },
   });
 
+  const handleNavButton = () => {
+    console.log("handleNavButton");
+    if (userId) {
+      navigate("/account");
+    } else {
+      navigate("/login", { state: { from: location } });
+    }
+  };
+
   const signout = () => {
     setAddress(undefined);
     setUserId(undefined);
     setToken(undefined);
     navigate("/");
   };
+
   return (
     <SCHeader>
       <div className={"px-3 h-100 w-100"}>
@@ -48,15 +59,24 @@ export const Header = () => {
                 Create Offer
               </Link>
             )}
-            <Link
-              to={userId ? "/purchase-credits" : "/login"}
-              color={"secondary"}
-              display={"button"}
-              buttonProps={{ outline: true }}
-              route
-            >
-              {userId ? `${balance} Credits Bild` : "Sign In"}
-            </Link>
+            {/*<Link*/}
+            {/*  to={userId ? "/purchase-credits" : "/login"}*/}
+            {/*  color={"secondary"}*/}
+            {/*  display={"button"}*/}
+            {/*  buttonProps={{ outline: true }}*/}
+            {/*  route*/}
+            {/*>*/}
+            {/*  {userId ? `${balance} Credits Bild` : "Sign In"}*/}
+            {/*</Link>*/}
+            {!userId && (
+              <Button
+                color={"secondary"}
+                outline={true}
+                onClick={handleNavButton}
+              >
+                {userId ? `${balance} Credits Bild` : "Sign In"}
+              </Button>
+            )}
             {userId && (
               <Button color={"secondary"} className={"ms-3"} onClick={signout}>
                 <Icon type={"box-arrow-right"} />

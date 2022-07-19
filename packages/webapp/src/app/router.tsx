@@ -33,24 +33,40 @@ export const AppRouter = () => {
         </RequireAddressRoute>
       </AppLayout>
     ),
-    children: [
-      { path: "*", element: <Navigate to="/404" /> },
-      { path: "/404", element: <ErrorPage /> },
-
-      {
-        path: "/login",
-        element: <LoginScreen />,
-      },
-      {
-        path: "/register",
-        element: <RegisterScreen />,
-      },
-      {
-        path: "/alreadyLoggedIn",
-        element: <Typography>User already logged in</Typography>,
-      },
-    ],
+    children: [{ path: "*", element: <Navigate to="/404" /> }],
   };
+
+  const authRoute = {
+    path: "login",
+    element: (
+      <AppLayout>
+        <LoginScreen />
+      </AppLayout>
+    ),
+  };
+
+  const authRoutes = [
+    // {
+    //   path: "login",
+    //   element: (
+    //     <AppLayout>
+    //       <LoginScreen />
+    //     </AppLayout>
+    //   ),
+    // },
+    {
+      path: "register",
+      element: (
+        <AppLayout>
+          <RegisterScreen />
+        </AppLayout>
+      ),
+    },
+    {
+      path: "alreadyLoggedIn",
+      element: <Typography>User already logged in</Typography>,
+    },
+  ];
 
   const addressRoute = {
     path: "address",
@@ -131,9 +147,11 @@ export const AppRouter = () => {
     {
       path: "mealoffers/:mealOfferId",
       element: (
-        <RequireAddressRoute>
-          <MealOfferDetailScreen />
-        </RequireAddressRoute>
+        <AppLayout>
+          <RequireAddressRoute>
+            <MealOfferDetailScreen />
+          </RequireAddressRoute>
+        </AppLayout>
       ),
     },
     {
@@ -158,6 +176,7 @@ export const AppRouter = () => {
 
   const routing = useRoutes([
     mainRoutes,
+    authRoute,
     addressRoute,
     profileRoutes,
     // ...redirectRoutes,
