@@ -22,7 +22,6 @@ export const Header = () => {
   });
 
   const handleNavButton = () => {
-    console.log("handleNavButton");
     if (userId) {
       navigate("/account");
     } else {

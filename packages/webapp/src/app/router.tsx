@@ -46,14 +46,6 @@ export const AppRouter = () => {
   };
 
   const authRoutes = [
-    // {
-    //   path: "login",
-    //   element: (
-    //     <AppLayout>
-    //       <LoginScreen />
-    //     </AppLayout>
-    //   ),
-    // },
     {
       path: "register",
       element: (
@@ -177,6 +169,7 @@ export const AppRouter = () => {
   const routing = useRoutes([
     mainRoutes,
     authRoute,
+    ...authRoutes,
     addressRoute,
     profileRoutes,
     // ...redirectRoutes,
