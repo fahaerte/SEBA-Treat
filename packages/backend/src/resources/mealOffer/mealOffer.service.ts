@@ -12,7 +12,7 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { EMealReservationState, TRANSACTION_FEE } from "@treat/lib-common";
+import { EMealReservationState } from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
@@ -20,6 +20,7 @@ import {
 } from "../../utils/address";
 import Logger, { ILogMessage } from "../../utils/logger";
 import UserDocument from "../user/user.interface";
+import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
 
 @Service()
 class MealOfferService {
@@ -58,6 +59,7 @@ class MealOfferService {
   public async getMealOfferWithUser(
     mealOfferId: string,
     includeRating = false,
+    preview = true,
     user?: UserDocument
   ): Promise<MealOfferDocumentWithUser | Error> {
     const mealOfferDoc = await this.mealOffer.findByIdWithUser(mealOfferId);
@@ -70,7 +72,7 @@ class MealOfferService {
     }
     if (!includeRating) mealOfferDoc.rating = undefined;
 
-    if (!user || !user._id.equals(mealOfferDoc.user._id)) {
+    if (preview && (!user || !user._id.equals(mealOfferDoc.user._id))) {
       return this.getMealOfferPreview(
         mealOfferDoc,
         user
@@ -82,6 +84,7 @@ class MealOfferService {
   public async getMealOffer(
     mealOfferId: string,
     includeRating = false,
+    preview = true,
     user?: UserDocument
   ): Promise<MealOfferDocument | Error> {
     const mealOfferDoc = (await this.mealOffer.findById(
@@ -96,7 +99,7 @@ class MealOfferService {
       throw new MealOfferNotFoundException(mealOfferId);
     }
     if (!includeRating) mealOfferDoc.rating = undefined;
-    if (!user || !user._id.equals(mealOfferDoc.user)) {
+    if (preview && (!user || !user._id.equals(mealOfferDoc.user))) {
       return this.getMealOfferPreview(mealOfferDoc, user) as MealOfferDocument;
     }
     return mealOfferDoc;
@@ -197,6 +200,7 @@ class MealOfferService {
     const mealOfferDoc = (await this.getMealOfferWithUser(
       mealOfferId,
       false,
+      false,
       user
     )) as MealOfferDocumentWithUser;
     if (user._id.equals(mealOfferDoc.user)) {
@@ -212,6 +216,7 @@ class MealOfferService {
   ): Promise<MealOfferDocumentWithUser | Error> {
     const mealOfferDoc = (await this.getMealOfferWithUser(
       mealOfferId,
+      false,
       false,
       user
     )) as MealOfferDocumentWithUser;
@@ -518,6 +523,7 @@ class MealOfferService {
   ): Promise<[MealOfferDocument, MealReservationDocument] | Error> {
     const mealOfferDoc = (await this.getMealOffer(
       mealOfferId,
+      true,
       true,
       user
     )) as MealOfferDocument;
