@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import {
   Col,
@@ -30,13 +30,12 @@ export const MealOfferDetailScreen = () => {
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
-    () => getMealOffer(mealOfferId as string)
-  );
-
-  const { data: seller, isLoading: sellerIsLoading } = useQuery(
-    ["getSeller", mealOffer],
-    () => getUserPreview(mealOffer.user._id as string),
-    { enabled: !!mealOffer }
+    () => getMealOffer(mealOfferId as string),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+      },
+    }
   );
 
   const requestMealMutation = useMutation(requestMealOffer, {
@@ -77,7 +76,7 @@ export const MealOfferDetailScreen = () => {
   return (
     <>
       <div>
-        {mealOfferIsLoading || sellerIsLoading ? (
+        {mealOfferIsLoading ? (
           <Container className={""}>
             <Row className={"pt-5"}>
               <PageHeading>
@@ -85,7 +84,7 @@ export const MealOfferDetailScreen = () => {
               </PageHeading>
             </Row>
           </Container>
-        ) : mealOffer && seller ? (
+        ) : mealOffer ? (
           <Container className={""}>
             <Row className={"pt-5"}>
               <PageHeading>
@@ -96,10 +95,10 @@ export const MealOfferDetailScreen = () => {
               ))}
             </Row>
             <Row>
-              <p>{seller.data.firstName}</p>
+              <p>{mealOffer.user.firstName}</p>
               <p>
-                Star {seller.data.meanRating}/5 – {seller.data.countRatings}{" "}
-                Ratings
+                Star {mealOffer.user.meanRating}/5 –{" "}
+                {mealOffer.user.countRatings} Ratings
               </p>
             </Row>
             <Row>

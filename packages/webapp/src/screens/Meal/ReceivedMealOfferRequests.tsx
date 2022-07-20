@@ -1,11 +1,11 @@
 import React from "react";
-import {MealOfferRequest} from "../../components/MealOfferRequest/MealOfferRequest";
-import {ReceivedMealReservation} from "../../components/MealOfferRequest/ReceivedMealReservation";
+import { MealOfferRequest } from "../../components/MealOfferRequest/MealOfferRequest";
+import { ReceivedMealReservation } from "../../components/MealOfferRequest/ReceivedMealReservation";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
-import {useQuery} from "react-query";
-import {getReceivedMealOfferRequests,} from "../../api/mealApi";
-import {useAuthContext} from "../../utils/auth/AuthProvider";
+import { useQuery } from "react-query";
+import { getReceivedMealOfferRequests } from "../../api/mealApi";
+import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 // TODO: use theme or maybe even create a component
 const MainDivider = styled.hr`
@@ -43,7 +43,11 @@ export const ReceivedMealOfferRequests = () => {
                     <ReceivedMealReservation
                       mealOfferId={mealOffer._id}
                       reservation={reservation}
-                      buyerRating={mealOffer.rating?mealOffer.rating.buyerRating:undefined}
+                      buyerRating={
+                        mealOffer.rating
+                          ? mealOffer.rating.buyerRating
+                          : undefined
+                      }
                     />
                   );
                   if (index != mealOffer.reservations.length - 1) {

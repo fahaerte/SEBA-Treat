@@ -19,7 +19,7 @@ interface MealOfferRequestUserInfoProps {
 }
 
 export const MealOfferRequestUserInfo = ({
-  user
+  user,
 }: MealOfferRequestUserInfoProps) => {
   const { data: profilePicture } = useQuery("getProfilePicture", () =>
     getProfilePictureURL(user._id, token as string)
