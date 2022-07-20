@@ -1,6 +1,6 @@
 import React from "react";
 
-type TRowAlinContent = "start" | "end" | "center" | "around" | "stretch";
+type TRowAlignContent = "start" | "end" | "center" | "around" | "stretch";
 
 type TRowAlignItems = "start" | "center" | "end" | "stretch" | "baseline";
 
@@ -34,7 +34,7 @@ export interface IRow {
   /**
    * Defines the align-content CSS Property
    */
-  alignContent?: TRowAlinContent;
+  alignContent?: TRowAlignContent;
   /**
    * Defines the align-items CSS Property
    */

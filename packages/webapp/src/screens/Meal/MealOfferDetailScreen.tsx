@@ -21,6 +21,7 @@ import {
 } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
+import UserPreview from "../../components/Profile/UserPreview";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
@@ -94,13 +95,13 @@ export const MealOfferDetailScreen = () => {
                 <span key={category}>{category}</span>
               ))}
             </Row>
-            <Row>
-              <p>{mealOffer.user.firstName}</p>
-              <p>
-                Star {mealOffer.user.meanRating}/5 –{" "}
-                {mealOffer.user.countRatings} Ratings
-              </p>
-            </Row>
+            <UserPreview
+              img={"undefined"}
+              firstName={mealOffer.user.firstName}
+              lastName={mealOffer.user.lastName}
+              meanRating={mealOffer.user.meanRating}
+              countRatings={mealOffer.user.countRatings}
+            />
             <Row>
               <div
                 style={{

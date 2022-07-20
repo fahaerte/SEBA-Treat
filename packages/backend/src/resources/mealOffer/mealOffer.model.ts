@@ -88,7 +88,7 @@ MealOfferSchema.statics.findByIdWithUser = async function (
 ) {
   return this.findById(mealOfferId).populate(
     "user",
-    "firstName lastName meanRating"
+    "firstName lastName meanRating countRatings"
   );
 };
 
