@@ -21,7 +21,7 @@ export const SentMealReservation = ({
   mealOfferId,
   seller,
   reservation,
-    buyerRating
+  buyerRating,
 }: SentMealOfferRequestBottomProps) => {
   const { token } = useAuthContext();
 
@@ -38,7 +38,7 @@ export const SentMealReservation = ({
         newState
       ),
     {
-      onSuccess: (newState:EMealReservationState) => {
+      onSuccess: (newState: EMealReservationState) => {
         successToast({ message: "You changed the state of your reservation" });
         setReservationState(newState);
       },
@@ -74,7 +74,7 @@ export const SentMealReservation = ({
         <RateUser
           mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
-          existingRating={buyerRating?buyerRating:undefined}
+          existingRating={buyerRating ? buyerRating : undefined}
         />
       );
     }
