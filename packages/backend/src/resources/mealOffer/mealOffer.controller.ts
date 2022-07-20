@@ -46,13 +46,8 @@ class MealOfferController implements Controller {
       `${this.path}/:mealOfferId`,
       optionalAuthenticatedMiddleware,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
+      validationMiddleware(validate.getMealOfferBody, ValidatePart.BODY),
       this.getMealOffer
-    );
-    this.router.get(
-      `${this.path}/:mealOfferId/details`,
-      // authenticate,
-      // validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
-      this.getMealOfferDetails
     );
     this.router.get(
       `${this.path}/reservations/sent`,
@@ -159,27 +154,13 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
+      const { compareAddress } = req.body;
       const mealOffer = await this.mealOfferService.getMealOfferWithUser(
         req.params.mealOfferId,
         false,
         true,
-        req.user
-      );
-      res.status(200).send({ data: mealOffer });
-    } catch (error: any) {
-      next(error);
-    }
-  };
-
-  private getMealOfferDetails = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    console.log("getMealOfferDetails - controller");
-    try {
-      const mealOffer = await this.mealOfferService.getMealOfferDetails(
-        req.params.mealOfferId
+        req.user,
+        compareAddress as string
       );
       res.status(200).send({ data: mealOffer });
     } catch (error: any) {

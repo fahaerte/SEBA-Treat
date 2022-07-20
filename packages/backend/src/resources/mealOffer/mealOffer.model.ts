@@ -88,8 +88,8 @@ MealOfferSchema.statics.findByIdWithUser = async function (
 ) {
   return this.findById(mealOfferId).populate(
     "user",
-    "firstName lastName meanRating countRatings"
-  );
+    "firstName lastName meanRating countRatings address"
+  ).lean();
 };
 
 MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
@@ -133,7 +133,9 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
   this: Model<MealOfferDocument>,
   mealOfferQuery: MealOfferQuery
 ) {
-  const match: Record<string, any> = {};
+  const match: Record<string, any> = {
+    endDate: { $gte: new Date() },
+  };
   if (mealOfferQuery.search !== undefined) {
     match["$or"] = [
       {
