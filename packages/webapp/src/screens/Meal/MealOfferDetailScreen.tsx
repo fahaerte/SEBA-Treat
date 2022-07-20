@@ -30,12 +30,12 @@ export const MealOfferDetailScreen = () => {
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
-    () => getMealOffer(mealOfferId as string, undefined)
+    () => getMealOffer(mealOfferId as string)
   );
 
   const { data: seller, isLoading: sellerIsLoading } = useQuery(
     ["getSeller", mealOffer],
-    () => getUserPreview(mealOffer.user as string),
+    () => getUserPreview(mealOffer.user._id as string),
     { enabled: !!mealOffer }
   );
 
