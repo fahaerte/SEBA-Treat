@@ -577,6 +577,10 @@ class MealOfferService {
     }
     throw new Error("User is not buyer of offer");
   }
+
+  public async getMealOffers(user: UserDocument): Promise<MealOfferDocument[]> {
+    return await this.mealOffer.find({ user: user._id }).exec();
+  }
 }
 
 export default MealOfferService;
