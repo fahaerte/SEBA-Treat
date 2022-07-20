@@ -86,9 +86,10 @@ MealOfferSchema.statics.findByIdWithUser = async function (
   this: Model<MealOfferDocument>,
   mealOfferId: string
 ) {
-  return this.findById(mealOfferId)
-    .populate("user", "firstName lastName meanRating address")
-    .lean();
+  return this.findById(mealOfferId).populate(
+    "user",
+    "firstName lastName meanRating countRatings address"
+  ).lean();
 };
 
 MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
