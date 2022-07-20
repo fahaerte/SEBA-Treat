@@ -7,21 +7,17 @@ import {
   Row,
   SectionHeading,
   successToast,
+  Tag,
+  PageHeading,
+  UserPreview,
+  MealDetails,
 } from "../../components";
-import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useMutation, useQuery } from "react-query";
-import { getUserPreview } from "../../api/userApi";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
-import UserPreview from "../../components/Profile/UserPreview";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
@@ -87,14 +83,20 @@ export const MealOfferDetailScreen = () => {
           </Container>
         ) : mealOffer ? (
           <Container className={""}>
-            <Row className={"pt-5"}>
+            <div
+              className={"pt-5"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <PageHeading>
                 <u>{mealOffer.title}</u>
               </PageHeading>
               {mealOffer.categories.map((category: string) => (
-                <span key={category}>{category}</span>
+                <Tag key={category}>{category}</Tag>
               ))}
-            </Row>
+            </div>
             <UserPreview
               img={"undefined"}
               firstName={mealOffer.user.firstName}
@@ -108,19 +110,19 @@ export const MealOfferDetailScreen = () => {
                   height: "400px",
                   width: "100%",
                   border: "1px solid grey",
-                  borderRadius: "1em",
+                  backgroundColor: "grey",
+                  color: "white",
                 }}
               >
                 Meal Pictures
               </div>
             </Row>
-            <Row>
-              <span>Distance: unknown</span>
-              <span>Portions: {mealOffer.portions}</span>
-              <span>
-                {mealOffer.startDate} – {mealOffer.endDate}
-              </span>
-            </Row>
+            <MealDetails
+              distance={mealOffer.distance}
+              portions={mealOffer.portions}
+              startDate={mealOffer.startDate}
+              endDate={mealOffer.endDate}
+            />
             <Row>
               <Col>
                 <SectionHeading>Description</SectionHeading>

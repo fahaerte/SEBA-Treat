@@ -1,38 +1,7 @@
 import React from "react";
-import { Card, Typography, Button, Col, Container, Row } from "../ui";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { Rating } from "./Rating";
-
-const SCUserPreview = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  margin-top: 1em;
-  margin-bottom: 2em;
-
-  & > div {
-    margin-left: 1em;
-
-    & > div > span.userName {
-      font-weight: bold;
-    }
-
-    & > div.userRating > div.star-ratings {
-      position: relative;
-      top: -0.2em;
-      margin-right: 0.2em;
-    }
-  }
-`;
-
-const SCUserPreviewImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  background: grey;
-  display: inline-block;
-`;
+import { Typography, Row } from "../index";
+import { Rating } from "../../Profile/Rating";
+import { SCUserPreview, SCUserPreviewImage } from "./styles";
 
 const UserPreview = ({
   img,
@@ -49,13 +18,6 @@ const UserPreview = ({
 }) => {
   return (
     <SCUserPreview>
-      {/*<Row*/}
-      {/*  alignContent={"end"}*/}
-      {/*  alignItems={"center"} // vertical align*/}
-      {/*  wrap={"nowrap"}*/}
-      {/*  direction={"row"}*/}
-      {/*  justify={"start"}*/}
-      {/*>*/}
       <SCUserPreviewImage />
       <div>
         <Row>
