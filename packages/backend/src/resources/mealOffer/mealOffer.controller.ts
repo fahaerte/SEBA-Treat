@@ -38,6 +38,11 @@ class MealOfferController implements Controller {
       this.getMealOfferPreviews
     );
     this.router.get(
+      `${this.path}`,
+      authenticatedMiddleware,
+      this.getMealOffers
+    );
+    this.router.get(
       `${this.path}/:mealOfferId`,
       optionalAuthenticatedMiddleware,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
@@ -92,7 +97,6 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const mealOfferRequest = req.body as MealOfferDocument;
-      console.log(mealOfferRequest);
       const newMealOffer = await this.mealOfferService.create(
         mealOfferRequest,
         req.user
@@ -130,6 +134,20 @@ class MealOfferController implements Controller {
       const mealOfferPreviews =
         await this.mealOfferService.getMealOfferPreviews(mealOfferQuery);
       res.status(200).send({ data: mealOfferPreviews });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private getMealOffers = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const user = req.user;
+      const mealOffers = await this.mealOfferService.getMealOffers(user);
+      res.status(200).send({ data: mealOffers });
     } catch (error: any) {
       next(error);
     }
