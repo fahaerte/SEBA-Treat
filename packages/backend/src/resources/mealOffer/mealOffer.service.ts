@@ -60,7 +60,8 @@ class MealOfferService {
     mealOfferId: string,
     includeRating = false,
     preview = true,
-    user?: UserDocument
+    user?: UserDocument,
+    compareAddress?: string
   ): Promise<MealOfferDocumentWithUser | Error> {
     const mealOfferDoc = await this.mealOffer.findByIdWithUser(mealOfferId);
     if (!mealOfferDoc) {
@@ -71,6 +72,11 @@ class MealOfferService {
       throw new MealOfferNotFoundException(mealOfferId);
     }
     // if (!includeRating) mealOfferDoc.rating = undefined;
+    if (compareAddress)
+      mealOfferDoc.distance = await getDistanceBetweenAddressesInKm(
+        getUserAddressString(mealOfferDoc.user.address!),
+        compareAddress
+      );
 
     if (preview && (!user || !user._id.equals(mealOfferDoc.user._id))) {
       return this.getMealOfferPreview(
@@ -87,9 +93,7 @@ class MealOfferService {
     preview = true,
     user?: UserDocument
   ): Promise<MealOfferDocument | Error> {
-    const mealOfferDoc = (await this.mealOffer.findById(
-      mealOfferId
-    )) as MealOfferDocument;
+    const mealOfferDoc = await this.mealOffer.findById(mealOfferId).lean();
 
     if (!mealOfferDoc) {
       Logger.error({
@@ -116,19 +120,6 @@ class MealOfferService {
     } else {
       mealOfferDoc.reservations = [];
       mealOfferDoc.pickUpDetails = undefined;
-    }
-    return mealOfferDoc;
-  }
-
-  public async getMealOfferDetails(
-    mealOfferId: string
-  ): Promise<MealOfferDocument | Error> {
-    console.log("getMealOfferDetails - service");
-    const mealOfferDoc = (await this.mealOffer.findById(
-      mealOfferId
-    )) as MealOfferDocument;
-    if (!mealOfferDoc) {
-      throw new MealOfferNotFoundException(mealOfferId as unknown as string);
     }
     return mealOfferDoc;
   }
@@ -165,8 +156,10 @@ class MealOfferService {
         addressString,
         compareAddress
       );
-      if (distance <= compareDistance)
+      if (distance <= compareDistance) {
+        mealOfferPreview.distance = distance;
         filteredMealOffers.push(mealOfferPreview);
+      }
     }
     return filteredMealOffers;
   }

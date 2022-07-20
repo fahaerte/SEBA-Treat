@@ -17,4 +17,5 @@ export interface IMealOffer {
   reservations: IMealReservation[];
   rating?: IRating;
   allergensVerified: boolean;
+  distance?: number;
 }
