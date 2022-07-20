@@ -96,7 +96,7 @@ MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
   this: Model<MealOfferDocument>,
   userId: string
 ) {
-  return this.find({ user: userId }, {rating: 0})
+  return this.find({ user: userId }, )
     .populate("user reservations.buyer", "firstName lastName meanRating")
     .exec();
 };
@@ -115,6 +115,7 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       endDate: 1,
       price: 1,
       title: 1,
+        rating: 1,
       reservations: {
         $filter: {
           input: "$reservations",

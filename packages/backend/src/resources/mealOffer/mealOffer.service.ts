@@ -70,7 +70,7 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (!includeRating) mealOfferDoc.rating = undefined;
+    // if (!includeRating) mealOfferDoc.rating = undefined;
 
     if (preview && (!user || !user._id.equals(mealOfferDoc.user._id))) {
       return this.getMealOfferPreview(
@@ -98,7 +98,7 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (!includeRating) mealOfferDoc.rating = undefined;
+    // if (!includeRating) mealOfferDoc.rating = undefined;
     if (preview && (!user || !user._id.equals(mealOfferDoc.user))) {
       return this.getMealOfferPreview(mealOfferDoc, user) as MealOfferDocument;
     }
@@ -174,20 +174,12 @@ class MealOfferService {
   public async getSentMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
-    Logger.info({
-      functionName: "getSentMealOfferRequests",
-      message: `Get sent mealOfferRequests for user ${user._id}`,
-    } as ILogMessage);
     return await this.mealOffer.findSentMealOfferRequests(user._id as string);
   }
 
   public async getReceivedMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
-    Logger.info({
-      functionName: "getReceivedMealOfferRequests",
-      message: `Get received mealOfferRequests for user ${user._id}`,
-    } as ILogMessage);
     return await this.mealOffer.findReceivedMealOfferRequests(
       user._id as string
     );

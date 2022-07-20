@@ -43,7 +43,7 @@ export const ReceivedMealOfferRequests = () => {
                     <ReceivedMealReservation
                       mealOfferId={mealOffer._id}
                       reservation={reservation}
-                      sellerRating={mealOffer.rating?mealOffer.rating.sellerRating:undefined}
+                      buyerRating={mealOffer.rating?mealOffer.rating.buyerRating:undefined}
                     />
                   );
                   if (index != mealOffer.reservations.length - 1) {

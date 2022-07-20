@@ -12,13 +12,13 @@ import { useAuthContext } from "../../utils/auth/AuthProvider";
 interface ReceivedMealReservationProps {
   mealOfferId: string;
   reservation: MealReservation;
-  sellerRating: number | undefined;
+  buyerRating: number | undefined;
 }
 
 export const ReceivedMealReservation = ({
   mealOfferId,
   reservation,
-  sellerRating,
+  buyerRating,
 }: ReceivedMealReservationProps) => {
   const { token } = useAuthContext();
 
@@ -71,7 +71,7 @@ export const ReceivedMealReservation = ({
         <RateUser
           mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
-          existingRating={sellerRating ? sellerRating : undefined}
+          existingRating={buyerRating ? buyerRating : undefined}
         />
       );
     }
