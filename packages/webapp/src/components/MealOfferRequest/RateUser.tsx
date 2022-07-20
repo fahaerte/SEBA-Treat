@@ -32,17 +32,23 @@ export const RateUser = ({
   };
 
   const rateUserMutation = useMutation(
-      () => rateUserCall(token as string,mealOfferId,mealReservationId,sum(rating)),
-      {
-        onSuccess: () => {
-          successToast({ message: "You rated the user" });
-          setFinalRating(sum(rating));
-        },
-        onError: (error: any) => {
-          dangerToast({ message: error.response.data.message });
-        },
-      }
-  )
+    () =>
+      rateUserCall(
+        token as string,
+        mealOfferId,
+        mealReservationId,
+        sum(rating)
+      ),
+    {
+      onSuccess: () => {
+        successToast({ message: "You rated the user" });
+        setFinalRating(sum(rating));
+      },
+      onError: (error: any) => {
+        dangerToast({ message: error.response.data.message });
+      },
+    }
+  );
 
   const rateUser = () => {
     rateUserMutation.mutate();
@@ -62,7 +68,7 @@ export const RateUser = ({
     if (existingRating !== undefined) {
       updateRating(existingRating - 1);
     }
-  },[existingRating]);
+  }, [existingRating]);
 
   return (
     <Row className={""}>

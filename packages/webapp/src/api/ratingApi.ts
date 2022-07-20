@@ -1,4 +1,4 @@
-import { baseApi } from "./baseApi";
+import { baseApi, baseApiAuth } from "./baseApi";
 
 export const rateUser = async (
   token: string,
@@ -6,7 +6,7 @@ export const rateUser = async (
   mealReservationId: string,
   rating: number
 ) => {
-  return await baseApi(token).post(
+  return await baseApiAuth(token).post(
     `/ratings/mealOffer/${mealOfferId}/reservation/${mealReservationId}`,
     { rating: rating }
   );

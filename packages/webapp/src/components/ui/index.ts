@@ -16,3 +16,6 @@ export * from "./TabBar";
 export * from "./Toast";
 export { default as PageHeading } from "./PageHeading/PageHeading";
 export { default as SectionHeading } from "./SectionHeading/SectionHeading";
+export { default as Tag } from "./Tag/Tag";
+export { default as UserPreview } from "./UserPreview/UserPreview";
+export { default as MealDetails } from "./MealDetails/MealDetails";

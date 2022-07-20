@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import {
   Col,
@@ -7,30 +7,32 @@ import {
   Row,
   SectionHeading,
   successToast,
+  Tag,
+  PageHeading,
+  UserPreview,
+  MealDetails,
 } from "../../components";
-import PageHeading from "../../components/ui/PageHeading/PageHeading";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useMutation, useQuery } from "react-query";
-import { getUserPreview } from "../../api/userApi";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
-  const { userId, token } = useAuthContext();
+  const { token } = useAuthContext();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
-    () => getMealOffer(mealOfferId as string, undefined)
-  );
-
-  const { data: seller, isLoading: sellerIsLoading } = useQuery(
-    ["getSeller", mealOffer],
-    () => getUserPreview(mealOffer.user as string),
-    { enabled: !!mealOffer }
+    () => getMealOffer(mealOfferId as string),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+      },
+    }
   );
 
   const requestMealMutation = useMutation(requestMealOffer, {
@@ -54,8 +56,6 @@ export const MealOfferDetailScreen = () => {
     },
   });
 
-  const [redirectToLogin, setRedirectToLogin] = useState(false);
-
   function handleRequestClick() {
     if (token) {
       const result = requestMealMutation.mutate({
@@ -63,21 +63,17 @@ export const MealOfferDetailScreen = () => {
         token: token,
       });
     } else {
-      setRedirectToLogin(true);
+      infoToast({
+        message: `Please log in to reserve this meal`,
+      });
+      navigate("/login", { state: { from: location } });
     }
-  }
-
-  if (redirectToLogin) {
-    infoToast({
-      message: `Please log in to reserve this meal`,
-    });
-    return <Navigate to={"/login"} replace state={{ from: location }} />;
   }
 
   return (
     <>
       <div>
-        {mealOfferIsLoading || sellerIsLoading ? (
+        {mealOfferIsLoading ? (
           <Container className={""}>
             <Row className={"pt-5"}>
               <PageHeading>
@@ -85,42 +81,48 @@ export const MealOfferDetailScreen = () => {
               </PageHeading>
             </Row>
           </Container>
-        ) : mealOffer && seller ? (
+        ) : mealOffer ? (
           <Container className={""}>
-            <Row className={"pt-5"}>
+            <div
+              className={"pt-5"}
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <PageHeading>
                 <u>{mealOffer.title}</u>
               </PageHeading>
               {mealOffer.categories.map((category: string) => (
-                <span key={category}>{category}</span>
+                <Tag key={category}>{category}</Tag>
               ))}
-            </Row>
-            <Row>
-              <p>{seller.data.firstName}</p>
-              <p>
-                Star {seller.data.meanRating}/5 – {seller.data.countRatings}{" "}
-                Ratings
-              </p>
-            </Row>
+            </div>
+            <UserPreview
+              img={"undefined"}
+              firstName={mealOffer.user.firstName}
+              lastName={mealOffer.user.lastName}
+              meanRating={mealOffer.user.meanRating}
+              countRatings={mealOffer.user.countRatings}
+            />
             <Row>
               <div
                 style={{
                   height: "400px",
                   width: "100%",
                   border: "1px solid grey",
-                  borderRadius: "1em",
+                  backgroundColor: "grey",
+                  color: "white",
                 }}
               >
                 Meal Pictures
               </div>
             </Row>
-            <Row>
-              <span>Distance: unknown</span>
-              <span>Portions: {mealOffer.portions}</span>
-              <span>
-                {mealOffer.startDate} – {mealOffer.endDate}
-              </span>
-            </Row>
+            <MealDetails
+              distance={mealOffer.distance}
+              portions={mealOffer.portions}
+              startDate={mealOffer.startDate}
+              endDate={mealOffer.endDate}
+            />
             <Row>
               <Col>
                 <SectionHeading>Description</SectionHeading>

@@ -1,14 +1,14 @@
-import { baseApi } from "./baseApi";
+import { baseApi, baseApiAuth } from "./baseApi";
 // import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 // import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
 
 export const paymentGetProductsWithPrices = async (token: string) => {
-  const response = await baseApi(token).get("/payment/products/");
+  const response = await baseApiAuth(token).get("/payment/products/");
   return response.data;
 };
 
 export const paymentGetDiscount = async (token: string) => {
-  const response = await baseApi(token).get("/payment/discounts/");
+  const response = await baseApiAuth(token).get("/payment/discounts/");
   return response.data === "" ? undefined : response.data;
 };
 
@@ -33,7 +33,7 @@ export const verifyPayment = async ({
   userId,
   token,
 }: VerifyPaymentApiArg) => {
-  const response = await baseApi(token).post(
+  const response = await baseApiAuth(token).post(
     `/payment/get-latest-payment?product=${priceId}`,
     {
       customerId,
@@ -50,7 +50,7 @@ export const createCheckoutSession = async ({
   token,
   userId,
 }: CreateCheckoutSessionApiArg) => {
-  const response = await baseApi(token).post(
+  const response = await baseApiAuth(token).post(
     "/payment/create-checkout-session",
     {
       priceId,
