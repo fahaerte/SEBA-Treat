@@ -7975,7 +7975,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"http-proxy-middleware@npm:^2.0.3":
+"http-proxy-middleware@npm:^2.0.3, http-proxy-middleware@npm:^2.0.6":
   version: 2.0.6
   resolution: "http-proxy-middleware@npm:2.0.6"
   dependencies:
@@ -11953,6 +11953,7 @@ __metadata:
     eslint-plugin-jest: ^25.2.4
     eslint-plugin-react: ^7.27.1
     eslint-plugin-react-hooks: ^4.3.0
+    http-proxy-middleware: ^2.0.6
     husky: ^8.0.1
     keyv: ^4.3.2
     lerna: ^4.0.0
