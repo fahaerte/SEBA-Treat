@@ -212,6 +212,14 @@ class MealOfferService {
       false,
       user
     )) as MealOfferDocumentWithUser;
+    if (new Date() > mealOfferDoc.endDate) {
+      Logger.error({
+        functionName: "createMealOfferReservation",
+        message: "Could not create mealOffer reservation",
+        details: `The mealOffer ${mealOfferId} endDate expired`,
+      } as ILogMessage);
+      throw new InvalidMealReservationException("The mealOffer dates expired");
+    }
     if (!user._id.equals(mealOfferDoc.user._id)) {
       const reservations = mealOfferDoc.reservations;
       reservations.forEach((reservation) => {
@@ -224,7 +232,7 @@ class MealOfferService {
             details: `The mealOffer with the id ${mealOfferId} is not available for reservations anymore`,
           } as ILogMessage);
           throw new InvalidMealReservationException(
-            `The mealOffer with the id ${mealOfferId} is not available for reservations anymore`
+            "The mealOffer is not available for reservations anymore"
           );
         } else if (user._id.equals(reservation.buyer)) {
           Logger.error({
