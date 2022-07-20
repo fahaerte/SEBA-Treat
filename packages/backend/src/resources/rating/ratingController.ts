@@ -16,7 +16,7 @@ class RatingController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.patch(
+    this.router.post(
       `${this.path}/mealOffer/:mealOfferId/reservation/:mealReservationId`,
       authenticatedMiddleware,
       validationMiddleware(validate.rate),
@@ -30,13 +30,13 @@ class RatingController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      await this.ratingService.rateUser(
+      const rating = await this.ratingService.createUserRatingForMealOffer(
         req.user,
         req.params.mealOfferId,
         req.params.mealReservationId,
         req.body.rating as number
       );
-      res.sendStatus(204);
+      res.status(201).send(rating);
     } catch (error: any) {
       next(error);
     }

@@ -2,10 +2,10 @@ import React from "react";
 import { Col, Row } from "../ui/Grid";
 import styled from "styled-components";
 import { Icon } from "../ui";
-import { MealOfferRequestUserInfoProps } from "@treat/lib-common/lib/interfaces/IMealOfferRequestUserInfoProps";
 import { useQuery } from "react-query";
 import { getProfilePictureURL } from "../../api/userApi";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
+import User from "../../types/interfaces/user.interface";
 
 const ProfilePicture = styled.img`
   border-radius: 50%;
@@ -14,14 +14,15 @@ const ProfilePicture = styled.img`
   object-fit: cover;
 `;
 
+interface MealOfferRequestUserInfoProps {
+  user: User;
+}
+
 export const MealOfferRequestUserInfo = ({
-  userId,
-  firstName,
-  lastName,
-  meanRating,
+  user
 }: MealOfferRequestUserInfoProps) => {
   const { data: profilePicture } = useQuery("getProfilePicture", () =>
-    getProfilePictureURL(userId, token as string)
+    getProfilePictureURL(user._id, token as string)
   );
 
   const { token } = useAuthContext();
@@ -35,7 +36,7 @@ export const MealOfferRequestUserInfo = ({
               <ProfilePicture src={profilePicture} />
             </Col>
             <Col className={"col-sm-auto my-auto p-0"}>
-              {`${firstName} ${lastName}`}
+              {`${user.firstName} ${user.lastName}`}
             </Col>
           </Row>
         </Col>
@@ -44,7 +45,7 @@ export const MealOfferRequestUserInfo = ({
             <Col className={"col-sm-auto p-0"}>
               <Icon type={"star-fill"}></Icon>
             </Col>
-            <Col className={"col-sm-auto"}>{meanRating} Sterne</Col>
+            <Col className={"col-sm-auto"}>{user.meanRating} Sterne</Col>
           </Row>
         </Col>
       </Row>

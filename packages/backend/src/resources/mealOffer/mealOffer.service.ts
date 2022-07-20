@@ -12,7 +12,7 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { EMealReservationState, TRANSACTION_FEE } from "@treat/lib-common";
+import { EMealReservationState } from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
@@ -20,6 +20,7 @@ import {
 } from "../../utils/address";
 import Logger, { ILogMessage } from "../../utils/logger";
 import UserDocument from "../user/user.interface";
+import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
 
 @Service()
 class MealOfferService {
@@ -58,6 +59,7 @@ class MealOfferService {
   public async getMealOfferWithUser(
     mealOfferId: string,
     includeRating = false,
+    preview = true,
     user?: UserDocument
   ): Promise<MealOfferDocumentWithUser | Error> {
     const mealOfferDoc = await this.mealOffer.findByIdWithUser(mealOfferId);
@@ -68,9 +70,9 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (!includeRating) mealOfferDoc.rating = undefined;
+    // if (!includeRating) mealOfferDoc.rating = undefined;
 
-    if (!user || !user._id.equals(mealOfferDoc.user._id)) {
+    if (preview && (!user || !user._id.equals(mealOfferDoc.user._id))) {
       return this.getMealOfferPreview(
         mealOfferDoc,
         user
@@ -82,6 +84,7 @@ class MealOfferService {
   public async getMealOffer(
     mealOfferId: string,
     includeRating = false,
+    preview = true,
     user?: UserDocument
   ): Promise<MealOfferDocument | Error> {
     const mealOfferDoc = (await this.mealOffer.findById(
@@ -95,8 +98,8 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (!includeRating) mealOfferDoc.rating = undefined;
-    if (!user || !user._id.equals(mealOfferDoc.user)) {
+    // if (!includeRating) mealOfferDoc.rating = undefined;
+    if (preview && (!user || !user._id.equals(mealOfferDoc.user))) {
       return this.getMealOfferPreview(mealOfferDoc, user) as MealOfferDocument;
     }
     return mealOfferDoc;
@@ -171,20 +174,12 @@ class MealOfferService {
   public async getSentMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
-    Logger.info({
-      functionName: "getSentMealOfferRequests",
-      message: `Get sent mealOfferRequests for user ${user._id}`,
-    } as ILogMessage);
     return await this.mealOffer.findSentMealOfferRequests(user._id as string);
   }
 
   public async getReceivedMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
-    Logger.info({
-      functionName: "getReceivedMealOfferRequests",
-      message: `Get received mealOfferRequests for user ${user._id}`,
-    } as ILogMessage);
     return await this.mealOffer.findReceivedMealOfferRequests(
       user._id as string
     );
@@ -196,6 +191,7 @@ class MealOfferService {
   ): Promise<void | Error> {
     const mealOfferDoc = (await this.getMealOfferWithUser(
       mealOfferId,
+      false,
       false,
       user
     )) as MealOfferDocumentWithUser;
@@ -213,8 +209,17 @@ class MealOfferService {
     const mealOfferDoc = (await this.getMealOfferWithUser(
       mealOfferId,
       false,
+      false,
       user
     )) as MealOfferDocumentWithUser;
+    if (new Date() > mealOfferDoc.endDate) {
+      Logger.error({
+        functionName: "createMealOfferReservation",
+        message: "Could not create mealOffer reservation",
+        details: `The mealOffer ${mealOfferId} endDate expired`,
+      } as ILogMessage);
+      throw new InvalidMealReservationException("The mealOffer dates expired");
+    }
     if (!user._id.equals(mealOfferDoc.user._id)) {
       const reservations = mealOfferDoc.reservations;
       reservations.forEach((reservation) => {
@@ -227,7 +232,7 @@ class MealOfferService {
             details: `The mealOffer with the id ${mealOfferId} is not available for reservations anymore`,
           } as ILogMessage);
           throw new InvalidMealReservationException(
-            `The mealOffer with the id ${mealOfferId} is not available for reservations anymore`
+            "The mealOffer is not available for reservations anymore"
           );
         } else if (user._id.equals(reservation.buyer)) {
           Logger.error({
@@ -518,6 +523,7 @@ class MealOfferService {
   ): Promise<[MealOfferDocument, MealReservationDocument] | Error> {
     const mealOfferDoc = (await this.getMealOffer(
       mealOfferId,
+      true,
       true,
       user
     )) as MealOfferDocument;

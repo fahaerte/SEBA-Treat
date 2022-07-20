@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
-import { Button } from "../ui";
+import { Button, dangerToast, successToast } from "../ui";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
@@ -33,12 +33,20 @@ export const ReceivedMealReservation = ({
         mealOfferId,
         reservation._id,
         newState
-      )
+      ),
+    {
+      onSuccess: (newState:EMealReservationState) => {
+        successToast({ message: "You changed the state of your reservation" });
+        setReservationState(newState);
+      },
+      onError: (error: any) => {
+        dangerToast({ message: error.response.data.message });
+      },
+    }
   );
 
   const updateReservationState = (newState: EMealReservationState) => {
     updateReservationStateMutation.mutate(newState);
-    setReservationState(newState);
   };
 
   const getActionButton = () => {
@@ -63,7 +71,7 @@ export const ReceivedMealReservation = ({
         <RateUser
           mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
-          existingRating={buyerRating}
+          existingRating={buyerRating ? buyerRating : undefined}
         />
       );
     }
@@ -103,12 +111,7 @@ export const ReceivedMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo
-        userId={reservation.buyer._id}
-        firstName={reservation.buyer.firstName}
-        lastName={reservation.buyer.lastName}
-        meanRating={reservation.buyer.meanRating}
-      />
+      <MealOfferRequestUserInfo user={reservation.buyer} />
       <Col className={"col-sm-auto d-flex align-items-center"}>
         {getActionBar()}
       </Col>
