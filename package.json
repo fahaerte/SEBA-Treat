@@ -33,6 +33,7 @@
     "axios": "^0.27.2",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
+    "http-proxy-middleware": "^2.0.6",
     "keyv": "^4.3.2",
     "morgan": "^1.10.0",
     "react-query": "^3.39.1"
