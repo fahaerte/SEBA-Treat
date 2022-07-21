@@ -24,7 +24,9 @@ export const getDistanceBetweenAddressesInKm = async (
     } as ILogMessage);
     throw new HttpException(500, "Couldn't calculate the distance!");
   }
-  return Number(response.data.rows[0].elements[0].distance.value) / 1000;
+  return Math.ceil(
+    Number(response.data.rows[0].elements[0].distance.value) / 1000
+  );
 };
 
 export const getUserAddressString = (address: IAddress): string => {

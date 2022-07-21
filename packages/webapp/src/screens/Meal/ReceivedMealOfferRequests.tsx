@@ -43,9 +43,9 @@ export const ReceivedMealOfferRequests = () => {
                     <ReceivedMealReservation
                       mealOfferId={mealOffer._id}
                       reservation={reservation}
-                      sellerRating={
+                      buyerRating={
                         mealOffer.rating
-                          ? mealOffer.rating.sellerRating
+                          ? mealOffer.rating.buyerRating
                           : undefined
                       }
                     />

@@ -29,9 +29,9 @@ export const SentMealOfferRequests = () => {
                       mealOfferId={mealOffer._id}
                       seller={mealOffer.user}
                       reservation={reservation}
-                      buyerRating={
+                      sellerRating={
                         mealOffer.rating
-                          ? mealOffer.rating.buyerRating
+                          ? mealOffer.rating.sellerRating
                           : undefined
                       }
                     />

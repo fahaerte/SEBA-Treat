@@ -88,15 +88,15 @@ MealOfferSchema.statics.findByIdWithUser = async function (
 ) {
   return this.findById(mealOfferId).populate(
     "user",
-    "firstName lastName meanRating"
-  );
+    "firstName lastName meanRating countRatings address"
+  ).lean();
 };
 
 MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
   this: Model<MealOfferDocument>,
   userId: string
 ) {
-  return this.find({ user: userId }, { rating: 0 })
+  return this.find({ user: userId })
     .populate("user reservations.buyer", "firstName lastName meanRating")
     .exec();
 };
@@ -132,7 +132,9 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
   this: Model<MealOfferDocument>,
   mealOfferQuery: MealOfferQuery
 ) {
-  const match: Record<string, any> = {};
+  const match: Record<string, any> = {
+    endDate: { $gte: new Date() },
+  };
   if (mealOfferQuery.search !== undefined) {
     match["$or"] = [
       {

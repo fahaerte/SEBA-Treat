@@ -1,12 +1,12 @@
-import { baseApi, baseImageApi } from "./baseApi";
+import { baseApi, baseApiAuth, baseImageApi } from "./baseApi";
 
 export const getUser = async (userId: string, token: string | undefined) => {
-  const response = await baseApi(token).get(`/users/${userId}`);
+  const response = await baseApiAuth(token).get(`/users/${userId}`);
   return response.data;
 };
 
 export const getUserPreview = async (userId: string) => {
-  const response = await baseApi(undefined).get(`/users/preview/${userId}`);
+  const response = await baseApi().get(`/users/${userId}/preview`);
   return response.data;
 };
 

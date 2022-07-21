@@ -1,7 +1,15 @@
 import axios from "axios";
 import { ConfigService } from "../utils/ConfigService";
 
-export const baseApi = (token: string | undefined) =>
+export const baseApi = () =>
+  axios.create({
+    baseURL: `${new ConfigService().get("API_URL")}`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+export const baseApiAuth = (token: string | undefined) =>
   axios.create({
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {

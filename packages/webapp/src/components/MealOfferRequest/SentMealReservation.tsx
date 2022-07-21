@@ -14,14 +14,14 @@ interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
   seller: User;
   reservation: MealReservation;
-  buyerRating: number | undefined;
+  sellerRating: number | undefined;
 }
 
 export const SentMealReservation = ({
   mealOfferId,
   seller,
   reservation,
-  buyerRating,
+  sellerRating,
 }: SentMealOfferRequestBottomProps) => {
   const { token } = useAuthContext();
 
@@ -74,7 +74,7 @@ export const SentMealReservation = ({
         <RateUser
           mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
-          existingRating={buyerRating ? buyerRating : undefined}
+          existingRating={sellerRating ? sellerRating : undefined}
         />
       );
     }
