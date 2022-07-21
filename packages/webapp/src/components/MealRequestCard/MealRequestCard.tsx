@@ -1,7 +1,7 @@
 import React from "react";
 // import { ICard } from "../ui/Card/ICard";
 // import { SCMealRequestCard } from "./styles";
-import { Button, Card, CardBody, Col, Row, Typography } from "../";
+import { Button, Card, CardBody, Col, Icon, Row, Typography } from "../";
 
 // TODO: replace inline styles with component styles
 
@@ -18,46 +18,63 @@ const MealRequestCard = ({
   transactionFee: number;
   buttonAction: () => void;
 }) => (
-  <Card className={`${className}`}>
+  <Card className={`${className} mb-3`}>
     <CardBody className={"my-3"}>
       <Typography variant={"h1"} className={"mb-3"}>
         Order {productName}
       </Typography>
       <div
         style={{
-          padding: "1em",
-          marginBottom: "1em",
+          padding: ".5rem .7rem",
+          marginBottom: "1rem",
           backgroundColor: "#EFEFEF",
           border: "1px solid #CFCFCF",
-          borderRadius: "10px",
+          borderRadius: "3px",
+          color: "#454545",
         }}
       >
-        <p>
-          <b>How to buy meal</b>
-        </p>
-        <ul>
-          <li>Check allergens if you have any</li>
-          <li>Request meal</li>
-          <li>Wait until Sender accepts request</li>
-          <li>Confirm transaction (only then, you are charged)</li>
-        </ul>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          <span style={{ fontWeight: "bold", width: "auto" }}>
+            How to buy a meal
+          </span>
+          <Icon type={"infoCircle"} size={"md"} />
+        </div>
+        <ol style={{ paddingLeft: "1rem" }}>
+          <li style={{ paddingLeft: ".5rem" }}>
+            Check allergens if you have any
+          </li>
+          <li style={{ paddingLeft: ".5rem" }}>Make a request for the meal</li>
+          <li style={{ paddingLeft: ".5rem" }}>
+            Wait until the seller accepts the request
+          </li>
+          <li style={{ paddingLeft: ".5rem" }}>
+            Confirm the transaction (<u>only then, you are charged</u>)
+          </li>
+        </ol>
       </div>
       <Row>
         <Col>
           <Typography>Meal Price</Typography>
         </Col>
         <Col>
-          <Typography align={"start"}>{mealPrice} Cr</Typography>
+          <Typography align={"end"}>{mealPrice} Cr</Typography>
         </Col>
       </Row>
-      <Row>
+      <Row justify={"between"}>
         <Col>
           <Typography>
             Service Fee ({Math.round((transactionFee / mealPrice) * 100)}%)
           </Typography>
         </Col>
         <Col>
-          <Typography align={"start"}>{transactionFee} Cr</Typography>
+          <Typography align={"end"}>{transactionFee} Cr</Typography>
         </Col>
       </Row>
       <hr />
@@ -66,33 +83,18 @@ const MealRequestCard = ({
           <Typography variant={"h3"}>Total</Typography>
         </Col>
         <Col>
-          <Typography variant={"h3"} align={"start"}>
+          <Typography variant={"h3"} align={"end"}>
             {mealPrice + transactionFee} Cr
           </Typography>
         </Col>
       </Row>
-      <Button className="px-3" onClick={buttonAction}>
-        Request meal
-      </Button>
+      <Row style={{ margin: "1rem 0 0 0" }}>
+        <Button className="px-3" onClick={buttonAction}>
+          Request meal
+        </Button>
+      </Row>
     </CardBody>
   </Card>
-  // <SCMealRequestCard
-  //   color={color}
-  //   className={["card", hoverable ? "card-hover" : "", className].join(" ")}
-  // >
-  //   <div>
-  //     <p>
-  //       <b>How to buy meal</b>
-  //     </p>
-  //     <ul>
-  //       <li>Check allergens if you have any</li>
-  //       <li>Request meal</li>
-  //       <li>Wait until Sender accepts request</li>
-  //       <li>Confirm transaction (only then, you are charged)</li>
-  //     </ul>
-  //   </div>
-  //   {children}
-  // </SCMealRequestCard>
 );
 
 export default MealRequestCard;

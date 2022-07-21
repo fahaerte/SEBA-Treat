@@ -90,7 +90,7 @@ export const MealOfferDetailScreen = () => {
                 alignItems: "center",
               }}
             >
-              <PageHeading>
+              <PageHeading style={{ marginRight: "0.5em" }}>
                 <u>{mealOffer.title}</u>
               </PageHeading>
               {mealOffer.categories.map((category: string) => (
@@ -124,19 +124,17 @@ export const MealOfferDetailScreen = () => {
               endDate={mealOffer.endDate}
             />
             <Row>
-              <Col>
+              <Col style={{ paddingRight: "3em" }}>
                 <SectionHeading>Description</SectionHeading>
                 <p>{mealOffer.description}</p>
                 <SectionHeading>Location</SectionHeading>
                 <p>{mealOffer.transactionFee}</p>
                 <SectionHeading>List of Allergens</SectionHeading>
-                <ul>
-                  {mealOffer.allergens.map((allergen: string) => (
-                    <li key={allergen}>{allergen}</li>
-                  ))}
-                </ul>
+                {mealOffer.allergens.map((allergen: string) => (
+                  <Tag key={allergen}>{allergen}</Tag>
+                ))}
               </Col>
-              <Col>
+              <Col style={{ maxWidth: "400px" }}>
                 <MealRequestCard
                   key={mealOffer._id}
                   productName={mealOffer.title}
