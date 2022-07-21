@@ -1,4 +1,4 @@
-import { baseApi, baseApiAuth, baseImageApi } from "./baseApi";
+import { baseApiAuth, baseImageApi } from "./baseApi";
 import { getCookie } from "../utils/auth/CookieProvider";
 
 export const getUser = async () => {
@@ -7,9 +7,8 @@ export const getUser = async () => {
   return response.data;
 };
 
-export const getUserPreview = async () => {
-  const userId = getCookie("userId");
-  const response = await baseApi().get(`/users/${userId}/preview`);
+export const getTransactions = async () => {
+  const response = await baseApiAuth().get(`/mealTransactions`);
   return response.data;
 };
 

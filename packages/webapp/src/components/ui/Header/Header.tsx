@@ -12,12 +12,23 @@ export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [balance, setBalance] = useState(0);
+  const [firstName, setFirstName] = useState("");
 
   useQuery("getUser", () => getUser(), {
-    onSuccess: (response) => {
-      setBalance(response.data.virtualAccount.balance);
-    },
-  });
+      onSuccess: (response) => {
+        setBalance(response.data.virtualAccount.balance);
+        setFirstName(response.data.firstName);
+      },
+    }
+  );
+
+  const handleReservationsButton = () => {
+    if (userId) {
+      navigate("/mealOfferRequests");
+    } else {
+      navigate("/login", { state: { from: location } });
+    }
+  };
 
   const handleNavButton = () => {
     if (getCookie("userId")) {
@@ -62,6 +73,16 @@ export const Header = () => {
                 Offer meal
               </Link>
             )}
+            {userId && (
+              <Button
+                className={"me-3"}
+                color={"secondary"}
+                outline={true}
+                onClick={handleReservationsButton}
+              >
+                Reservations
+              </Button>
+            )}
             {/*<Link*/}
             {/*  to={userId ? "/purchase-credits" : "/login"}*/}
             {/*  color={"secondary"}*/}
@@ -77,7 +98,7 @@ export const Header = () => {
                 outline={true}
                 onClick={handleNavButton}
               >
-                {`${balance} Credits Bild`}
+                {`${balance} Credits ${firstName}`}
               </Button>
             ) : (
               <Button

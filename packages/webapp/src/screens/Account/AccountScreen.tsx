@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, SectionHeading } from "../../components";
+import {
+  Col,
+  Container,
+  Row,
+  PageHeading,
+  SectionHeading,
+} from "../../components";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
@@ -15,6 +21,7 @@ import {
 import { getUser } from "../../api/userApi";
 import { useParams } from "react-router-dom";
 import { UserOverview } from "../../components/Profile/UserOverview";
+import { TransactionHistory } from "../../components/TransactionHistory/TransactionHistory";
 import { getCookie, setCookie } from "../../utils/auth/CookieProvider";
 
 export const AccountScreen = () => {
@@ -94,7 +101,10 @@ export const AccountScreen = () => {
 
   return (
     <>
-      <Row>
+      <Container className={""}>
+        <PageHeading className={"pt-5"}>
+          Your <u>account</u>
+        </PageHeading>
         <ProfileOverview />
         {discount && (
           <CreditDiscount
@@ -111,50 +121,51 @@ export const AccountScreen = () => {
             }
           />
         )}
-      </Row>
-      <SectionHeading>Buy packages</SectionHeading>
-      <Container>
-        <Row>
-          {productsIsLoading || isMutation || discountIsLoading ? (
-            <LoadingPackages />
-          ) : (
-            <>
-              {products &&
-                products
-                  .slice()
-                  .sort(
-                    (
-                      p1: { default_price: { unit_amount: number | null } },
-                      p2: { default_price: { unit_amount: number | null } }
-                    ) => {
-                      if (
-                        p1.default_price.unit_amount !== null &&
-                        p2.default_price.unit_amount !== null
-                      ) {
-                        return (
-                          p1.default_price.unit_amount -
-                          p2.default_price.unit_amount
-                        );
-                      }
-                      return -1;
-                    }
-                  )
-                  .map((creditPackage: IStripeProduct) => (
-                    <Col key={`${creditPackage.id}-container`}>
-                      <CreditPackage
-                        key={creditPackage.id}
-                        productName={creditPackage.name}
-                        price={creditPackage.default_price.unit_amount || 0}
-                        buttonAction={() =>
-                          redirectToCheckout(creditPackage.default_price.id)
+        <SectionHeading>Buy packages</SectionHeading>
+        <Container>
+          <Row>
+            {productsIsLoading || isMutation || discountIsLoading ? (
+              <LoadingPackages />
+            ) : (
+              <>
+                {products &&
+                  products
+                    .slice()
+                    .sort(
+                      (
+                        p1: { default_price: { unit_amount: number | null } },
+                        p2: { default_price: { unit_amount: number | null } }
+                      ) => {
+                        if (
+                          p1.default_price.unit_amount !== null &&
+                          p2.default_price.unit_amount !== null
+                        ) {
+                          return (
+                            p1.default_price.unit_amount -
+                            p2.default_price.unit_amount
+                          );
                         }
-                      />
-                    </Col>
-                  ))}
-            </>
-          )}
-        </Row>
-        <UserOverview />
+                        return -1;
+                      }
+                    )
+                    .map((creditPackage: IStripeProduct) => (
+                      <Col key={`${creditPackage.id}-container`}>
+                        <CreditPackage
+                          key={creditPackage.id}
+                          productName={creditPackage.name}
+                          price={creditPackage.default_price.unit_amount || 0}
+                          buttonAction={() =>
+                            redirectToCheckout(creditPackage.default_price.id)
+                          }
+                        />
+                      </Col>
+                    ))}
+              </>
+            )}
+          </Row>
+          {/*<UserOverview />*/}
+          <TransactionHistory />
+        </Container>
       </Container>
     </>
   );

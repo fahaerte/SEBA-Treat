@@ -1,19 +1,15 @@
 import React from "react";
 import { Container, PageHeading, Row, Typography } from "../../components/ui";
-import { Header } from "../../components/ui/Header/Header";
 import TabBar from "../../components/ui/TabBar/TabBar";
 import { Outlet } from "react-router-dom";
 
 export const MealOfferRequests = () => {
   return (
     <div>
-      <Header />
       <Container>
         <Row className={"pt-5"}>
           <PageHeading>
-            <Typography>
-              Your <u>orders</u>
-            </Typography>
+            Your <u>pending reservations</u>
           </PageHeading>
         </Row>
         <Row className={"pt-3"}>

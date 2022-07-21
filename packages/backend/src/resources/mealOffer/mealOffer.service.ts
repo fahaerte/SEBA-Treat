@@ -93,7 +93,8 @@ class MealOfferService {
     preview = true,
     user?: UserDocument
   ): Promise<MealOfferDocument | Error> {
-    const mealOfferDoc = await this.mealOffer.findById(mealOfferId).lean();
+    // const mealOfferDoc = await this.mealOffer.findById(mealOfferId).lean();
+    const mealOfferDoc = await this.mealOffer.findById(mealOfferId);
 
     if (!mealOfferDoc) {
       Logger.error({
@@ -383,9 +384,7 @@ class MealOfferService {
           mealOfferDoc.transactionFee
         )) as MealTransaction;
 
-      await this.mealTransactionService.performTransaction(
-        mealTransaction._id as ObjectId
-      );
+      await this.mealTransactionService.performTransaction(mealTransaction._id);
       mealOfferDoc.reservations.forEach((reservation) => {
         reservation.reservationState =
           mealReservation._id === reservation._id
