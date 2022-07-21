@@ -3299,15 +3299,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cookie-parser@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "@types/cookie-parser@npm:1.4.3"
-  dependencies:
-    "@types/express": "*"
-  checksum: f390f3af1b1711190dee2c2ecd9af33af81fbde8d81ee820dadb6fe1e0d80c3faba40af37c6ed36fb88b04b64870f6a021f7e9edceecd17c42fe22abe0af5005
-  languageName: node
-  linkType: hard
-
 "@types/cors@npm:^2.8.12":
   version: 2.8.12
   resolution: "@types/cors@npm:2.8.12"
@@ -11951,7 +11942,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@types/cookie-parser": ^1.4.3
     "@types/node": ^16.11.10
     "@typescript-eslint/eslint-plugin": ^5.4.0
     "@typescript-eslint/parser": ^5.4.0
