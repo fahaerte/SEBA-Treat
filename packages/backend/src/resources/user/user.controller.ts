@@ -84,11 +84,6 @@ class UserController implements Controller {
     );
 
     this.router.get(
-      `${this.path}/logout`,
-      this.logout
-    );
-
-    this.router.get(
       `${this.path}/account-balance`,
       authenticatedMiddleware,
       this.getAccountBalance
@@ -197,12 +192,12 @@ class UserController implements Controller {
           city,
           country,
           line1: `${street} ${houseNumber}`,
-          postal_code: postalCode
+          postal_code: postalCode,
         }
       );
       const createdUser = await this.userService.updateUser({
         _id: userId,
-        stripeCustomerId: stripeUserId
+        stripeCustomerId: stripeUserId,
       });
 
       res.status(201).json({ userId, token, address });
@@ -223,25 +218,7 @@ class UserController implements Controller {
         email as string,
         password as string
       );
-      res.status(200).cookie(
-        "jwt", token, {
-          expires: new Date(new Date().getTime() + 60 * 60 * 1000), // 1 hour
-          httpOnly: true
-        }
-      )
-        .send({ userId, address });
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
-    }
-  };
-
-  private logout = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Response | void => {
-    try {
-      res.status(200).clearCookie("jwt").send("removed cookie!");
+      res.status(200).send({ userId, token, address });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
