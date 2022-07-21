@@ -5,8 +5,8 @@ export const getUser = async (userId: string, token: string | undefined) => {
   return response.data;
 };
 
-export const getUserPreview = async (userId: string) => {
-  const response = await baseApi().get(`/users/${userId}/preview`);
+export const getTransactions = async (token: string | undefined) => {
+  const response = await baseApiAuth(token).get(`/mealTransactions`);
   return response.data;
 };
 

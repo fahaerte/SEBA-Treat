@@ -36,16 +36,15 @@ export const AppRouter = () => {
     children: [{ path: "*", element: <Navigate to="/404" /> }],
   };
 
-  const authRoute = {
-    path: "login",
-    element: (
-      <AppLayout>
-        <LoginScreen />
-      </AppLayout>
-    ),
-  };
-
   const authRoutes = [
+    {
+      path: "login",
+      element: (
+        <AppLayout>
+          <LoginScreen />
+        </AppLayout>
+      ),
+    },
     {
       path: "register",
       element: (
@@ -149,9 +148,11 @@ export const AppRouter = () => {
     {
       path: "mealOfferRequests",
       element: (
-        <RequireAuthRoute>
-          <MealOfferRequests />
-        </RequireAuthRoute>
+        <AppLayout>
+          <RequireAuthRoute>
+            <MealOfferRequests />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
       children: [
         {
@@ -168,7 +169,6 @@ export const AppRouter = () => {
 
   const routing = useRoutes([
     mainRoutes,
-    authRoute,
     ...authRoutes,
     addressRoute,
     profileRoutes,
