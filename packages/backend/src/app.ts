@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import compression from "compression";
 import cors from "cors";
 import morgan from "morgan";
+
 import Controller from "./utils/interfaces/controller.interface";
 import ErrorMiddleware from "./middleware/error.middleware";
 import helmet from "helmet";
@@ -10,7 +11,6 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUI from "swagger-ui-express";
 import { User } from "./resources/user/user.validation";
 import { ConfigService } from "./utils/ConfigService";
-import cookieParser from "cookie-parser";
 
 class App {
   public express: Application;
@@ -44,7 +44,6 @@ class App {
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: false }));
     this.express.use(compression());
-    this.express.use(cookieParser());
   }
 
   private initialiseErrorHandling(): void {
@@ -105,7 +104,7 @@ class App {
 
   public listen(): void {
     this.express.listen(this.port, () => {
-      console.log(`App listening on port ${this.port}`);
+      console.log(`App listening on the port ${this.port}`);
     });
   }
 }
