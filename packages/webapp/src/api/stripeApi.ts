@@ -26,7 +26,7 @@ export const verifyPayment = async ({
   customerId,
   priceId,
 }: VerifyPaymentApiArg) => {
-  const userId = getCookie('userId');
+  const userId = getCookie("userId");
   const response = await baseApiAuth().post(
     `/payment/get-latest-payment?product=${priceId}`,
     {
@@ -42,7 +42,7 @@ export const createCheckoutSession = async ({
   stripeCustomerId,
   couponId,
 }: CreateCheckoutSessionApiArg) => {
-  const userId = getCookie('userId');
+  const userId = getCookie("userId");
   const response = await baseApiAuth().post(
     "/payment/create-checkout-session",
     {

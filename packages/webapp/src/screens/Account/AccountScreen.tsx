@@ -19,9 +19,7 @@ import { getCookie, setCookie } from "../../utils/auth/CookieProvider";
 
 export const AccountScreen = () => {
   const { userId: userIdParam, token: userTokenParam } = useParams();
-  const { data: user } = useQuery("getUser", () =>
-    getUser()
-  );
+  const { data: user } = useQuery("getUser", () => getUser());
 
   const { data: products, isLoading: productsIsLoading } = useQuery(
     "products",
@@ -34,11 +32,7 @@ export const AccountScreen = () => {
   );
 
   const createCheckout = useMutation(
-    ({
-      priceId,
-      stripeCustomerId,
-      couponId,
-    }: CreateCheckoutSessionApiArg) => {
+    ({ priceId, stripeCustomerId, couponId }: CreateCheckoutSessionApiArg) => {
       return createCheckoutSession({
         priceId,
         stripeCustomerId,
@@ -61,13 +55,13 @@ export const AccountScreen = () => {
     IStripeProduct | undefined
   >();
 
-  const token = getCookie('token');
-  const userId = getCookie('userId');
+  const token = getCookie("token");
+  const userId = getCookie("userId");
 
   useEffect(() => {
     if (!userId && !token) {
-      setCookie('userId', userIdParam as string);
-      setCookie('token', userTokenParam as string);
+      setCookie("userId", userIdParam as string);
+      setCookie("token", userTokenParam as string);
     }
     if (discount && products) {
       const findProduct: IStripeProduct | undefined = products.find(

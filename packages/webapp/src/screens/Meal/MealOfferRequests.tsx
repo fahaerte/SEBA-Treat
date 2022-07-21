@@ -5,7 +5,6 @@ import TabBar from "../../components/ui/TabBar/TabBar";
 import { Outlet } from "react-router-dom";
 
 export const MealOfferRequests = () => {
-
   return (
     <div>
       <Header />

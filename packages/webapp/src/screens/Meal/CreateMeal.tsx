@@ -27,10 +27,8 @@ interface IMealOfferForm
 const CreateMeal = () => {
   const navigate = useNavigate();
 
-
   const createOfferMutation = useMutation(
-    ({ mealOffer }: CreateMealOfferArgs) =>
-      createMealOffer({ mealOffer }),
+    ({ mealOffer }: CreateMealOfferArgs) => createMealOffer({ mealOffer }),
     {
       onSuccess: (response) => {
         successToast({ message: "Your meal offer has been created!" });
@@ -212,8 +210,8 @@ const CreateMeal = () => {
     }),
   ];
 
-  const userId = getCookie('userId');
-  const token = getCookie('token');
+  const userId = getCookie("userId");
+  const token = getCookie("token");
 
   const handleSubmit = (data: IMealOfferForm) => {
     if (userId && token) {

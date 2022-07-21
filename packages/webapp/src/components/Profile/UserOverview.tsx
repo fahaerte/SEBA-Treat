@@ -6,12 +6,9 @@ import { Rating } from "./Rating";
 import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const UserOverview = () => {
+  const userId = getCookie("userIs");
 
-  const userId = getCookie('userIs');
-
-  const { isLoading, data } = useQuery(["getUser", userId], () =>
-    getUser()
-  );
+  const { isLoading, data } = useQuery(["getUser", userId], () => getUser());
 
   return (
     <>

@@ -16,8 +16,8 @@ const PaymentSuccess = () => {
   const { priceId, customerId, token, userId } = useParams();
 
   const { isLoading, isSuccess, isError } = useQuery("verifyPayment", () => {
-    setCookie('userId', userId as string);
-    setCookie('token', token as string)
+    setCookie("userId", userId as string);
+    setCookie("token", token as string);
     console.log({
       customerId,
       priceId,

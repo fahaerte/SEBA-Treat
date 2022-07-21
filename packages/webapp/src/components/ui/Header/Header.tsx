@@ -9,7 +9,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
 
 export const Header = () => {
-
   const navigate = useNavigate();
   const location = useLocation();
   const [balance, setBalance] = useState(0);
@@ -21,7 +20,7 @@ export const Header = () => {
   });
 
   const handleNavButton = () => {
-    if (getCookie('userId')) {
+    if (getCookie("userId")) {
       navigate("/account");
     } else {
       navigate("/login", { state: { from: location } });
@@ -33,8 +32,8 @@ export const Header = () => {
     navigate("/");
   };
 
-  const address = getCookie('address');
-  const userId = getCookie('userId');
+  const address = getCookie("address");
+  const userId = getCookie("userId");
 
   return (
     <SCHeader>

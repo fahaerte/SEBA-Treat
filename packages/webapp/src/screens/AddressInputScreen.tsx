@@ -19,7 +19,7 @@ export const AddressInputScreen = () => {
   const from = locationState?.from || "/mealoffers";
 
   const handleAddress = (data: IStringObject) => {
-    setCookie('address', data.returnedString);
+    setCookie("address", data.returnedString);
     navigate(from, { replace: true });
   };
 

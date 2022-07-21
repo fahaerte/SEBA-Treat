@@ -1,4 +1,4 @@
-import React  from "react";
+import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { getCookie } from "./CookieProvider";
 
@@ -7,7 +7,7 @@ export const RequireAuthRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const userId = getCookie('userId');
+  const userId = getCookie("userId");
   const location = useLocation();
 
   return (

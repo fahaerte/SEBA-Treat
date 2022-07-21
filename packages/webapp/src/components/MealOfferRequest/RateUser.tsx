@@ -15,7 +15,6 @@ export const RateUser = ({
   mealReservationId,
   existingRating,
 }: RateUserProps) => {
-
   const [rating, setRating] = useState([0, 0, 0, 0, 0]);
   const [finalRating, setFinalRating] = useState(existingRating);
 
@@ -30,12 +29,7 @@ export const RateUser = ({
   };
 
   const rateUserMutation = useMutation(
-    () =>
-      rateUserCall(
-        mealOfferId,
-        mealReservationId,
-        sum(rating)
-      ),
+    () => rateUserCall(mealOfferId, mealReservationId, sum(rating)),
     {
       onSuccess: () => {
         successToast({ message: "You rated the user" });

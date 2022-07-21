@@ -10,14 +10,10 @@ export const getMealOffer = async (mealOfferId: string) => {
 export const requestMealOffer = async ({
   mealOfferId,
 }: requestMealOfferArgs) => {
-  return await baseApiAuth().post(
-    `/mealOffers/${mealOfferId}/reservations`
-  );
+  return await baseApiAuth().post(`/mealOffers/${mealOfferId}/reservations`);
 };
 
-export const createMealOffer = async ({
-  mealOffer,
-}: CreateMealOfferArgs) => {
+export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
   return await baseApiAuth().post("/mealOffers", mealOffer);
 };
 
@@ -32,7 +28,7 @@ export const getMealOffersByParams = async (
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
-      address: getCookie('address'),
+      address: getCookie("address"),
       portions: portions,
       category: category,
       sellerRating: sellerRating,
@@ -45,16 +41,12 @@ export const getMealOffersByParams = async (
 };
 
 export const getSentMealOfferRequests = async () => {
-  const response = await baseApiAuth().get(
-    "/mealOffers/reservations/sent"
-  );
+  const response = await baseApiAuth().get("/mealOffers/reservations/sent");
   return response.data;
 };
 
 export const getReceivedMealOfferRequests = async () => {
-  const response = await baseApiAuth().get(
-    "/mealOffers/reservations/received"
-  );
+  const response = await baseApiAuth().get("/mealOffers/reservations/received");
   return response.data;
 };
 

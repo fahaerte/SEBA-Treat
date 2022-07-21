@@ -7,7 +7,7 @@ export const RequireAddressRoute = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const address = getCookie('address');
+  const address = getCookie("address");
   const location = useLocation();
 
   return (

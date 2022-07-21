@@ -56,7 +56,7 @@ export const MealOfferDetailScreen = () => {
   });
 
   function handleRequestClick() {
-    const token = getCookie('token');
+    const token = getCookie("token");
     if (token) {
       const result = requestMealMutation.mutate({
         mealOfferId: mealOfferId as string,

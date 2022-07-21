@@ -19,18 +19,13 @@ export const ReceivedMealReservation = ({
   reservation,
   buyerRating,
 }: ReceivedMealReservationProps) => {
-
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
-      updateMealReservationState(
-        mealOfferId,
-        reservation._id,
-        newState
-      ),
+      updateMealReservationState(mealOfferId, reservation._id, newState),
     {
       onSuccess: (newState: EMealReservationState) => {
         successToast({ message: "You changed the state of your reservation" });
