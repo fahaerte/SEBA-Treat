@@ -62,7 +62,6 @@ export const getReceivedMealOfferRequests = async (token: string) => {
 
 export const updateMealReservationState = async (
   token: string,
-  mealOfferId: string,
   mealOfferReservationId: string,
   newReservationState: EMealReservationState
 ) => {
@@ -70,7 +69,7 @@ export const updateMealReservationState = async (
     reservationState: newReservationState,
   };
   const response = await baseApiAuth(token).patch(
-    `/mealOffers/${mealOfferId}/reservations/${mealOfferReservationId}`,
+    `/mealOffers/reservations/${mealOfferReservationId}`,
     newStateObject
   );
   return response.data;

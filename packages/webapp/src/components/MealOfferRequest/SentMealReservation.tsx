@@ -33,14 +33,12 @@ export const SentMealReservation = ({
     (newState: EMealReservationState) =>
       updateMealReservationState(
         token as string,
-        mealOfferId,
         reservation._id,
         newState
       ),
     {
-      onSuccess: (newState: EMealReservationState) => {
+      onSuccess: () => {
         successToast({ message: "You changed the state of your reservation" });
-        setReservationState(newState);
       },
       onError: (error: any) => {
         dangerToast({ message: error.response.data.message });
@@ -50,6 +48,7 @@ export const SentMealReservation = ({
 
   const updateReservationState = (newState: EMealReservationState) => {
     updateReservationStateMutation.mutate(newState);
+    setReservationState(newState);
   };
 
   function getActionElement() {

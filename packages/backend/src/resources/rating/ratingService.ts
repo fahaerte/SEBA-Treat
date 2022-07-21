@@ -25,8 +25,6 @@ class RatingService {
   ): Promise<RatingDocument | Error> {
     const [mealOffer, mealReservation] =
       (await this.mealOfferService.getMealOfferAndReservation(
-        user,
-        mealOfferId,
         mealReservationId
       )) as [MealOfferDocument, MealReservationDocument];
     if (
