@@ -1,7 +1,14 @@
 import { Document, ObjectId } from "mongoose";
 import { ETransactionState } from "@treat/lib-common";
+import { IMealTransaction } from "@treat/lib-common";
 
-interface MealTransaction extends Document {
+interface MealTransactionDocument
+  extends Omit<
+      IMealTransaction,
+      "_id" | "mealOfferId" | "mealReservationId" | "senderId" | "receiverId"
+    >,
+    Document {
+  _id: ObjectId;
   mealOfferId: ObjectId;
   mealReservationId: ObjectId;
   senderId: ObjectId;
@@ -13,4 +20,4 @@ interface MealTransaction extends Document {
   sellerRating: number;
 }
 
-export default MealTransaction;
+export default MealTransactionDocument;

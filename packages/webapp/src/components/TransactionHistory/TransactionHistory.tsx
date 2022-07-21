@@ -1,20 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row, SectionHeading, Typography } from "../ui";
 import { useQuery } from "react-query";
 import { getTransactions, getUser } from "../../api/userApi";
 import { useAuthContext } from "../../utils/auth/AuthProvider";
+import IMealTransaction from "@treat/lib-common";
 
 export const TransactionHistory = () => {
   const { userId, token } = useAuthContext();
 
+  const [transactionHist, setTransactionHist] = useState([]);
+
   const { data: transactions, isLoading: transactionsAreLoading } = useQuery(
     ["getTransactions", userId],
-    () => getTransactions(token as string)
+    () => getTransactions(token as string),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
+        setTransactionHist(response.data);
+      },
+    }
   );
-
-  useEffect(() => {
-    console.log(transactions);
-  }, [transactions]);
 
   return (
     <>
@@ -22,7 +27,14 @@ export const TransactionHistory = () => {
         "Loading..."
       ) : (
         <>
-          <SectionHeading>Your Transaction Tistory</SectionHeading>
+          <SectionHeading>Your Transaction History</SectionHeading>
+          {transactionHist &&
+            transactionHist
+              .slice()
+              .map((transaction: IMealTransaction, index: number) => (
+                <div key={transaction._id}>{transaction._id}</div>
+              ))}
+
           {/*<Row>*/}
           {/*  <Col>*/}
           {/*    <Typography variant={"h4"} display={"inline"}>*/}

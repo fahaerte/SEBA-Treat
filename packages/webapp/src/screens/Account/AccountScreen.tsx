@@ -116,7 +116,7 @@ export const AccountScreen = () => {
     <>
       <Container className={""}>
         <PageHeading className={"pt-5"}>
-          Your <u>Account</u>
+          Your <u>account</u>
         </PageHeading>
         <ProfileOverview />
         {discount && (

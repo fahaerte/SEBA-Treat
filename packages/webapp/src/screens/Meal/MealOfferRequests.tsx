@@ -12,7 +12,7 @@ export const MealOfferRequests = () => {
       <Container>
         <Row className={"pt-5"}>
           <PageHeading>
-            Your <u>orders</u>
+            Your <u>pending reservations</u>
           </PageHeading>
         </Row>
         <Row className={"pt-3"}>
