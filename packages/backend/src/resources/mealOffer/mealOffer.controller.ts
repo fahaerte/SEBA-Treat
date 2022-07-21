@@ -60,7 +60,7 @@ class MealOfferController implements Controller {
       this.getReceivedMealOfferRequests
     );
     this.router.patch(
-      `${this.path}/:mealOfferId/reservations/:mealReservationId`,
+      `${this.path}/reservations/:mealReservationId`,
       authenticatedMiddleware,
       validationMiddleware(validate.updateReservationStateBody),
       validationMiddleware(
@@ -155,10 +155,8 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { compareAddress } = req.body;
-      const mealOffer = await this.mealOfferService.getMealOfferWithUser(
+      const mealOffer = await this.mealOfferService.getMealOffer(
         req.params.mealOfferId,
-        false,
-        true,
         req.user,
         compareAddress as string
       );
@@ -237,7 +235,6 @@ class MealOfferController implements Controller {
     try {
       const { reservationState } = req.body;
       await this.mealOfferService.updateMealOfferReservationState(
-        req.params.mealOfferId,
         req.user,
         req.params.mealReservationId,
         reservationState as EMealReservationState
