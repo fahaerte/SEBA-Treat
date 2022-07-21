@@ -7,7 +7,6 @@ import { RateUser } from "./RateUser";
 import { EMealReservationState } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -20,7 +19,6 @@ export const ReceivedMealReservation = ({
   reservation,
   buyerRating,
 }: ReceivedMealReservationProps) => {
-  const { token } = useAuthContext();
 
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
@@ -29,7 +27,6 @@ export const ReceivedMealReservation = ({
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
       updateMealReservationState(
-        token as string,
         mealOfferId,
         reservation._id,
         newState

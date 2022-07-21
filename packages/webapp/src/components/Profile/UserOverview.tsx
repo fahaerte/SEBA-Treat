@@ -2,14 +2,15 @@ import React from "react";
 import { Col, Row, SectionHeading, Typography } from "../ui";
 import { useQuery } from "react-query";
 import { getUser } from "../../api/userApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { Rating } from "./Rating";
+import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const UserOverview = () => {
-  const { userId, token } = useAuthContext();
+
+  const userId = getCookie('userIs');
 
   const { isLoading, data } = useQuery(["getUser", userId], () =>
-    getUser(userId as string, token as string)
+    getUser()
   );
 
   return (

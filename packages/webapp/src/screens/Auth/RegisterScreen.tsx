@@ -1,15 +1,14 @@
 import React from "react";
 import { Form, FormHelper, IFormRow } from "../../components";
 import { IAddress, IUser } from "@treat/lib-common";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { register } from "../../api/authApi";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { setCookie } from "../../utils/auth/CookieProvider";
 
 export const RegisterScreen = () => {
-  const userContext = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,11 +23,10 @@ export const RegisterScreen = () => {
 
   const registerMutation = useMutation(register, {
     onSuccess: (response) => {
-      console.log(response.data);
       const { userId, token, address } = response.data;
-      userContext.setToken(token as string);
-      userContext.setUserId(userId as string);
-      userContext.setAddress(getStringFromIAddress(address as IAddress));
+      setCookie('token', token);
+      setCookie('userId', userId);
+      setCookie('address', getStringFromIAddress(address as IAddress));
     },
   });
 

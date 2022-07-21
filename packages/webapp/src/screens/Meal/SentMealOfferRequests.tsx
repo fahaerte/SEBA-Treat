@@ -4,15 +4,12 @@ import { SentMealReservation } from "../../components/MealOfferRequest/SentMealR
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import { useQuery } from "react-query";
 import { getSentMealOfferRequests } from "../../api/mealApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const SentMealOfferRequests = () => {
   const queryKey = "sentMealOfferRequests";
 
-  const { token } = useAuthContext();
-
   const { data: requests } = useQuery(queryKey, () =>
-    getSentMealOfferRequests(token as string)
+    getSentMealOfferRequests()
   );
 
   return (

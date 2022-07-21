@@ -1,12 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form } from "@treat/webapp/src/components/";
 import { IStringObject } from "@treat/lib-common";
-import { AuthContext } from "../utils/auth/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addressElement } from "../components/AddressInput/AddressInput";
+import { setCookie } from "../utils/auth/CookieProvider";
 
 export const AddressInputScreen = () => {
-  const userContext = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,7 +19,7 @@ export const AddressInputScreen = () => {
   const from = locationState?.from || "/mealoffers";
 
   const handleAddress = (data: IStringObject) => {
-    userContext.setAddress(data.returnedString);
+    setCookie('address', data.returnedString);
     navigate(from, { replace: true });
   };
 

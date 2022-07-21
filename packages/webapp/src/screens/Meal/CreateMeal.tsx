@@ -8,10 +8,10 @@ import {
   TOptionValuePair,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { IMealOffer, EMealAllergen, EMealCategory } from "@treat/lib-common";
 import { createMealOffer, CreateMealOfferArgs } from "../../api/mealApi";
 import { useMutation } from "react-query";
+import { getCookie } from "../../utils/auth/CookieProvider";
 
 interface IMealOfferForm
   extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
@@ -25,12 +25,12 @@ interface IMealOfferForm
  * - Redirect to detail page on success
  */
 const CreateMeal = () => {
-  const { userId, token } = useAuthContext();
   const navigate = useNavigate();
 
+
   const createOfferMutation = useMutation(
-    ({ mealOffer, token }: CreateMealOfferArgs) =>
-      createMealOffer({ mealOffer, token }),
+    ({ mealOffer }: CreateMealOfferArgs) =>
+      createMealOffer({ mealOffer }),
     {
       onSuccess: (response) => {
         successToast({ message: "Your meal offer has been created!" });
@@ -212,6 +212,9 @@ const CreateMeal = () => {
     }),
   ];
 
+  const userId = getCookie('userId');
+  const token = getCookie('token');
+
   const handleSubmit = (data: IMealOfferForm) => {
     if (userId && token) {
       const { startDate, endDate, categories, allergens } = data;
@@ -232,7 +235,7 @@ const CreateMeal = () => {
         categories: categoryValues,
         allergens: allergenValues,
       };
-      createOfferMutation.mutate({ mealOffer: newOffer, token });
+      createOfferMutation.mutate({ mealOffer: newOffer });
     } else {
       dangerToast({ message: "User not authenticated!" });
       navigate("/login");

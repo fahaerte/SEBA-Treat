@@ -5,7 +5,6 @@ import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { getReceivedMealOfferRequests } from "../../api/mealApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 // TODO: use theme or maybe even create a component
 const MainDivider = styled.hr`
@@ -19,11 +18,9 @@ const MainDivider = styled.hr`
 export const ReceivedMealOfferRequests = () => {
   const queryKey = "receivedMealOfferRequests";
 
-  const { token } = useAuthContext();
-
   const { data: requests } = useQuery(
     queryKey,
-    () => getReceivedMealOfferRequests(token as string),
+    () => getReceivedMealOfferRequests(),
     {
       onSuccess: (response) => {
         console.log(response);

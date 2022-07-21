@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Icon } from "../ui";
 import { useQuery } from "react-query";
 import { getProfilePictureURL } from "../../api/userApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import User from "../../types/interfaces/user.interface";
 
 const ProfilePicture = styled.img`
@@ -22,10 +21,8 @@ export const MealOfferRequestUserInfo = ({
   user,
 }: MealOfferRequestUserInfoProps) => {
   const { data: profilePicture } = useQuery("getProfilePicture", () =>
-    getProfilePictureURL(user._id, token as string)
+    getProfilePictureURL()
   );
-
-  const { token } = useAuthContext();
 
   return (
     <Col>

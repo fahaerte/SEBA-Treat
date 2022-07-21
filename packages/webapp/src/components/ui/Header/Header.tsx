@@ -1,28 +1,27 @@
 import { Col, Row } from "../Grid";
-import { Button, Icon, infoToast, Link, Typography } from "../index";
+import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { useAuthContext } from "../../../utils/auth/AuthProvider";
 import { SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
 
 export const Header = () => {
-  const { userId, setUserId, setToken, setAddress, token, address } =
-    useAuthContext();
+
   const navigate = useNavigate();
   const location = useLocation();
   const [balance, setBalance] = useState(0);
 
-  useQuery("getUser", () => getUser(userId as string, token as string), {
+  useQuery("getUser", () => getUser(), {
     onSuccess: (response) => {
       setBalance(response.data.virtualAccount.balance);
     },
   });
 
   const handleNavButton = () => {
-    if (userId) {
+    if (getCookie('userId')) {
       navigate("/account");
     } else {
       navigate("/login", { state: { from: location } });
@@ -30,11 +29,12 @@ export const Header = () => {
   };
 
   const signout = () => {
-    setAddress(undefined);
-    setUserId(undefined);
-    setToken(undefined);
+    removeCookies();
     navigate("/");
   };
+
+  const address = getCookie('address');
+  const userId = getCookie('userId');
 
   return (
     <SCHeader>

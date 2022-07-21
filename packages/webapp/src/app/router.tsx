@@ -2,12 +2,8 @@ import React from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import LoginScreen from "../screens/Auth/LoginScreen";
 import { RegisterScreen } from "../screens/Auth/RegisterScreen";
-import { HomeScreen } from "../screens/HomeScreen";
 import { AddressInputScreen } from "../screens/AddressInputScreen";
-import { ErrorPage } from "../screens/Status/ErrorPage";
-import { AuthProvider } from "../utils/auth/AuthProvider";
 import { MealOfferScreen } from "../screens/Meal/MealOfferScreen";
-// import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
@@ -179,7 +175,7 @@ export const AppRouter = () => {
 
   return (
     <QueryClientProvider client={reactQueryClient}>
-      <AuthProvider>{routing}</AuthProvider>
+      {routing}
     </QueryClientProvider>
   );
 };
