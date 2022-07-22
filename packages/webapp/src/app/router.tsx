@@ -2,12 +2,8 @@ import React from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import LoginScreen from "../screens/Auth/LoginScreen";
 import { RegisterScreen } from "../screens/Auth/RegisterScreen";
-import { HomeScreen } from "../screens/HomeScreen";
 import { AddressInputScreen } from "../screens/AddressInputScreen";
-import { ErrorPage } from "../screens/Status/ErrorPage";
-import { AuthProvider } from "../utils/auth/AuthProvider";
 import { MealOfferScreen } from "../screens/Meal/MealOfferScreen";
-// import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { Typography } from "../components/ui";
 import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
@@ -19,6 +15,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
+import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -27,46 +24,45 @@ export const AppRouter = () => {
     path: "/",
     element: (
       <AppLayout>
-        <HomeScreen />
+        <RequireAddressRoute>
+          <MealOfferScreen />
+        </RequireAddressRoute>
       </AppLayout>
     ),
-    children: [
-      { path: "*", element: <Navigate to="/404" /> },
-      { path: "/404", element: <ErrorPage /> },
-
-      {
-        path: "/login",
-        element: <LoginScreen />,
-      },
-      {
-        path: "/register",
-        element: <RegisterScreen />,
-      },
-      {
-        path: "/address",
-        element: <AddressInputScreen />,
-      },
-      {
-        path: "/alreadyLoggedIn",
-        element: <Typography>User already logged in</Typography>,
-      },
-    ],
+    children: [{ path: "*", element: <Navigate to="/404" /> }],
   };
 
-  const redirectRoutes = [
-    // {
-    //   path: "/success/:priceId",
-    //   element: <PaymentSuccess />,
-    // },
-    // {
-    //   path: "/purchase-credits",
-    //   element: (
-    //     <RequireAuthRoute>
-    //       <AccountScreen />
-    //     </RequireAuthRoute>
-    //   ),
-    // },
+  const authRoutes = [
+    {
+      path: "login",
+      element: (
+        <AppLayout>
+          <LoginScreen />
+        </AppLayout>
+      ),
+    },
+    {
+      path: "register",
+      element: (
+        <AppLayout>
+          <RegisterScreen />
+        </AppLayout>
+      ),
+    },
+    {
+      path: "alreadyLoggedIn",
+      element: <Typography>User already logged in</Typography>,
+    },
   ];
+
+  const addressRoute = {
+    path: "address",
+    element: (
+      <AppLayout>
+        <AddressInputScreen />
+      </AppLayout>
+    ),
+  };
 
   const profileRoutes = {
     path: "profile/:profileId/",
@@ -128,21 +124,31 @@ export const AppRouter = () => {
     {
       path: "mealoffers",
       element: (
-        <RequireAuthRoute>
-          <MealOfferScreen />
-        </RequireAuthRoute>
+        <AppLayout>
+          <RequireAddressRoute>
+            <MealOfferScreen />
+          </RequireAddressRoute>
+        </AppLayout>
       ),
     },
     {
       path: "mealoffers/:mealOfferId",
-      element: <MealOfferDetailScreen />,
+      element: (
+        <AppLayout>
+          <RequireAddressRoute>
+            <MealOfferDetailScreen />
+          </RequireAddressRoute>
+        </AppLayout>
+      ),
     },
     {
       path: "mealOfferRequests",
       element: (
-        <RequireAuthRoute>
-          <MealOfferRequests />
-        </RequireAuthRoute>
+        <AppLayout>
+          <RequireAuthRoute>
+            <MealOfferRequests />
+          </RequireAuthRoute>
+        </AppLayout>
       ),
       children: [
         {
@@ -159,6 +165,8 @@ export const AppRouter = () => {
 
   const routing = useRoutes([
     mainRoutes,
+    ...authRoutes,
+    addressRoute,
     profileRoutes,
     // ...redirectRoutes,
     ...purchaseCreditRoutes,
@@ -167,7 +175,7 @@ export const AppRouter = () => {
 
   return (
     <QueryClientProvider client={reactQueryClient}>
-      <AuthProvider>{routing}</AuthProvider>
+      {routing}
     </QueryClientProvider>
   );
 };

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Icon, Row } from "../ui";
+import { Button, Col, dangerToast, Icon, Row, successToast } from "../ui";
 import { sum } from "lodash";
-import MealTransactionService from "../../services/mealTransaction.service";
+import { useMutation } from "react-query";
+import { rateUser as rateUserCall } from "../../api/ratingApi";
 
 interface RateUserProps {
   mealOfferId: string;
@@ -27,23 +28,27 @@ export const RateUser = ({
     setRating([...rating]);
   };
 
-  const createRating = async () => {
-    try {
-      await MealTransactionService.rateTransaction(
-        mealOfferId,
-        mealReservationId,
-        sum(rating)
-      );
-      setFinalRating(sum(rating));
-    } catch (error: any) {
-      console.error(error);
+  const rateUserMutation = useMutation(
+    () => rateUserCall(mealOfferId, mealReservationId, sum(rating)),
+    {
+      onSuccess: () => {
+        successToast({ message: "You rated the user" });
+        setFinalRating(sum(rating));
+      },
+      onError: (error: any) => {
+        dangerToast({ message: error.response.data.message });
+      },
     }
+  );
+
+  const rateUser = () => {
+    rateUserMutation.mutate();
   };
 
   const getRateButton = () => {
     if (finalRating === undefined) {
       return (
-        <Button onClick={() => createRating()} disabled={sum(rating) === 0}>
+        <Button onClick={() => rateUser()} disabled={sum(rating) === 0}>
           Rate user
         </Button>
       );
@@ -54,7 +59,7 @@ export const RateUser = ({
     if (existingRating !== undefined) {
       updateRating(existingRating - 1);
     }
-  }, [existingRating, updateRating]);
+  }, [existingRating]);
 
   return (
     <Row className={""}>

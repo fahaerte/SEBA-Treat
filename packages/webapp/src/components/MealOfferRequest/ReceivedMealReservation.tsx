@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
-import { Button } from "../ui";
-import MealOfferService from "../../services/mealOffer.service";
+import { Button, dangerToast, successToast } from "../ui";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
 import { EMealReservationState } from "@treat/lib-common";
+import { useMutation } from "react-query";
+import { updateMealReservationState } from "../../api/mealApi";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -22,17 +23,22 @@ export const ReceivedMealReservation = ({
     reservation.reservationState
   );
 
-  const updateReservationState = async (newState: EMealReservationState) => {
-    try {
-      await MealOfferService.updateMealReservationState(
-        String(mealOfferId),
-        reservation._id,
-        newState
-      );
-      setReservationState(newState);
-    } catch (error: any) {
-      console.log(error);
+  const updateReservationStateMutation = useMutation(
+    (newState: EMealReservationState) =>
+      updateMealReservationState(reservation._id, newState),
+    {
+      onSuccess: (newState: EMealReservationState) => {
+        successToast({ message: "You changed the state of your reservation" });
+      },
+      onError: (error: any) => {
+        dangerToast({ message: error.response.data.message });
+      },
     }
+  );
+
+  const updateReservationState = (newState: EMealReservationState) => {
+    updateReservationStateMutation.mutate(newState);
+    setReservationState(newState);
   };
 
   const getActionButton = () => {
@@ -57,7 +63,7 @@ export const ReceivedMealReservation = ({
         <RateUser
           mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
-          existingRating={buyerRating}
+          existingRating={buyerRating ? buyerRating : undefined}
         />
       );
     }
@@ -67,7 +73,8 @@ export const ReceivedMealReservation = ({
     if (
       reservationState == EMealReservationState.BUYER_REJECTED ||
       reservationState == EMealReservationState.SELLER_REJECTED ||
-      reservationState == EMealReservationState.BUYER_CONFIRMED
+      reservationState == EMealReservationState.BUYER_CONFIRMED ||
+      reservationState == EMealReservationState.SELLER_ACCEPTED
     ) {
       return (
         <Row>
@@ -97,12 +104,7 @@ export const ReceivedMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo
-        userId={reservation.buyer._id}
-        firstName={reservation.buyer.firstName}
-        lastName={reservation.buyer.lastName}
-        meanRating={reservation.buyer.meanRating}
-      />
+      <MealOfferRequestUserInfo user={reservation.buyer} />
       <Col className={"col-sm-auto d-flex align-items-center"}>
         {getActionBar()}
       </Col>

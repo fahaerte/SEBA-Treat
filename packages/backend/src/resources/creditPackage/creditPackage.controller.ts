@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-import authenticate from "../../middleware/authenticated.middleware";
+import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
 import CreditPackageService from "./creditPackage.service";
 
 class CreditPackageController implements Controller {
@@ -13,7 +13,11 @@ class CreditPackageController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.get(`${this.path}`, authenticate, this.getCreditPackages);
+    this.router.get(
+      `${this.path}`,
+      authenticatedMiddleware,
+      this.getCreditPackages
+    );
   }
 
   private getCreditPackages = async (

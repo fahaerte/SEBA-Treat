@@ -1,16 +1,15 @@
 import React from "react";
-import { Form, FormHelper } from "../../components";
+import { Row, Form, FormHelper } from "../../components";
 import { IFormRow } from "../../components";
 import { IAddress, IUserCredentials } from "@treat/lib-common";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
 import { AxiosError } from "axios";
+import { setCookie } from "../../utils/auth/CookieProvider";
 
 const LoginScreen = () => {
-  const userContext = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,17 +22,12 @@ const LoginScreen = () => {
   const locationState = location.state as LocationState;
   const from = locationState?.from || "/alreadyLoggedIn";
 
-  // const from = location.state?.from || "/alreadyLoggedIn";
-
-  console.log("Coming from", from);
-
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
-      console.log(response.data);
       const { userId, token, address } = response.data;
-      userContext.setToken(token as string);
-      userContext.setUserId(userId as string);
-      userContext.setAddress(getStringFromIAddress(address as IAddress));
+      setCookie("token", token);
+      setCookie("userId", userId);
+      setCookie("address", getStringFromIAddress(address as IAddress));
       navigate(from, { replace: true });
     },
   });
@@ -52,7 +46,7 @@ const LoginScreen = () => {
             message: "Please provide an email!",
           },
         },
-        defaultValue: "test@user.de",
+        defaultValue: "fabian.haertel@tum.de",
       }),
       FormHelper.createInput({
         formKey: "password",
@@ -66,15 +60,17 @@ const LoginScreen = () => {
             message: "Please provide a password!",
           },
         },
-        defaultValue: "pa55word",
+        defaultValue: "123456",
       }),
     ],
   ];
 
   const handleSignIn = (user: IUserCredentials) => {
-    console.log("Trying to log in...");
-    console.log(JSON.stringify(user));
     loginMutation.mutate(user);
+  };
+
+  const handleCreateAccount = () => {
+    navigate("/register", { state: { from: from } });
   };
 
   return (
@@ -104,6 +100,16 @@ const LoginScreen = () => {
           }}
         />
       </div>
+      <Row>
+        <p>
+          <br />
+          Or{" "}
+          <a onClick={handleCreateAccount}>
+            <u>create an account</u>
+          </a>
+          .
+        </p>
+      </Row>
     </>
   );
 };

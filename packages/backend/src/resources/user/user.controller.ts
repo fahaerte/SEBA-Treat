@@ -1,9 +1,9 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
 import HttpException from "../../utils/exceptions/http.exception";
-import authenticate from "../../middleware/authenticated.middleware";
+import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
 import profileFileUpload from "../../middleware/upload.middleware";
 
 import UserService from "../../resources/user/user.service";
@@ -85,7 +85,7 @@ class UserController implements Controller {
 
     this.router.get(
       `${this.path}/account-balance`,
-      authenticate,
+      authenticatedMiddleware,
       this.getAccountBalance
     );
 
@@ -110,9 +110,13 @@ class UserController implements Controller {
      *      401:
      *        description: Unauthorised
      */
-    this.router.get(`${this.path}/:userId?`, authenticate, this.getUser);
+    this.router.get(
+      `${this.path}/:userId?`,
+      authenticatedMiddleware,
+      this.getUser
+    );
 
-    this.router.get(`${this.path}/preview/:userId?`, this.getUserPreview);
+    this.router.get(`${this.path}/:userId?/preview`, this.getUserPreview);
 
     /**
      * @swagger
@@ -135,7 +139,7 @@ class UserController implements Controller {
      */
     this.router.post(
       `${this.path}/profile-picture`,
-      authenticate,
+      authenticatedMiddleware,
       profileFileUpload.single("profilePicture"),
       this.uploadProfilePicture
     );
@@ -163,7 +167,7 @@ class UserController implements Controller {
      */
     this.router.get(
       `${this.path}/profile-picture/:userid?`,
-      authenticate,
+      authenticatedMiddleware,
       this.getProfilePicture
     );
   }

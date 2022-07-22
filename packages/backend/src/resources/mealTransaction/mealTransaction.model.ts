@@ -1,8 +1,8 @@
 import { model, Schema, Types } from "mongoose";
-import MealTransaction from "./mealTransaction.interface";
+import MealTransactionDocument from "./mealTransaction.interface";
 import { ETransactionState } from "@treat/lib-common";
 
-const MealTransactionSchema = new Schema<MealTransaction>(
+const MealTransactionSchema = new Schema<MealTransactionDocument>(
   {
     mealOfferId: {
       type: Types.ObjectId,
@@ -50,4 +50,7 @@ const MealTransactionSchema = new Schema<MealTransaction>(
   { timestamps: true }
 );
 
-export default model<MealTransaction>("MealTransaction", MealTransactionSchema);
+export default model<MealTransactionDocument>(
+  "MealTransaction",
+  MealTransactionSchema
+);

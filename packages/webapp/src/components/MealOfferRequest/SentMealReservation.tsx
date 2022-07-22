@@ -1,46 +1,47 @@
 import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
-import { Button } from "../ui";
-import MealOfferService from "../../services/mealOffer.service";
+import { Button, dangerToast, successToast } from "../ui";
 import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
 import { EMealReservationState } from "@treat/lib-common";
+import User from "../../types/interfaces/user.interface";
+import { useMutation } from "react-query";
+import { updateMealReservationState } from "../../api/mealApi";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
-  sellerId: string;
-  sellerFirstName: string;
-  sellerLastName: string;
+  seller: User;
   reservation: MealReservation;
   sellerRating: number | undefined;
-  sellerMeanRating: number;
 }
 
 export const SentMealReservation = ({
   mealOfferId,
-  sellerId,
-  sellerFirstName,
-  sellerLastName,
+  seller,
   reservation,
   sellerRating,
-  sellerMeanRating,
 }: SentMealOfferRequestBottomProps) => {
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
 
-  const updateReservationState = async (newState: EMealReservationState) => {
-    try {
-      await MealOfferService.updateMealReservationState(
-        mealOfferId,
-        reservation._id,
-        newState
-      );
-      setReservationState(newState);
-    } catch (error: any) {
-      console.log(error);
+  const updateReservationStateMutation = useMutation(
+    (newState: EMealReservationState) =>
+      updateMealReservationState(reservation._id, newState),
+    {
+      onSuccess: () => {
+        successToast({ message: "You changed the state of your reservation" });
+      },
+      onError: (error: any) => {
+        dangerToast({ message: error.response.data.message });
+      },
     }
+  );
+
+  const updateReservationState = (newState: EMealReservationState) => {
+    updateReservationStateMutation.mutate(newState);
+    setReservationState(newState);
   };
 
   function getActionElement() {
@@ -65,7 +66,7 @@ export const SentMealReservation = ({
         <RateUser
           mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
-          existingRating={sellerRating}
+          existingRating={sellerRating ? sellerRating : undefined}
         />
       );
     }
@@ -105,12 +106,7 @@ export const SentMealReservation = ({
 
   return (
     <Row className={""}>
-      <MealOfferRequestUserInfo
-        userId={sellerId}
-        firstName={sellerFirstName}
-        lastName={sellerLastName}
-        meanRating={sellerMeanRating}
-      />
+      <MealOfferRequestUserInfo user={seller} />
 
       <Col className={"col-sm-auto"}>{getActionBar()}</Col>
     </Row>
