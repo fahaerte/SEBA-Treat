@@ -12,7 +12,6 @@ export const getCookie = (cookieName: string) => {
 
 export const removeCookies = () => {
   const cookies = new Cookies();
-  cookies.remove("token");
   cookies.remove("address");
   cookies.remove("userId");
 };

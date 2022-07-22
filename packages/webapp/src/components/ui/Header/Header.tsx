@@ -29,7 +29,7 @@ export const Header = () => {
     onSuccess: (response) => {
       removeCookies();
       navigate("/");
-    }
+    },
   });
 
   const handleReservationsButton = () => {
@@ -116,7 +116,11 @@ export const Header = () => {
               </Button>
             )}
             {userId && (
-              <Button color={"secondary"} className={"ms-3"} onClick={executeSignout}>
+              <Button
+                color={"secondary"}
+                className={"ms-3"}
+                onClick={executeSignout}
+              >
                 <Icon type={"box-arrow-right"} />
               </Button>
             )}

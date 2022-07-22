@@ -23,8 +23,7 @@ export const RegisterScreen = () => {
 
   const registerMutation = useMutation(register, {
     onSuccess: (response) => {
-      const { userId, token, address } = response.data;
-      setCookie("token", token);
+      const { userId, address } = response.data;
       setCookie("userId", userId);
       setCookie("address", getStringFromIAddress(address as IAddress));
     },
