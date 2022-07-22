@@ -10,14 +10,13 @@ import {
   Tag,
   PageHeading,
   UserPreview,
-  MealDetails,
+  MealDetails
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
-import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
@@ -30,7 +29,7 @@ export const MealOfferDetailScreen = () => {
     {
       onSuccess: (response) => {
         console.log(response);
-      },
+      }
     }
   );
 
@@ -38,35 +37,28 @@ export const MealOfferDetailScreen = () => {
     onSuccess: () => {
       successToast({
         message:
-          "The meal has been reserved for you. Now, the chef can accept it.",
+          "The meal has been reserved for you. Now, the chef can accept it."
       });
     },
     onError: (error) => {
       console.log("onError:");
       if (error instanceof AxiosError && error.response) {
         dangerToast({
-          message: error.response.data.message,
+          message: error.response.data.message
         });
       } else {
         dangerToast({
-          message: "Unexpected server error. The meal could not be reserved.",
+          message: "Unexpected server error. The meal could not be reserved."
         });
       }
-    },
+      navigate("/login", { state: { from: location } });
+    }
   });
 
   function handleRequestClick() {
-    const token = getCookie("token");
-    if (token) {
-      const result = requestMealMutation.mutate({
-        mealOfferId: mealOfferId as string,
-      });
-    } else {
-      infoToast({
-        message: `Please log in to reserve this meal`,
-      });
-      navigate("/login", { state: { from: location } });
-    }
+    void requestMealMutation.mutate({
+      mealOfferId: mealOfferId as string
+    });
   }
 
   return (
@@ -86,7 +78,7 @@ export const MealOfferDetailScreen = () => {
               className={"pt-5"}
               style={{
                 display: "flex",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <PageHeading>
@@ -110,7 +102,7 @@ export const MealOfferDetailScreen = () => {
                   width: "100%",
                   border: "1px solid grey",
                   backgroundColor: "grey",
-                  color: "white",
+                  color: "white"
                 }}
               >
                 Meal Pictures
