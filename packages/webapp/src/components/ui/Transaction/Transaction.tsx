@@ -1,7 +1,9 @@
 import React from "react";
 // import { SCTransaction } from "./styles";
-import { Typography, Row, Icon } from "../../index";
+import { Container } from "react-bootstrap";
+import { Typography, Row, Icon, Col, UserPreview } from "../";
 import { useAuthContext } from "../../../utils/auth/AuthProvider";
+import styled from "styled-components";
 
 const Transaction = ({
   senderId,
@@ -30,19 +32,40 @@ const Transaction = ({
   return (
     <>
       {userId && (
-        <>
-          <Row>
-            {firstName} {lastName}
+        <Container className={"p-0"}>
+          <Row justify={"between"} alignItems={"center"}>
+            <Col>
+              <UserPreview
+                firstName={"Test"}
+                lastName={"User"}
+                countRatings={99}
+                meanRating={2}
+                img={"test"}
+              />
+            </Col>
+            <Col>
+              <div style={{ textAlign: "center" }}>
+                <p>{timestampAsString}</p>
+              </div>
+            </Col>
+            <Col>
+              <div
+                style={{
+                  // fontSize: "1.2rem",
+                  fontWeight: "bold",
+                  textAlign: "right",
+                }}
+              >
+                {userId === senderId ? (
+                  <p>- {senderAmount} €</p>
+                ) : (
+                  <p>+ {receiverAmount} €</p>
+                )}
+              </div>
+            </Col>
           </Row>
-          <Row>{timestampAsString}</Row>
-          <Row>
-            {userId === senderId ? (
-              <p>- {senderAmount} €</p>
-            ) : (
-              <p>+ {receiverAmount} €</p>
-            )}
-          </Row>
-        </>
+          <hr style={{ marginTop: "0" }} />
+        </Container>
       )}
     </>
   );
