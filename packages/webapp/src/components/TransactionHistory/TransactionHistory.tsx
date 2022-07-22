@@ -4,11 +4,12 @@ import { useQuery } from "react-query";
 import { getTransactions } from "../../api/userApi";
 import { IMealTransaction } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
+import { Transaction } from "../";
 
 export const TransactionHistory = () => {
   const [transactionHist, setTransactionHist] = useState([]);
 
-  const userId = getCookie("userrId");
+  const userId = getCookie("userId");
 
   const { data: transactions, isLoading: transactionsAreLoading } = useQuery(
     ["getTransactions", userId],
@@ -38,6 +39,7 @@ export const TransactionHistory = () => {
                     //   {transaction._id}: {transaction.updatedAt}
                     // </div>
                     <Transaction
+                      key={transaction._id}
                       senderId={transaction.senderId}
                       receiverId={transaction.receiverId}
                       firstName={"Test"}

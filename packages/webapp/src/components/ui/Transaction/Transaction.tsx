@@ -2,7 +2,7 @@ import React from "react";
 // import { SCTransaction } from "./styles";
 import { Container } from "react-bootstrap";
 import { Typography, Row, Icon, Col, UserPreview } from "../";
-import { useAuthContext } from "../../../utils/auth/AuthProvider";
+import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
 import styled from "styled-components";
 
 const Transaction = ({
@@ -22,7 +22,7 @@ const Transaction = ({
   amount: number;
   fee: number;
 }) => {
-  const { userId, token } = useAuthContext();
+  const userId = getCookie("userId");
 
   const timestampAsString = new Date(timestamp).toLocaleDateString();
 
