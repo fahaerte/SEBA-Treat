@@ -14,16 +14,18 @@ export const Header = () => {
   const [balance, setBalance] = useState(0);
   const [firstName, setFirstName] = useState("");
 
+  const address = getCookie("address");
+  const userId = getCookie("userId");
+
   useQuery("getUser", () => getUser(), {
-      onSuccess: (response) => {
-        setBalance(response.data.virtualAccount.balance);
-        setFirstName(response.data.firstName);
-      },
-    }
-  );
+    onSuccess: (response) => {
+      setBalance(response.data.virtualAccount.balance);
+      setFirstName(response.data.firstName);
+    },
+  });
 
   const handleReservationsButton = () => {
-    if (userId) {
+    if (getCookie('userId')) {
       navigate("/mealOfferRequests");
     } else {
       navigate("/login", { state: { from: location } });
@@ -42,9 +44,6 @@ export const Header = () => {
     removeCookies();
     navigate("/");
   };
-
-  const address = getCookie("address");
-  const userId = getCookie("userId");
 
   return (
     <SCHeader>
