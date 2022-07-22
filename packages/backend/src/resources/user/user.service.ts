@@ -1,5 +1,5 @@
 import UserModel from "../user/user.model";
-import token from "../../utils/token";
+import token from "../../utils/tokenUtil";
 import path from "path";
 import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";

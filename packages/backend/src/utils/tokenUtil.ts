@@ -9,7 +9,7 @@ export const createToken = (user: UserDocument): string => {
     { id: user._id },
     configService.get("JWT_SECRET") as jwt.Secret,
     {
-      expiresIn: "1d",
+      expiresIn: "1h",
     }
   );
 };

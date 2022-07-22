@@ -214,10 +214,14 @@ class UserController implements Controller {
     try {
       const { email, password } = req.body;
 
-      const { userId, token, address } = await this.userService.login(
+      const { userId, address, token } = await this.userService.login(
         email as string,
         password as string
       );
+
+      res.cookie('Authorization', token, {
+        httpOnly: true,
+      });
       res.status(200).send({ userId, token, address });
     } catch (error: any) {
       next(new HttpException(400, error.message));

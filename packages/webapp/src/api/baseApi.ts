@@ -2,13 +2,15 @@ import axios from "axios";
 import { ConfigService } from "../utils/ConfigService";
 import { getCookie } from "../utils/auth/CookieProvider";
 
-export const baseApi = () =>
-  axios.create({
+export const baseApi = () => {
+  axios.defaults.withCredentials = true;
+  return axios.create({
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
-      "Content-Type": "application/json",
-    },
+      "Content-Type": "application/json"
+    }
   });
+};
 
 export const baseApiAuth = () => {
   const token = getCookie("token");
@@ -16,8 +18,9 @@ export const baseApiAuth = () => {
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+      "Access-Control-Allow-Origin": "*",
+      withCredentials: true
+    }
   });
 };
 
@@ -27,7 +30,7 @@ export const baseImageApi = () => {
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
       "Content-Type": "image/png",
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   });
 };
