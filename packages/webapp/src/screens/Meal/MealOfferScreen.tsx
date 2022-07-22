@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "../../components";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
-import { MealOfferScreenHeader } from "../../components/ui/Header/mealOfferScreenHeader";
 import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 
 export const MealOfferScreen = () => {
-  const { address } = useAuthContext();
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [sortingRule, setSortingRule] = useState<string>();
   const [distance, setDistance] = useState<number>(5);
@@ -30,7 +27,6 @@ export const MealOfferScreen = () => {
     queryKey,
     () =>
       getMealOffersByParams(
-        address as string,
         distance,
         portions,
         category,

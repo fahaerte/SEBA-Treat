@@ -11,7 +11,6 @@ import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
 import ProfileOverview from "../../components/Profile/ProfileOverview";
 import CreditDiscount from "../../components/CreditProducts/CreditDiscount";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useIsMutating, useMutation, useQuery } from "react-query";
 import {
   createCheckoutSession,
@@ -23,38 +22,28 @@ import { getUser } from "../../api/userApi";
 import { useParams } from "react-router-dom";
 import { UserOverview } from "../../components/Profile/UserOverview";
 import { TransactionHistory } from "../../components/TransactionHistory/TransactionHistory";
+import { getCookie, setCookie } from "../../utils/auth/CookieProvider";
 
 export const AccountScreen = () => {
   const { userId: userIdParam, token: userTokenParam } = useParams();
-  const { userId, setUserId, token, setToken } = useAuthContext();
-  const { data: user } = useQuery("getUser", () =>
-    getUser(userId as string, token as string)
-  );
+  const { data: user } = useQuery("getUser", () => getUser());
 
   const { data: products, isLoading: productsIsLoading } = useQuery(
     "products",
-    () => paymentGetProductsWithPrices(token as string)
+    () => paymentGetProductsWithPrices()
   );
 
   const { data: discount, isLoading: discountIsLoading } = useQuery(
     "discounts",
-    () => paymentGetDiscount(token as string)
+    () => paymentGetDiscount()
   );
 
   const createCheckout = useMutation(
-    ({
-      priceId,
-      stripeCustomerId,
-      couponId,
-      token,
-      userId,
-    }: CreateCheckoutSessionApiArg) => {
+    ({ priceId, stripeCustomerId, couponId }: CreateCheckoutSessionApiArg) => {
       return createCheckoutSession({
         priceId,
         stripeCustomerId,
         couponId,
-        token,
-        userId,
       });
     },
     {
@@ -73,10 +62,13 @@ export const AccountScreen = () => {
     IStripeProduct | undefined
   >();
 
+  const token = getCookie("token");
+  const userId = getCookie("userId");
+
   useEffect(() => {
     if (!userId && !token) {
-      setUserId(userIdParam);
-      setToken(userTokenParam);
+      setCookie("userId", userIdParam as string);
+      setCookie("token", userTokenParam as string);
     }
     if (discount && products) {
       const findProduct: IStripeProduct | undefined = products.find(
@@ -93,8 +85,6 @@ export const AccountScreen = () => {
     token,
     userTokenParam,
     userIdParam,
-    setToken,
-    setUserId,
   ]);
 
   const redirectToCheckout = (priceId: string, couponId?: string) => {
@@ -103,8 +93,6 @@ export const AccountScreen = () => {
         priceId: priceId,
         stripeCustomerId: user.data.stripeCustomerId,
         couponId: couponId || undefined,
-        token: token as string,
-        userId: userId as string,
       });
     } catch {
       return <div>Stripe Instance not available, 401</div>;

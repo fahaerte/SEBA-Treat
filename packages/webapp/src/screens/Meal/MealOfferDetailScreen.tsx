@@ -12,16 +12,15 @@ import {
   UserPreview,
   MealDetails,
 } from "../../components";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useMutation, useQuery } from "react-query";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
+import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
-  const { token } = useAuthContext();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -57,10 +56,10 @@ export const MealOfferDetailScreen = () => {
   });
 
   function handleRequestClick() {
+    const token = getCookie("token");
     if (token) {
       const result = requestMealMutation.mutate({
         mealOfferId: mealOfferId as string,
-        token: token,
       });
     } else {
       infoToast({

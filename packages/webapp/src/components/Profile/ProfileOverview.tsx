@@ -1,24 +1,20 @@
 import React, { useState } from "react";
 import { Col, SectionHeading, Typography } from "../ui";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useQuery } from "react-query";
 import { getUser } from "../../api/userApi";
 import { IUser } from "@treat/lib-common";
+import { getCookie } from "../../utils/auth/CookieProvider";
 
 const ProfileOverview = () => {
-  const { userId, token } = useAuthContext();
-
   const [balance, setBalance] = useState(0);
 
-  const { isLoading } = useQuery(
-    ["getUser", userId],
-    () => getUser(userId as string, token as string),
-    {
-      onSuccess: (response: { data: IUser }) => {
-        setBalance(response.data.virtualAccount.balance);
-      },
-    }
-  );
+  const userId = getCookie("userId");
+
+  const { isLoading } = useQuery(["getUser", userId], () => getUser(), {
+    onSuccess: (response: { data: IUser }) => {
+      setBalance(response.data.virtualAccount.balance);
+    },
+  });
 
   return (
     <Col>

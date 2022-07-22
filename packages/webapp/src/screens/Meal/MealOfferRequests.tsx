@@ -2,11 +2,8 @@ import React from "react";
 import { Container, PageHeading, Row, Typography } from "../../components/ui";
 import TabBar from "../../components/ui/TabBar/TabBar";
 import { Outlet } from "react-router-dom";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const MealOfferRequests = () => {
-  const { token } = useAuthContext();
-
   return (
     <div>
       <Container>

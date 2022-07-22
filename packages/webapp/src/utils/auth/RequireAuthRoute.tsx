@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import { AuthContext } from "./AuthProvider";
+import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { getCookie } from "./CookieProvider";
 
 export const RequireAuthRoute = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const { userId } = useContext(AuthContext);
+  const userId = getCookie("userId");
   const location = useLocation();
 
   return (

@@ -8,7 +8,6 @@ import { EMealReservationState } from "@treat/lib-common";
 import User from "../../types/interfaces/user.interface";
 import { useMutation } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -23,15 +22,13 @@ export const SentMealReservation = ({
   reservation,
   sellerRating,
 }: SentMealOfferRequestBottomProps) => {
-  const { token } = useAuthContext();
-
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
-      updateMealReservationState(token as string, reservation._id, newState),
+      updateMealReservationState(reservation._id, newState),
     {
       onSuccess: () => {
         successToast({ message: "You changed the state of your reservation" });

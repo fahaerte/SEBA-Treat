@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row, SectionHeading, Typography, Transaction } from "../ui";
+import React, { useState } from "react";
+import { SectionHeading } from "../ui";
 import { useQuery } from "react-query";
-import { getTransactions, getUser } from "../../api/userApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
+import { getTransactions } from "../../api/userApi";
 import { IMealTransaction } from "@treat/lib-common";
+import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const TransactionHistory = () => {
-  const { userId, token } = useAuthContext();
-
   const [transactionHist, setTransactionHist] = useState([]);
+
+  const userId = getCookie("userrId");
 
   const { data: transactions, isLoading: transactionsAreLoading } = useQuery(
     ["getTransactions", userId],
-    () => getTransactions(token as string),
+    () => getTransactions(),
     {
       onSuccess: (response) => {
         console.log(response.data);
