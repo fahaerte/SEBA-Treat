@@ -20,7 +20,7 @@ const LoginScreen = () => {
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState?.from || "/alreadyLoggedIn";
+  const from = locationState?.from || "/";
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
@@ -28,6 +28,9 @@ const LoginScreen = () => {
       setCookie("userId", userId);
       setCookie("address", getStringFromIAddress(address as IAddress));
       successToast({ message: "Welcome!" });
+      if (from.pathname === "/address") {
+        from.pathname = "/";
+      }
       navigate(from, { replace: true });
     },
     onError: () => {
