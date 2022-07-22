@@ -181,9 +181,7 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const newUser = req.body;
-      const { userId } = await this.userService.register(
-        newUser
-      );
+      const { userId } = await this.userService.register(newUser);
       const { city, country, street, postalCode, houseNumber } =
         newUser.address;
       const stripeUserId = await this.stripeService.stripeUsers.createCustomer(

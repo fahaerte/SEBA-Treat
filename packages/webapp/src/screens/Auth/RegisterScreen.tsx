@@ -1,5 +1,12 @@
 import React from "react";
-import { dangerToast, Form, FormHelper, IFormRow, successToast, Typography } from "../../components";
+import {
+  dangerToast,
+  Form,
+  FormHelper,
+  IFormRow,
+  successToast,
+  Typography,
+} from "../../components";
 import { IUser } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { register } from "../../api/authApi";
@@ -10,12 +17,12 @@ export const RegisterScreen = () => {
 
   const registerMutation = useMutation(register, {
     onSuccess: (response) => {
-      successToast({message: "Registration successful!"})
+      successToast({ message: "Registration successful!" });
       navigate("/");
     },
     onError: () => {
-      dangerToast({message: "Something went wrong!"});
-    }
+      dangerToast({ message: "Something went wrong!" });
+    },
   });
 
   const elements: IFormRow<IUser>[] = [

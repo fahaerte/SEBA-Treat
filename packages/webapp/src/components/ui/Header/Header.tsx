@@ -8,6 +8,7 @@ import Logo from "../../../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
 import { signout } from "../../../api/authApi";
+import { dangerToast, successToast } from "../Toast";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -28,8 +29,12 @@ export const Header = () => {
   const signoutMutation = useMutation("signout", signout, {
     onSuccess: (response) => {
       removeCookies();
+      successToast({message: "Successfully signed out."});
       navigate("/");
     },
+    onError: () => {
+      dangerToast({message: "Signout unsuccessful. Please try again!"});
+    }
   });
 
   const handleReservationsButton = () => {

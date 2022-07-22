@@ -75,14 +75,7 @@ export const AccountScreen = () => {
       );
       setDiscountedProduct(findProduct);
     }
-  }, [
-    discount,
-    products,
-    createCheckout,
-    userId,
-    userTokenParam,
-    userIdParam,
-  ]);
+  }, [discount, products, createCheckout, userId, userTokenParam, userIdParam]);
 
   const redirectToCheckout = (priceId: string, couponId?: string) => {
     try {
