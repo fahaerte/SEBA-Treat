@@ -57,11 +57,7 @@ export const AppRouter = () => {
 
   const addressRoute = {
     path: "address",
-    element: (
-      <AppLayout>
-        <AddressInputScreen />
-      </AppLayout>
-    ),
+    element: <AddressInputScreen />,
   };
 
   const profileRoutes = {

@@ -10,7 +10,7 @@ export const SCFloatingForm = styled.div`
     border-radius: ${({ theme }) => theme.form.control.border.radius};
     border: ${({ theme }) => theme.general.border.width} solid
       ${({ theme }) => theme.general.border.color.primary};
-    color: ${({ theme }) => theme.form.control.color};
+    color: black;
     font-size: ${({ theme }) => theme.form.control.fontSize};
     height: ${({ theme }) => theme.form.control.height};
     padding: ${({ theme }) => theme.form.control.padding};

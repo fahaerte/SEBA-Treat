@@ -1,44 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;700&family=Roboto:wght@300;400;700&display=swap"
-      rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;700&family=Roboto:wght@300;400;700&display=swap"
+            rel="stylesheet"
     />
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title>Treat</title>
     <style>
-      @media print {
-        @page {
-          size: auto;
-          margin: 0;
-        }
+        /*body {*/
+        /*    position: static;*/
+        /*    overflow: scroll;*/
+        /*    min-height: 100vh;*/
+        /*}*/
 
-        body {
-          position: static;
-          overflow: scroll;
-        }
+        @media print {
+            @page {
+                /*size: auto;*/
+                margin: 0;
+            }
 
-        #root > div > div:not(:nth-child(2)) {
-          display: none !important;
-        }
+            body {
+                position: static;
+                overflow: scroll;
+                min-height: 100vh;
+            }
 
-        #root > div > div:nth-child(2) {
-          overflow: visible !important;
-          position: absolute !important;
-          z-index: 2147483647;
-          page-break-after: avoid;
-        }
+            #root > div > div:not(:nth-child(2)) {
+                display: none !important;
+            }
 
-        #root > div > div:nth-child(2) * {
-          overflow: visible !important;
+            #root > div > div:nth-child(2) {
+                overflow: visible !important;
+                position: absolute !important;
+                z-index: 2147483647;
+                page-break-after: avoid;
+            }
+
+            #root > div > div:nth-child(2) * {
+                overflow: visible !important;
+            }
         }
-      }
     </style>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+</head>
+<body>
+<div id="root"></div>
+</body>
 </html>

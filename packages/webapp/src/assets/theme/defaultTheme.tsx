@@ -141,7 +141,7 @@ export const defaultTheme: DefaultTheme = {
       },
     },
     label: {
-      color: "",
+      color: "#000",
       padding: "0 1em",
     },
   },
