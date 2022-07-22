@@ -5,26 +5,12 @@ import HttpException from "../utils/exceptions/http.exception";
 import jwt from "jsonwebtoken";
 import tokenUtil from "../utils/tokenUtil";
 
-async function optionalAuthenticatedMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | void> {
-  const bearer = req.headers.authorization;
-
-  if (bearer && bearer.startsWith("Bearer")) {
-    return addUserToRequest(req, res, next, bearer);
-  }
-  return next();
-}
-
 async function authenticatedMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> {
   const token = req.cookies["Authorization"];
-  console.log(req.cookies["Authorization"]);
 
   if (!token) {
     return next(new HttpException(401, "Unauthorised"));
@@ -60,4 +46,4 @@ async function addUserToRequest(
   }
 }
 
-export { authenticatedMiddleware, optionalAuthenticatedMiddleware };
+export { authenticatedMiddleware };

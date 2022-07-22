@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { getTransactions } from "../../api/userApi";
 import { IMealTransaction } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
-import { Transaction } from "../";
+import { Transaction } from "../ui";
 
 export const TransactionHistory = () => {
   const [transactionHist, setTransactionHist] = useState([]);

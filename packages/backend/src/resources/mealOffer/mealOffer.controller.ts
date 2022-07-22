@@ -3,7 +3,6 @@ import { NextFunction, Request, Response, Router } from "express";
 import validate from "../mealOffer/mealOffer.validation";
 import {
   authenticatedMiddleware,
-  optionalAuthenticatedMiddleware,
 } from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
@@ -44,7 +43,6 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}/:mealOfferId`,
-      optionalAuthenticatedMiddleware,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
       validationMiddleware(validate.getMealOfferBody, ValidatePart.BODY),
       this.getMealOffer

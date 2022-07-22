@@ -13,7 +13,6 @@ export const baseApi = () => {
 };
 
 export const baseApiAuth = () => {
-  const token = getCookie("token");
   return axios.create({
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
@@ -25,12 +24,10 @@ export const baseApiAuth = () => {
 };
 
 export const baseImageApi = () => {
-  const token = getCookie("token");
   return axios.create({
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
       "Content-Type": "image/png",
-      Authorization: `Bearer ${token}`,
     },
   });
 };

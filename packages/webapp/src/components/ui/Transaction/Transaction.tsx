@@ -1,9 +1,7 @@
 import React from "react";
-// import { SCTransaction } from "./styles";
 import { Container } from "react-bootstrap";
-import { Typography, Row, Icon, Col, UserPreview } from "../";
-import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
-import styled from "styled-components";
+import { Row, Icon, Col, UserPreview } from "../";
+import { getCookie } from "../../../utils/auth/CookieProvider";
 
 const Transaction = ({
   senderId,
