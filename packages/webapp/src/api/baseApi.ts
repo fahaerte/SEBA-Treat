@@ -7,8 +7,8 @@ export const baseApi = () => {
   return axios.create({
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
   });
 };
 
@@ -19,8 +19,8 @@ export const baseApiAuth = () => {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      withCredentials: true
-    }
+      withCredentials: true,
+    },
   });
 };
 
@@ -30,7 +30,7 @@ export const baseImageApi = () => {
     baseURL: `${new ConfigService().get("API_URL")}`,
     headers: {
       "Content-Type": "image/png",
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   });
 };

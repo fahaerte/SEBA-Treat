@@ -219,7 +219,7 @@ class UserController implements Controller {
         password as string
       );
 
-      res.cookie('Authorization', token, {
+      res.cookie("Authorization", token, {
         httpOnly: true,
       });
       res.status(200).send({ userId, token, address });

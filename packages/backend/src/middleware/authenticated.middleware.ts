@@ -23,8 +23,8 @@ async function authenticatedMiddleware(
   res: Response,
   next: NextFunction
 ): Promise<Response | void> {
-  const token = req.cookies['Authorization'];
-  console.log(req.cookies['Authorization']);
+  const token = req.cookies["Authorization"];
+  console.log(req.cookies["Authorization"]);
 
   if (!token) {
     return next(new HttpException(401, "Unauthorised"));

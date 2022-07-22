@@ -25,7 +25,7 @@ const LoginScreen = () => {
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
       const { userId, address } = response.data;
-      console.log(response.headers['Authorization']);
+      console.log(response.headers["Authorization"]);
       // setCookie("token", token);
       setCookie("userId", userId);
       setCookie("address", getStringFromIAddress(address as IAddress));

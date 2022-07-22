@@ -39,7 +39,7 @@ class App {
           "*",
         ],
         credentials: true,
-        exposedHeaders: ['Authorization'],
+        exposedHeaders: ["Authorization"],
       })
     );
     this.express.use(morgan("dev"));
