@@ -34,9 +34,6 @@ const updateReservationStateBody = Joi.object({
 });
 
 const updateReservationStateParams = Joi.object({
-  mealOfferId: Joi.string()
-    .regex(/^[a-f\d]{24}$/i)
-    .required(),
   mealReservationId: Joi.string()
     .regex(/^[a-f\d]{24}$/i)
     .required(),
