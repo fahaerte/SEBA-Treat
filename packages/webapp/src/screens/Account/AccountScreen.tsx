@@ -164,8 +164,8 @@ export const AccountScreen = () => {
             )}
           </Row>
           {/*<UserOverview />*/}
-          <TransactionHistory />
         </Container>
+        <TransactionHistory />
       </Container>
     </>
   );
