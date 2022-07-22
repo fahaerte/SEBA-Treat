@@ -7,8 +7,7 @@ import { SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
-import Dropdown from "react-bootstrap";
-import { DropdownExample } from "./CustomDropdownToggle";
+import { CustomDropdown } from "./CustomDropdownToggle";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -69,25 +68,26 @@ export const Header = () => {
             {/*    Create Offer*/}
             {/*  </Link>*/}
             {/*)}*/}
-            <DropdownExample />
 
-            {/*### WIEDER REIN MACHEN DIESEN BLOCK ###*/}
-            {/*{location.pathname !== "/createMeal" && (*/}
-            {/*  <Link to={"/createMeal"} display={"button"} className={"me-3"}>*/}
-            {/*    Offer meal*/}
-            {/*  </Link>*/}
-            {/*)}*/}
-            {/*{userId && (*/}
-            {/*  <Button*/}
+            {location.pathname !== "/createMeal" && (
+              <Link
+                to={"/createMeal"}
+                display={"button"}
+                className={"me-3"}
+                color={"secondary"}
+              >
+                <Icon type={"plus"} /> Offer meal
+              </Link>
+            )}
+
+            {/*<Button*/}
             {/*    className={"me-3"}*/}
             {/*    color={"secondary"}*/}
             {/*    outline={true}*/}
             {/*    onClick={handleReservationsButton}*/}
-            {/*  >*/}
-            {/*    Reservations*/}
-            {/*  </Button>*/}
-            {/*)}*/}
-
+            {/*>*/}
+            {/*  Reservations*/}
+            {/*</Button>*/}
             {/*<Link*/}
             {/*  to={userId ? "/purchase-credits" : "/login"}*/}
             {/*  color={"secondary"}*/}
@@ -98,25 +98,19 @@ export const Header = () => {
             {/*  {userId ? `${balance} Credits Bild` : "Sign In"}*/}
             {/*</Link>*/}
             {userId ? (
-              <Button
-                color={"secondary"}
-                outline={true}
-                onClick={handleNavButton}
-              >
-                {`${balance} Credits ${firstName}`}
-              </Button>
+              <CustomDropdown
+                credits={balance}
+                firstName={firstName}
+                handleReservationNavigation={handleReservationsButton}
+                handleLogout={signout}
+              />
             ) : (
               <Button
-                color={"secondary"}
+                color={"primary"}
                 outline={true}
                 onClick={handleNavButton}
               >
                 Sign in
-              </Button>
-            )}
-            {userId && (
-              <Button color={"secondary"} className={"ms-3"} onClick={signout}>
-                <Icon type={"box-arrow-right"} />
               </Button>
             )}
           </Col>

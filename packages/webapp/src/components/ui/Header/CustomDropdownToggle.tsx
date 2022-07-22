@@ -3,14 +3,16 @@ import { DropdownToggle, DropdownItem, DropdownMenu, Button } from "reactstrap";
 import { Icon, Link } from "../index";
 import { StyledDropdown } from "./styles";
 
-export const DropdownExample = ({
+export const CustomDropdown = ({
   credits,
   firstName,
-  logOutFunction,
+  handleReservationNavigation,
+  handleLogout,
 }: {
   credits: number;
   firstName: string;
-  logOutFunction: () => void;
+  handleLogout: () => void;
+  handleReservationNavigation: () => void;
 }) => (
   <StyledDropdown group>
     <Button className={"btn-secondary"}>
@@ -20,17 +22,17 @@ export const DropdownExample = ({
     </Button>
     <DropdownToggle caret>{firstName}</DropdownToggle>
     <DropdownMenu end={true}>
-      <Link route to={"/register/company"} className={"dropdown-item"}>
+      <DropdownItem onClick={handleReservationNavigation}>
         Meal Reservations
-      </Link>
-      <Link route to={"/register/company"} className={"dropdown-item"}>
+      </DropdownItem>
+      <Link route to={"/"} className={"dropdown-item"}>
         My Offers
       </Link>
-      <Link route to={"/register/company"} className={"dropdown-item"}>
+      <Link route to={"/"} className={"dropdown-item"}>
         My Profile
       </Link>
       <DropdownItem divider />
-      <DropdownItem onClick={logOutFunction}>
+      <DropdownItem onClick={handleLogout}>
         <Icon type={"box-arrow-right"} /> Logout
       </DropdownItem>
     </DropdownMenu>
