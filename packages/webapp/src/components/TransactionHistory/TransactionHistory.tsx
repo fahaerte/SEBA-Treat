@@ -23,7 +23,7 @@ export const TransactionHistory = () => {
 
   return (
     <>
-      <SectionHeading>Your Transaction History</SectionHeading>
+      <SectionHeading>Your transaction history</SectionHeading>
       {transactionsAreLoading ? (
         "Loading..."
       ) : (

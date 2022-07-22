@@ -28,11 +28,7 @@ export const ReceivedMealReservation = ({
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
-      updateMealReservationState(
-        token as string,
-        reservation._id,
-        newState
-      ),
+      updateMealReservationState(token as string, reservation._id, newState),
     {
       onSuccess: () => {
         successToast({ message: "You changed the state of your reservation" });
@@ -81,7 +77,7 @@ export const ReceivedMealReservation = ({
       reservationState == EMealReservationState.BUYER_REJECTED ||
       reservationState == EMealReservationState.SELLER_REJECTED ||
       reservationState == EMealReservationState.BUYER_CONFIRMED ||
-        reservationState == EMealReservationState.SELLER_ACCEPTED
+      reservationState == EMealReservationState.SELLER_ACCEPTED
     ) {
       return (
         <Row>

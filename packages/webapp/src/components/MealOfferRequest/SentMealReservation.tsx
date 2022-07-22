@@ -31,11 +31,7 @@ export const SentMealReservation = ({
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
-      updateMealReservationState(
-        token as string,
-        reservation._id,
-        newState
-      ),
+      updateMealReservationState(token as string, reservation._id, newState),
     {
       onSuccess: () => {
         successToast({ message: "You changed the state of your reservation" });

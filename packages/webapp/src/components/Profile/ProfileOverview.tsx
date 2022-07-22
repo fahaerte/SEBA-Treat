@@ -26,7 +26,7 @@ const ProfileOverview = () => {
         <div>Loading....</div>
       ) : (
         <>
-          <SectionHeading>Your Account Balance</SectionHeading>
+          <SectionHeading>Your account balance</SectionHeading>
           <Typography variant={"h1"} className={"fw-normal"}>
             {balance} Credits
           </Typography>
