@@ -170,6 +170,11 @@ class UserController implements Controller {
       authenticatedMiddleware,
       this.getProfilePicture
     );
+
+    this.router.post(
+      `${this.path}/signout`,
+      this.signout
+    );
   }
 
   private register = async (
@@ -192,12 +197,12 @@ class UserController implements Controller {
           city,
           country,
           line1: `${street} ${houseNumber}`,
-          postal_code: postalCode,
+          postal_code: postalCode
         }
       );
       const createdUser = await this.userService.updateUser({
         _id: userId,
-        stripeCustomerId: stripeUserId,
+        stripeCustomerId: stripeUserId
       });
 
       res.status(201).json({ userId, token, address });
@@ -220,12 +225,20 @@ class UserController implements Controller {
       );
 
       res.cookie("Authorization", token, {
-        httpOnly: true,
+        httpOnly: true
       });
       res.status(200).send({ userId, token, address });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
+  };
+
+  private signout = (
+    req: Request,
+    res: Response,
+  ): Response | void => {
+    res.clearCookie("Authorization");
+    res.status(200).send("Removed cookie");
   };
 
   private getUser = async (

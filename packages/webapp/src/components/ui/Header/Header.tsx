@@ -1,12 +1,13 @@
 import { Col, Row } from "../Grid";
 import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
 import { SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
+import { signout } from "../../../api/authApi";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -22,6 +23,13 @@ export const Header = () => {
       setBalance(response.data.virtualAccount.balance);
       setFirstName(response.data.firstName);
     },
+  });
+
+  const signoutMutation = useMutation("signout", signout, {
+    onSuccess: (response) => {
+      removeCookies();
+      navigate("/");
+    }
   });
 
   const handleReservationsButton = () => {
@@ -40,9 +48,8 @@ export const Header = () => {
     }
   };
 
-  const signout = () => {
-    removeCookies();
-    navigate("/");
+  const executeSignout = () => {
+    signoutMutation.mutate();
   };
 
   return (
@@ -109,7 +116,7 @@ export const Header = () => {
               </Button>
             )}
             {userId && (
-              <Button color={"secondary"} className={"ms-3"} onClick={signout}>
+              <Button color={"secondary"} className={"ms-3"} onClick={executeSignout}>
                 <Icon type={"box-arrow-right"} />
               </Button>
             )}
