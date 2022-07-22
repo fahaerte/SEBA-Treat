@@ -19,7 +19,6 @@ import {
   paymentGetDiscount,
   paymentGetProductsWithPrices,
 } from "../../api/stripeApi";
-// import { CreateCheckoutSessionApiArg } from "@treat/lib-common/lib/interfaces/ICreateCheckoutSessionApiArg";
 import { getUser } from "../../api/userApi";
 import { useParams } from "react-router-dom";
 import { UserOverview } from "../../components/Profile/UserOverview";
@@ -177,8 +176,8 @@ export const AccountScreen = () => {
             )}
           </Row>
           {/*<UserOverview />*/}
-          <TransactionHistory />
         </Container>
+        <TransactionHistory />
       </Container>
     </>
   );
