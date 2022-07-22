@@ -35,9 +35,6 @@ export const TransactionHistory = () => {
               .map((transaction: IMealTransaction, index: number) => {
                 if (transaction.transactionState === "COMPLETED") {
                   return (
-                    // <div key={transaction._id}>
-                    //   {transaction._id}: {transaction.updatedAt}
-                    // </div>
                     <Transaction
                       key={transaction._id}
                       senderId={transaction.senderId}
