@@ -2,7 +2,7 @@ import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
-import MealTransaction from "../mealTransaction/mealTransaction.interface";
+import { MealTransactionDocument } from "../mealTransaction/mealTransaction.interface";
 import { ObjectId } from "mongoose";
 import {
   MealOfferDocument,
@@ -355,7 +355,7 @@ class MealOfferService {
         mealOfferDoc.user,
         mealOfferDoc.price,
         mealOfferDoc.transactionFee
-      )) as MealTransaction;
+      )) as MealTransactionDocument;
     await this.mealTransactionService.performTransaction(mealTransaction._id);
     mealOfferDoc.reservations.forEach((reservation) => {
       reservation.reservationState =

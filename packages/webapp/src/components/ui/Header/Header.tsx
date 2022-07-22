@@ -18,7 +18,7 @@ export const Header = () => {
   const address = getCookie("address");
   const userId = getCookie("userId");
 
-  useQuery("getUser", () => getUser(), {
+  useQuery(["getUser", userId], () => getUser(), {
     onSuccess: (response) => {
       setBalance(response.data.virtualAccount.balance);
       setFirstName(response.data.firstName);
