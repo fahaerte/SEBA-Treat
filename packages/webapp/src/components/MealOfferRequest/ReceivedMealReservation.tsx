@@ -74,7 +74,7 @@ export const ReceivedMealReservation = ({
       reservationState == EMealReservationState.BUYER_REJECTED ||
       reservationState == EMealReservationState.SELLER_REJECTED ||
       reservationState == EMealReservationState.BUYER_CONFIRMED ||
-        reservationState == EMealReservationState.SELLER_ACCEPTED
+      reservationState == EMealReservationState.SELLER_ACCEPTED
     ) {
       return (
         <Row>
