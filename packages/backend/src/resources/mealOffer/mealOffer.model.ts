@@ -177,7 +177,7 @@ MealOfferSchema.statics.findByReservationId = async function (
     reservations: 1,
     rating: 1,
     price: 1,
-    transactionFee: 1
+    transactionFee: 1,
   });
 };
 
