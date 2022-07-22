@@ -25,7 +25,7 @@ export const Header = () => {
   });
 
   const handleReservationsButton = () => {
-    if (getCookie('userId')) {
+    if (getCookie("userId")) {
       navigate("/mealOfferRequests");
     } else {
       navigate("/login", { state: { from: location } });
