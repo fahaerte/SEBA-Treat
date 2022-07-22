@@ -8,7 +8,7 @@ import { getCookie } from "../../utils/auth/CookieProvider";
 export const TransactionHistory = () => {
   const [transactionHist, setTransactionHist] = useState([]);
 
-  const userId = getCookie('userrId');
+  const userId = getCookie("userrId");
 
   const { data: transactions, isLoading: transactionsAreLoading } = useQuery(
     ["getTransactions", userId],
