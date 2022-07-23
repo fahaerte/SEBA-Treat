@@ -81,7 +81,7 @@ export const AppRouter = () => {
 
   const purchaseCreditRoutes = [
     {
-      path: "/account/:userId/:token",
+      path: "/purchase-credits/:userId/:token",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -91,7 +91,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/account",
+      path: "/purchase-credits",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -105,6 +105,37 @@ export const AppRouter = () => {
       element: <PaymentSuccess />,
     },
   ];
+
+  const mealOfferRequestsRoute = {
+    path: "mealOfferRequests",
+    element: (
+      <RequireAuthRoute>
+        <AppLayout />
+      </RequireAuthRoute>
+    ),
+    children: [
+      {
+        path: "",
+        element: <Navigate to={"./sent"} replace={true} />,
+      },
+      {
+        path: "sent",
+        element: (
+          <MealOfferRequests>
+            <SentMealOfferRequests />
+          </MealOfferRequests>
+        ),
+      },
+      {
+        path: "received",
+        element: (
+          <MealOfferRequests>
+            <ReceivedMealOfferRequests />
+          </MealOfferRequests>
+        ),
+      },
+    ],
+  };
 
   const mealRoutes = [
     {
@@ -137,26 +168,24 @@ export const AppRouter = () => {
         </AppLayout>
       ),
     },
-    {
-      path: "mealOfferRequests",
-      element: (
-        <AppLayout>
-          <RequireAuthRoute>
-            <MealOfferRequests />
-          </RequireAuthRoute>
-        </AppLayout>
-      ),
-      children: [
-        {
-          path: "sent",
-          element: <SentMealOfferRequests />,
-        },
-        {
-          path: "received",
-          element: <ReceivedMealOfferRequests />,
-        },
-      ],
-    },
+    // {
+    //   path: "mealOfferRequests",
+    //   element: (
+    //     <RequireAuthRoute>
+    //       <MealOfferRequests />
+    //     </RequireAuthRoute>
+    //   ),
+    //   children: [
+    //     {
+    //       path: "sent",
+    //       element: <SentMealOfferRequests />,
+    //     },
+    //     {
+    //       path: "received",
+    //       element: <ReceivedMealOfferRequests />,
+    //     },
+    //   ],
+    // },
   ];
 
   const routing = useRoutes([
@@ -164,6 +193,7 @@ export const AppRouter = () => {
     ...authRoutes,
     addressRoute,
     profileRoutes,
+    mealOfferRequestsRoute,
     // ...redirectRoutes,
     ...purchaseCreditRoutes,
     ...mealRoutes,
