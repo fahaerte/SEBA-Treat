@@ -6,7 +6,6 @@ import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
-import { useInView } from "react-intersection-observer";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
@@ -19,32 +18,20 @@ export const MealOfferScreen = () => {
   const [portions, setPortions] = useState<number | undefined>(undefined);
   const [allergen, setAllergen] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
-  const [pageNumber, setPageNumber] = useState<number>(1);
-
-  const pageLimit = 10;
 
   const queryClient = useQueryClient();
 
   const queryKey = "getOffers";
 
-  const { ref, inView } = useInView();
+  const pageLimit = 2;
 
-  const {
-    data,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery(
+  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
     queryKey,
-    () =>
+    ({ pageParam = 1 }) =>
       getMealOffersByParams(
-        distance,
-        pageNumber,
+        pageParam,
         pageLimit,
+        distance,
         portions,
         category,
         allergen,
@@ -53,16 +40,32 @@ export const MealOfferScreen = () => {
         search
       ),
     {
-      getPreviousPageParam: (firstPage) => firstPage.previousId ?? undefined,
-      getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
+      getNextPageParam: (lastPage, allPages) => {
+        const maxPages = lastPage.total / pageLimit;
+        const nextPage = allPages.length + 1;
+        return nextPage <= maxPages ? nextPage : undefined;
+      },
     }
   );
 
   useEffect(() => {
-    if (inView) {
-      fetchNextPage();
-    }
     // queryClient.fetchQuery(queryKey);
+    let fetching = false;
+    const onScroll = async (event: any) => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        event.target.scrollingElement;
+
+      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.5) {
+        fetching = true;
+        if (hasNextPage) await fetchNextPage();
+        fetching = false;
+      }
+    };
+
+    document.addEventListener("scroll", onScroll);
+    return () => {
+      document.removeEventListener("scroll", onScroll);
+    };
   }, [
     search,
     distance,
@@ -72,11 +75,9 @@ export const MealOfferScreen = () => {
     sellerRating,
     portions,
     queryClient,
-    inView,
   ]);
 
   const handleSearch = (event: any) => {
-    console.log(event.target.value);
     if (event.target.value === "") {
       setSearch(undefined);
     } else {
@@ -183,18 +184,6 @@ export const MealOfferScreen = () => {
             <Row>
               <Col>
                 <Container>
-                  <div>
-                    <button
-                      onClick={() => fetchPreviousPage()}
-                      disabled={!hasPreviousPage || isFetchingPreviousPage}
-                    >
-                      {isFetchingPreviousPage
-                        ? "Loading more..."
-                        : hasPreviousPage
-                        ? "Load Older"
-                        : "Nothing more to load"}
-                    </button>
-                  </div>
                   <>
                     {data &&
                       data.pages.map((page) => {
@@ -219,22 +208,6 @@ export const MealOfferScreen = () => {
                       })}
                   </>
                 </Container>
-                <div>
-                  <button
-                    ref={ref}
-                    onClick={() => fetchNextPage()}
-                    disabled={!hasNextPage || isFetchingNextPage}
-                  >
-                    {isFetchingNextPage
-                      ? "Loading more..."
-                      : hasNextPage
-                      ? "Load Newer"
-                      : "Nothing more to load"}
-                  </button>
-                </div>
-                <div>
-                  {isFetching && !isFetchingNextPage ? "Fetching..." : null}
-                </div>
               </Col>
             </Row>
           </Col>

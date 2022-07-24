@@ -18,9 +18,9 @@ export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
 };
 
 export const getMealOffersByParams = async (
-  distance: number,
-  pageNumber: number,
+  page: number,
   pageLimit: number,
+  distance: number,
   portions?: number | undefined,
   category?: string | undefined,
   allergen?: string | undefined,
@@ -30,6 +30,8 @@ export const getMealOffersByParams = async (
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
+      page: page,
+      pageLimit: pageLimit,
       address: getCookie("address"),
       portions: portions,
       category: category,
@@ -37,8 +39,6 @@ export const getMealOffersByParams = async (
       price: price,
       search: search,
       distance: distance,
-      pageNumber: pageNumber,
-      pageLimit: pageLimit,
     },
   });
   return response.data;
