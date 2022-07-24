@@ -29,12 +29,12 @@ export const Header = () => {
   const signoutMutation = useMutation("signout", signout, {
     onSuccess: (response) => {
       removeCookies();
-      successToast({message: "Successfully signed out."});
+      successToast({ message: "Successfully signed out." });
       navigate("/");
     },
     onError: () => {
-      dangerToast({message: "Signout unsuccessful. Please try again!"});
-    }
+      dangerToast({ message: "Signout unsuccessful. Please try again!" });
+    },
   });
 
   const handleReservationsButton = () => {

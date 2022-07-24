@@ -1,12 +1,17 @@
 import React from "react";
-import { Row, Form, FormHelper, successToast, dangerToast } from "../../components";
-import { IFormRow } from "../../components";
+import {
+  dangerToast,
+  Form,
+  FormHelper,
+  IFormRow,
+  Row,
+  successToast,
+} from "../../components";
 import { IAddress, IUserCredentials } from "@treat/lib-common";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
-import { AxiosError } from "axios";
 import { setCookie } from "../../utils/auth/CookieProvider";
 
 const LoginScreen = () => {
@@ -35,7 +40,7 @@ const LoginScreen = () => {
     },
     onError: () => {
       dangerToast({ message: "Wrong credentials. Please try again!" });
-    }
+    },
   });
 
   const elements: IFormRow<IUserCredentials>[] = [
@@ -44,31 +49,31 @@ const LoginScreen = () => {
         formKey: "email",
         label: "Email",
         props: {
-          type: "email"
+          type: "email",
         },
         rules: {
           required: {
             value: true,
-            message: "Please provide an email!"
-          }
+            message: "Please provide an email!",
+          },
         },
-        defaultValue: "fabian.haertel@tum.de"
+        defaultValue: "fabian.haertel@tum.de",
       }),
       FormHelper.createInput({
         formKey: "password",
         label: "Password",
         props: {
-          type: "password"
+          type: "password",
         },
         rules: {
           required: {
             value: true,
-            message: "Please provide a password!"
-          }
+            message: "Please provide a password!",
+          },
         },
-        defaultValue: "123456"
-      })
-    ]
+        defaultValue: "123456",
+      }),
+    ],
   ];
 
   const handleSignIn = (user: IUserCredentials) => {
@@ -91,7 +96,7 @@ const LoginScreen = () => {
             children: "Cancel",
             color: "secondary",
             className: "ms-3",
-            outline: true
+            outline: true,
           }}
         />
       </div>

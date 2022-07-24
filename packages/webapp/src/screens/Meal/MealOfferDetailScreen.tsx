@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container } from "react-bootstrap";
 import {
   Col,
   dangerToast,
-  infoToast,
+  MealDetails,
+  PageHeading,
   Row,
   SectionHeading,
   successToast,
   Tag,
-  PageHeading,
   UserPreview,
-  MealDetails
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
@@ -29,7 +28,7 @@ export const MealOfferDetailScreen = () => {
     {
       onSuccess: (response) => {
         console.log(response);
-      }
+      },
     }
   );
 
@@ -37,27 +36,27 @@ export const MealOfferDetailScreen = () => {
     onSuccess: () => {
       successToast({
         message:
-          "The meal has been reserved for you. Now, the chef can accept it."
+          "The meal has been reserved for you. Now, the chef can accept it.",
       });
     },
     onError: (error) => {
       console.log("onError:");
       if (error instanceof AxiosError && error.response) {
         dangerToast({
-          message: error.response.data.message
+          message: error.response.data.message,
         });
       } else {
         dangerToast({
-          message: "Unexpected server error. The meal could not be reserved."
+          message: "Unexpected server error. The meal could not be reserved.",
         });
       }
       navigate("/login", { state: { from: location } });
-    }
+    },
   });
 
   function handleRequestClick() {
     void requestMealMutation.mutate({
-      mealOfferId: mealOfferId as string
+      mealOfferId: mealOfferId as string,
     });
   }
 
@@ -78,7 +77,7 @@ export const MealOfferDetailScreen = () => {
               className={"pt-5"}
               style={{
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               <PageHeading>
@@ -102,7 +101,7 @@ export const MealOfferDetailScreen = () => {
                   width: "100%",
                   border: "1px solid grey",
                   backgroundColor: "grey",
-                  color: "white"
+                  color: "white",
                 }}
               >
                 Meal Pictures

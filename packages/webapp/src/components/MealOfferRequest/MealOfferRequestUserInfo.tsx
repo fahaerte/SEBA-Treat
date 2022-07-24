@@ -37,7 +37,7 @@ export const MealOfferRequestUserInfo = ({
           <Row>
             <Col className={"col-sm-auto"}>
               <ProfilePicture
-                src={`http://192.168.178.29:5000/profile-pictures/${user.profilePicture}`}
+                src={`${process.env.PROFILE_PICTURES_URL}/${user.profilePicture}`}
               />
             </Col>
             <Col className={"col-sm-auto my-auto p-0"}>

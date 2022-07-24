@@ -23,18 +23,16 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers } = useQuery(
-    queryKey,
-    () =>
-      getMealOffersByParams(
-        distance,
-        portions,
-        category,
-        allergen,
-        sellerRating,
-        price,
-        search
-      ),
+  const { data: offers } = useQuery(queryKey, () =>
+    getMealOffersByParams(
+      distance,
+      portions,
+      category,
+      allergen,
+      sellerRating,
+      price,
+      search
+    )
   );
 
   useEffect(() => {
