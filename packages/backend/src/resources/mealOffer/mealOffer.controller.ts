@@ -9,6 +9,7 @@ import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
 import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
+import { mealOfferFileUpload } from "../../middleware/upload.middleware";
 
 @Service()
 class MealOfferController implements Controller {
@@ -23,6 +24,7 @@ class MealOfferController implements Controller {
     this.router.post(
       `${this.path}`,
       authenticatedMiddleware,
+      mealOfferFileUpload.single("image"),
       validationMiddleware(validate.createBody),
       this.create
     );

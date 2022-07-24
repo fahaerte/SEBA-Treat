@@ -24,6 +24,10 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+      required: true,
+    },
     categories: [
       {
         type: String,
@@ -66,6 +70,10 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
     reservations: [MealReservationSchema],
     rating: {
       type: RatingSchema,
+    },
+    allergensVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
