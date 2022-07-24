@@ -3,11 +3,14 @@ import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { SCCustomForm, SCHeader,
-} from "./styles";
+import { SCCustomForm, SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getCookie, removeCookies, setCookie } from "../../../utils/auth/CookieProvider";
+import {
+  getCookie,
+  removeCookies,
+  setCookie,
+} from "../../../utils/auth/CookieProvider";
 import { signout } from "../../../api/authApi";
 import { dangerToast, successToast } from "../Toast";
 import { CustomDropdown } from "./UserDropdown";

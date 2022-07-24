@@ -1,5 +1,14 @@
 import React from "react";
-import { Row, Form, FormHelper, IFormRow, Link, Typography, successToast, dangerToast } from "../../components";
+import {
+  Row,
+  Form,
+  FormHelper,
+  IFormRow,
+  Link,
+  Typography,
+  successToast,
+  dangerToast,
+} from "../../components";
 import { IAddress, IUserCredentials } from "@treat/lib-common";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
