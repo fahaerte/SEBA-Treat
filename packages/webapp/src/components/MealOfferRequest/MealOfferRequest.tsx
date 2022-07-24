@@ -4,6 +4,7 @@ import { Col, Row } from "../ui/Grid";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { getFormattedDateFromString } from "../../utils/getFormattedDate";
+import { Typography } from "../ui";
 
 interface MealOfferProps {
   mealOffer: MealOffer;
@@ -56,10 +57,14 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
           <Col className={"d-flex justify-content-end col-sm-auto"}>
             <Row className={""}>
               <Col className={"col-sm-auto my-auto"}>
-                <h3 className={"mb-0"}>{mealOffer.price} Cr</h3>
+                <Typography variant={"h3"} component={"p"} className={"mb-0"}>
+                  {mealOffer.price} Cr
+                </Typography>
               </Col>
               <Col className={"col-sm-auto my-auto"}>
-                <p className={"mb-0"}>Go to offer</p>
+                <Typography variant={"p"} className={"mb-0"}>
+                  Go to offer
+                </Typography>
               </Col>
             </Row>
           </Col>

@@ -37,15 +37,19 @@ export const Header = () => {
       setBalance(response.data.virtualAccount.balance);
       setFirstName(response.data.firstName);
     },
+    onError: (Error) => {
+      dangerToast({ message: "Authorization error. Please Logout" });
+    },
   });
 
   const signoutMutation = useMutation("signout", signout, {
-    onSuccess: (response) => {
+    onSuccess: () => {
       removeCookies();
       successToast({ message: "Successfully signed out." });
       navigate("/");
     },
     onError: () => {
+      removeCookies();
       dangerToast({ message: "Signout unsuccessful. Please try again!" });
     },
   });

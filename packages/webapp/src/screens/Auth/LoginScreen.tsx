@@ -98,9 +98,8 @@ const LoginScreen = () => {
           }}
         />
       </div>
-      <Row>
-        <p>
-          <br />
+      <Row className={"mt-3"}>
+        <Typography variant={"div"} display={"inline"}>
           Or{" "}
           <Link to={"/register"} display={"text"}>
             <Typography variant={"h3"} display={"inline"}>
@@ -108,7 +107,7 @@ const LoginScreen = () => {
             </Typography>
           </Link>
           .
-        </p>
+        </Typography>
       </Row>
     </>
   );

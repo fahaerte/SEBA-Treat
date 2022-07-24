@@ -38,7 +38,7 @@ export const MealOfferRequestUserInfo = ({
           <Row>
             <Col className={"col-sm-auto"}>
               <ProfilePicture
-                src={`${new ConfigService.get("PROFILE_PICTURES_URL")}/${
+                src={`${new ConfigService().get("PROFILE_PICTURES_URL")}/${
                   user.profilePicture
                 }`}
               />

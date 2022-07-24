@@ -9,7 +9,7 @@ import {
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
-import ProfileOverview from "../../components/Profile/ProfileOverview";
+import CreditAccountOverview from "../../components/Profile/CreditAccountOverview";
 import CreditDiscount from "../../components/CreditProducts/CreditDiscount";
 import { useIsMutating, useMutation, useQuery } from "react-query";
 import {
@@ -94,7 +94,7 @@ export const CreditScreen = () => {
         <PageHeading className={"pt-5"}>
           Your <u>account</u>
         </PageHeading>
-        <ProfileOverview />
+        <CreditAccountOverview />
         {discount && (
           <CreditDiscount
             discountTitle={discount.name || ""}

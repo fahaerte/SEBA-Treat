@@ -11,7 +11,7 @@ import { IUser } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { register } from "../../api/authApi";
 import { AxiosError } from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export const RegisterScreen = () => {
   const navigate = useNavigate();
 
