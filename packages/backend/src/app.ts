@@ -33,7 +33,10 @@ class App {
     this.express.use(helmet());
     this.express.use(
       cors({
-        origin: "*",
+        origin: [
+          this.configService.get("STRIPE_CHECKOUT"),
+          this.configService.get("CLIENT_URL"),
+        ],
         credentials: true,
         exposedHeaders: ["Authorization"],
       })

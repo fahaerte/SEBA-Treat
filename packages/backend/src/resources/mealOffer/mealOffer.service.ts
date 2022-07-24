@@ -2,7 +2,6 @@ import MealOfferSchema from "../mealOffer/mealOffer.model";
 import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound.exception";
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
-import { MealTransactionDocument } from "../mealTransaction/mealTransaction.interface";
 import {
   MealOfferDocument,
   MealOfferDocumentWithUser,
@@ -21,7 +20,7 @@ import Logger, { ILogMessage } from "../../utils/logger";
 import UserDocument from "../user/user.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
 import { ObjectId } from "mongoose";
-import MealTransactionDocument from "../mealTransaction/mealTransaction.interface";
+import { MealTransactionDocument } from "../mealTransaction/mealTransaction.interface";
 
 @Service()
 class MealOfferService {

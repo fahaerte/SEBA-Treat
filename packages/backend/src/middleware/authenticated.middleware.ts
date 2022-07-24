@@ -11,10 +11,10 @@ async function optionalAuthenticatedMiddleware(
   res: Response,
   next: NextFunction
 ): Promise<Response | void> {
-  const bearer = req.headers.authorization;
+  const token = req.cookies["Authorization"];
 
-  if (bearer && bearer.startsWith("Bearer")) {
-    return addUserToRequest(req, res, next, bearer);
+  if (token) {
+    return addUserToRequest(req, res, next, token as string);
   }
   return next();
 }
@@ -29,7 +29,7 @@ async function authenticatedMiddleware(
   if (!token) {
     return next(new HttpException(401, "Unauthorised"));
   }
-  return addUserToRequest(req, res, next, token);
+  return addUserToRequest(req, res, next, token as string);
 }
 
 async function addUserToRequest(
@@ -75,4 +75,4 @@ async function addUserToRequest(
   }
 }
 
-export { authenticatedMiddleware };
+export { authenticatedMiddleware, optionalAuthenticatedMiddleware };

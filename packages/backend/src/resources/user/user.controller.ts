@@ -96,8 +96,9 @@ class UserController implements Controller {
       );
 
       res.cookie("Authorization", token, {
-        httpOnly: true,
-      });
+            httpOnly: true,
+          }
+      );
       res.status(200).send({ userId, address });
     } catch (error: any) {
       next(new HttpException(400, error.message));

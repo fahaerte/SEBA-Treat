@@ -1,9 +1,5 @@
 import UserModel from "../user/user.model";
-<<<<<<< packages/backend/src/resources/user/user.service.ts
-import token from "../../utils/token";
 import token from "../../utils/tokenUtil";
-import path from "path";
-import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
