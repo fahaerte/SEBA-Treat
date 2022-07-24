@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "../../components";
-import { useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
+import { useInView } from "react-intersection-observer";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
@@ -18,25 +19,50 @@ export const MealOfferScreen = () => {
   const [portions, setPortions] = useState<number | undefined>(undefined);
   const [allergen, setAllergen] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const pageLimit = 10;
 
   const queryClient = useQueryClient();
 
   const queryKey = "getOffers";
 
-  const { data: offers } = useQuery(queryKey, () =>
-    getMealOffersByParams(
-      distance,
-      portions,
-      category,
-      allergen,
-      sellerRating,
-      price,
-      search
-    )
+  const { ref, inView } = useInView();
+
+  const {
+    data,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+  } = useInfiniteQuery(
+    queryKey,
+    () =>
+      getMealOffersByParams(
+        distance,
+        pageNumber,
+        pageLimit,
+        portions,
+        category,
+        allergen,
+        sellerRating,
+        price,
+        search
+      ),
+    {
+      getPreviousPageParam: (firstPage) => firstPage.previousId ?? undefined,
+      getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
+    }
   );
 
   useEffect(() => {
-    queryClient.fetchQuery(queryKey);
+    if (inView) {
+      fetchNextPage();
+    }
+    // queryClient.fetchQuery(queryKey);
   }, [
     search,
     distance,
@@ -46,6 +72,7 @@ export const MealOfferScreen = () => {
     sellerRating,
     portions,
     queryClient,
+    inView,
   ]);
 
   const handleSearch = (event: any) => {
@@ -151,33 +178,63 @@ export const MealOfferScreen = () => {
               />
             </Row>
             <Row className={"m-2 row justify-content-center"}>
-              {offers ? offers.data.length : "No"} Offers found
+              {data ? data.pages.length : "No"} Offers found
             </Row>
             <Row>
               <Col>
                 <Container>
+                  <div>
+                    <button
+                      onClick={() => fetchPreviousPage()}
+                      disabled={!hasPreviousPage || isFetchingPreviousPage}
+                    >
+                      {isFetchingPreviousPage
+                        ? "Loading more..."
+                        : hasPreviousPage
+                        ? "Load Older"
+                        : "Nothing more to load"}
+                    </button>
+                  </div>
                   <>
-                    {offers &&
-                      offers.data
-                        .slice()
-                        .sort(sortRule)
-                        .map((mealOffer: IMealOfferCard) => (
-                          <Row key={`${mealOffer._id}-container`}>
-                            <MealOffer
-                              mealId={mealOffer._id}
-                              price={mealOffer.price}
-                              distance={mealOffer.distance}
-                              mealTitle={mealOffer.title}
-                              portions={mealOffer.portions}
-                              sellerRating={mealOffer.user.meanRating}
-                              endDate={mealOffer.endDate}
-                              sellerName={mealOffer.user.firstName}
-                              startDate={mealOffer.endDate}
-                            />
-                          </Row>
-                        ))}
+                    {data &&
+                      data.pages.map((page) => {
+                        return page.data
+                          .slice()
+                          .sort(sortRule)
+                          .map((mealOffer: IMealOfferCard) => (
+                            <Row key={`${mealOffer._id}-container`}>
+                              <MealOffer
+                                mealId={mealOffer._id}
+                                price={mealOffer.price}
+                                distance={mealOffer.distance}
+                                mealTitle={mealOffer.title}
+                                portions={mealOffer.portions}
+                                sellerRating={mealOffer.user.meanRating}
+                                endDate={mealOffer.endDate}
+                                sellerName={mealOffer.user.firstName}
+                                startDate={mealOffer.endDate}
+                              />
+                            </Row>
+                          ));
+                      })}
                   </>
                 </Container>
+                <div>
+                  <button
+                    ref={ref}
+                    onClick={() => fetchNextPage()}
+                    disabled={!hasNextPage || isFetchingNextPage}
+                  >
+                    {isFetchingNextPage
+                      ? "Loading more..."
+                      : hasNextPage
+                      ? "Load Newer"
+                      : "Nothing more to load"}
+                  </button>
+                </div>
+                <div>
+                  {isFetching && !isFetchingNextPage ? "Fetching..." : null}
+                </div>
               </Col>
             </Row>
           </Col>

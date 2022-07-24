@@ -19,6 +19,8 @@ export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
 
 export const getMealOffersByParams = async (
   distance: number,
+  pageNumber: number,
+  pageLimit: number,
   portions?: number | undefined,
   category?: string | undefined,
   allergen?: string | undefined,
@@ -35,6 +37,8 @@ export const getMealOffersByParams = async (
       price: price,
       search: search,
       distance: distance,
+      pageNumber: pageNumber,
+      pageLimit: pageLimit,
     },
   });
   return response.data;
