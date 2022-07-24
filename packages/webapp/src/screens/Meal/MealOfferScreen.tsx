@@ -35,11 +35,6 @@ export const MealOfferScreen = () => {
         price,
         search
       ),
-    {
-      onSuccess: (response) => {
-        console.log(response);
-      },
-    }
   );
 
   useEffect(() => {
@@ -51,7 +46,7 @@ export const MealOfferScreen = () => {
     if (event.target.value === "") {
       setSearch(undefined);
     } else {
-      setSearch(event.target.value); //Problem: on every keyboard stroke a request is sent --> expensive
+      setSearch(event.target.value);
     }
   };
 

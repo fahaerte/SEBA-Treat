@@ -1,6 +1,6 @@
 import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
-import MealTransactionDocument from "./mealTransaction.interface";
+import { MealTransactionDocument } from "./mealTransaction.interface";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 import UserService from "../user/user.service";
 import TransactionNotFoundException from "../../utils/exceptions/transactionNotFound.exception";

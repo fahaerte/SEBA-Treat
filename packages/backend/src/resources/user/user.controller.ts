@@ -47,6 +47,7 @@ class UserController implements Controller {
       this.getUser
     );
     this.router.get(`${this.path}/:userId?/preview`, this.getUserPreview);
+    this.router.post(`${this.path}/signout`, this.signout);
   }
 
   private register = async (
@@ -56,9 +57,7 @@ class UserController implements Controller {
   ): Promise<Response | void> => {
     try {
       const newUser = req.body;
-      const { userId, token, address } = await this.userService.register(
-        newUser
-      );
+      const { userId } = await this.userService.register(newUser);
       const { city, country, street, postalCode, houseNumber } =
         newUser.address;
       const stripeUserId = await this.stripeService.stripeUsers.createCustomer(
@@ -72,12 +71,12 @@ class UserController implements Controller {
           postal_code: postalCode,
         }
       );
-      const createdUser = await this.userService.updateUser({
+      await this.userService.updateUser({
         _id: userId,
         stripeCustomerId: stripeUserId,
       });
 
-      res.status(201).json({ userId, token, address });
+      res.status(200).json("Registered successfully!");
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
@@ -91,14 +90,23 @@ class UserController implements Controller {
     try {
       const { email, password } = req.body;
 
-      const { userId, token, address } = await this.userService.login(
+      const { userId, address, token } = await this.userService.login(
         email as string,
         password as string
       );
-      res.status(200).send({ userId, token, address });
+
+      res.cookie("Authorization", token, {
+        httpOnly: true,
+      });
+      res.status(200).send({ userId, address });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }
+  };
+
+  private signout = (req: Request, res: Response): Response | void => {
+    res.clearCookie("Authorization");
+    res.status(200).send("Removed cookie");
   };
 
   private getUser = async (

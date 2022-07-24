@@ -62,13 +62,11 @@ export const AccountScreen = () => {
     IStripeProduct | undefined
   >();
 
-  const token = getCookie("token");
   const userId = getCookie("userId");
 
   useEffect(() => {
-    if (!userId && !token) {
+    if (!userId) {
       setCookie("userId", userIdParam as string);
-      setCookie("token", userTokenParam as string);
     }
     if (discount && products) {
       const findProduct: IStripeProduct | undefined = products.find(
@@ -77,15 +75,7 @@ export const AccountScreen = () => {
       );
       setDiscountedProduct(findProduct);
     }
-  }, [
-    discount,
-    products,
-    createCheckout,
-    userId,
-    token,
-    userTokenParam,
-    userIdParam,
-  ]);
+  }, [discount, products, createCheckout, userId, userTokenParam, userIdParam]);
 
   const redirectToCheckout = (priceId: string, couponId?: string) => {
     try {
@@ -164,8 +154,8 @@ export const AccountScreen = () => {
             )}
           </Row>
           {/*<UserOverview />*/}
-          <TransactionHistory />
         </Container>
+        <TransactionHistory />
       </Container>
     </>
   );
