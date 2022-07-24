@@ -5,6 +5,7 @@ import { Icon } from "../ui";
 import { useQuery } from "react-query";
 import { getProfilePictureURL } from "../../api/userApi";
 import { IUser } from "@treat/lib-common";
+import { ConfigService } from "../../utils/ConfigService";
 
 const ProfilePicture = styled.img`
   border-radius: 50%;
@@ -37,7 +38,9 @@ export const MealOfferRequestUserInfo = ({
           <Row>
             <Col className={"col-sm-auto"}>
               <ProfilePicture
-                src={`${process.env.PROFILE_PICTURES_URL}/${user.profilePicture}`}
+                src={`${new ConfigService.get("PROFILE_PICTURES_URL")}/${
+                  user.profilePicture
+                }`}
               />
             </Col>
             <Col className={"col-sm-auto my-auto p-0"}>
