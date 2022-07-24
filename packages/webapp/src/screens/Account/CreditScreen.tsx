@@ -20,11 +20,10 @@ import {
 } from "../../api/stripeApi";
 import { getUser } from "../../api/userApi";
 import { useParams } from "react-router-dom";
-import { UserOverview } from "../../components/Profile/UserOverview";
 import { TransactionHistory } from "../../components/TransactionHistory/TransactionHistory";
 import { getCookie, setCookie } from "../../utils/auth/CookieProvider";
 
-export const AccountScreen = () => {
+export const CreditScreen = () => {
   const { userId: userIdParam, token: userTokenParam } = useParams();
   const { data: user } = useQuery("getUser", () => getUser());
 

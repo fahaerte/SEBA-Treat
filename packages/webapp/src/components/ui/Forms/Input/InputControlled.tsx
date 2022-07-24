@@ -15,6 +15,7 @@ const InputControlled = ({
   label,
   type,
   value,
+  labelClass = "",
   ...rest
 }: IInput<HTMLInputElement>) => {
   const inputId = getEncodedString(label, type as string);
@@ -35,7 +36,9 @@ const InputControlled = ({
         placeholder={label}
         {...rest}
       />
-      <label htmlFor={inputId}>{label}</label>
+      <label htmlFor={inputId} className={labelClass}>
+        {label}
+      </label>
       {isInvalid && <FormInvalidFeedback message={invalidFeedback} />}
     </SCFloatingForm>
   );

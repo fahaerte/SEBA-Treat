@@ -9,13 +9,14 @@ import { MealOfferRequests } from "../screens/Meal/MealOfferRequests";
 import { SentMealOfferRequests } from "../screens/Meal/SentMealOfferRequests";
 import { ReceivedMealOfferRequests } from "../screens/Meal/ReceivedMealOfferRequests";
 import PaymentSuccess from "../screens/Payment/PaymentSuccess";
-import { AccountScreen } from "../screens/Account/AccountScreen";
+import { CreditScreen } from "../screens/Account/CreditScreen";
 import { RequireAuthRoute } from "../utils/auth/RequireAuthRoute";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
+import { ProfileScreen } from "../screens/Account/ProfileScreen";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -61,20 +62,24 @@ export const AppRouter = () => {
   };
 
   const profileRoutes = {
-    path: "profile/:profileId/",
-    element: <Typography variant={"h1"}>Your Profile</Typography>,
+    path: "account",
+    element: (
+      <RequireAuthRoute>
+        <AppLayout />
+      </RequireAuthRoute>
+    ),
     children: [
-      // Settings screen
-      // Overview Screen
       {
-        path: "requests/",
+        path: "",
+        element: <Navigate to={"./profile"} replace={true} />,
+      },
+      {
+        path: "profile",
+        element: <ProfileScreen />,
+      },
+      {
+        path: "transaction-history/:userid",
         element: <Typography>Orders by user</Typography>,
-        children: [
-          {
-            path: "received/",
-            element: <Typography>Orders for user</Typography>,
-          },
-        ],
       },
     ],
   };
@@ -85,7 +90,7 @@ export const AppRouter = () => {
       element: (
         <AppLayout>
           <RequireAuthRoute>
-            <AccountScreen />
+            <CreditScreen />
           </RequireAuthRoute>
         </AppLayout>
       ),
@@ -95,7 +100,7 @@ export const AppRouter = () => {
       element: (
         <AppLayout>
           <RequireAuthRoute>
-            <AccountScreen />
+            <CreditScreen />
           </RequireAuthRoute>
         </AppLayout>
       ),

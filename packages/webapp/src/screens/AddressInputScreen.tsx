@@ -47,7 +47,7 @@ export const AddressInputScreen = () => {
                 color: "secondary",
                 children: (
                   <>
-                    <Icon type={"arrowRight"} /> Set your location
+                    <Icon type={"geo-alt"} /> Set your location
                   </>
                 ),
               }}

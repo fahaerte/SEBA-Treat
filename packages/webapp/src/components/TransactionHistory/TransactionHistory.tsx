@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SectionHeading } from "../ui";
 import { useQuery } from "react-query";
 import { getTransactions } from "../../api/userApi";
-import IMealTransaction from "@treat/lib-common";
+import { IMealTransaction } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const TransactionHistory = () => {

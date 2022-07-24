@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import { UncontrolledDropdown } from "reactstrap";
+import { Form } from "../Forms";
 
 export const SCHeader = styled.header`
   height: 5rem;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: ${({ theme }) => theme.general.border.width} solid
+    ${({ theme }) => theme.general.border.color.primary};
   background: white;
 
   img {
@@ -34,7 +36,7 @@ export const StyledDropdown = styled(UncontrolledDropdown)`
     color: ${({ theme }) => theme.palette.primary.contrastText};
     //box-shadow: none;
     border-color: ${({ theme }) => theme.palette.primary.main};
-    // border-radius: ${(props) => props.theme.general.border.radius};
+    // border-radius: ${({ theme }) => theme.general.border.radius};
     &:hover,
     &:active {
       background-color: ${(props) => props.theme.palette.primary.hover};
@@ -44,27 +46,33 @@ export const StyledDropdown = styled(UncontrolledDropdown)`
   }
 
   &.show .dropdown-toggle {
-    background-color: ${(props) => props.theme.palette.primary.hover};
-    color: ${(props) => props.theme.typography.color.secondary};
+    background-color: ${({ theme }) => theme.palette.primary.hover};
+    color: ${({ theme }) => theme.palette.primary.contrastText};
     &:after {
       border-top: 0;
-      border-bottom: ${(props) => props.theme.general.border.width} solid; // TODO color?!
+      border-bottom: ${({ theme }) => theme.general.border.width} solid
+        ${({ theme }) => theme.palette.primary.main}; // TODO color?!
     }
   }
 
   .dropdown-menu .dropdown-item {
-    color: ${(props) => props.theme.typography.color.primary};
-    font-size: ${(props) => props.theme.typography.size.md};
+    color: ${({ theme }) => theme.typography.color.primary};
+    font-size: ${({ theme }) => theme.typography.size.md};
     text-decoration: none;
-
     &:hover {
-      background-color: ${(props) => props.theme.palette.primary.hover};
+      background-color: ${({ theme }) => theme.palette.primary.hover};
     }
 
     &:active,
     &.active {
-      background-color: ${(props) => props.theme.palette.primary.active};
+      background-color: ${({ theme }) => theme.palette.primary.active};
       text-decoration: none;
     }
+  }
+`;
+
+export const SCCustomForm = styled(Form)`
+  > .mb-lg {
+    margin-bottom: 0;
   }
 `;

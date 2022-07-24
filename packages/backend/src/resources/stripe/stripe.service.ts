@@ -45,7 +45,7 @@ class StripeService {
         )}/success/${priceId}/${customerId}/${token}/${userId}`,
         cancel_url: `${this.configService.get(
           "CLIENT_URL"
-        )}/account/${userId}/${token}`,
+        )}/credit-account/${userId}/${token}`,
         automatic_tax: { enabled: true },
       });
     } catch (error: any) {

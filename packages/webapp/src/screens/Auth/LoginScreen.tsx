@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Form, FormHelper } from "../../components";
+import { Row, Form, FormHelper, Link, Typography } from "../../components";
 import { IFormRow } from "../../components";
 import { IAddress, IUserCredentials } from "@treat/lib-common";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
@@ -69,10 +69,6 @@ const LoginScreen = () => {
     loginMutation.mutate(user);
   };
 
-  const handleCreateAccount = () => {
-    navigate("/register", { state: { from: from } });
-  };
-
   return (
     <>
       <div>
@@ -104,9 +100,11 @@ const LoginScreen = () => {
         <p>
           <br />
           Or{" "}
-          <a onClick={handleCreateAccount}>
-            <u>create an account</u>
-          </a>
+          <Link to={"/register"} display={"text"}>
+            <Typography variant={"h3"} display={"inline"}>
+              <u>create an account</u>
+            </Typography>
+          </Link>
           .
         </p>
       </Row>

@@ -1,22 +1,34 @@
 import { Col, Row } from "../Grid";
-import { Button, Icon, Link, Typography } from "../index";
+import { Button, Form, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { SCHeader } from "./styles";
+import { SCCustomForm, SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getCookie, removeCookies } from "../../../utils/auth/CookieProvider";
-import { CustomDropdown } from "./CustomDropdownToggle";
+import {
+  getCookie,
+  removeCookies,
+  setCookie,
+} from "../../../utils/auth/CookieProvider";
+import { CustomDropdown } from "./UserDropdown";
+import { IStringObject } from "@treat/lib-common";
+import { addressElement } from "../../AddressInput/AddressInput";
 
 export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [balance, setBalance] = useState(0);
   const [firstName, setFirstName] = useState("");
+  const [onAddressEdit, setOnAddressEdit] = useState(false);
 
   const address = getCookie("address");
   const userId = getCookie("userId");
+
+  const handleAddress = (data: IStringObject) => {
+    setCookie("address", data.returnedString);
+    setOnAddressEdit(false);
+  };
 
   useQuery("getUser", () => getUser(), {
     onSuccess: (response) => {
@@ -56,19 +68,39 @@ export const Header = () => {
             </Link>
           </Col>
           {address && (
-            <Col className={"my-auto"}>
-              <Typography variant={"h4"} className={"fw-normal"}>
-                <Icon type={"geo-alt"} /> {address}
-              </Typography>
+            <Col className={"col-sm-auto my-auto"}>
+              {onAddressEdit ? (
+                <SCCustomForm<IStringObject>
+                  elements={addressElement}
+                  onSubmit={handleAddress}
+                  className={"d-flex align-items-center"}
+                  submitButton={{
+                    color: "secondary",
+                    className: "ms-2",
+                    children: (
+                      <>
+                        <Icon type={"geo-alt"} /> Update location
+                      </>
+                    ),
+                  }}
+                />
+              ) : (
+                <div className={"d-flex flex-row align-items-center"}>
+                  <Typography variant={"h4"} className={"fw-normal"}>
+                    <Icon type={"geo-alt"} /> {address}
+                  </Typography>
+                  <Button
+                    color={"primary"}
+                    className={"ms-2 my-0"}
+                    onClick={() => setOnAddressEdit(true)}
+                  >
+                    <Icon type={"pen"} />
+                  </Button>
+                </div>
+              )}
             </Col>
           )}
           <Col className={"justify-content-end d-flex align-items-center"}>
-            {/*{userId && (*/}
-            {/*  <Link to={"/createMeal"} display={"button"} className={"me-3"}>*/}
-            {/*    Create Offer*/}
-            {/*  </Link>*/}
-            {/*)}*/}
-
             {location.pathname !== "/createMeal" && (
               <Link
                 to={"/createMeal"}
@@ -79,24 +111,6 @@ export const Header = () => {
                 <Icon type={"plus"} /> Offer meal
               </Link>
             )}
-
-            {/*<Button*/}
-            {/*    className={"me-3"}*/}
-            {/*    color={"secondary"}*/}
-            {/*    outline={true}*/}
-            {/*    onClick={handleReservationsButton}*/}
-            {/*>*/}
-            {/*  Reservations*/}
-            {/*</Button>*/}
-            {/*<Link*/}
-            {/*  to={userId ? "/purchase-credits" : "/login"}*/}
-            {/*  color={"secondary"}*/}
-            {/*  display={"button"}*/}
-            {/*  buttonProps={{ outline: true }}*/}
-            {/*  route*/}
-            {/*>*/}
-            {/*  {userId ? `${balance} Credits Bild` : "Sign In"}*/}
-            {/*</Link>*/}
             {userId ? (
               <CustomDropdown
                 credits={balance}

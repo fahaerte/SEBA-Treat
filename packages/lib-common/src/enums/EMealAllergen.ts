@@ -29,5 +29,3 @@ export enum EMealAllergen {
   MOLLUSCS = "molluscs",
   SHELLFRUITS = "shell fruits",
 }
-
-// export default EMealAllergen;

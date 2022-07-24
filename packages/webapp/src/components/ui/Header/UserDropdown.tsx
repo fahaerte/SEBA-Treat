@@ -16,7 +16,7 @@ export const CustomDropdown = ({
 }) => (
   <StyledDropdown group>
     <Button className={"btn-secondary"}>
-      <Link to={"/account"} display={"text"} underline={false}>
+      <Link to={"/purchase-credits"} display={"text"} underline={false}>
         {credits} Credits
       </Link>
     </Button>
@@ -25,10 +25,10 @@ export const CustomDropdown = ({
       <DropdownItem onClick={handleReservationNavigation}>
         Meal Reservations
       </DropdownItem>
-      <Link route to={"/"} className={"dropdown-item"}>
+      <Link route to={"/reservations"} className={"dropdown-item"}>
         My Offers
       </Link>
-      <Link route to={"/"} className={"dropdown-item"}>
+      <Link route to={"/account"} className={"dropdown-item"}>
         My Profile
       </Link>
       <DropdownItem divider />
