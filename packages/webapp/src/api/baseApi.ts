@@ -1,6 +1,5 @@
 import axios from "axios";
 import { ConfigService } from "../utils/ConfigService";
-import { getCookie } from "../utils/auth/CookieProvider";
 
 export const baseApi = () => {
   axios.defaults.withCredentials = true;

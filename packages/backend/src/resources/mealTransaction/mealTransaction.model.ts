@@ -4,10 +4,6 @@ import {
   MealTransactionDocumentWithUserNames,
 } from "./mealTransaction.interface";
 import { ETransactionState } from "@treat/lib-common";
-import {
-  MealOfferDocument,
-  MealOfferDocumentWithUser,
-} from "../mealOffer/mealOffer.interface";
 import UserDocument from "../user/user.interface";
 
 const MealTransactionSchema = new Schema<MealTransactionDocument>(

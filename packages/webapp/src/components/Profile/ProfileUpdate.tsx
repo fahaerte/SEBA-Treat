@@ -10,14 +10,9 @@ export const ProfileUpdate = () => {
   // const { userId, token } = useAuthContext();
 
   const userId = getCookie("userIs");
-  const { isLoading, data, isSuccess } = useQuery(
-    ["getUser", userId],
-    () => getUser(),
-    {
-      onError: () =>
-        dangerToast({ message: "Could not get user information!" }),
-    }
-  );
+  const { data, isSuccess } = useQuery(["getUser", userId], () => getUser(), {
+    onError: () => dangerToast({ message: "Could not get user information!" }),
+  });
 
   const [formElements, setFormElements] = useState<IFormRow<IUser>[]>([]);
 

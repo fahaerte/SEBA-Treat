@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { Row, Icon, Col, UserPreview } from "../";
+import { Row, Col, UserPreview } from "../";
 import { getCookie } from "../../../utils/auth/CookieProvider";
 
 const Transaction = ({

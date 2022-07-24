@@ -37,7 +37,7 @@ export const Header = () => {
       setBalance(response.data.virtualAccount.balance);
       setFirstName(response.data.firstName);
     },
-    onError: (Error) => {
+    onError: () => {
       dangerToast({ message: "Authorization error. Please Logout" });
     },
   });

@@ -6,7 +6,6 @@ import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 import { IFileInput } from "./IFileInput";
 
 const FileInputControlled = ({
-  wrapperClasses = "",
   className = "",
   fileType = ["text/*", "application/*", "video/*", "audio/*", "image/*"],
   multiple = true,
@@ -15,7 +14,7 @@ const FileInputControlled = ({
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
   label,
-  value,
+  // value,
   ...rest
 }: IFileInput<HTMLInputElement>) => {
   const inputId = getEncodedString(label, "file");

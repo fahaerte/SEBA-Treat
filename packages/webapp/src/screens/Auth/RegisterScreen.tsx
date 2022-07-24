@@ -16,7 +16,7 @@ export const RegisterScreen = () => {
   const navigate = useNavigate();
 
   const registerMutation = useMutation(register, {
-    onSuccess: (response) => {
+    onSuccess: () => {
       successToast({ message: "Registration successful!" });
       navigate("/");
     },
