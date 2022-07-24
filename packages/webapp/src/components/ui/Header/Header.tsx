@@ -40,6 +40,7 @@ export const Header = () => {
     onError: () => {
       dangerToast({ message: "Authorization error. Please Logout" });
     },
+    enabled: !!userId,
   });
 
   const signoutMutation = useMutation("signout", signout, {
