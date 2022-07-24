@@ -17,6 +17,9 @@ import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { ProfileScreen } from "../screens/Account/ProfileScreen";
+import { UserOverview } from "../components/Profile/UserOverview";
+import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
+import { ProfileUpdateScreen } from "../screens/Account/ProfileUpdateScreen";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -71,15 +74,33 @@ export const AppRouter = () => {
     children: [
       {
         path: "",
-        element: <Navigate to={"./profile"} replace={true} />,
+        element: (
+          <ProfileScreen>
+            <UserOverview />
+          </ProfileScreen>
+        ),
+        // children: [
+        //   {
+        //     path: "edit",
+        //     element: <ProfileScreen>hallo</ProfileScreen>,
+        //   },
+        // ],
       },
       {
-        path: "profile",
-        element: <ProfileScreen />,
+        path: "edit",
+        element: (
+          <ProfileScreen>
+            <ProfileUpdateScreen />
+          </ProfileScreen>
+        ),
       },
       {
         path: "transaction-history/:userid",
-        element: <Typography>Orders by user</Typography>,
+        element: (
+          <ProfileScreen>
+            <TransactionHistory />
+          </ProfileScreen>
+        ),
       },
     ],
   };
@@ -173,24 +194,6 @@ export const AppRouter = () => {
         </AppLayout>
       ),
     },
-    // {
-    //   path: "mealOfferRequests",
-    //   element: (
-    //     <RequireAuthRoute>
-    //       <MealOfferRequests />
-    //     </RequireAuthRoute>
-    //   ),
-    //   children: [
-    //     {
-    //       path: "sent",
-    //       element: <SentMealOfferRequests />,
-    //     },
-    //     {
-    //       path: "received",
-    //       element: <ReceivedMealOfferRequests />,
-    //     },
-    //   ],
-    // },
   ];
 
   const routing = useRoutes([

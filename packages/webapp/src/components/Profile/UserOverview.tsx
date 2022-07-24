@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Typography } from "../ui";
+import { Col, Icon, Link, Row, Typography } from "../ui";
 import { useQuery } from "react-query";
 import { getUser } from "../../api/userApi";
 import { Rating } from "./Rating";
@@ -10,11 +10,12 @@ export const UserOverview = () => {
 
   const { isLoading, data } = useQuery(["getUser", userId], () => getUser());
 
+  // TODO: Show profile picture
   return (
     <>
-      <Row>
+      <Row className={"mt-3"}>
         <Col>
-          <Typography variant={"h4"} display={"inline"} isLoading={isLoading}>
+          <Typography variant={"h4"} display={"inline"}>
             First Name:{"  "}
           </Typography>
           <Typography
@@ -29,7 +30,7 @@ export const UserOverview = () => {
         </Col>
 
         <Col>
-          <Typography variant={"h4"} display={"inline"} isLoading={isLoading}>
+          <Typography variant={"h4"} display={"inline"}>
             Last Name:{" "}
           </Typography>
           <Typography
@@ -45,7 +46,7 @@ export const UserOverview = () => {
       </Row>
       <Row>
         <Col>
-          <Typography variant={"h4"} display={"inline"} isLoading={isLoading}>
+          <Typography variant={"h4"} display={"inline"}>
             E-Mail:{" "}
           </Typography>
           <Typography
@@ -59,7 +60,7 @@ export const UserOverview = () => {
           </Typography>
         </Col>
         <Col>
-          <Typography variant={"h4"} display={"inline"} isLoading={isLoading}>
+          <Typography variant={"h4"} display={"inline"}>
             Rating:{" "}
           </Typography>
           <Typography
@@ -75,7 +76,7 @@ export const UserOverview = () => {
       </Row>
       <Row>
         <Col>
-          <Typography variant={"h4"} display={"inline"} isLoading={isLoading}>
+          <Typography variant={"h4"} display={"inline"}>
             Address:{" "}
           </Typography>
           <Typography
@@ -90,6 +91,9 @@ export const UserOverview = () => {
           </Typography>
         </Col>
       </Row>
+      <Link to={"/account/edit"} className={"mt-3"} display={"button"}>
+        <Icon type={"pen"} /> Edit Profile
+      </Link>
     </>
   );
 };
