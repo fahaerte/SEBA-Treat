@@ -33,13 +33,13 @@ class App {
     this.express.use(helmet());
     this.express.use(
       cors({
-        origin: [
-          this.configService.get("STRIPE_CHECKOUT"),
-          this.configService.get("CLIENT_URL"),
-          "*",
-        ],
+        origin: "*",
       })
     );
+    this.express.use(function (req, res, next) {
+      res.header("Cross-Origin-Resource-Policy", "cross-origin");
+      next();
+    }, express.static("public"));
     this.express.use(morgan("dev"));
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: false }));

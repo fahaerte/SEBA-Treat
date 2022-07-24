@@ -29,7 +29,7 @@ export const RateUser = ({
   };
 
   const rateUserMutation = useMutation(
-    () => rateUserCall(mealOfferId, mealReservationId, sum(rating)),
+    () => rateUserCall(mealReservationId, sum(rating)),
     {
       onSuccess: () => {
         successToast({ message: "You rated the user" });

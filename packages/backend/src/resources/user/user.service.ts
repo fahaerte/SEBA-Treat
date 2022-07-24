@@ -1,13 +1,13 @@
 import UserModel from "../user/user.model";
 import token from "../../utils/token";
-import path from "path";
-import * as fs from "fs";
 import VirtualAccountService from "../virtualAccount/virtualAccount.service";
 import UserDocument from "../user/user.interface";
 import { Service } from "typedi";
 import { ObjectId } from "mongoose";
 import { IAddress, IUser, USER_STARTING_BALANCE } from "@treat/lib-common";
 import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
+import UserNotFoundException from "../../utils/exceptions/userNotFound.exception";
+import Logger, { ILogMessage } from "../../utils/logger";
 
 @Service()
 class UserService {
@@ -35,6 +35,11 @@ class UserService {
         address: user.address,
       };
     } catch (error: any) {
+      Logger.error({
+        functionName: "register",
+        message: "Could not create user",
+        details: error.message,
+      } as ILogMessage);
       throw new Error(error.message as string);
     }
   }
@@ -49,16 +54,27 @@ class UserService {
     const user = await this.userModel.findOne({ email });
 
     if (!user) {
-      throw new Error("Unable to find user with that email address");
+      throw new UserNotFoundException(
+        "Unable to find user with that email address"
+      );
     }
 
     if (await user.isValidPassword(password)) {
+      Logger.info({
+        functionName: "login",
+        message: "User logged in",
+        details: `User ${user._id}`,
+      } as ILogMessage);
       return {
         userId: user.id,
         token: token.createToken(user),
         address: user.address,
       };
     } else {
+      Logger.error({
+        functionName: "login",
+        message: "Invalid password",
+      } as ILogMessage);
       throw new Error("Wrong credentials given");
     }
   }
@@ -96,25 +112,6 @@ class UserService {
       .select(["firstName", "meanRating", "countRatings"]);
   }
 
-  /**
-   * Attempt to get path to profile picture
-   * @param userid
-   */
-  public getProfilePicturePath(userid: string): string {
-    const profilePicturesPath = path.resolve(
-      __dirname,
-      "../../../profilePictures"
-    );
-    const picturesList = fs.readdirSync(profilePicturesPath);
-    const pictureForId = picturesList.find((element) =>
-      element.includes(userid)
-    );
-    if (!pictureForId) {
-      throw new Error("User has no profile picture");
-    }
-    return path.join(profilePicturesPath, pictureForId);
-  }
-
   public async sendTransaction(
     userId: ObjectId,
     amount: number
@@ -145,23 +142,6 @@ class UserService {
   public async getAccountBalance(userId: ObjectId): Promise<number | Error> {
     const user = (await this.userModel.findById(userId)) as UserDocument;
     return user.virtualAccount.balance;
-  }
-
-  public async updateUserRating(
-    userId: ObjectId,
-    newRating: number
-  ): Promise<number | Error> {
-    try {
-      const user = (await this.userModel.findById(userId)) as UserDocument;
-      const ratingVolume = user.meanRating * user.countRatings;
-      user.countRatings += 1;
-      const newMeanRating = (ratingVolume + newRating) / user.countRatings;
-      user.meanRating = Math.round(newMeanRating * 100) / 100;
-      await user.save();
-      return user.meanRating;
-    } catch (error) {
-      throw new Error("MeanRating of user could not be updated!");
-    }
   }
 }
 

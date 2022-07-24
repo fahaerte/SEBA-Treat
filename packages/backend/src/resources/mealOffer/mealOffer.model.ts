@@ -169,7 +169,6 @@ MealOfferSchema.statics.findByReservationId = async function (
       $elemMatch: reservationFilter,
     },
   };
-  console.log(sellerId);
   if (sellerId) filter["user"] = sellerId;
   return this.findOne(filter, {
     _id: 1,
@@ -186,7 +185,10 @@ MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
   userId: string
 ) {
   return this.find({ user: userId })
-    .populate("user reservations.buyer", "firstName lastName meanRating")
+    .populate(
+      "user reservations.buyer",
+      "firstName lastName meanRating profilePicture"
+    )
     .exec();
 };
 
@@ -214,7 +216,10 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       },
     }
   )
-    .populate("user reservations.buyer", "firstName lastName meanRating")
+    .populate(
+      "user reservations.buyer",
+      "firstName lastName meanRating profilePicture"
+    )
     .exec();
 };
 

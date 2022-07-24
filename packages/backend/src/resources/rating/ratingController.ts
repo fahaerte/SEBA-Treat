@@ -17,7 +17,7 @@ class RatingController implements Controller {
 
   private initializeRoutes(): void {
     this.router.post(
-      `${this.path}/mealOffer/:mealOfferId/reservation/:mealReservationId`,
+      `${this.path}/reservations/:mealReservationId`,
       authenticatedMiddleware,
       validationMiddleware(validate.rate),
       this.rateUserForMealOffer
@@ -32,7 +32,6 @@ class RatingController implements Controller {
     try {
       const rating = await this.ratingService.createUserRatingForMealOffer(
         req.user,
-        req.params.mealOfferId,
         req.params.mealReservationId,
         req.body.rating as number
       );
