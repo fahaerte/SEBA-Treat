@@ -1,7 +1,6 @@
 import React from "react";
-import { Container, PageHeading, Row, Typography } from "../../components/ui";
+import { Container, PageHeading, Row } from "../../components/ui";
 import TabBar from "../../components/ui/TabBar/TabBar";
-import { Outlet } from "react-router-dom";
 
 export const MealOfferRequests = ({
   children,

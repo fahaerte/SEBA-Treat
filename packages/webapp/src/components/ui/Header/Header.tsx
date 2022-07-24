@@ -1,5 +1,5 @@
 import { Col, Row } from "../Grid";
-import { Button, Form, Icon, Link, Typography } from "../index";
+import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";

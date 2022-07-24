@@ -44,7 +44,16 @@ export const MealOfferScreen = () => {
 
   useEffect(() => {
     queryClient.fetchQuery(queryKey);
-  }, [search, distance, price, allergen, category, sellerRating, portions]);
+  }, [
+    search,
+    distance,
+    price,
+    allergen,
+    category,
+    sellerRating,
+    portions,
+    queryClient,
+  ]);
 
   const handleSearch = (event: any) => {
     console.log(event.target.value);

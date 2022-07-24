@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { SectionHeading } from "../ui";
 import { useQuery } from "react-query";
 import { getTransactions } from "../../api/userApi";
@@ -6,7 +6,7 @@ import { IMealTransaction } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const TransactionHistory = () => {
-  const [transactionHist, setTransactionHist] = useState([]);
+  // const [transactionHist, setTransactionHist] = useState([]);
 
   const userId = getCookie("userrId");
 
@@ -16,7 +16,7 @@ export const TransactionHistory = () => {
     {
       onSuccess: (response) => {
         console.log(response.data);
-        setTransactionHist(response.data);
+        // setTransactionHist(response.data);
       },
     }
   );
@@ -28,8 +28,8 @@ export const TransactionHistory = () => {
       ) : (
         <>
           <SectionHeading>Your Transaction History</SectionHeading>
-          {transactionHist &&
-            transactionHist
+          {transactions &&
+            transactions
               .slice()
               .map((transaction: IMealTransaction, index: number) => (
                 <div key={transaction._id}>{transaction._id}</div>

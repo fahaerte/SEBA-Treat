@@ -1,10 +1,10 @@
 import React from "react";
 import { FormHelper, IFormRow, Form } from "../ui";
 import { IUser } from "@treat/lib-common";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
+// import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 export const ProfileUpdate = () => {
-  const { userId, token } = useAuthContext();
+  // const { userId, token } = useAuthContext();
 
   const elements: IFormRow<IUser>[] = [
     [
