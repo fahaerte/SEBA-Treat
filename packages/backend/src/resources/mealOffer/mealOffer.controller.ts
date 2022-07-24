@@ -121,10 +121,13 @@ class MealOfferController implements Controller {
           : undefined,
         price: req.query.price ? Number(req.query.price) : undefined,
         search: req.query.search as string,
+        page: Number(req.query.page),
+        pageLimit: Number(req.query.pageLimit),
       } as MealOfferQuery;
-      const mealOfferPreviews =
-        await this.mealOfferService.getMealOfferPreviews(mealOfferQuery);
-      res.status(200).send({ data: mealOfferPreviews });
+      const data = await this.mealOfferService.getMealOfferPreviews(
+        mealOfferQuery
+      );
+      res.status(200).send(data);
     } catch (error: any) {
       next(error);
     }

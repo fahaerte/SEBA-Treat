@@ -93,7 +93,7 @@ class MealOfferService {
 
   public async getMealOfferPreviews(
     mealOfferQuery: MealOfferQuery
-  ): Promise<MealOfferDocumentWithUser[]> {
+  ): Promise<MealOfferPreviewReturnObject> {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
       mealOfferQuery
     );
@@ -106,7 +106,23 @@ class MealOfferService {
       preview.user.address = undefined;
       preview.rating = undefined;
     });
-    return filteredPreviews;
+    //TDOD: Sort offers according to sorting rule
+    const filteredPreviewsSliced = filteredPreviews.slice(
+      (mealOfferQuery.page - 1) * mealOfferQuery.pageLimit,
+      mealOfferQuery.page * mealOfferQuery.pageLimit
+    );
+
+    const totalPages = Math.ceil(
+      filteredPreviews.length / mealOfferQuery.pageLimit
+    );
+
+    return {
+      data: filteredPreviewsSliced,
+      total: filteredPreviews.length,
+      total_pages: totalPages,
+      page: mealOfferQuery.page,
+      per_page: mealOfferQuery.pageLimit,
+    };
   }
 
   private async filterMealOfferPreviewsForDistance(
@@ -443,6 +459,14 @@ class MealOfferService {
   public async getMealOffers(user: UserDocument): Promise<MealOfferDocument[]> {
     return await this.mealOffer.find({ user: user._id }).exec();
   }
+}
+
+interface MealOfferPreviewReturnObject {
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+  data: MealOfferDocumentWithUser[];
 }
 
 export default MealOfferService;

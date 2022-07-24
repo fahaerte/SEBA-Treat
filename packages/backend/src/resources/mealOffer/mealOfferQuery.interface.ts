@@ -12,4 +12,6 @@ export interface MealOfferQuery {
   endDate?: Date;
   price?: number;
   search?: string;
+  page: number;
+  pageLimit: number;
 }
