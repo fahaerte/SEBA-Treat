@@ -3,7 +3,6 @@ import MealTransactionModel from "./mealTransaction.model";
 import { MealTransactionDocument } from "./mealTransaction.interface";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 import UserService from "../user/user.service";
-import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 import TransactionNotFoundException from "../../utils/exceptions/transactionNotFound.exception";
 import TransactionInWrongStateException from "../../utils/exceptions/transactionInWrongState.exception";
 import UserDocument from "../user/user.interface";
@@ -125,54 +124,6 @@ class MealTransactionService {
       }
     }
     await transaction.save();
-  }
-
-  public async rateTransactionParticipant(
-    user: UserDocument,
-    transactionId: ObjectId,
-    stars: number,
-    participantType: MealTransactionParticipant
-  ): Promise<MealTransactionDocument | Error> {
-    try {
-      const transaction = (await this.mealTransactionModel.findById(
-        transactionId
-      )) as MealTransactionDocument;
-      if (!transaction) {
-        throw new TransactionNotFoundException(
-          transactionId as unknown as string
-        );
-      }
-      if (transaction.transactionState === ETransactionState.COMPLETED) {
-        if (participantType === MealTransactionParticipant.BUYER) {
-          if (user._id.equals(transaction.receiverId)) {
-            transaction.buyerRating = stars;
-            await this.userService.updateUserRating(
-              transaction.receiverId,
-              stars
-            );
-          } else {
-            throw new Error("Only the seller can rate the buyer.");
-          }
-        } else {
-          if (user._id.equals(transaction.senderId)) {
-            transaction.sellerRating = stars;
-            await this.userService.updateUserRating(
-              transaction.senderId,
-              stars
-            );
-          } else {
-            throw new Error("Only the buyer can rate the seller.");
-          }
-        }
-        transaction.sellerRating = stars;
-        await transaction.save();
-        return transaction;
-      } else {
-        throw new TransactionInWrongStateException(transaction.id);
-      }
-    } catch (error: any) {
-      throw new Error(error.message as string);
-    }
   }
 }
 

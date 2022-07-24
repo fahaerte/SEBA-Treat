@@ -12,8 +12,9 @@ export const getTransactions = async () => {
   return response.data;
 };
 
-export const getProfilePictureURL = async () => {
-  const userId = getCookie("userId");
-  const response = await baseImageApi().get(`users/profile-picture/${userId}`);
-  return URL.createObjectURL(response);
+export const getProfilePictureURL = async (userId?: string) => {
+  let path = "users/profile-picture";
+  if (userId) path += `/${userId}`;
+  const response = await baseImageApi().get(path, { responseType: "blob" });
+  return URL.createObjectURL(response.data);
 };

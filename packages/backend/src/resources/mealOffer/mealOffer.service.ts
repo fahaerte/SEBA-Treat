@@ -3,7 +3,6 @@ import MealOfferNotFoundException from "../../utils/exceptions/mealOfferNotFound
 import { Service } from "typedi";
 import MealTransactionService from "../mealTransaction/mealTransaction.service";
 import { MealTransactionDocument } from "../mealTransaction/mealTransaction.interface";
-import { ObjectId } from "mongoose";
 import {
   MealOfferDocument,
   MealOfferDocumentWithUser,
@@ -21,6 +20,8 @@ import {
 import Logger, { ILogMessage } from "../../utils/logger";
 import UserDocument from "../user/user.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
+import { ObjectId } from "mongoose";
+import MealTransactionDocument from "../mealTransaction/mealTransaction.interface";
 
 @Service()
 class MealOfferService {
@@ -338,7 +339,8 @@ class MealOfferService {
     buyer: UserDocument,
     mealReservationId: string
   ): Promise<void | Error> {
-    const [mealOfferDoc, mealReservation] =
+    // eslint-disable-next-line prefer-const
+    let [mealOfferDoc, mealReservation] =
       (await this.getMealOfferAndReservation(
         mealReservationId,
         undefined,
@@ -357,12 +359,16 @@ class MealOfferService {
         mealOfferDoc.transactionFee
       )) as MealTransactionDocument;
     await this.mealTransactionService.performTransaction(mealTransaction._id);
-    mealOfferDoc.reservations.forEach((reservation) => {
-      reservation.reservationState =
-        mealReservation._id === reservation._id
-          ? EMealReservationState.BUYER_CONFIRMED
-          : EMealReservationState.SELLER_REJECTED;
-    });
+    mealOfferDoc = (await this.mealOffer.findById(
+      mealOfferDoc._id
+    )) as MealOfferDocument;
+    mealOfferDoc.reservations.forEach(
+      (reservation) =>
+        (reservation.reservationState =
+          reservation._id.toString() === mealReservation._id.toString()
+            ? EMealReservationState.BUYER_CONFIRMED
+            : EMealReservationState.SELLER_REJECTED)
+    );
     await this.updateAndSaveMealReservationState(
       mealOfferDoc,
       mealReservation,

@@ -19,7 +19,6 @@ class RatingService {
 
   public async createUserRatingForMealOffer(
     user: UserDocument,
-    mealOfferId: string,
     mealReservationId: string,
     rating: number
   ): Promise<RatingDocument | Error> {
