@@ -6,10 +6,10 @@ import { ConfigService } from "./ConfigService";
 const configService = new ConfigService();
 export const createToken = (user: UserDocument): string => {
   return jwt.sign(
-    { id: user._id },
+    { id: user._id, address: user.address },
     configService.get("JWT_SECRET") as jwt.Secret,
     {
-      expiresIn: "1d",
+      expiresIn: "1h",
     }
   );
 };

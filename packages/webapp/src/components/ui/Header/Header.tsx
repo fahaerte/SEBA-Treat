@@ -1,16 +1,15 @@
 import { Col, Row } from "../Grid";
 import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { SCCustomForm, SCHeader } from "./styles";
+import { SCCustomForm, SCHeader,
+} from "./styles";
 import Logo from "../../../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  getCookie,
-  removeCookies,
-  setCookie,
-} from "../../../utils/auth/CookieProvider";
+import { getCookie, removeCookies, setCookie } from "../../../utils/auth/CookieProvider";
+import { signout } from "../../../api/authApi";
+import { dangerToast, successToast } from "../Toast";
 import { CustomDropdown } from "./UserDropdown";
 import { IStringObject } from "@treat/lib-common";
 import { addressElement } from "../../AddressInput/AddressInput";
@@ -30,10 +29,21 @@ export const Header = () => {
     setOnAddressEdit(false);
   };
 
-  useQuery("getUser", () => getUser(), {
+  useQuery(["getUser", userId], () => getUser(), {
     onSuccess: (response) => {
       setBalance(response.data.virtualAccount.balance);
       setFirstName(response.data.firstName);
+    },
+  });
+
+  const signoutMutation = useMutation("signout", signout, {
+    onSuccess: (response) => {
+      removeCookies();
+      successToast({ message: "Successfully signed out." });
+      navigate("/");
+    },
+    onError: () => {
+      dangerToast({ message: "Signout unsuccessful. Please try again!" });
     },
   });
 
@@ -53,9 +63,8 @@ export const Header = () => {
     }
   };
 
-  const signout = () => {
-    removeCookies();
-    navigate("/");
+  const executeSignout = () => {
+    signoutMutation.mutate();
   };
 
   return (
@@ -116,7 +125,7 @@ export const Header = () => {
                 credits={balance}
                 firstName={firstName}
                 handleReservationNavigation={handleReservationsButton}
-                handleLogout={signout}
+                handleLogout={executeSignout}
               />
             ) : (
               <Button

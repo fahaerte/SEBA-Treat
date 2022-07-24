@@ -23,23 +23,16 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers } = useQuery(
-    queryKey,
-    () =>
-      getMealOffersByParams(
-        distance,
-        portions,
-        category,
-        allergen,
-        sellerRating,
-        price,
-        search
-      ),
-    {
-      onSuccess: (response) => {
-        console.log(response);
-      },
-    }
+  const { data: offers } = useQuery(queryKey, () =>
+    getMealOffersByParams(
+      distance,
+      portions,
+      category,
+      allergen,
+      sellerRating,
+      price,
+      search
+    )
   );
 
   useEffect(() => {
@@ -60,7 +53,7 @@ export const MealOfferScreen = () => {
     if (event.target.value === "") {
       setSearch(undefined);
     } else {
-      setSearch(event.target.value); //Problem: on every keyboard stroke a request is sent --> expensive
+      setSearch(event.target.value);
     }
   };
 

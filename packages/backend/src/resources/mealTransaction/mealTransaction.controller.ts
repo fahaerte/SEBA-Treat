@@ -4,7 +4,6 @@ import HttpException from "../../utils/exceptions/http.exception";
 import MealTransactionService from "./mealTransaction.service";
 import { ObjectId } from "mongoose";
 import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
-import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 import validate from "./mealTransaction.validation";
 import { Service } from "typedi";
 import validationMiddleware from "../../middleware/validation.middleware";
@@ -29,11 +28,6 @@ class MealTransactionController implements Controller {
       authenticatedMiddleware,
       validationMiddleware(validate.rateTransaction),
       this.rateTransaction
-    );
-    this.router.post(
-      `${this.path}/:mealTransactionId/rate`,
-      authenticatedMiddleware,
-      this.rateTransactionParticipant
     );
   }
 
@@ -71,34 +65,6 @@ class MealTransactionController implements Controller {
       res.sendStatus(204);
     } catch (error: any) {
       next(error);
-    }
-  };
-
-  private rateTransactionParticipant = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      if (!req.user) {
-        return next(new HttpException(404, "No logged in user"));
-      } else {
-        const user = req.user;
-        // const userId = req.user._id;
-        const mealTransactionId = req.params.mealTransactionId;
-        const stars = req.body.stars;
-        const participantType = req.body.participantType;
-        const mealTransaction =
-          await this.mealTransactionService.rateTransactionParticipant(
-            user,
-            mealTransactionId as unknown as ObjectId,
-            stars as number,
-            participantType as MealTransactionParticipant
-          );
-        res.status(200).json({ mealTransaction });
-      }
-    } catch (error: any) {
-      next(new HttpException(400, error.message));
     }
   };
 }

@@ -7,7 +7,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   birthdate: Date;
-  // profilePicture: File;
+  profilePicture: string;
   address: IAddress;
   virtualAccount: IVirtualAccount;
   stripeCustomerId?: string;

@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container } from "react-bootstrap";
 import {
   Col,
   dangerToast,
-  infoToast,
+  MealDetails,
+  PageHeading,
   Row,
   SectionHeading,
   successToast,
   Tag,
-  PageHeading,
   UserPreview,
-  MealDetails,
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
 import { getMealOffer, requestMealOffer } from "../../api/mealApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
-import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const MealOfferDetailScreen = () => {
   const { mealOfferId } = useParams();
@@ -52,21 +50,14 @@ export const MealOfferDetailScreen = () => {
           message: "Unexpected server error. The meal could not be reserved.",
         });
       }
+      navigate("/login", { state: { from: location } });
     },
   });
 
   function handleRequestClick() {
-    const token = getCookie("token");
-    if (token) {
-      const result = requestMealMutation.mutate({
-        mealOfferId: mealOfferId as string,
-      });
-    } else {
-      infoToast({
-        message: `Please log in to reserve this meal`,
-      });
-      navigate("/login", { state: { from: location } });
-    }
+    void requestMealMutation.mutate({
+      mealOfferId: mealOfferId as string,
+    });
   }
 
   return (

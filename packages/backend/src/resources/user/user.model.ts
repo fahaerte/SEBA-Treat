@@ -24,6 +24,10 @@ const UserSchema = new Schema<UserDocument>(
       type: String,
       required: true,
     },
+    profilePicture: {
+      type: String,
+      required: true,
+    },
     birthdate: {
       type: Date,
       required: true,

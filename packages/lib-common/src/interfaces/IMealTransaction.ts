@@ -11,4 +11,5 @@ export interface IMealTransaction {
   transactionState: ETransactionState;
   buyerRating: number;
   sellerRating: number;
+  updatedAt: Date;
 }

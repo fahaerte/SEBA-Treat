@@ -1,12 +1,10 @@
 import React from "react";
-import { Row, Form, FormHelper, Link, Typography } from "../../components";
-import { IFormRow } from "../../components";
+import { Row, Form, FormHelper, IFormRow, Link, Typography, successToast, dangerToast } from "../../components";
 import { IAddress, IUserCredentials } from "@treat/lib-common";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
-import { AxiosError } from "axios";
 import { setCookie } from "../../utils/auth/CookieProvider";
 
 const LoginScreen = () => {
@@ -20,15 +18,21 @@ const LoginScreen = () => {
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState?.from || "/alreadyLoggedIn";
+  const from = locationState?.from || "/";
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
-      const { userId, token, address } = response.data;
-      setCookie("token", token);
+      const { userId, address } = response.data;
       setCookie("userId", userId);
       setCookie("address", getStringFromIAddress(address as IAddress));
+      successToast({ message: "Welcome!" });
+      if (from.pathname === "/address") {
+        from.pathname = "/";
+      }
       navigate(from, { replace: true });
+    },
+    onError: () => {
+      dangerToast({ message: "Wrong credentials. Please try again!" });
     },
   });
 
@@ -72,17 +76,6 @@ const LoginScreen = () => {
   return (
     <>
       <div>
-        <div>
-          {loginMutation.isError ? (
-            <div>
-              An error occurred:{" "}
-              {loginMutation.error instanceof AxiosError &&
-              loginMutation.error.message
-                ? loginMutation.error.message
-                : "unknown"}
-            </div>
-          ) : null}
-        </div>
         <Form<IUserCredentials>
           elements={elements}
           onSubmit={handleSignIn}

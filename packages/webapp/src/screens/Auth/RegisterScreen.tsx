@@ -1,32 +1,27 @@
 import React from "react";
-import { Form, FormHelper, IFormRow } from "../../components";
-import { IAddress, IUser } from "@treat/lib-common";
-import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
+import {
+  dangerToast,
+  Form,
+  FormHelper,
+  IFormRow,
+  successToast,
+  Typography,
+} from "../../components";
+import { IUser } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { register } from "../../api/authApi";
 import { AxiosError } from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { setCookie } from "../../utils/auth/CookieProvider";
-
 export const RegisterScreen = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  type LocationState = {
-    from: {
-      pathname: string;
-    };
-  };
-
-  const locationState = location.state as LocationState;
-  const from = locationState?.from || "/alreadyLoggedIn";
 
   const registerMutation = useMutation(register, {
     onSuccess: (response) => {
-      const { userId, token, address } = response.data;
-      setCookie("token", token);
-      setCookie("userId", userId);
-      setCookie("address", getStringFromIAddress(address as IAddress));
+      successToast({ message: "Registration successful!" });
+      navigate("/");
+    },
+    onError: () => {
+      dangerToast({ message: "Something went wrong!" });
     },
   });
 
@@ -187,10 +182,7 @@ export const RegisterScreen = () => {
   ];
 
   const handleRegister = (data: IUser) => {
-    console.log("register user...");
-    console.log(JSON.stringify(data));
-    void register(data);
-    navigate(from, { replace: true });
+    registerMutation.mutate(data);
   };
 
   return (
@@ -198,13 +190,13 @@ export const RegisterScreen = () => {
       <div>
         <div>
           {registerMutation.isError ? (
-            <div>
+            <Typography variant={"h4"} className={"fw-normal"} color={"danger"}>
               An error occurred:{" "}
               {registerMutation.error instanceof AxiosError &&
               registerMutation.error.message
                 ? registerMutation.error.message
                 : "unknown"}
-            </div>
+            </Typography>
           ) : null}
         </div>
         <Form<IUser>

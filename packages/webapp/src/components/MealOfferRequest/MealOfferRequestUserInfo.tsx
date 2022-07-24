@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { Icon } from "../ui";
 import { useQuery } from "react-query";
 import { getProfilePictureURL } from "../../api/userApi";
-import User from "../../types/interfaces/user.interface";
+import { IUser } from "@treat/lib-common";
+import { ConfigService } from "../../utils/ConfigService";
 
 const ProfilePicture = styled.img`
   border-radius: 50%;
@@ -14,14 +15,20 @@ const ProfilePicture = styled.img`
 `;
 
 interface MealOfferRequestUserInfoProps {
-  user: User;
+  user: IUser;
 }
 
 export const MealOfferRequestUserInfo = ({
   user,
 }: MealOfferRequestUserInfoProps) => {
-  const { data: profilePicture } = useQuery("getProfilePicture", () =>
-    getProfilePictureURL()
+  const { data, status } = useQuery(
+    "getProfilePicture",
+    () => getProfilePictureURL(user._id), // TODO: user._id throws error
+    {
+      onSuccess: (response) => {
+        console.log(response);
+      },
+    }
   );
 
   return (
@@ -30,10 +37,14 @@ export const MealOfferRequestUserInfo = ({
         <Col className={"col-3"}>
           <Row>
             <Col className={"col-sm-auto"}>
-              <ProfilePicture src={profilePicture} />
+              <ProfilePicture
+                src={`${new ConfigService.get("PROFILE_PICTURES_URL")}/${
+                  user.profilePicture
+                }`}
+              />
             </Col>
             <Col className={"col-sm-auto my-auto p-0"}>
-              {`${user.firstName} ${user.lastName}`}
+              {`${user.firstName}`}
             </Col>
           </Row>
         </Col>
