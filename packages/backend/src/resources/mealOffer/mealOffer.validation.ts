@@ -41,6 +41,10 @@ const getMealOfferParams = Joi.object({
   mealOfferId: Joi.string().regex(/^[a-f\d]{24}$/i),
 });
 
+const getMealOfferQuery = Joi.object({
+  compareAddress: Joi.string().min(1).required(),
+});
+
 const getMealOfferBody = Joi.object({
   compareAddress: Joi.string().min(1),
 });
@@ -67,6 +71,7 @@ export default {
   updateReservationStateBody,
   getMealOfferPreviewsQuery,
   getMealOfferParams,
+  getMealOfferQuery,
   getMealOfferBody,
   updateReservationStateParams,
   createMealOfferReservationParams,

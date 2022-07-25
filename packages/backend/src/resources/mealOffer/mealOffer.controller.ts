@@ -44,7 +44,7 @@ class MealOfferController implements Controller {
     this.router.get(
       `${this.path}/:mealOfferId`,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
-      validationMiddleware(validate.getMealOfferBody, ValidatePart.BODY),
+      validationMiddleware(validate.getMealOfferQuery, ValidatePart.QUERY),
       this.getMealOffer
     );
     this.router.get(
