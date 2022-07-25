@@ -171,16 +171,9 @@ export const MealOfferDetailScreen = () => {
                   style={{
                     height: "400px",
                     width: "100%",
-                    // border: "1px solid grey",
-                    // backgroundColor: "#BFD0CD",
                     position: "relative",
                     display: "inline-block",
                     overflow: "hidden",
-                    margin: "0",
-                    boxShadow: "0 2px 5px 1px rgb(0 0 0 / 10%)",
-                    border: "2px solid #BFD0CD",
-                    borderRadius: "20px",
-                    padding: "0",
                   }}
                 >
                   <div
@@ -194,7 +187,7 @@ export const MealOfferDetailScreen = () => {
                       backgroundPosition: "center",
                       backgroundSize: "cover",
                       backgroundRepeat: "no-repeat",
-                      opacity: "0.5",
+                      opacity: "0.3",
                     }}
                   ></div>
                   <img

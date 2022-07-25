@@ -42,7 +42,7 @@ const getMealOfferParams = Joi.object({
 });
 
 const getMealOfferQuery = Joi.object({
-  compareAddress: Joi.string().min(1).required(),
+  compareAddress: Joi.string().min(1),
 });
 
 const getMealOfferBody = Joi.object({

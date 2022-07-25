@@ -7,10 +7,14 @@ import {
   successToast,
   TOptionValuePair,
 } from "../../components";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { EMealAllergen, EMealCategory, IMealOffer } from "@treat/lib-common";
-import { createMealOffer, CreateMealOfferArgs } from "../../api/mealApi";
-import { useMutation } from "react-query";
+import {
+  createMealOffer,
+  CreateMealOfferArgs,
+  getMealOffer,
+} from "../../api/mealApi";
+import { useMutation, useQuery } from "react-query";
 import { getCookie } from "../../utils/auth/CookieProvider";
 
 interface IMealOfferForm
@@ -25,7 +29,21 @@ interface IMealOfferForm
  * - Redirect to detail page on success
  */
 const EditMeal = () => {
+  const userId = getCookie("userId");
+  const token = getCookie("token");
+
+  const { mealOfferId } = useParams();
   const navigate = useNavigate();
+
+  const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
+    "getMealOffer",
+    () => getMealOffer(mealOfferId as string),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+      },
+    }
+  );
 
   const createOfferMutation = useMutation(
     ({ mealOffer }: CreateMealOfferArgs) => createMealOffer({ mealOffer }),
@@ -209,9 +227,6 @@ const EditMeal = () => {
       },
     }),
   ];
-
-  const userId = getCookie("userId");
-  const token = getCookie("token");
 
   const handleSubmit = (data: IMealOfferForm) => {
     if (userId && token) {

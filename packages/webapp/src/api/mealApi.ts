@@ -4,13 +4,18 @@ import { getCookie } from "../utils/auth/CookieProvider";
 
 export const getMealOffer = async (
   mealOfferId: string,
-  compareAddress: string
+  compareAddress?: string
 ) => {
-  const response = await baseApi().get(`/mealOffers/${mealOfferId}`, {
-    params: {
-      compareAddress: compareAddress,
-    },
-  });
+  let response;
+  if (compareAddress) {
+    response = await baseApi().get(`/mealOffers/${mealOfferId}`, {
+      params: {
+        compareAddress: compareAddress,
+      },
+    });
+  } else {
+    response = await baseApi().get(`/mealOffers/${mealOfferId}`);
+  }
   return response.data.data;
 };
 
@@ -22,6 +27,13 @@ export const requestMealOffer = async ({
 
 export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
   return await baseApiAuth().post("/mealOffers", mealOffer);
+};
+
+export const updateMealOffer = async (
+  mealOfferId: string,
+  { mealOffer }: CreateMealOfferArgs
+) => {
+  return await baseApiAuth().patch(`/mealOffers/${mealOfferId}`, mealOffer);
 };
 
 export const getMealOffersByParams = async (
