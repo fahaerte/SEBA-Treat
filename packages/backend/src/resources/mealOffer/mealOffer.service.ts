@@ -10,14 +10,11 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import {
-  EMealReservationState,
-  ESortingRules,
-  IMealOfferCard,
-} from "@treat/lib-common";
+import { EMealReservationState, ESortingRules } from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
+  getDistancesBetweenAddressesInKm,
   getUserAddressString,
 } from "../../utils/address";
 import Logger, { ILogMessage } from "../../utils/logger";
@@ -219,20 +216,20 @@ class MealOfferService {
     compareAddress: string,
     compareDistance: number
   ): Promise<MealOfferDocumentWithUser[]> {
-    const filteredMealOffers = [];
-    for (const mealOfferPreview of mealOfferPreviews) {
-      const addressString = getUserAddressString(
-        mealOfferPreview.user.address!
-      );
-      const distance = await getDistanceBetweenAddressesInKm(
-        addressString,
-        compareAddress
-      );
-      if (distance <= compareDistance) {
-        mealOfferPreview.distance = distance;
-        filteredMealOffers.push(mealOfferPreview);
+    const filteredMealOffers = [] as MealOfferDocumentWithUser[];
+    const addresses = Array.from(mealOfferPreviews, (preview) =>
+      getUserAddressString(preview.user.address!)
+    );
+    const distances = await getDistancesBetweenAddressesInKm(
+      compareAddress,
+      addresses
+    );
+    mealOfferPreviews.forEach((preview, index) => {
+      if (distances[index] <= compareDistance) {
+        preview.distance = distances[index];
+        filteredMealOffers.push(preview);
       }
-    }
+    });
     return filteredMealOffers;
   }
 
