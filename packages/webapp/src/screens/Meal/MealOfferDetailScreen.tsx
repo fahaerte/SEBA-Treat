@@ -76,17 +76,6 @@ export const MealOfferDetailScreen = () => {
       }
     );
 
-  // useEffect(() => {
-  //   console.log(mealOffer);
-  //   const nowDate = new Date();
-  //   const endDate = new Date(mealOffer.endDate);
-  //   console.log("nowDate: ", nowDate);
-  //   console.log("still valid: ", endDate > nowDate);
-  //   if (userId !== mealOffer.user._id) {
-  //     setEnableReservation(true);
-  //   }
-  // }, [mealOffer]);
-
   function handleEditClick() {
     if (userId && userId === mealOffer.user._id) {
       console.log("Edit click");
@@ -227,7 +216,8 @@ export const MealOfferDetailScreen = () => {
                   <Tag key={allergen}>{allergen}</Tag>
                 ))}
               </Col>
-              <Col style={{ maxWidth: "400px" }}>
+              {/* TODO: @Rosan why dis w-25 not working? */}
+              <Col className={"w-25"} xs>
                 <MealRequestCard
                   productName={mealOffer.title}
                   mealPrice={mealOffer.price}

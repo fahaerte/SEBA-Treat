@@ -96,7 +96,7 @@ const MealRequestCard = ({
             </Typography>
           </Col>
         </Row>
-        <Row style={{ margin: "1rem 0 0 0" }}>
+        <Row className={"mt-3"}>
           {!disableButton ? (
             <Button className="px-3" onClick={buttonAction}>
               Reserve meal

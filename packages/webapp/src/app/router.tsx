@@ -15,6 +15,7 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
+import EditMeal from "../screens/Meal/EditMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { ProfileScreen } from "../screens/Account/ProfileScreen";
 import { ProfileOverview } from "../components/Profile/ProfileOverview";
@@ -191,6 +192,16 @@ export const AppRouter = () => {
           <RequireAddressRoute>
             <MealOfferDetailScreen />
           </RequireAddressRoute>
+        </AppLayout>
+      ),
+    },
+    {
+      path: "mealoffers/:mealOfferId/edit",
+      element: (
+        <AppLayout>
+          <RequireAuthRoute>
+            <EditMeal />
+          </RequireAuthRoute>
         </AppLayout>
       ),
     },
