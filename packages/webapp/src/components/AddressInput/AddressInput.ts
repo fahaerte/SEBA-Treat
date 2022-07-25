@@ -5,6 +5,7 @@ export const addressElement: IFormRow<IStringObject>[] = [
   FormHelper.createInput({
     formKey: "returnedString",
     label: "Address",
+    labelClass: "text-start",
     props: {
       type: "text",
     },

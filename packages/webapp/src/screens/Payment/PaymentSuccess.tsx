@@ -10,16 +10,13 @@ import {
 } from "../../components";
 import { useQuery } from "react-query";
 import { verifyPayment } from "../../api/stripeApi";
-// import { VerifyPaymentApiArg } from "@treat/lib-common/lib/interfaces/IVerifyPaymentApiArg";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
+import { setCookie } from "../../utils/auth/CookieProvider";
 
 const PaymentSuccess = () => {
   const { priceId, customerId, token, userId } = useParams();
-  const { setUserId, setToken } = useAuthContext();
 
   const { isLoading, isSuccess, isError } = useQuery("verifyPayment", () => {
-    setUserId(userId);
-    setToken(token);
+    setCookie("userId", userId as string);
     console.log({
       customerId,
       priceId,
@@ -28,12 +25,9 @@ const PaymentSuccess = () => {
     });
 
     if (customerId && userId && priceId && token) {
-      console.log("ist hier drin");
       return verifyPayment({
         customerId,
         priceId,
-        userId,
-        token,
       });
     }
     return;

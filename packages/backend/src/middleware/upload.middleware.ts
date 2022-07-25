@@ -1,12 +1,18 @@
 import multer from "multer";
 import {
-  profileFilterFilter,
+  imageUploadFilter,
+  mealOfferStorage,
   profileFileStorage,
-} from "../utils/profileUpload";
+} from "../utils/imageUpload";
 
 const profileFileUpload = multer({
-  fileFilter: profileFilterFilter,
+  fileFilter: imageUploadFilter,
   storage: profileFileStorage,
 });
 
-export default profileFileUpload;
+const mealOfferFileUpload = multer({
+  fileFilter: imageUploadFilter,
+  storage: mealOfferStorage,
+});
+
+export { profileFileUpload, mealOfferFileUpload };

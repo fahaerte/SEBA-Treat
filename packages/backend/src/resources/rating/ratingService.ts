@@ -19,14 +19,11 @@ class RatingService {
 
   public async createUserRatingForMealOffer(
     user: UserDocument,
-    mealOfferId: string,
     mealReservationId: string,
     rating: number
   ): Promise<RatingDocument | Error> {
     const [mealOffer, mealReservation] =
       (await this.mealOfferService.getMealOfferAndReservation(
-        user,
-        mealOfferId,
         mealReservationId
       )) as [MealOfferDocument, MealReservationDocument];
     if (

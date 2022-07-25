@@ -7,7 +7,6 @@ import { RateUser } from "./RateUser";
 import { EMealReservationState } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -20,24 +19,16 @@ export const ReceivedMealReservation = ({
   reservation,
   buyerRating,
 }: ReceivedMealReservationProps) => {
-  const { token } = useAuthContext();
-
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
-      updateMealReservationState(
-        token as string,
-        mealOfferId,
-        reservation._id,
-        newState
-      ),
+      updateMealReservationState(reservation._id, newState),
     {
       onSuccess: (newState: EMealReservationState) => {
         successToast({ message: "You changed the state of your reservation" });
-        setReservationState(newState);
       },
       onError: (error: any) => {
         dangerToast({ message: error.response.data.message });
@@ -47,6 +38,7 @@ export const ReceivedMealReservation = ({
 
   const updateReservationState = (newState: EMealReservationState) => {
     updateReservationStateMutation.mutate(newState);
+    setReservationState(newState);
   };
 
   const getActionButton = () => {
@@ -81,7 +73,8 @@ export const ReceivedMealReservation = ({
     if (
       reservationState == EMealReservationState.BUYER_REJECTED ||
       reservationState == EMealReservationState.SELLER_REJECTED ||
-      reservationState == EMealReservationState.BUYER_CONFIRMED
+      reservationState == EMealReservationState.BUYER_CONFIRMED ||
+      reservationState == EMealReservationState.SELLER_ACCEPTED
     ) {
       return (
         <Row>

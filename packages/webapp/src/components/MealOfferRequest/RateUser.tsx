@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, dangerToast, Icon, Row, successToast } from "../ui";
 import { sum } from "lodash";
 import { useMutation } from "react-query";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { rateUser as rateUserCall } from "../../api/ratingApi";
 
 interface RateUserProps {
@@ -16,8 +15,6 @@ export const RateUser = ({
   mealReservationId,
   existingRating,
 }: RateUserProps) => {
-  const { token } = useAuthContext();
-
   const [rating, setRating] = useState([0, 0, 0, 0, 0]);
   const [finalRating, setFinalRating] = useState(existingRating);
 
@@ -32,13 +29,7 @@ export const RateUser = ({
   };
 
   const rateUserMutation = useMutation(
-    () =>
-      rateUserCall(
-        token as string,
-        mealOfferId,
-        mealReservationId,
-        sum(rating)
-      ),
+    () => rateUserCall(mealReservationId, sum(rating)),
     {
       onSuccess: () => {
         successToast({ message: "You rated the user" });

@@ -1,5 +1,6 @@
 import { baseApi, baseApiAuth } from "./baseApi";
 import { EMealReservationState, IMealOffer } from "@treat/lib-common";
+import { getCookie } from "../utils/auth/CookieProvider";
 
 export const getMealOffer = async (mealOfferId: string) => {
   const response = await baseApi().get(`/mealOffers/${mealOfferId}`);
@@ -8,22 +9,15 @@ export const getMealOffer = async (mealOfferId: string) => {
 
 export const requestMealOffer = async ({
   mealOfferId,
-  token,
 }: requestMealOfferArgs) => {
-  return await baseApiAuth(token).post(
-    `/mealOffers/${mealOfferId}/reservations`
-  );
+  return await baseApiAuth().post(`/mealOffers/${mealOfferId}/reservations`);
 };
 
-export const createMealOffer = async ({
-  mealOffer,
-  token,
-}: CreateMealOfferArgs) => {
-  return await baseApiAuth(token).post("/mealOffers", mealOffer);
+export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
+  return await baseApiAuth().post("/mealOffers", mealOffer);
 };
 
 export const getMealOffersByParams = async (
-  address: string,
   distance: number,
   portions?: number | undefined,
   category?: string | undefined,
@@ -34,7 +28,7 @@ export const getMealOffersByParams = async (
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
-      address: address,
+      address: getCookie("address"),
       portions: portions,
       category: category,
       sellerRating: sellerRating,
@@ -46,31 +40,25 @@ export const getMealOffersByParams = async (
   return response.data;
 };
 
-export const getSentMealOfferRequests = async (token: string) => {
-  const response = await baseApiAuth(token).get(
-    "/mealOffers/reservations/sent"
-  );
+export const getSentMealOfferRequests = async () => {
+  const response = await baseApiAuth().get("/mealOffers/reservations/sent");
   return response.data;
 };
 
-export const getReceivedMealOfferRequests = async (token: string) => {
-  const response = await baseApiAuth(token).get(
-    "/mealOffers/reservations/received"
-  );
+export const getReceivedMealOfferRequests = async () => {
+  const response = await baseApiAuth().get("/mealOffers/reservations/received");
   return response.data;
 };
 
 export const updateMealReservationState = async (
-  token: string,
-  mealOfferId: string,
   mealOfferReservationId: string,
   newReservationState: EMealReservationState
 ) => {
   const newStateObject = {
     reservationState: newReservationState,
   };
-  const response = await baseApiAuth(token).patch(
-    `/mealOffers/${mealOfferId}/reservations/${mealOfferReservationId}`,
+  const response = await baseApiAuth().patch(
+    `/mealOffers/reservations/${mealOfferReservationId}`,
     newStateObject
   );
   return response.data;
@@ -78,7 +66,6 @@ export const updateMealReservationState = async (
 
 interface requestMealOfferArgs {
   mealOfferId: string;
-  token: string | undefined;
 }
 
 export interface CreateMealOfferArgs {
@@ -86,5 +73,4 @@ export interface CreateMealOfferArgs {
     IMealOffer,
     "_id" | "rating" | "transactionFee" | "reservations"
   >;
-  token: string;
 }

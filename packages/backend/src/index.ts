@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import "dotenv/config";
 import "module-alias/register";
-import validateEnv from "./utils/validateEnv";
 import App from "./app";
 import UserController from "./resources/user/user.controller";
 import MealOfferController from "./resources/mealOffer/mealOffer.controller";
@@ -16,8 +15,6 @@ import MealTransactionService from "./resources/mealTransaction/mealTransaction.
 import RatingController from "./resources/rating/ratingController";
 import RatingService from "./resources/rating/ratingService";
 import { ConfigService } from "./utils/ConfigService";
-
-validateEnv();
 
 const configService = new ConfigService();
 const app = new App(

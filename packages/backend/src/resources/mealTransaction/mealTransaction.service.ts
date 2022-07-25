@@ -1,9 +1,8 @@
 import { ObjectId } from "mongoose";
 import MealTransactionModel from "./mealTransaction.model";
-import MealTransaction from "./mealTransaction.interface";
+import { MealTransactionDocument } from "./mealTransaction.interface";
 import VirtualCentralAccountService from "../virtualCentralAccount/virtualCentralAccount.service";
 import UserService from "../user/user.service";
-import MealTransactionParticipant from "./mealTransactionParticipant.enum";
 import TransactionNotFoundException from "../../utils/exceptions/transactionNotFound.exception";
 import TransactionInWrongStateException from "../../utils/exceptions/transactionInWrongState.exception";
 import UserDocument from "../user/user.interface";
@@ -29,7 +28,7 @@ class MealTransactionService {
     receiverId: ObjectId,
     amount: number,
     transactionFee: number
-  ): Promise<MealTransaction | Error> {
+  ): Promise<MealTransactionDocument | Error> {
     try {
       return await this.mealTransactionModel.create({
         mealOfferId,
@@ -49,7 +48,7 @@ class MealTransactionService {
    */
   public async getMealTransactions(
     userId: ObjectId
-  ): Promise<MealTransaction[] | Error> {
+  ): Promise<MealTransactionDocument[] | Error> {
     return this.mealTransactionModel.find({
       $or: [{ senderId: userId }, { receiverId: userId }],
     });
@@ -60,10 +59,10 @@ class MealTransactionService {
    */
   public async performTransaction(
     mealTransactionId: ObjectId
-  ): Promise<MealTransaction | Error> {
+  ): Promise<MealTransactionDocument | Error> {
     const mealTransaction = (await this.mealTransactionModel.findById(
       mealTransactionId
-    )) as MealTransaction;
+    )) as MealTransactionDocument;
     if (mealTransaction.transactionState === ETransactionState.PENDING) {
       const price = mealTransaction.amount;
       const fee = mealTransaction.transactionFee;
@@ -88,7 +87,7 @@ class MealTransactionService {
 
       return (await this.mealTransactionModel.findById(
         mealTransactionId
-      )) as MealTransaction;
+      )) as MealTransactionDocument;
     } else {
       return mealTransaction;
     }
@@ -102,12 +101,14 @@ class MealTransactionService {
     const transaction = (await this.mealTransactionModel.findOne({
       mealOfferId: mealOfferId,
       $or: [{ senderId: user._id }, { receiverId: user._id }],
-    })) as MealTransaction;
+    })) as MealTransactionDocument;
     if (!transaction) {
       throw new TransactionNotFoundException(mealOfferId);
     }
     if (transaction.transactionState !== ETransactionState.COMPLETED) {
-      throw new TransactionInWrongStateException(transaction._id as string);
+      throw new TransactionInWrongStateException(
+        transaction._id as unknown as string
+      );
     }
     if (user._id.equals(transaction.senderId)) {
       if (transaction.sellerRating === undefined) {
@@ -123,54 +124,6 @@ class MealTransactionService {
       }
     }
     await transaction.save();
-  }
-
-  public async rateTransactionParticipant(
-    user: UserDocument,
-    transactionId: ObjectId,
-    stars: number,
-    participantType: MealTransactionParticipant
-  ): Promise<MealTransaction | Error> {
-    try {
-      const transaction = (await this.mealTransactionModel.findById(
-        transactionId
-      )) as MealTransaction;
-      if (!transaction) {
-        throw new TransactionNotFoundException(
-          transactionId as unknown as string
-        );
-      }
-      if (transaction.transactionState === ETransactionState.COMPLETED) {
-        if (participantType === MealTransactionParticipant.BUYER) {
-          if (user._id.equals(transaction.receiverId)) {
-            transaction.buyerRating = stars;
-            await this.userService.updateUserRating(
-              transaction.receiverId,
-              stars
-            );
-          } else {
-            throw new Error("Only the seller can rate the buyer.");
-          }
-        } else {
-          if (user._id.equals(transaction.senderId)) {
-            transaction.sellerRating = stars;
-            await this.userService.updateUserRating(
-              transaction.senderId,
-              stars
-            );
-          } else {
-            throw new Error("Only the buyer can rate the seller.");
-          }
-        }
-        transaction.sellerRating = stars;
-        await transaction.save();
-        return transaction;
-      } else {
-        throw new TransactionInWrongStateException(transaction.id);
-      }
-    } catch (error: any) {
-      throw new Error(error.message as string);
-    }
   }
 }
 

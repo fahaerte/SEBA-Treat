@@ -1,10 +1,7 @@
 import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
 import validate from "../mealOffer/mealOffer.validation";
-import {
-  authenticatedMiddleware,
-  optionalAuthenticatedMiddleware,
-} from "../../middleware/authenticated.middleware";
+import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import ValidatePart from "../../utils/validation";
@@ -12,6 +9,7 @@ import validationMiddleware from "../../middleware/validation.middleware";
 import { MealOfferDocument } from "./mealOffer.interface";
 import { EMealReservationState } from "@treat/lib-common/lib/enums/EMealReservationState";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
+import { mealOfferFileUpload } from "../../middleware/upload.middleware";
 
 @Service()
 class MealOfferController implements Controller {
@@ -26,6 +24,7 @@ class MealOfferController implements Controller {
     this.router.post(
       `${this.path}`,
       authenticatedMiddleware,
+      mealOfferFileUpload.single("image"),
       validationMiddleware(validate.createBody),
       this.create
     );
@@ -44,7 +43,6 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}/:mealOfferId`,
-      optionalAuthenticatedMiddleware,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
       validationMiddleware(validate.getMealOfferBody, ValidatePart.BODY),
       this.getMealOffer
@@ -60,7 +58,7 @@ class MealOfferController implements Controller {
       this.getReceivedMealOfferRequests
     );
     this.router.patch(
-      `${this.path}/:mealOfferId/reservations/:mealReservationId`,
+      `${this.path}/reservations/:mealReservationId`,
       authenticatedMiddleware,
       validationMiddleware(validate.updateReservationStateBody),
       validationMiddleware(
@@ -155,10 +153,8 @@ class MealOfferController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { compareAddress } = req.body;
-      const mealOffer = await this.mealOfferService.getMealOfferWithUser(
+      const mealOffer = await this.mealOfferService.getMealOffer(
         req.params.mealOfferId,
-        false,
-        true,
         req.user,
         compareAddress as string
       );
@@ -237,7 +233,6 @@ class MealOfferController implements Controller {
     try {
       const { reservationState } = req.body;
       await this.mealOfferService.updateMealOfferReservationState(
-        req.params.mealOfferId,
         req.user,
         req.params.mealReservationId,
         reservationState as EMealReservationState

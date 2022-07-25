@@ -7,6 +7,7 @@ import { MealReservationSchema } from "../mealReservation/mealReservation.model"
 import { RatingSchema } from "../rating/rating.model";
 import { EMealAllergen, EMealCategory } from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
+import UserDocument from "../user/user.interface";
 
 const MealOfferSchema = new Schema<MealOfferDocument>(
   {
@@ -20,6 +21,10 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    image: {
       type: String,
       required: true,
     },
@@ -66,12 +71,28 @@ const MealOfferSchema = new Schema<MealOfferDocument>(
     rating: {
       type: RatingSchema,
     },
+    allergensVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
 
 export interface MealOfferModel extends Model<MealOfferDocument> {
   findByIdWithUser(mealOfferId: string): Promise<MealOfferDocumentWithUser>;
+
+  findBy(
+    mealOfferId: string,
+    populateUser: boolean,
+    user?: UserDocument
+  ): Promise<MealOfferDocument | MealOfferDocumentWithUser>;
+
+  findByReservationId(
+    mealReservationId: string,
+    sellerId?: string,
+    buyerId?: string
+  ): Promise<MealOfferDocument>;
 
   findSentMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
 
@@ -82,13 +103,89 @@ export interface MealOfferModel extends Model<MealOfferDocument> {
   ): Promise<MealOfferDocumentWithUser[]>;
 }
 
+MealOfferSchema.statics.findBy = async function (
+  this: Model<MealOfferDocument>,
+  mealOfferId: string,
+  populateUser: boolean,
+  user?: UserDocument
+) {
+  const projection: Record<string, any> = {
+    _id: 1,
+    title: 1,
+    description: 1,
+    categories: 1,
+    allergens: 1,
+    price: 1,
+    transactionFee: 1,
+    user: 1,
+    startDate: 1,
+    endDate: 1,
+    portions: 1,
+    createdAt: 1,
+    updatedAt: 1,
+    pickUpDetails: {
+      $cond: {
+        if: { $ne: ["$user", user?._id] },
+        then: "$$REMOVE",
+        else: "$pickUpDetails",
+      },
+    },
+    reservations: {
+      $cond: {
+        if: { $ne: ["$user", user?._id] },
+        then: {
+          $filter: {
+            input: "$reservations",
+            as: "reservations",
+            cond: { $eq: ["$$reservations.buyer", user?._id] },
+          },
+        },
+        else: "$reservations",
+      },
+    },
+  };
+  return populateUser
+    ? this.findById(mealOfferId, projection).populate(
+        "user",
+        "firstName lastName meanRating countRatings address"
+      )
+    : this.findById(mealOfferId, projection);
+};
+
 MealOfferSchema.statics.findByIdWithUser = async function (
   this: Model<MealOfferDocument>,
   mealOfferId: string
 ) {
-  return this.findById(mealOfferId)
-    .populate("user", "firstName lastName meanRating countRatings address")
-    .lean();
+  return this.findById(mealOfferId).populate(
+    "user",
+    "firstName lastName meanRating countRatings address"
+  );
+};
+
+MealOfferSchema.statics.findByReservationId = async function (
+  this: Model<MealOfferDocument>,
+  mealReservationId: string,
+  sellerId?: string,
+  buyerId?: string
+) {
+  const reservationFilter: Record<string, any> = {
+    _id: mealReservationId,
+  };
+  if (buyerId) reservationFilter["buyer"] = buyerId;
+  const filter: Record<string, any> = {
+    reservations: {
+      $elemMatch: reservationFilter,
+    },
+  };
+  if (sellerId) filter["user"] = sellerId;
+  return this.findOne(filter, {
+    _id: 1,
+    user: 1,
+    reservations: 1,
+    rating: 1,
+    price: 1,
+    transactionFee: 1,
+  });
 };
 
 MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
@@ -96,7 +193,10 @@ MealOfferSchema.statics.findReceivedMealOfferRequests = async function (
   userId: string
 ) {
   return this.find({ user: userId })
-    .populate("user reservations.buyer", "firstName lastName meanRating")
+    .populate(
+      "user reservations.buyer",
+      "firstName lastName meanRating profilePicture"
+    )
     .exec();
 };
 
@@ -124,7 +224,10 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       },
     }
   )
-    .populate("user reservations.buyer", "firstName lastName meanRating")
+    .populate(
+      "user reservations.buyer",
+      "firstName lastName meanRating profilePicture"
+    )
     .exec();
 };
 

@@ -1,39 +1,78 @@
 import { Col, Row } from "../Grid";
-import { Button, Icon, infoToast, Link, Typography } from "../index";
+import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { useAuthContext } from "../../../utils/auth/AuthProvider";
-import { SCHeader } from "./styles";
+import { SCCustomForm, SCHeader } from "./styles";
 import Logo from "../../../assets/logo.png";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  getCookie,
+  removeCookies,
+  setCookie,
+} from "../../../utils/auth/CookieProvider";
+import { signout } from "../../../api/authApi";
+import { dangerToast, successToast } from "../Toast";
+import { CustomDropdown } from "./UserDropdown";
+import { IStringObject } from "@treat/lib-common";
+import { addressElement } from "../../AddressInput/AddressInput";
 
 export const Header = () => {
-  const { userId, setUserId, setToken, setAddress, token, address } =
-    useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [balance, setBalance] = useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [onAddressEdit, setOnAddressEdit] = useState(false);
 
-  useQuery("getUser", () => getUser(userId as string, token as string), {
+  const address = getCookie("address");
+  const userId = getCookie("userId");
+
+  const handleAddress = (data: IStringObject) => {
+    setCookie("address", data.returnedString);
+    setOnAddressEdit(false);
+  };
+
+  useQuery(["getUser", userId], () => getUser(), {
     onSuccess: (response) => {
       setBalance(response.data.virtualAccount.balance);
+      setFirstName(response.data.firstName);
+    },
+    onError: () => {
+      dangerToast({ message: "Authorization error. Please Logout" });
+    },
+    enabled: !!userId,
+  });
+
+  const signoutMutation = useMutation("signout", signout, {
+    onSuccess: () => {
+      removeCookies();
+      successToast({ message: "Successfully signed out." });
+      navigate("/");
+    },
+    onError: () => {
+      removeCookies();
+      dangerToast({ message: "Signout unsuccessful. Please try again!" });
     },
   });
 
+  const handleReservationsButton = () => {
+    if (getCookie("userId")) {
+      navigate("/mealOfferRequests");
+    } else {
+      navigate("/login", { state: { from: location } });
+    }
+  };
+
   const handleNavButton = () => {
-    if (userId) {
+    if (getCookie("userId")) {
       navigate("/account");
     } else {
       navigate("/login", { state: { from: location } });
     }
   };
 
-  const signout = () => {
-    setAddress(undefined);
-    setUserId(undefined);
-    setToken(undefined);
-    navigate("/");
+  const executeSignout = () => {
+    signoutMutation.mutate();
   };
 
   return (
@@ -46,52 +85,63 @@ export const Header = () => {
             </Link>
           </Col>
           {address && (
-            <Col className={"my-auto"}>
-              <Typography variant={"h4"} className={"fw-normal"}>
-                <Icon type={"geo-alt"} /> {address}
-              </Typography>
+            <Col className={"col-sm-auto my-auto"}>
+              {onAddressEdit ? (
+                <SCCustomForm<IStringObject>
+                  elements={addressElement}
+                  onSubmit={handleAddress}
+                  className={"d-flex align-items-center"}
+                  submitButton={{
+                    color: "secondary",
+                    className: "ms-2",
+                    children: (
+                      <>
+                        <Icon type={"geo-alt"} /> Update location
+                      </>
+                    ),
+                  }}
+                />
+              ) : (
+                <div className={"d-flex flex-row align-items-center"}>
+                  <Typography variant={"h4"} className={"fw-normal"}>
+                    <Icon type={"geo-alt"} /> {address}
+                  </Typography>
+                  <Button
+                    color={"primary"}
+                    className={"ms-2 my-0"}
+                    onClick={() => setOnAddressEdit(true)}
+                  >
+                    <Icon type={"pen"} />
+                  </Button>
+                </div>
+              )}
             </Col>
           )}
           <Col className={"justify-content-end d-flex align-items-center"}>
-            {/*{userId && (*/}
-            {/*  <Link to={"/createMeal"} display={"button"} className={"me-3"}>*/}
-            {/*    Create Offer*/}
-            {/*  </Link>*/}
-            {/*)}*/}
             {location.pathname !== "/createMeal" && (
-              <Link to={"/createMeal"} display={"button"} className={"me-3"}>
-                Offer meal
+              <Link
+                to={"/createMeal"}
+                display={"button"}
+                className={"me-3"}
+                color={"secondary"}
+              >
+                <Icon type={"plus"} /> Offer meal
               </Link>
             )}
-            {/*<Link*/}
-            {/*  to={userId ? "/purchase-credits" : "/login"}*/}
-            {/*  color={"secondary"}*/}
-            {/*  display={"button"}*/}
-            {/*  buttonProps={{ outline: true }}*/}
-            {/*  route*/}
-            {/*>*/}
-            {/*  {userId ? `${balance} Credits Bild` : "Sign In"}*/}
-            {/*</Link>*/}
             {userId ? (
-              <Button
-                color={"secondary"}
-                outline={true}
-                onClick={handleNavButton}
-              >
-                {`${balance} Credits Bild`}
-              </Button>
+              <CustomDropdown
+                credits={balance}
+                firstName={firstName}
+                handleReservationNavigation={handleReservationsButton}
+                handleLogout={executeSignout}
+              />
             ) : (
               <Button
-                color={"secondary"}
+                color={"primary"}
                 outline={true}
                 onClick={handleNavButton}
               >
                 Sign in
-              </Button>
-            )}
-            {userId && (
-              <Button color={"secondary"} className={"ms-3"} onClick={signout}>
-                <Icon type={"box-arrow-right"} />
               </Button>
             )}
           </Col>

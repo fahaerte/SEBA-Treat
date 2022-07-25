@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "../../components";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
-import { MealOfferScreenHeader } from "../../components/ui/Header/mealOfferScreenHeader";
 import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 
 export const MealOfferScreen = () => {
-  const { address } = useAuthContext();
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [sortingRule, setSortingRule] = useState<string>();
   const [distance, setDistance] = useState<number>(5);
@@ -26,36 +23,37 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers } = useQuery(
-    queryKey,
-    () =>
-      getMealOffersByParams(
-        address as string,
-        distance,
-        portions,
-        category,
-        allergen,
-        sellerRating,
-        price,
-        search
-      ),
-    {
-      onSuccess: (response) => {
-        console.log(response);
-      },
-    }
+  const { data: offers } = useQuery(queryKey, () =>
+    getMealOffersByParams(
+      distance,
+      portions,
+      category,
+      allergen,
+      sellerRating,
+      price,
+      search
+    )
   );
 
   useEffect(() => {
     queryClient.fetchQuery(queryKey);
-  }, [search, distance, price, allergen, category, sellerRating, portions]);
+  }, [
+    search,
+    distance,
+    price,
+    allergen,
+    category,
+    sellerRating,
+    portions,
+    queryClient,
+  ]);
 
   const handleSearch = (event: any) => {
     console.log(event.target.value);
     if (event.target.value === "") {
       setSearch(undefined);
     } else {
-      setSearch(event.target.value); //Problem: on every keyboard stroke a request is sent --> expensive
+      setSearch(event.target.value);
     }
   };
 

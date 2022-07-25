@@ -28,6 +28,10 @@ export interface IFormElement<TFormValues>
    * Defines rules and error messages for client form validation
    */
   rules?: IFormRulesConfig;
+  /**
+   * Css Class for form element label
+   */
+  labelClass?: string;
 }
 
 /**

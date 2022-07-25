@@ -8,3 +8,7 @@ export const login = async (credentials: IUserCredentials) => {
 export const register = async (user: IUser) => {
   return await baseApi().post("/users/register", user);
 };
+
+export const signout = async () => {
+  return await baseApi().post("users/signout");
+};

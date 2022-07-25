@@ -30,9 +30,7 @@ const Link = ({
       onClick={(event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) =>
         onClick(event)
       }
-      className={`${
-        display === "text" ? `link-${color} link-${size}` : ""
-      } ${className}`}
+      className={`${display === "text" ? `link-${size}` : ""} ${className}`}
       color={color}
     >
       {display === "text" ? (

@@ -2,8 +2,6 @@ export enum EMealCategory {
   VEGAN = "vegan",
   VEGETARIAN = "vegetarian",
   HALAL = "halal",
-  PORK = "pork",
-  BEEF = "beef",
   ITALIAN = "italian",
   ASIAN = "asian",
   CHINESE = "chinese",
@@ -16,5 +14,3 @@ export enum EMealCategory {
   SUSHI = "sushi",
   "BAKEDGOODS" = "baked goods",
 }
-
-// export default EMealCategory;

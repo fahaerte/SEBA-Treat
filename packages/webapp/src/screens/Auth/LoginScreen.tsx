@@ -1,16 +1,22 @@
 import React from "react";
-import { Row, Form, Link, FormHelper } from "../../components";
-import { IFormRow } from "../../components";
+import {
+  Row,
+  Form,
+  FormHelper,
+  IFormRow,
+  Link,
+  Typography,
+  successToast,
+  dangerToast,
+} from "../../components";
 import { IAddress, IUserCredentials } from "@treat/lib-common";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
 import { getStringFromIAddress } from "../../utils/getStringFromIAddress";
 import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
-import { AxiosError } from "axios";
+import { setCookie } from "../../utils/auth/CookieProvider";
 
 const LoginScreen = () => {
-  const userContext = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,17 +27,21 @@ const LoginScreen = () => {
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState?.from || "/alreadyLoggedIn";
-
-  // TODO: Link to register screen einbinden
+  const from = locationState?.from || "/";
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
-      const { userId, token, address } = response.data;
-      userContext.setToken(token as string);
-      userContext.setUserId(userId as string);
-      userContext.setAddress(getStringFromIAddress(address as IAddress));
+      const { userId, address } = response.data;
+      setCookie("userId", userId);
+      setCookie("address", getStringFromIAddress(address as IAddress));
+      successToast({ message: "Welcome!" });
+      if (from.pathname === "/address") {
+        from.pathname = "/";
+      }
       navigate(from, { replace: true });
+    },
+    onError: () => {
+      dangerToast({ message: "Wrong credentials. Please try again!" });
     },
   });
 
@@ -49,7 +59,7 @@ const LoginScreen = () => {
             message: "Please provide an email!",
           },
         },
-        defaultValue: "test@user.de",
+        defaultValue: "fabian.haertel@tum.de",
       }),
       FormHelper.createInput({
         formKey: "password",
@@ -63,7 +73,7 @@ const LoginScreen = () => {
             message: "Please provide a password!",
           },
         },
-        defaultValue: "pa55word",
+        defaultValue: "123456",
       }),
     ],
   ];
@@ -72,24 +82,9 @@ const LoginScreen = () => {
     loginMutation.mutate(user);
   };
 
-  const handleCreateAccount = () => {
-    navigate("/register", { state: { from: from } });
-  };
-
   return (
     <>
       <div>
-        <div>
-          {loginMutation.isError ? (
-            <div>
-              An error occurred:{" "}
-              {loginMutation.error instanceof AxiosError &&
-              loginMutation.error.message
-                ? loginMutation.error.message
-                : "unknown"}
-            </div>
-          ) : null}
-        </div>
         <Form<IUserCredentials>
           elements={elements}
           onSubmit={handleSignIn}
@@ -103,15 +98,16 @@ const LoginScreen = () => {
           }}
         />
       </div>
-      <Row>
-        <p>
-          <br />
+      <Row className={"mt-3"}>
+        <Typography variant={"div"} display={"inline"}>
           Or{" "}
-          <a onClick={handleCreateAccount}>
-            <u>create an account</u>
-          </a>
+          <Link to={"/register"} display={"text"}>
+            <Typography variant={"h3"} display={"inline"}>
+              <u>create an account</u>
+            </Typography>
+          </Link>
           .
-        </p>
+        </Typography>
       </Row>
     </>
   );

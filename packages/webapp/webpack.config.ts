@@ -41,8 +41,8 @@ module.exports = (
         loader: "url-loader",
         options: {
           limit: "25000",
-          outputPath: "images/",
-          publicPath: "images/",
+          outputPath: "profile-pictures/",
+          publicPath: "profile-pictures/",
         },
       },
       {

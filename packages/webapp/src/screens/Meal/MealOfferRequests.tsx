@@ -1,40 +1,39 @@
 import React from "react";
-import { Container, PageHeading, Row, Typography } from "../../components/ui";
-import { Header } from "../../components/ui/Header/Header";
+import { Container, PageHeading, Row } from "../../components/ui";
 import TabBar from "../../components/ui/TabBar/TabBar";
-import { Outlet } from "react-router-dom";
-import { useAuthContext } from "../../utils/auth/AuthProvider";
+import { useLocation } from "react-router-dom";
 
-export const MealOfferRequests = () => {
-  const { token } = useAuthContext();
-
-  return (
-    <div>
-      <Header />
-      <Container>
-        <Row className={"pt-5"}>
-          <PageHeading>
-            <Typography>
-              Your <u>orders</u>
-            </Typography>
-          </PageHeading>
-        </Row>
-        <Row className={"pt-3"}>
-          <TabBar
-            tabs={[
-              {
-                to: "/mealOfferRequests/sent",
-                children: "Your requests",
-              },
-              {
-                to: "/mealOfferRequests/received",
-                children: "Received requests",
-              },
-            ]}
-          />
-          <Outlet />
-        </Row>
-      </Container>
-    </div>
-  );
-};
+export const MealOfferRequests = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => (
+  <div>
+    <Container>
+      <Row className={"pt-5"}>
+        <PageHeading>
+          Your{" "}
+          <u>
+            {useLocation().pathname.includes("sent") ? "pending" : "received"}{" "}
+            reservations
+          </u>
+        </PageHeading>
+      </Row>
+      <Row className={"pt-3"}>
+        <TabBar
+          tabs={[
+            {
+              to: "/mealOfferRequests/sent",
+              children: "Your requests",
+            },
+            {
+              to: "/mealOfferRequests/received",
+              children: "Received requests",
+            },
+          ]}
+        />
+        {children}
+      </Row>
+    </Container>
+  </div>
+);

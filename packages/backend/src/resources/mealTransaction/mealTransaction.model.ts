@@ -1,8 +1,16 @@
-import { model, Schema, Types } from "mongoose";
-import MealTransaction from "./mealTransaction.interface";
+import { Model, model, Schema, Types } from "mongoose";
+import {
+  MealTransactionDocument,
+  MealTransactionDocumentWithUserNames,
+} from "./mealTransaction.interface";
 import { ETransactionState } from "@treat/lib-common";
+import {
+  MealOfferDocument,
+  MealOfferDocumentWithUser,
+} from "../mealOffer/mealOffer.interface";
+import UserDocument from "../user/user.interface";
 
-const MealTransactionSchema = new Schema<MealTransaction>(
+const MealTransactionSchema = new Schema<MealTransactionDocument>(
   {
     mealOfferId: {
       type: Types.ObjectId,
@@ -50,4 +58,35 @@ const MealTransactionSchema = new Schema<MealTransaction>(
   { timestamps: true }
 );
 
-export default model<MealTransaction>("MealTransaction", MealTransactionSchema);
+export interface MealTransactionModel extends Model<MealTransactionDocument> {
+  findWithUser(
+    user: UserDocument
+  ): Promise<MealTransactionDocumentWithUserNames[]>;
+}
+
+MealTransactionSchema.statics.findBy = async function (
+  this: Model<MealTransactionDocument>,
+  mealOfferId: string,
+  user?: UserDocument
+) {
+  const projection: Record<string, any> = {
+    _id: 1,
+    mealOfferId: 1,
+    mealReservationId: 1,
+    senderId: 1,
+    receiverId: 1,
+    amount: 1,
+    transactionFee: 1,
+    createdAt: 1,
+    updatedAt: 1,
+  };
+  return this.findById(mealOfferId, projection).populate(
+    "user",
+    "firstName lastName meanRating countRatings address"
+  );
+};
+
+export default model<MealTransactionDocument>(
+  "MealTransaction",
+  MealTransactionSchema
+);
