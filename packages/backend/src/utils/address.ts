@@ -33,8 +33,10 @@ export const getDistanceBetweenAddressesInKm = async (
   address1: string,
   address2: string
 ): Promise<number> => {
-  const distances = await getDistancesBetweenAddressesInKm(address1, [address2]);
-  return distances[0]
+  const distances = await getDistancesBetweenAddressesInKm(address1, [
+    address2,
+  ]);
+  return distances[0];
 };
 
 export const getUserAddressString = (address: IAddress): string => {
