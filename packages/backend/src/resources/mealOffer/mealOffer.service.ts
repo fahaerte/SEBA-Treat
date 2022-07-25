@@ -112,16 +112,9 @@ class MealOfferService {
       mealOfferQuery.page * mealOfferQuery.pageLimit
     );
 
-    const totalPages = Math.ceil(
-      filteredPreviews.length / mealOfferQuery.pageLimit
-    );
-
     return {
+      total_count: filteredPreviews.length,
       data: filteredPreviewsSliced,
-      total: filteredPreviews.length,
-      total_pages: totalPages,
-      page: mealOfferQuery.page,
-      per_page: mealOfferQuery.pageLimit,
     };
   }
 
@@ -462,10 +455,7 @@ class MealOfferService {
 }
 
 interface MealOfferPreviewReturnObject {
-  page: number;
-  per_page: number;
-  total: number;
-  total_pages: number;
+  total_count: number;
   data: MealOfferDocumentWithUser[];
 }
 
