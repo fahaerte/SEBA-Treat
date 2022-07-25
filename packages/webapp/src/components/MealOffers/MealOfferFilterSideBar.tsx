@@ -94,7 +94,6 @@ const MealOfferFilterSideBar = ({
           </option>
           <option value={EMealCategory.RAW}>{EMealCategory.RAW}</option>
           <option value={EMealCategory.ASIAN}>{EMealCategory.ASIAN}</option>
-          <option value={EMealCategory.BEEF}>{EMealCategory.BEEF}</option>
           <option value={EMealCategory.BAKEDGOODS}>
             {EMealCategory.BAKEDGOODS}
           </option>
@@ -106,7 +105,6 @@ const MealOfferFilterSideBar = ({
           <option value={EMealCategory.KOREAN}>{EMealCategory.KOREAN}</option>
           <option value={EMealCategory.SWEETS}>{EMealCategory.SWEETS}</option>
           <option value={EMealCategory.PASTA}>{EMealCategory.PASTA}</option>
-          <option value={EMealCategory.PORK}>{EMealCategory.PORK}</option>
           <option value={EMealCategory.SUSHI}>{EMealCategory.SUSHI}</option>
         </SelectControlled>
       </Row>

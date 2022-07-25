@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "../../components";
-import { useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
+import { ESortingRules } from "@treat/lib-common/lib/enums/ESortingRules";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
-  const [sortingRule, setSortingRule] = useState<string>();
+  const [sortingRule, setSortingRule] = useState<ESortingRules>(
+    ESortingRules.DIST_ASC
+  );
   const [distance, setDistance] = useState<number>(5);
   const [price, setPrice] = useState<number | undefined>(undefined);
   const [sellerRating, setSellerRating] = useState<number | undefined>(
@@ -23,20 +26,49 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const { data: offers } = useQuery(queryKey, () =>
-    getMealOffersByParams(
-      distance,
-      portions,
-      category,
-      allergen,
-      sellerRating,
-      price,
-      search
-    )
-  );
+  const pageLimit = 10;
+
+  const { data, fetchNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery(
+      queryKey,
+      ({ pageParam = 1 }) =>
+        getMealOffersByParams(
+          pageParam,
+          pageLimit,
+          distance,
+          portions,
+          category,
+          allergen,
+          sellerRating,
+          price,
+          search,
+          sortingRule
+        ),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const maxPages = Math.ceil(lastPage.total_count / pageLimit);
+          const nextPage = allPages.length + 1;
+          return nextPage <= maxPages ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
     queryClient.fetchQuery(queryKey);
+    let fetching = false;
+    const onScroll = async (event: any) => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        event.target.scrollingElement;
+      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.5) {
+        fetching = true;
+        await fetchNextPage();
+        fetching = false;
+      }
+    };
+    document.addEventListener("scroll", onScroll);
+    return () => {
+      document.removeEventListener("scroll", onScroll);
+    };
   }, [
     search,
     distance,
@@ -49,7 +81,6 @@ export const MealOfferScreen = () => {
   ]);
 
   const handleSearch = (event: any) => {
-    console.log(event.target.value);
     if (event.target.value === "") {
       setSearch(undefined);
     } else {
@@ -102,17 +133,6 @@ export const MealOfferScreen = () => {
     }
   };
 
-  const sortRule = (meal1: IMealOfferCard, meal2: IMealOfferCard) => {
-    switch (sortingRule) {
-      case "ratingDesc":
-        return meal2.rating - meal1.rating;
-      case "priceAsc":
-        return meal1.price - meal2.price;
-      default:
-        return meal1.distance - meal2.distance;
-    }
-  };
-
   const resetFilters = () => {
     setPortions(undefined);
     setPrice(undefined);
@@ -147,18 +167,19 @@ export const MealOfferScreen = () => {
                 handleSearch={handleSearch}
                 handleSort={handleSort}
                 currentSearchString={search}
-                currentSortingRule={sortingRule ? sortingRule : "distanceAsc"}
+                currentSortingRule={sortingRule}
               />
             </Row>
             <Row className={"m-2 row justify-content-center"}>
-              {offers ? offers.data.length : "No"} Offers found
+              {isFetching || isFetchingNextPage ? "Loading data..." : ""}
+            </Row>
+            <Row className={"m-2 row justify-content-center"}>
+              {data ? data.pages[0].total_count : "No "} Offers found
             </Row>
             <Row className={"row-cols-2 row-cols-md-3 g-4"}>
-              {offers &&
-                offers.data
-                  .slice()
-                  .sort(sortRule)
-                  .map((mealOffer: IMealOfferCard) => (
+              {data &&
+                data.pages.map((page) => {
+                  return page.data.map((mealOffer: IMealOfferCard) => (
                     <Col key={`${mealOffer._id}-container`}>
                       <MealOffer
                         key={mealOffer._id}
@@ -175,7 +196,8 @@ export const MealOfferScreen = () => {
                         categories={mealOffer.categories}
                       />
                     </Col>
-                  ))}
+                  ));
+                })}
             </Row>
           </Col>
         </Row>

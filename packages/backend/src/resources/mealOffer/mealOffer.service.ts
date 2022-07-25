@@ -10,7 +10,11 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { EMealReservationState } from "@treat/lib-common";
+import {
+  EMealReservationState,
+  ESortingRules,
+  IMealOfferCard,
+} from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
@@ -93,7 +97,7 @@ class MealOfferService {
 
   public async getMealOfferPreviews(
     mealOfferQuery: MealOfferQuery
-  ): Promise<MealOfferDocumentWithUser[]> {
+  ): Promise<MealOfferPreviewReturnObject> {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
       mealOfferQuery
     );
@@ -106,7 +110,43 @@ class MealOfferService {
       preview.user.address = undefined;
       preview.rating = undefined;
     });
-    return filteredPreviews;
+    filteredPreviews.sort((meal1, meal2) =>
+      this.getSortingRule(meal1, meal2, mealOfferQuery.sortingRule)
+    );
+
+    const filteredPreviewsSliced = filteredPreviews.slice(
+      (mealOfferQuery.page - 1) * mealOfferQuery.pageLimit,
+      mealOfferQuery.page * mealOfferQuery.pageLimit
+    );
+
+    return {
+      total_count: filteredPreviews.length,
+      data: filteredPreviewsSliced,
+    };
+  }
+
+  private getSortingRule(
+    meal1: MealOfferDocumentWithUser,
+    meal2: MealOfferDocumentWithUser,
+    sortingRule: string | undefined
+  ) {
+    switch (sortingRule) {
+      case ESortingRules.RATING_DESC.valueOf():
+        return (
+          (meal2.user.meanRating ? meal2.user.meanRating : 0) -
+          (meal1.user.meanRating ? meal1.user.meanRating : 0)
+        );
+      case ESortingRules.PRICE_ASC.valueOf():
+        return (
+          (meal1.price ? meal1.price : 1000) -
+          (meal2.price ? meal2.price : 1000)
+        );
+      default:
+        return (
+          (meal1.distance ? meal1.distance : 100) -
+          (meal2.distance ? meal2.distance : 100)
+        );
+    }
   }
 
   private async filterMealOfferPreviewsForDistance(
@@ -443,6 +483,11 @@ class MealOfferService {
   public async getMealOffers(user: UserDocument): Promise<MealOfferDocument[]> {
     return await this.mealOffer.find({ user: user._id }).exec();
   }
+}
+
+interface MealOfferPreviewReturnObject {
+  total_count: number;
+  data: MealOfferDocumentWithUser[];
 }
 
 export default MealOfferService;
