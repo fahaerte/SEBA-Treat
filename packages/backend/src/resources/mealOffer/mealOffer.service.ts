@@ -10,7 +10,7 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { EMealReservationState } from "@treat/lib-common";
+import { EMealReservationState, IMealOfferCard } from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
@@ -106,7 +106,10 @@ class MealOfferService {
       preview.user.address = undefined;
       preview.rating = undefined;
     });
-    //TDOD: Sort offers according to sorting rule
+    filteredPreviews.sort((meal1, meal2) =>
+      this.getSortingRule(meal1, meal2, mealOfferQuery.sortingRule)
+    );
+
     const filteredPreviewsSliced = filteredPreviews.slice(
       (mealOfferQuery.page - 1) * mealOfferQuery.pageLimit,
       mealOfferQuery.page * mealOfferQuery.pageLimit
@@ -116,6 +119,30 @@ class MealOfferService {
       total_count: filteredPreviews.length,
       data: filteredPreviewsSliced,
     };
+  }
+
+  private getSortingRule(
+    meal1: MealOfferDocumentWithUser,
+    meal2: MealOfferDocumentWithUser,
+    sortingRule: string | undefined
+  ) {
+    switch (sortingRule) {
+      case "ratingDesc":
+        return (
+          (meal2.user.meanRating ? meal2.user.meanRating : 0) -
+          (meal1.user.meanRating ? meal1.user.meanRating : 0)
+        );
+      case "priceAsc":
+        return (
+          (meal1.price ? meal1.price : 1000) -
+          (meal2.price ? meal2.price : 1000)
+        );
+      default:
+        return (
+          (meal1.distance ? meal1.distance : 100) -
+          (meal2.distance ? meal2.distance : 100)
+        );
+    }
   }
 
   private async filterMealOfferPreviewsForDistance(

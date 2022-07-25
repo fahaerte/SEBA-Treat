@@ -14,4 +14,5 @@ export interface MealOfferQuery {
   search?: string;
   page: number;
   pageLimit: number;
+  sortingRule?: string;
 }

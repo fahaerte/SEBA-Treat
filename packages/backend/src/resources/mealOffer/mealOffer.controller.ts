@@ -123,6 +123,7 @@ class MealOfferController implements Controller {
         search: req.query.search as string,
         page: Number(req.query.page),
         pageLimit: Number(req.query.pageLimit),
+        sortingRule: req.query.sortingRule ? req.query.sortingRule : undefined,
       } as MealOfferQuery;
       const data = await this.mealOfferService.getMealOfferPreviews(
         mealOfferQuery

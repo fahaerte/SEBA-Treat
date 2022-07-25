@@ -60,6 +60,7 @@ const getMealOfferPreviewsQuery = Joi.object({
   address: Joi.string().min(1).required(),
   page: Joi.number().min(1).required(),
   pageLimit: Joi.number().min(1).required(),
+  sortingRule: Joi.string(),
 });
 
 const createMealOfferReservationParams = Joi.object({
