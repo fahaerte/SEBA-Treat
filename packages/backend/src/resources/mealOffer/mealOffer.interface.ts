@@ -5,10 +5,14 @@ import { UserWithOptionalAddressDocument } from "../user/user.interface";
 import { IMealOffer } from "@treat/lib-common";
 
 export interface MealOfferDocument
-  extends Omit<IMealOffer, "_id" | "user" | "reservations" | "rating">,
+  extends Omit<
+      IMealOffer,
+      "_id" | "user" | "reservations" | "rating" | "image"
+    >,
     Document {
   _id: ObjectId;
   user: ObjectId;
+  image: string;
   reservations: MealReservationDocument[];
   rating?: RatingDocument;
 }

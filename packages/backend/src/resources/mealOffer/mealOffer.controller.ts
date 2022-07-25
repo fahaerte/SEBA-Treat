@@ -28,6 +28,14 @@ class MealOfferController implements Controller {
       validationMiddleware(validate.createBody),
       this.create
     );
+    this.router.put(
+      `${this.path}/:mealOfferId`,
+      authenticatedMiddleware,
+      mealOfferFileUpload.single("image"),
+      validationMiddleware(validate.updateMealOfferParams, ValidatePart.PARAMS),
+      validationMiddleware(validate.updateMealOfferBody, ValidatePart.BODY),
+      this.update
+    );
     this.router.get(
       `${this.path}/previews`,
       validationMiddleware(
@@ -89,12 +97,33 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOfferRequest = req.body as MealOfferDocument;
+      const mealOffer = req.body as MealOfferDocument;
       const newMealOffer = await this.mealOfferService.create(
-        mealOfferRequest,
+        mealOffer,
         req.user
       );
       res.status(201).send({ data: newMealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private update = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const mealOfferId = req.params.mealOfferId;
+      const mealOffer = req.body as MealOfferDocument;
+      const user = req.user;
+      const updatedMealOffer = await this.mealOfferService.update(
+        mealOfferId,
+        mealOffer,
+        user
+      );
+      if (updatedMealOffer) res.status(201).send({ data: updatedMealOffer });
+      res.sendStatus(204);
     } catch (error: any) {
       next(error);
     }
