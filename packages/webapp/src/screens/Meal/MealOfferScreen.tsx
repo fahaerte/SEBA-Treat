@@ -23,9 +23,9 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const pageLimit = 2;
+  const pageLimit = 10;
 
-  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery(
+  const { data, fetchNextPage } = useInfiniteQuery(
     queryKey,
     ({ pageParam = 1 }) =>
       getMealOffersByParams(
@@ -41,7 +41,7 @@ export const MealOfferScreen = () => {
       ),
     {
       getNextPageParam: (lastPage, allPages) => {
-        const maxPages = lastPage.total / pageLimit;
+        const maxPages = Math.ceil(lastPage.total_count / pageLimit);
         const nextPage = allPages.length + 1;
         return nextPage <= maxPages ? nextPage : undefined;
       },
@@ -49,19 +49,16 @@ export const MealOfferScreen = () => {
   );
 
   useEffect(() => {
-    // queryClient.fetchQuery(queryKey);
     let fetching = false;
     const onScroll = async (event: any) => {
       const { scrollHeight, scrollTop, clientHeight } =
         event.target.scrollingElement;
-
       if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.5) {
         fetching = true;
-        if (hasNextPage) await fetchNextPage();
+        await fetchNextPage();
         fetching = false;
       }
     };
-
     document.addEventListener("scroll", onScroll);
     return () => {
       document.removeEventListener("scroll", onScroll);
@@ -179,7 +176,8 @@ export const MealOfferScreen = () => {
               />
             </Row>
             <Row className={"m-2 row justify-content-center"}>
-              {data ? data.pages.length : "No"} Offers found
+              {/*TODO: Show total amount of offers found
+              {data ? data.pages.length : "No"} Offers found*/}
             </Row>
             <Row>
               <Col>
