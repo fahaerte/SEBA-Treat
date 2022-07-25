@@ -1,11 +1,14 @@
 import React from "react";
 import {
+  Button,
   dangerToast,
   Form,
   FormHelper,
+  Icon,
   IFormRow,
   successToast,
   TOptionValuePair,
+  useModalInfo,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { EMealAllergen, EMealCategory, IMealOffer } from "@treat/lib-common";
@@ -207,12 +210,18 @@ const CreateMeal = () => {
       props: {
         type: "switch",
       },
+      rules: {
+        required: {
+          value: true,
+        },
+      },
     }),
   ];
 
   const userId = getCookie("userId");
   const token = getCookie("token");
 
+  const modalAllergensInfo = useModalInfo({ close: () => undefined });
   const handleSubmit = (data: IMealOfferForm) => {
     if (userId && token) {
       const { startDate, endDate, categories, allergens } = data;
@@ -243,20 +252,32 @@ const CreateMeal = () => {
   return (
     <>
       {userId ? (
-        <Form<IMealOfferForm>
-          elements={elements}
-          onSubmit={handleSubmit}
-          formTitle={"Having leftovers? Create an offer!"}
-          submitButton={{ children: "Publish your offer!" }}
-          isLoading={createOfferMutation.isLoading}
-          abortButton={{
-            children: "Cancel",
-            color: "secondary",
-            className: "ms-3",
-            outline: true,
-            onClick: () => navigate("/"),
-          }}
-        />
+        <>
+          {modalAllergensInfo.markup}
+          <Form<IMealOfferForm>
+            elements={elements}
+            onSubmit={handleSubmit}
+            formTitle={"Having leftovers? Create an offer!"}
+            submitButton={{ children: "Publish your offer!" }}
+            isLoading={createOfferMutation.isLoading}
+            abortButton={{
+              children: "Cancel",
+              color: "secondary",
+              className: "ms-3",
+              outline: true,
+              onClick: () => navigate("/"),
+            }}
+          >
+            <Button
+              className={"mb-3"}
+              color={"warning"}
+              onClick={() => modalAllergensInfo.open(true)}
+            >
+              <Icon type={"exclamationTriangle"} /> Allergens
+            </Button>
+            <br />
+          </Form>
+        </>
       ) : (
         <Navigate to={"/"} />
       )}

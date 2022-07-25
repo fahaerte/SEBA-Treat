@@ -6,6 +6,7 @@ import { IComponentBase } from "../../../assets/theme/types/IComponentBase";
 import { TBootstrapPalette } from "../../../assets/theme/interfaces/TBootstrapPalette";
 
 export interface IForm<TFormValues> extends Pick<IComponentBase, "className"> {
+  children?: React.ReactNode;
   isLoading?: boolean;
   /**
    * Form Elements that are to be generated

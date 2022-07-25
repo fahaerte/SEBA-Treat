@@ -17,10 +17,12 @@ export const CustomDropdown = ({
   <StyledDropdown group>
     <Button className={"btn-secondary"}>
       <Link to={"/purchase-credits"} display={"text"} underline={false}>
-        {credits} Credits
+        <Icon type={"coin"} /> {credits}
       </Link>
     </Button>
-    <DropdownToggle caret>{firstName}</DropdownToggle>
+    <DropdownToggle caret>
+      <Icon type={"person"} /> {firstName}
+    </DropdownToggle>
     <DropdownMenu end={true}>
       <DropdownItem onClick={handleReservationNavigation}>
         Meal Reservations

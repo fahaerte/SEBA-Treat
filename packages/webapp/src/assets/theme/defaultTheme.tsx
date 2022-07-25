@@ -120,9 +120,9 @@ export const defaultTheme: DefaultTheme = {
   },
   card: {
     background: {
-      main: "inherit",
-      hover: "gray",
-      active: "dark-gray",
+      main: "white",
+      hover: "#f2f2f2",
+      active: "#c7c7c7",
       contrastText: "black",
     },
   },

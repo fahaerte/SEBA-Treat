@@ -5,12 +5,11 @@ import { getUser } from "../../api/userApi";
 import { Rating } from "./Rating";
 import { getCookie } from "../../utils/auth/CookieProvider";
 
-export const UserOverview = () => {
+export const ProfileOverview = () => {
   const userId = getCookie("userIs");
 
   const { isLoading, data } = useQuery(["getUser", userId], () => getUser());
 
-  // TODO: Show profile picture
   return (
     <>
       <Row className={"mt-3"}>
@@ -92,7 +91,7 @@ export const UserOverview = () => {
         </Col>
       </Row>
       <Link to={"/account/edit"} className={"mt-3"} display={"button"}>
-        <Icon type={"pen"} /> Edit Profile
+        <Icon type={"gear"} /> Edit Profile
       </Link>
     </>
   );

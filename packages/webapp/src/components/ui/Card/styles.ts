@@ -28,3 +28,13 @@ export const SCCard = styled.div<ICard>`
     }
   }
 `;
+
+export const SCCardHeader = styled.div`
+  background-color: transparent;
+  border: none;
+`;
+
+export const SCCardImage = styled.img`
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+`;

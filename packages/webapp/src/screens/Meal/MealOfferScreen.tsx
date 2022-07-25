@@ -125,7 +125,7 @@ export const MealOfferScreen = () => {
 
   return (
     <>
-      <Container className={""}>
+      <Container>
         <Row>
           <Col className={"col col-lg-2"}>
             <Row>
@@ -153,32 +153,29 @@ export const MealOfferScreen = () => {
             <Row className={"m-2 row justify-content-center"}>
               {offers ? offers.data.length : "No"} Offers found
             </Row>
-            <Row>
-              <Col>
-                <Container>
-                  <>
-                    {offers &&
-                      offers.data
-                        .slice()
-                        .sort(sortRule)
-                        .map((mealOffer: IMealOfferCard) => (
-                          <Row key={`${mealOffer._id}-container`}>
-                            <MealOffer
-                              mealId={mealOffer._id}
-                              price={mealOffer.price}
-                              distance={mealOffer.distance}
-                              mealTitle={mealOffer.title}
-                              portions={mealOffer.portions}
-                              sellerRating={mealOffer.user.meanRating}
-                              endDate={mealOffer.endDate}
-                              sellerName={mealOffer.user.firstName}
-                              startDate={mealOffer.endDate}
-                            />
-                          </Row>
-                        ))}
-                  </>
-                </Container>
-              </Col>
+            <Row className={"row-cols-2 row-cols-md-3 g-4"}>
+              {offers &&
+                offers.data
+                  .slice()
+                  .sort(sortRule)
+                  .map((mealOffer: IMealOfferCard) => (
+                    <Col key={`${mealOffer._id}-container`}>
+                      <MealOffer
+                        key={mealOffer._id}
+                        mealId={mealOffer._id}
+                        price={mealOffer.price}
+                        distance={mealOffer.distance}
+                        mealTitle={mealOffer.title}
+                        portions={mealOffer.portions}
+                        sellerRating={mealOffer.user.meanRating}
+                        endDate={mealOffer.endDate}
+                        sellerName={mealOffer.user.firstName}
+                        startDate={mealOffer.endDate}
+                        allergensVerified={mealOffer.allergensVerified}
+                        categories={mealOffer.categories}
+                      />
+                    </Col>
+                  ))}
             </Row>
           </Col>
         </Row>

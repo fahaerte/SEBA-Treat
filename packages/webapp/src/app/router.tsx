@@ -17,7 +17,7 @@ import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { ProfileScreen } from "../screens/Account/ProfileScreen";
-import { UserOverview } from "../components/Profile/UserOverview";
+import { ProfileOverview } from "../components/Profile/ProfileOverview";
 import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
 import { ProfileUpdateScreen } from "../screens/Account/ProfileUpdateScreen";
 
@@ -76,7 +76,7 @@ export const AppRouter = () => {
         path: "",
         element: (
           <ProfileScreen>
-            <UserOverview />
+            <ProfileOverview />
           </ProfileScreen>
         ),
         // children: [

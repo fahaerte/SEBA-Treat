@@ -6,13 +6,13 @@ import { PasswordUpdate } from "../../components/Profile/PasswordUpdate";
 export const ProfileUpdateScreen = () => {
   return (
     <>
-      <SectionHeading>Edit Personal Information</SectionHeading>
+      <SectionHeading>
+        <Icon type={"person"} /> Edit Personal Information
+      </SectionHeading>
       <ProfileUpdate />
       <SectionHeading>
-        <Icon type={"person"} /> Update Profile Picture
+        <Icon type={"shield-lock"} /> Update Password
       </SectionHeading>
-      Here you could edit the profile picture
-      <SectionHeading>Update Password</SectionHeading>
       <PasswordUpdate />
     </>
   );

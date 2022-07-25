@@ -1,22 +1,14 @@
 import { IMealReservation } from "./IMealReservation";
 import { IRating } from "./IRating";
+import { IMealOfferCard } from "./IMealOfferCard";
 
-export interface IMealOffer {
-  _id: string;
-  title: string;
+export interface IMealOffer
+  extends Omit<IMealOfferCard, "rating" | "image" | "distance"> {
+  image: File;
   description: string;
-  user: string;
-  image: string;
-  categories: string[];
-  allergens: string[];
-  startDate: Date;
-  endDate: Date;
-  portions: number;
   pickUpDetails?: string;
-  price: number;
   transactionFee: number;
   reservations: IMealReservation[];
   rating?: IRating;
-  allergensVerified: boolean;
   distance?: number;
 }

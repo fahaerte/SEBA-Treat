@@ -1,4 +1,5 @@
 import React from "react";
+import { SCCardImage } from "../styles";
 
 interface IProps {
   /**
@@ -20,7 +21,13 @@ interface IProps {
 }
 
 const CardImage = ({ src, alt, className = "" }: IProps) => (
-  <img src={src} className={`card-img-top ${className}`} alt={alt} />
+  <SCCardImage
+    src={src}
+    className={`card-img-top ${className}`}
+    alt={alt}
+    // width={160}
+    // height={160}
+  />
 );
 
 export default CardImage;

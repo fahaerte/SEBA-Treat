@@ -26,6 +26,7 @@ const Form = <TFormValues extends FieldValues>({
   onSubmit,
   elements,
   feedback,
+  children = "",
   ...props
 }: IForm<TFormValues>) => {
   const { handleSubmit, formState, reset, setError, ...rest } =
@@ -72,6 +73,7 @@ const Form = <TFormValues extends FieldValues>({
             {feedback.message}
           </Typography>
         ) : null}
+        {children}
         {submitButton ? (
           <Button
             htmlType="submit"

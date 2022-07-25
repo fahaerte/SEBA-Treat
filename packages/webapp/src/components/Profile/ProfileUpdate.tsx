@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { FormHelper, IFormRow, Form, dangerToast, Icon } from "../ui";
+import {
+  FormHelper,
+  IFormRow,
+  Form,
+  dangerToast,
+  Icon,
+  SkeletonSquare,
+} from "../ui";
 import { IUser } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
 import { useQuery } from "react-query";
 import { getUser } from "../../api/userApi";
-// import { useAuthContext } from "../../utils/auth/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export const ProfileUpdate = () => {
-  // const { userId, token } = useAuthContext();
-
   const userId = getCookie("userIs");
-  const { data, isSuccess } = useQuery(["getUser", userId], () => getUser(), {
-    onError: () => dangerToast({ message: "Could not get user information!" }),
-  });
+  const navigate = useNavigate();
+  const { data, isSuccess, isError } = useQuery(
+    ["getUser", userId],
+    () => getUser(),
+    {
+      onError: () =>
+        dangerToast({ message: "Could not get user information!" }),
+    }
+  );
 
   const [formElements, setFormElements] = useState<IFormRow<IUser>[]>([]);
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("ist hier drin");
-      console.log(data);
       const user = data.data;
       const userEditElements: IFormRow<IUser>[] = [
         [
@@ -63,7 +72,7 @@ export const ProfileUpdate = () => {
             props: {
               type: "date",
             },
-            defaultValue: user.birthdate,
+            defaultValue: new Date(user.birthdate),
           }),
         ],
         [
@@ -145,6 +154,9 @@ export const ProfileUpdate = () => {
       ];
 
       setFormElements(userEditElements);
+    } else if (isError) {
+      dangerToast({ message: "Could not get user data!" });
+      navigate("/account");
     }
   }, [data, setFormElements]);
 
@@ -167,7 +179,11 @@ export const ProfileUpdate = () => {
           }}
         />
       ) : (
-        "Loading..."
+        <>
+          <SkeletonSquare />
+          <SkeletonSquare />
+          <SkeletonSquare />
+        </>
       )}
     </>
   );

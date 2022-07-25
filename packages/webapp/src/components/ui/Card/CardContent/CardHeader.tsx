@@ -1,12 +1,13 @@
 import React from "react";
 import { IComponentBase } from "../../../../assets/theme/types/IComponentBase";
+import { SCCardHeader } from "../styles";
 
 const CardHeader = ({ className = "", children }: IComponentBase) => (
-  <div
-    className={`card-header d-flex align-items-center justify-content-between ${className}`}
+  <SCCardHeader
+    className={`card-header d-flex align-items-center justify-content-between ${className} fw-bold`}
   >
     {children}
-  </div>
+  </SCCardHeader>
 );
 
 export default CardHeader;
