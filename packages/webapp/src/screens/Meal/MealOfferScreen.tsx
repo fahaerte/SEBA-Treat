@@ -25,30 +25,32 @@ export const MealOfferScreen = () => {
 
   const pageLimit = 10;
 
-  const { data, fetchNextPage } = useInfiniteQuery(
-    queryKey,
-    ({ pageParam = 1 }) =>
-      getMealOffersByParams(
-        pageParam,
-        pageLimit,
-        distance,
-        portions,
-        category,
-        allergen,
-        sellerRating,
-        price,
-        search
-      ),
-    {
-      getNextPageParam: (lastPage, allPages) => {
-        const maxPages = Math.ceil(lastPage.total_count / pageLimit);
-        const nextPage = allPages.length + 1;
-        return nextPage <= maxPages ? nextPage : undefined;
-      },
-    }
-  );
+  const { data, fetchNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery(
+      queryKey,
+      ({ pageParam = 1 }) =>
+        getMealOffersByParams(
+          pageParam,
+          pageLimit,
+          distance,
+          portions,
+          category,
+          allergen,
+          sellerRating,
+          price,
+          search
+        ),
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const maxPages = Math.ceil(lastPage.total_count / pageLimit);
+          const nextPage = allPages.length + 1;
+          return nextPage <= maxPages ? nextPage : undefined;
+        },
+      }
+    );
 
   useEffect(() => {
+    queryClient.fetchQuery(queryKey);
     let fetching = false;
     const onScroll = async (event: any) => {
       const { scrollHeight, scrollTop, clientHeight } =
@@ -176,8 +178,10 @@ export const MealOfferScreen = () => {
               />
             </Row>
             <Row className={"m-2 row justify-content-center"}>
-              {/*TODO: Show total amount of offers found
-              {data ? data.pages.length : "No"} Offers found*/}
+              {isFetching || isFetchingNextPage ? "Loading data..." : ""}
+            </Row>
+            <Row className={"m-2 row justify-content-center"}>
+              {data ? data.pages[0].total_count : "No "} Offers found
             </Row>
             <Row>
               <Col>
