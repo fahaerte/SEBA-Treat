@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const SCMealDetails = styled.div`
   margin-top: 1em;
+  margin-bottom: 3rem;
   font-size: 1rem;
 
   & > div > div {

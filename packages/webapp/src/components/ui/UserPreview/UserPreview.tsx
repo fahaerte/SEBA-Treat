@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, Row } from "../index";
 import { Rating } from "../../Profile/Rating";
 import { SCUserPreview, SCUserPreviewImage } from "./styles";
+import { ConfigService } from "../../../utils/ConfigService";
 
 const UserPreview = ({
   img,
@@ -18,7 +19,9 @@ const UserPreview = ({
 }) => {
   return (
     <SCUserPreview>
-      <SCUserPreviewImage />
+      <SCUserPreviewImage
+        src={`${new ConfigService().get("PROFILE_PICTURES_URL")}/${img}`}
+      />
       <div>
         <Row>
           <span className={"userName"}>

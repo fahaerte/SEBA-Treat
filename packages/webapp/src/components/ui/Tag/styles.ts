@@ -8,6 +8,5 @@ export const SCTag = styled.div`
   border: 2px solid ${({ theme }) => theme.palette.primary.main};
   border-radius: 2em;
   text-transform: capitalize;
-  margin-left: 1em;
-  margin-right: -0.5em;
+  margin: 0 0.5em;
 `;

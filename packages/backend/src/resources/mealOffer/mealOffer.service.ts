@@ -152,8 +152,9 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (compareAddress)
+    if (compareAddress) {
       return await this.addDistanceToMealOffer(mealOfferDoc, compareAddress);
+    }
     return mealOfferDoc;
   }
 
@@ -237,6 +238,23 @@ class MealOfferService {
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
     return await this.mealOffer.findSentMealOfferRequests(user._id as string);
+  }
+
+  public async alreadyReserved(
+    mealOfferId: string,
+    user: UserDocument
+  ): Promise<boolean | Error> {
+    const mealOfferDoc = (await this.getMealOffer(
+      mealOfferId,
+      user
+    )) as MealOfferDocumentWithUser;
+    let alreadyReserved = false;
+    mealOfferDoc.reservations.forEach((reservation) => {
+      if (user._id.equals(reservation.buyer)) {
+        alreadyReserved = true;
+      }
+    });
+    return alreadyReserved;
   }
 
   public async getReceivedMealOfferRequests(
