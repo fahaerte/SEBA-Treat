@@ -8,10 +8,8 @@ import {
 
 const createBody = Joi.object<Partial<IMealOffer>>({
   title: Joi.string().required(),
-  user: Joi.string()
-    .regex(/^[a-f\d]{24}$/i)
-    .required(),
   description: Joi.string().required(),
+  image: Joi.string().required(),
   categories: Joi.array()
     .required()
     .min(1)
