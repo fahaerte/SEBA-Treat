@@ -6,6 +6,7 @@ export interface IMealOffer {
   title: string;
   description: string;
   user: string;
+  image: string;
   categories: string[];
   allergens: string[];
   startDate: Date;
