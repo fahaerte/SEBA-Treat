@@ -21,6 +21,9 @@ import UserDocument from "../user/user.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
 import { ObjectId } from "mongoose";
 import { MealTransactionDocument } from "../mealTransaction/mealTransaction.interface";
+import HttpException from "../../utils/exceptions/http.exception";
+import InvalidMealOfferUpdateException from "../../utils/exceptions/invalidMealOfferUpdate.exception";
+import { deleteImage } from "../../utils/imageUpload";
 
 @Service()
 class MealOfferService {
@@ -53,6 +56,68 @@ class MealOfferService {
         details: error.message,
       } as ILogMessage);
       throw new Error("Could not create mealOffer");
+    }
+  }
+
+  public async update(
+    mealOfferId: string,
+    updatedMealOffer: MealOfferDocument,
+    user: UserDocument
+  ): Promise<void | MealOfferDocument | Error> {
+    const mealOffer = (await this.mealOffer.findById(
+      mealOfferId
+    )) as MealOfferDocument;
+    if (!mealOffer) {
+      return await this.create(updatedMealOffer, user);
+    }
+    if (!user._id.equals(mealOffer.user)) {
+      Logger.error({
+        functionName: "update",
+        message: "Could not update mealOffer",
+        details: `User ${user._id} is not owner of mealOffer ${mealOfferId}`,
+      } as ILogMessage);
+      throw new HttpException(403, "A user can only change own mealOffers");
+    }
+    if (mealOffer.reservations.length) {
+      Logger.error({
+        functionName: "update",
+        message: "Could not update mealOffer",
+        details: `MealOffer ${mealOfferId} has already reservations.`,
+      });
+      throw new InvalidMealOfferUpdateException(
+        "MealOffer already has reservations and can not be updated"
+      );
+    }
+    if (updatedMealOffer.image && mealOffer.image != updatedMealOffer.image) {
+      deleteImage("meal-images", mealOffer.image);
+      mealOffer.image = updatedMealOffer.image;
+    }
+    mealOffer.title = updatedMealOffer.title;
+    mealOffer.pickUpDetails = updatedMealOffer.pickUpDetails;
+    mealOffer.categories = updatedMealOffer.categories;
+    mealOffer.allergens = updatedMealOffer.allergens;
+    mealOffer.startDate = updatedMealOffer.startDate;
+    mealOffer.endDate = updatedMealOffer.endDate;
+    mealOffer.portions = updatedMealOffer.portions;
+    mealOffer.price = updatedMealOffer.price;
+    mealOffer.allergensVerified = updatedMealOffer.allergensVerified;
+    mealOffer.transactionFee = Math.round(
+      TRANSACTION_FEE * updatedMealOffer.price
+    );
+    try {
+      await mealOffer.save();
+      Logger.info({
+        functionName: "update",
+        message: "Updated mealOffer",
+        details: `Updated mealOffer ${mealOfferId}`,
+      } as ILogMessage);
+    } catch (error: any) {
+      Logger.error({
+        functionName: "update",
+        message: "Could not save mealOffer",
+        details: error.message,
+      } as ILogMessage);
+      throw new Error("Could not update mealOffer");
     }
   }
 

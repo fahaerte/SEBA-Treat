@@ -93,4 +93,16 @@ const saveFile = (dirName: string, file: Express.Multer.File): string => {
   return fileName;
 };
 
-export { imageUploadFilter, profileFileStorage, mealOfferStorage };
+const deleteImage = (dirName: string, fileName: string): void => {
+  const pathName = path.join(checkPublicFolder(dirName), fileName);
+  if (fs.existsSync(pathName)) {
+    fs.unlinkSync(pathName);
+    Logger.info({
+      functionName: "deleteImage",
+      message: "Deleted image",
+      details: `Image ${pathName}`,
+    } as ILogMessage);
+  }
+};
+
+export { imageUploadFilter, profileFileStorage, mealOfferStorage, deleteImage };
