@@ -6,10 +6,13 @@ import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
+import { ESortingRules } from "@treat/lib-common/lib/enums/ESortingRules";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
-  const [sortingRule, setSortingRule] = useState<string>("distanceAsc");
+  const [sortingRule, setSortingRule] = useState<ESortingRules>(
+    ESortingRules.DIST_ASC
+  );
   const [distance, setDistance] = useState<number>(5);
   const [price, setPrice] = useState<number | undefined>(undefined);
   const [sellerRating, setSellerRating] = useState<number | undefined>(
@@ -164,7 +167,7 @@ export const MealOfferScreen = () => {
                 handleSearch={handleSearch}
                 handleSort={handleSort}
                 currentSearchString={search}
-                currentSortingRule={sortingRule ? sortingRule : "distanceAsc"}
+                currentSortingRule={sortingRule}
               />
             </Row>
             <Row className={"m-2 row justify-content-center"}>

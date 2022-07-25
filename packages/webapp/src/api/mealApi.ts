@@ -1,5 +1,9 @@
 import { baseApi, baseApiAuth } from "./baseApi";
-import { EMealReservationState, IMealOffer } from "@treat/lib-common";
+import {
+  EMealReservationState,
+  ESortingRules,
+  IMealOffer,
+} from "@treat/lib-common";
 import { getCookie } from "../utils/auth/CookieProvider";
 
 export const getMealOffer = async (mealOfferId: string) => {
@@ -27,7 +31,7 @@ export const getMealOffersByParams = async (
   sellerRating?: number | undefined,
   price?: number | undefined,
   search?: string | undefined,
-  sortingRule?: string | undefined
+  sortingRule?: ESortingRules | undefined
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
@@ -40,7 +44,7 @@ export const getMealOffersByParams = async (
       price: price,
       search: search,
       distance: distance,
-      sortingRule: sortingRule,
+      sortingRule: sortingRule?.valueOf(),
     },
   });
   return response.data;

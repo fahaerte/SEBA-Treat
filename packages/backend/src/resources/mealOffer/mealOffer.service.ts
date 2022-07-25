@@ -10,7 +10,11 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { EMealReservationState, IMealOfferCard } from "@treat/lib-common";
+import {
+  EMealReservationState,
+  ESortingRules,
+  IMealOfferCard,
+} from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
@@ -127,12 +131,12 @@ class MealOfferService {
     sortingRule: string | undefined
   ) {
     switch (sortingRule) {
-      case "ratingDesc":
+      case ESortingRules.RATING_DESC.valueOf():
         return (
           (meal2.user.meanRating ? meal2.user.meanRating : 0) -
           (meal1.user.meanRating ? meal1.user.meanRating : 0)
         );
-      case "priceAsc":
+      case ESortingRules.PRICE_ASC.valueOf():
         return (
           (meal1.price ? meal1.price : 1000) -
           (meal2.price ? meal2.price : 1000)
