@@ -137,6 +137,24 @@ class MealOfferService {
     return await this.mealOffer.findSentMealOfferRequests(user._id as string);
   }
 
+  public async alreadyReserved(
+    mealOfferId: string,
+    user: UserDocument
+  ): Promise<boolean | Error> {
+    const sentMealReservations = await this.getSentMealOfferRequests(user);
+    const mealOfferDoc = (await this.getMealOffer(
+      mealOfferId,
+      user
+    )) as MealOfferDocumentWithUser;
+    let alreadyReserved = false;
+    mealOfferDoc.reservations.forEach((reservation) => {
+      if (user._id.equals(reservation.buyer)) {
+        alreadyReserved = true;
+      }
+    });
+    return alreadyReserved;
+  }
+
   public async getReceivedMealOfferRequests(
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {

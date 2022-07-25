@@ -67,6 +67,12 @@ class MealOfferController implements Controller {
       ),
       this.updateMealOfferReservation
     );
+    this.router.get(
+      `${this.path}/:mealOfferId/reservations`,
+      authenticatedMiddleware,
+      validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
+      this.alreadyReserved
+    );
     this.router.post(
       `${this.path}/:mealOfferId/reservations`,
       authenticatedMiddleware,
@@ -159,6 +165,22 @@ class MealOfferController implements Controller {
         compareAddress as string
       );
       res.status(200).send({ data: mealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private alreadyReserved = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const alreadyReserved = await this.mealOfferService.alreadyReserved(
+        req.params.mealOfferId,
+        req.user
+      );
+      res.status(200).send(alreadyReserved);
     } catch (error: any) {
       next(error);
     }

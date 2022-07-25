@@ -40,6 +40,13 @@ export const getMealOffersByParams = async (
   return response.data;
 };
 
+export const alreadyReserved = async (mealOfferId: string) => {
+  const response = await baseApiAuth().get(
+    `/mealOffers/${mealOfferId}/reservations`
+  );
+  return response.data;
+};
+
 export const getSentMealOfferRequests = async () => {
   const response = await baseApiAuth().get("/mealOffers/reservations/sent");
   return response.data;

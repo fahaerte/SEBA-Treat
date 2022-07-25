@@ -13,7 +13,11 @@ import {
   UserPreview,
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
-import { getMealOffer, requestMealOffer } from "../../api/mealApi";
+import {
+  getMealOffer,
+  requestMealOffer,
+  alreadyReserved,
+} from "../../api/mealApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
@@ -55,6 +59,20 @@ export const MealOfferDetailScreen = () => {
       },
     }
   );
+
+  const { data: isAlreadyReserved, isLoading: isAlreadyReservedIsLoading } =
+    useQuery(
+      ["getAlreadyReserved", mealOffer],
+      () => alreadyReserved(mealOfferId as string),
+      {
+        onSuccess: (response) => {
+          if (response) {
+            setReservationText("You have already reserved this meal.");
+            setEnableReservation(false);
+          }
+        },
+      }
+    );
 
   // useEffect(() => {
   //   console.log(mealOffer);
@@ -164,7 +182,7 @@ export const MealOfferDetailScreen = () => {
               endDate={mealOffer.endDate}
             />
             <Row>
-              <Col style={{ paddingRight: "3em" }}>
+              <Col className={"pe-5"}>
                 <SectionHeading>Description</SectionHeading>
                 <p>{mealOffer.description}</p>
                 <SectionHeading>Location</SectionHeading>
