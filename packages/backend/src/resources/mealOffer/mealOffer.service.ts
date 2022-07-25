@@ -86,8 +86,9 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (compareAddress)
+    if (compareAddress) {
       return await this.addDistanceToMealOffer(mealOfferDoc, compareAddress);
+    }
     return mealOfferDoc;
   }
 
@@ -141,7 +142,6 @@ class MealOfferService {
     mealOfferId: string,
     user: UserDocument
   ): Promise<boolean | Error> {
-    const sentMealReservations = await this.getSentMealOfferRequests(user);
     const mealOfferDoc = (await this.getMealOffer(
       mealOfferId,
       user

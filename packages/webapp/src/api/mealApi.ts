@@ -2,8 +2,15 @@ import { baseApi, baseApiAuth } from "./baseApi";
 import { EMealReservationState, IMealOffer } from "@treat/lib-common";
 import { getCookie } from "../utils/auth/CookieProvider";
 
-export const getMealOffer = async (mealOfferId: string) => {
-  const response = await baseApi().get(`/mealOffers/${mealOfferId}`);
+export const getMealOffer = async (
+  mealOfferId: string,
+  compareAddress: string
+) => {
+  const response = await baseApi().get(`/mealOffers/${mealOfferId}`, {
+    params: {
+      compareAddress: compareAddress,
+    },
+  });
   return response.data.data;
 };
 

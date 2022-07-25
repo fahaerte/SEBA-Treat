@@ -27,7 +27,7 @@ const MealDetails = ({
           display={"inline"}
         >
           <Icon type={"geo-alt"} size={"lg"} />
-          {distance} Dreihunderttausend Kilometer
+          {distance} km
         </Typography>
         <Typography
           className={"fw-normal mb-3"}

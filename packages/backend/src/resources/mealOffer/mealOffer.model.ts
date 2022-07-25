@@ -117,6 +117,7 @@ MealOfferSchema.statics.findBy = async function (
     allergens: 1,
     price: 1,
     transactionFee: 1,
+    // image: 1,
     user: 1,
     startDate: 1,
     endDate: 1,

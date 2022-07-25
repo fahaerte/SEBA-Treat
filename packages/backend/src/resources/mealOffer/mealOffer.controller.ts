@@ -158,11 +158,10 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { compareAddress } = req.body;
       const mealOffer = await this.mealOfferService.getMealOffer(
         req.params.mealOfferId,
         req.user,
-        compareAddress as string
+        req.query.compareAddress as string
       );
       res.status(200).send({ data: mealOffer });
     } catch (error: any) {

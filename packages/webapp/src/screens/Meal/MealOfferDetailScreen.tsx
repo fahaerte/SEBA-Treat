@@ -25,6 +25,7 @@ import { getCookie } from "../../utils/auth/CookieProvider";
 
 export const MealOfferDetailScreen = () => {
   const userId = getCookie("userId");
+  const address = getCookie("address");
 
   const { mealOfferId } = useParams();
   const location = useLocation();
@@ -35,7 +36,7 @@ export const MealOfferDetailScreen = () => {
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
-    () => getMealOffer(mealOfferId as string),
+    () => getMealOffer(mealOfferId as string, address),
     {
       onSuccess: (response) => {
         console.log(response);
@@ -187,8 +188,9 @@ export const MealOfferDetailScreen = () => {
                 <p>{mealOffer.description}</p>
                 <SectionHeading>Location</SectionHeading>
                 <p>
-                  {mealOffer.transactionFee} km (You will see the exact location
-                  once the seller accepted your reservation.)
+                  {mealOffer.user.firstName} is {mealOffer.distance} kilometers
+                  away from you. You will see the exact location once the seller
+                  accepted your reservation.
                 </p>
                 <SectionHeading>List of Allergens</SectionHeading>
                 {mealOffer.allergens.map((allergen: string) => (
