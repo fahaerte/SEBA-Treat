@@ -9,7 +9,7 @@ import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterS
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
-  const [sortingRule, setSortingRule] = useState<string>();
+  const [sortingRule, setSortingRule] = useState<string>("distanceAsc");
   const [distance, setDistance] = useState<number>(5);
   const [price, setPrice] = useState<number | undefined>(undefined);
   const [sellerRating, setSellerRating] = useState<number | undefined>(
@@ -38,7 +38,8 @@ export const MealOfferScreen = () => {
           allergen,
           sellerRating,
           price,
-          search
+          search,
+          sortingRule
         ),
       {
         getNextPageParam: (lastPage, allPages) => {
@@ -129,17 +130,6 @@ export const MealOfferScreen = () => {
     }
   };
 
-  const sortRule = (meal1: IMealOfferCard, meal2: IMealOfferCard) => {
-    switch (sortingRule) {
-      case "ratingDesc":
-        return meal2.rating - meal1.rating;
-      case "priceAsc":
-        return meal1.price - meal2.price;
-      default:
-        return meal1.distance - meal2.distance;
-    }
-  };
-
   const resetFilters = () => {
     setPortions(undefined);
     setPrice(undefined);
@@ -189,24 +179,21 @@ export const MealOfferScreen = () => {
                   <>
                     {data &&
                       data.pages.map((page) => {
-                        return page.data
-                          .slice()
-                          .sort(sortRule)
-                          .map((mealOffer: IMealOfferCard) => (
-                            <Row key={`${mealOffer._id}-container`}>
-                              <MealOffer
-                                mealId={mealOffer._id}
-                                price={mealOffer.price}
-                                distance={mealOffer.distance}
-                                mealTitle={mealOffer.title}
-                                portions={mealOffer.portions}
-                                sellerRating={mealOffer.user.meanRating}
-                                endDate={mealOffer.endDate}
-                                sellerName={mealOffer.user.firstName}
-                                startDate={mealOffer.endDate}
-                              />
-                            </Row>
-                          ));
+                        return page.data.map((mealOffer: IMealOfferCard) => (
+                          <Row key={`${mealOffer._id}-container`}>
+                            <MealOffer
+                              mealId={mealOffer._id}
+                              price={mealOffer.price}
+                              distance={mealOffer.distance}
+                              mealTitle={mealOffer.title}
+                              portions={mealOffer.portions}
+                              sellerRating={mealOffer.user.meanRating}
+                              endDate={mealOffer.endDate}
+                              sellerName={mealOffer.user.firstName}
+                              startDate={mealOffer.endDate}
+                            />
+                          </Row>
+                        ));
                       })}
                   </>
                 </Container>

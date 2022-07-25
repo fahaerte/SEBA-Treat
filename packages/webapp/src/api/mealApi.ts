@@ -26,7 +26,8 @@ export const getMealOffersByParams = async (
   allergen?: string | undefined,
   sellerRating?: number | undefined,
   price?: number | undefined,
-  search?: string | undefined
+  search?: string | undefined,
+  sortingRule?: string | undefined
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
@@ -39,6 +40,7 @@ export const getMealOffersByParams = async (
       price: price,
       search: search,
       distance: distance,
+      sortingRule: sortingRule,
     },
   });
   return response.data;
