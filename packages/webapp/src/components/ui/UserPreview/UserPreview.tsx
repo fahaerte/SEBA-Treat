@@ -1,11 +1,9 @@
 import React from "react";
 import { Typography, Row } from "../index";
 import { Rating } from "../../Profile/Rating";
-import { SCUserPreview, SCUserPreviewImage } from "./styles";
-import { ConfigService } from "../../../utils/ConfigService";
+import { SCUserPreview } from "./styles";
 
 const UserPreview = ({
-  img,
   firstName,
   lastName,
   meanRating,
@@ -19,9 +17,6 @@ const UserPreview = ({
 }) => {
   return (
     <SCUserPreview>
-      <SCUserPreviewImage
-        src={`${new ConfigService().get("PROFILE_PICTURES_URL")}/${img}`}
-      />
       <div>
         <Row>
           <span className={"userName"}>

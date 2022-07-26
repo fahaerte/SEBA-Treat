@@ -24,10 +24,6 @@ const UserSchema = new Schema<UserDocument>(
       type: String,
       required: true,
     },
-    profilePicture: {
-      type: String,
-      required: true,
-    },
     birthdate: {
       type: Date,
       required: true,
@@ -62,9 +58,7 @@ UserSchema.pre<UserDocument>("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-
   this.password = await bcrypt.hash(this.password, 10);
-
   next();
 });
 

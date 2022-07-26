@@ -279,4 +279,4 @@ const EditMeal = () => {
   );
 };
 
-export default CreateMeal;
+export default EditMeal;
