@@ -26,7 +26,9 @@ const createBody = Joi.object<Partial<IMealOffer>>({
 });
 
 const updateMealOfferParams = Joi.object({
-  mealOfferId: Joi.string().regex(/^[a-f\d]{24}$/i).required()
+  mealOfferId: Joi.string()
+    .regex(/^[a-f\d]{24}$/i)
+    .required(),
 });
 
 const updateMealOfferBody = Joi.object<Partial<IMealOffer>>({
@@ -34,11 +36,11 @@ const updateMealOfferBody = Joi.object<Partial<IMealOffer>>({
   description: Joi.string().required(),
   image: Joi.string(),
   categories: Joi.array()
-      .required()
-      .min(1)
-      .items(Joi.string().valid(...Object.values(EMealCategory))),
+    .required()
+    .min(1)
+    .items(Joi.string().valid(...Object.values(EMealCategory))),
   allergens: Joi.array().items(
-      Joi.string().valid(...Object.values(EMealAllergen))
+    Joi.string().valid(...Object.values(EMealAllergen))
   ),
   startDate: Joi.date().iso().required().min(Date.now()),
   endDate: Joi.date().iso().required().greater(Joi.ref("startDate")),
