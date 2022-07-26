@@ -4,8 +4,6 @@ import validationMiddleware from "../../middleware/validation.middleware";
 import validate from "../../resources/user/user.validation";
 import HttpException from "../../utils/exceptions/http.exception";
 import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
-import { profileFileUpload } from "../../middleware/upload.middleware";
-
 import UserService from "../../resources/user/user.service";
 import { Service } from "typedi";
 import { ObjectId } from "mongoose";
@@ -27,7 +25,6 @@ class UserController implements Controller {
   private initializeRoutes(): void {
     this.router.post(
       `${this.path}/register`,
-      profileFileUpload.single("profilePicture"),
       validationMiddleware(validate.registerBody),
       this.register
     );
