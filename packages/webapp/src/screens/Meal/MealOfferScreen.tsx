@@ -103,7 +103,7 @@ export const MealOfferScreen = () => {
     setSortingRule(event.target.value);
   };
 
-  const handleChangedFilter = (event: any, element?: string) => {
+  const handleChangedFilter = (event: any) => {
     console.log(event);
     switch (event.target.id) {
       case "max.-distance":

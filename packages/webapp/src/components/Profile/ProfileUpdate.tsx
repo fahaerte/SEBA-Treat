@@ -167,7 +167,7 @@ export const ProfileUpdate = () => {
       dangerToast({ message: "Could not get user data!" });
       navigate("/account");
     }
-  }, [data, setFormElements]);
+  }, [data, setFormElements, isError, isSuccess, navigate]);
 
   const handleSubmit = (data: IUser) => {
     if (userId) {

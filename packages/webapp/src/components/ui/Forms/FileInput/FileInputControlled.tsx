@@ -18,13 +18,13 @@ const FileInputControlled = ({
   ...rest
 }: IFileInput<HTMLInputElement>) => {
   const inputId = getEncodedString(label, "file");
-  const [files, setFiles] = React.useState<FileList | null>(null);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFiles(e.target.files);
-
-    onChange(e);
-  };
+  // const [files, setFiles] = React.useState<FileList | null>(null);
+  //
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setFiles(e.target.files);
+  //
+  //   onChange(e);
+  // };
   return (
     <>
       <label
@@ -45,7 +45,7 @@ const FileInputControlled = ({
         placeholder={label}
         readOnly={disabled}
         multiple={multiple}
-        onChange={(event) => handleChange(event)}
+        onChange={(event) => onChange(event)}
         {...rest}
       />
 
