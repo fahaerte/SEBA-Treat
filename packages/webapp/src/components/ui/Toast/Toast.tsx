@@ -50,7 +50,9 @@ const toast = (toastConfig: IToast) => {
     case "success":
       toastify.success(toastConfig.message, {
         ...toastOptions,
-        icon: toastConfig.roundedLight ? "" : () => <Icon type={"check2"} />,
+        icon: toastConfig.roundedLight
+          ? ""
+          : () => <Icon type={"check2-circle"} />,
       });
       break;
     default:

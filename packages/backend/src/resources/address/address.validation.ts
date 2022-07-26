@@ -8,4 +8,12 @@ const create = Joi.object({
   country: Joi.string().required().example("Germany"),
 });
 
-export default { create };
+const update = Joi.object({
+  street: Joi.string().example("Einhornalle"),
+  houseNumber: Joi.string().example("12a"),
+  postalCode: Joi.string().min(5).max(5).example("80333"),
+  city: Joi.string().example("Munich"),
+  country: Joi.string().example("Germany"),
+});
+
+export default { create, update };

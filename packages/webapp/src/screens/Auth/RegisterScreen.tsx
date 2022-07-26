@@ -58,7 +58,7 @@ export const RegisterScreen = () => {
           },
           min: {
             value: 6,
-            message: "Your username needs at least 6 characters!",
+            message: "Your password needs at least 6 characters!",
           },
         },
         defaultValue: "",

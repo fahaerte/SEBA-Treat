@@ -24,7 +24,29 @@ const getProfilePictureParams = Joi.object({
   userid: Joi.string().regex(/^[a-f\d]{24}$/i),
 });
 
-export default { registerBody, loginBody, getProfilePictureParams };
+const updateUser = Joi.object<Partial<IUser>>({
+  _id: Joi.string()
+    .regex(/^[a-f\d]{24}$/i)
+    .required(),
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+  address: AddressValidation.update,
+});
+
+const updatePassword = Joi.object({
+  userId: Joi.string()
+    .regex(/^[a-f\d]{24}$/i)
+    .required(),
+  passwordOld: Joi.string().min(6).required(),
+  passwordNew: Joi.string().min(6).required(),
+});
+export default {
+  registerBody,
+  loginBody,
+  getProfilePictureParams,
+  updateUser,
+  updatePassword,
+};
 
 export const User = {
   RegisterUser: j2s(registerBody).swagger,

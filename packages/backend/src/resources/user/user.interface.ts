@@ -2,7 +2,7 @@ import { Document } from "mongoose";
 import { IUser } from "@treat/lib-common";
 import { IAddress } from "@treat/lib-common/lib/interfaces/IAddress";
 
-interface UserDocument extends Document, IUser {
+interface UserDocument extends Document, Omit<IUser, "_id"> {
   isValidPassword(password: string): Promise<Error | boolean>;
 }
 

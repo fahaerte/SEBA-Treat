@@ -1,10 +1,12 @@
 import axios from "axios";
 import { ConfigService } from "../utils/ConfigService";
 
+const configService = new ConfigService();
+
 export const baseApi = () => {
   axios.defaults.withCredentials = true;
   return axios.create({
-    baseURL: `${new ConfigService().get("API_URL")}`,
+    baseURL: `${configService.get("API_URL")}`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -13,7 +15,7 @@ export const baseApi = () => {
 
 export const baseApiAuth = () => {
   return axios.create({
-    baseURL: `${new ConfigService().get("API_URL")}`,
+    baseURL: `${configService.get("API_URL")}`,
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
@@ -24,7 +26,7 @@ export const baseApiAuth = () => {
 
 export const baseImageApi = () => {
   return axios.create({
-    baseURL: `${new ConfigService().get("API_URL")}`,
+    baseURL: `${configService.get("API_URL")}`,
     headers: {
       "Content-Type": "image/png",
     },

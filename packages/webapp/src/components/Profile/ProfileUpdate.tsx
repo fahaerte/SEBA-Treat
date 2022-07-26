@@ -6,26 +6,35 @@ import {
   dangerToast,
   Icon,
   SkeletonSquare,
+  successToast,
 } from "../ui";
 import { IUser } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
-import { useQuery } from "react-query";
-import { getUser } from "../../api/userApi";
+import { useMutation, useQuery } from "react-query";
+import { getUser, updateUser } from "../../api/userApi";
 import { useNavigate } from "react-router-dom";
 
 export const ProfileUpdate = () => {
-  const userId = getCookie("userIs");
+  const userId = getCookie("userId");
   const navigate = useNavigate();
-  const { data, isSuccess, isError } = useQuery(
-    ["getUser", userId],
-    () => getUser(),
-    {
-      onError: () =>
-        dangerToast({ message: "Could not get user information!" }),
-    }
+  const { data, isSuccess, isError } = useQuery(["getUser", userId], () =>
+    getUser()
   );
 
   const [formElements, setFormElements] = useState<IFormRow<IUser>[]>([]);
+
+  const { mutate: updateUserMutation, isLoading } = useMutation(
+    (user: Partial<IUser>) => updateUser({ _id: userId, ...user }),
+    {
+      onSuccess: () => {
+        successToast({ message: "Successfully updated ur information!" });
+        navigate("/account");
+      },
+      onError: () => {
+        dangerToast({ message: "Sorry, something went wrong." });
+      },
+    }
+  );
 
   useEffect(() => {
     if (isSuccess) {
@@ -72,7 +81,7 @@ export const ProfileUpdate = () => {
             props: {
               type: "date",
             },
-            defaultValue: new Date(user.birthdate),
+            defaultValue: user.birthdate.split("T")[0],
           }),
         ],
         [
@@ -161,7 +170,15 @@ export const ProfileUpdate = () => {
   }, [data, setFormElements]);
 
   const handleSubmit = (data: IUser) => {
-    console.log(data);
+    if (userId) {
+      console.log({ ...data, _id: userId });
+      updateUserMutation({ ...data, _id: userId });
+    } else {
+      dangerToast({
+        message: "User does not seem to be authenticated. Please login.",
+      });
+      navigate("/login");
+    }
   };
 
   return (
@@ -177,6 +194,7 @@ export const ProfileUpdate = () => {
               </>
             ),
           }}
+          isLoading={isLoading}
         />
       ) : (
         <SkeletonSquare rows={3} />
