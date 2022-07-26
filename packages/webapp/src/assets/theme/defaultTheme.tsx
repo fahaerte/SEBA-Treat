@@ -49,7 +49,7 @@ export const defaultTheme: DefaultTheme = {
   typography: {
     color: {
       primary: "#333",
-      secondary: "gray",
+      secondary: "#454545",
     },
     headline: {
       family: "Lato, sans-serif",
@@ -85,7 +85,7 @@ export const defaultTheme: DefaultTheme = {
   },
   general: {
     backgroundPrimary: "white",
-    backgroundSecondary: "white",
+    backgroundSecondary: "#efefef",
     backgroundBody: "white",
     border: {
       radius: "50px",

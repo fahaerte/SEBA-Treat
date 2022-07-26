@@ -12,7 +12,7 @@ import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
-import { ESortingRules } from "@treat/lib-common/lib/enums/ESortingRules";
+import { ESortingRules } from "@treat/lib-common";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);

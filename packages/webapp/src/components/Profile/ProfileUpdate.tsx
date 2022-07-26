@@ -179,11 +179,7 @@ export const ProfileUpdate = () => {
           }}
         />
       ) : (
-        <>
-          <SkeletonSquare />
-          <SkeletonSquare />
-          <SkeletonSquare />
-        </>
+        <SkeletonSquare rows={3} />
       )}
     </>
   );

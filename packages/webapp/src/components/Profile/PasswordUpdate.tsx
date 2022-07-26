@@ -1,5 +1,5 @@
 import React from "react";
-import { IFormRow, FormHelper, Form } from "../ui";
+import { IFormRow, FormHelper, Form, Icon } from "../ui";
 
 type PasswordForm = {
   oldPassword: string;
@@ -58,7 +58,18 @@ export const PasswordUpdate = () => {
     <Form<PasswordForm>
       elements={formElemements}
       onSubmit={(data) => handleSubmit(data)}
-      abortButton={{ color: "secondary", children: "Cancel" }}
+      submitButton={{
+        children: (
+          <>
+            <Icon type={"shield-lock"} /> Update
+          </>
+        ),
+      }}
+      abortButton={{
+        color: "secondary",
+        children: "Cancel",
+        className: "ms-3",
+      }}
     />
   );
 };

@@ -15,7 +15,7 @@ const ProfilePicture = styled.img`
 `;
 
 interface MealOfferRequestUserInfoProps {
-  user: IUser;
+  user: Partial<IUser>;
 }
 
 export const MealOfferRequestUserInfo = ({
