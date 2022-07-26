@@ -29,7 +29,7 @@ interface IMealOfferForm
 /**
  * TODO:
  * - Image upload
- * - Redirect to detail page on success
+ * - Switch for allergenVerified
  */
 const CreateMeal = () => {
   const navigate = useNavigate();
@@ -202,12 +202,13 @@ const CreateMeal = () => {
   ];
 
   const createOfferMutation = useMutation(
-    ({ mealOffer }: CreateMealOfferArgs) => createMealOffer({ mealOffer }),
+    (formData: FormData) => createMealOffer(formData),
     {
       onSuccess: (response) => {
         successToast({ message: "Your meal offer has been created!" });
-        const mealId = response.data._id;
-        navigate("/");
+        const mealId = response.data.data._id;
+        console.log(response);
+        navigate(`/mealOffers/${mealId}`);
       },
       onError: () => dangerToast({ message: "Sorry, something went wrong." }),
     }
@@ -216,10 +217,6 @@ const CreateMeal = () => {
   const handleSubmit = (data: IMealOfferForm) => {
     if (userId) {
       const { categories, allergens } = data;
-
-      console.log(data);
-      console.log(new Date(data.startDate).toISOString());
-
       // const categoryValues: string[] = [];
       // categories.forEach((category) => categoryValues.push(category.value));
       //
@@ -244,10 +241,10 @@ const CreateMeal = () => {
       formData.append("description", data.description);
       formData.append("image", data.image);
       formData.append("endDate", new Date(data.endDate).toISOString());
-      formData.append("startDate", new Date(data.endDate).toISOString());
+      formData.append("startDate", new Date(data.startDate).toISOString());
       formData.append("price", data.price.toString());
       formData.append("portions", data.portions.toString());
-      formData.append("allergensVderified", data.allergensVerified.toString());
+      formData.append("allergensVerified", data.allergensVerified.toString());
       categories.forEach((category, index) =>
         formData.append(`categories[${index}]`, category.value)
       );
@@ -255,7 +252,7 @@ const CreateMeal = () => {
         formData.append(`allergens[${index}]`, allergen.value)
       );
 
-      // createOfferMutation.mutate({ mealOffer: newOffer });
+      createOfferMutation.mutate(formData);
     } else {
       dangerToast({ message: "User not authenticated!" });
       navigate("/login");

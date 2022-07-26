@@ -30,8 +30,8 @@ export const requestMealOffer = async ({
   return await baseApiAuth().post(`/mealOffers/${mealOfferId}/reservations`);
 };
 
-export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
-  return await baseApiAuth().post("/mealOffers", mealOffer);
+export const createMealOffer = async (formData: FormData) => {
+  return await baseApiAuth().post("/mealOffers", formData);
 };
 
 export const updateMealOffer = async (
