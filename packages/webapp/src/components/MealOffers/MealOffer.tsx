@@ -15,7 +15,7 @@ import {
   Badge,
 } from "../ui";
 import { useNavigate } from "react-router-dom";
-import PlaceholderImg from "../../assets/nudeln.jpg";
+import PlaceholderImg from "../../assets/img/nudeln.jpg";
 
 const MealOffer = ({
   mealId,

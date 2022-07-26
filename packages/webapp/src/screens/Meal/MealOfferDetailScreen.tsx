@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import {
+  Badge,
   Col,
   dangerToast,
   MealDetails,
@@ -8,7 +9,6 @@ import {
   Row,
   SectionHeading,
   successToast,
-  Tag,
   UserPreview,
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
@@ -84,7 +84,9 @@ export const MealOfferDetailScreen = () => {
                 <u>{mealOffer.title}</u>
               </PageHeading>
               {mealOffer.categories.map((category: string) => (
-                <Tag key={category}>{category}</Tag>
+                <Badge key={category} outlined>
+                  {category}
+                </Badge>
               ))}
             </div>
             <UserPreview

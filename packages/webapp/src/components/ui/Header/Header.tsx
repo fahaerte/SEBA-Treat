@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { getUser } from "../../../api/userApi";
 import { SCCustomForm, SCHeader } from "./styles";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/img/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getCookie,

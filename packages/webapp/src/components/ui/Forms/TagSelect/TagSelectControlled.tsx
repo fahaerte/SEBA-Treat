@@ -17,8 +17,6 @@ const TagSelectControlled = ({
   color = "primary",
   disabled = false,
   noOptionsMessage = "No options",
-  // loadingMessage = "loading...",
-  // isLoading = false,
   onChange = () => undefined,
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
@@ -42,9 +40,7 @@ const TagSelectControlled = ({
         styles={customStyles(color, isInvalid, theme)}
         className={className}
         isDisabled={disabled}
-        // isLoading={isLoading}
         noOptionsMessage={() => noOptionsMessage}
-        // loadingMessage={() => loadingMessage}
         placeholder={label}
         components={makeAnimated()}
         value={value}

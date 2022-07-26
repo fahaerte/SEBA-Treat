@@ -11,10 +11,14 @@ import {
   useModalInfo,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
-import { EMealAllergen, EMealCategory, IMealOffer } from "@treat/lib-common";
+import { IMealOffer } from "@treat/lib-common";
 import { createMealOffer, CreateMealOfferArgs } from "../../api/mealApi";
 import { useMutation } from "react-query";
 import { getCookie } from "../../utils/auth/CookieProvider";
+import {
+  createCategoriesOptions,
+  createAllergensOptions,
+} from "../../utils/createMealValueArrays";
 
 interface IMealOfferForm
   extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
@@ -29,37 +33,8 @@ interface IMealOfferForm
  */
 const CreateMeal = () => {
   const navigate = useNavigate();
-
-  const createOfferMutation = useMutation(
-    ({ mealOffer }: CreateMealOfferArgs) => createMealOffer({ mealOffer }),
-    {
-      onSuccess: (response) => {
-        successToast({ message: "Your meal offer has been created!" });
-        const mealId = response.data._id;
-        navigate("/");
-      },
-      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
-    }
-  );
-
-  const createAllergensOptions = () => {
-    const allergenValues = Object.values(EMealAllergen);
-    const allergens: TOptionValuePair[] = [];
-    allergenValues.forEach((allergen) =>
-      allergens.push({ value: allergen, label: allergen })
-    );
-    // console.log(Object.values(EMealAllergen));
-    return allergens;
-  };
-
-  const createCategoriesOptions = () => {
-    const categoryValues = Object.values(EMealCategory);
-    const categories: TOptionValuePair[] = [];
-    categoryValues.forEach((category) =>
-      categories.push({ value: category, label: category })
-    );
-    return categories;
-  };
+  const modalAllergensInfo = useModalInfo({ close: () => undefined });
+  const userId = getCookie("userId");
 
   const elements: IFormRow<IMealOfferForm>[] = [
     [
@@ -76,20 +51,20 @@ const CreateMeal = () => {
           },
         },
       }),
-      // FormHelper.createFileInput({
-      //   formKey: "profile-pictures",
-      //   label: "Upload profile-pictures for your meal",
-      //   props: {
-      //     fileType: "profile-pictures/*",
-      //     multiple: true,
-      //   },
-      //   rules: {
-      //     required: {
-      //       value: true,
-      //       message: "Please provide profile-pictures, so others can can get hungry!",
-      //     },
-      //   },
-      // }),
+      FormHelper.createFileInput({
+        formKey: "image",
+        label: "Upload an image for your meal",
+        props: {
+          fileType: "img/*",
+          multiple: false,
+        },
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide an image, so others can get hungry!",
+          },
+        },
+      }),
     ],
 
     FormHelper.createTextArea({
@@ -175,6 +150,10 @@ const CreateMeal = () => {
             value: true,
             message: "Please indicate from when your offer can be picked up.",
           },
+          min: {
+            value: new Date().toISOString().split(".")[0].slice(0, -3),
+            message: "The starting day cannot be in the past.",
+          },
         },
         props: {
           type: "datetime-local",
@@ -187,6 +166,10 @@ const CreateMeal = () => {
           required: {
             value: true,
             message: "Please indicate until when your offer can be picked up.",
+          },
+          min: {
+            value: new Date().toISOString().split(".")[0].slice(0, -3),
+            message: "The end date has to be later than the starting day.",
           },
         },
         props: {
@@ -218,31 +201,61 @@ const CreateMeal = () => {
     }),
   ];
 
-  const userId = getCookie("userId");
-  const token = getCookie("token");
+  const createOfferMutation = useMutation(
+    ({ mealOffer }: CreateMealOfferArgs) => createMealOffer({ mealOffer }),
+    {
+      onSuccess: (response) => {
+        successToast({ message: "Your meal offer has been created!" });
+        const mealId = response.data._id;
+        navigate("/");
+      },
+      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
+    }
+  );
 
-  const modalAllergensInfo = useModalInfo({ close: () => undefined });
   const handleSubmit = (data: IMealOfferForm) => {
-    if (userId && token) {
-      const { startDate, endDate, categories, allergens } = data;
-      const categoryValues: string[] = [];
-      categories.forEach((category) => categoryValues.push(category.value));
+    if (userId) {
+      const { categories, allergens } = data;
 
-      const allergenValues: string[] = [];
-      allergens.forEach((allergen) => allergenValues.push(allergen.value));
+      console.log(data);
+      console.log(new Date(data.startDate).toISOString());
 
-      const newOffer: Omit<
-        IMealOffer,
-        "_id" | "rating" | "transactionFee" | "reservations"
-      > = {
-        user: userId,
-        ...data,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        categories: categoryValues,
-        allergens: allergenValues,
-      };
-      createOfferMutation.mutate({ mealOffer: newOffer });
+      // const categoryValues: string[] = [];
+      // categories.forEach((category) => categoryValues.push(category.value));
+      //
+      //
+      // const allergenValues: string[] = [];
+      // allergens.forEach((allergen) => allergenValues.push(allergen.value));
+
+      // const newOffer: Omit<
+      //   IMealOffer,
+      //   "_id" | "rating" | "transactionFee" | "reservations"
+      // > = {
+      //   user: userId,
+      //   ...data,
+      //   startDate,
+      //   endDate,
+      //   categories: categoryValues,
+      //   allergens: allergenValues,
+      // };
+
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("image", data.image);
+      formData.append("endDate", new Date(data.endDate).toISOString());
+      formData.append("startDate", new Date(data.endDate).toISOString());
+      formData.append("price", data.price.toString());
+      formData.append("portions", data.portions.toString());
+      formData.append("allergensVderified", data.allergensVerified.toString());
+      categories.forEach((category, index) =>
+        formData.append(`categories[${index}]`, category.value)
+      );
+      allergens.forEach((allergen, index) =>
+        formData.append(`allergens[${index}]`, allergen.value)
+      );
+
+      // createOfferMutation.mutate({ mealOffer: newOffer });
     } else {
       dangerToast({ message: "User not authenticated!" });
       navigate("/login");

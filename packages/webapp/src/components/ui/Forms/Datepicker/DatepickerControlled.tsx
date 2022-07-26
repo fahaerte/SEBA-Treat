@@ -13,6 +13,8 @@ const DatepickerControlled = ({
   onChange = () => undefined,
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
+  min,
+  max,
   label,
   value,
   ...rest
@@ -33,6 +35,8 @@ const DatepickerControlled = ({
         readOnly={disabled}
         value={value}
         onChange={(event) => onChange(event)}
+        min={min}
+        max={max}
         {...rest}
       />
       <label htmlFor={inputId}>{label}</label>

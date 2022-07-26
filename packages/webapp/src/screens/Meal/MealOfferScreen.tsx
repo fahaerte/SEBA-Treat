@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "../../components";
+import {
+  Col,
+  Container,
+  Row,
+  TOptionValuePair,
+  Typography,
+} from "../../components";
 import { useQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
@@ -16,8 +22,12 @@ export const MealOfferScreen = () => {
     undefined
   );
   const [portions, setPortions] = useState<number | undefined>(undefined);
-  const [allergen, setAllergen] = useState<string | undefined>(undefined);
-  const [category, setCategory] = useState<string | undefined>(undefined);
+  const [allergen, setAllergen] = useState<TOptionValuePair[] | undefined>(
+    undefined
+  );
+  const [category, setCategory] = useState<TOptionValuePair[] | undefined>(
+    undefined
+  );
 
   const queryClient = useQueryClient();
 
@@ -61,7 +71,8 @@ export const MealOfferScreen = () => {
     setSortingRule(event.target.value);
   };
 
-  const handleChangedFilter = (event: any) => {
+  const handleChangedFilter = (event: any, element?: string) => {
+    console.log(event);
     switch (event.target.id) {
       case "max.-distance":
         setDistance(() =>
@@ -88,17 +99,6 @@ export const MealOfferScreen = () => {
             ? undefined
             : Number(event.target.value)
         );
-        break;
-      case "category":
-        setCategory(() =>
-          event.target.value === "None" ? undefined : event.target.value
-        );
-        break;
-      case "allergens":
-        setAllergen(() =>
-          event.target.value === "None" ? undefined : event.target.value
-        );
-        break;
     }
   };
 
@@ -127,6 +127,10 @@ export const MealOfferScreen = () => {
     <>
       <Container>
         <Row>
+          <Typography variant={"h1"} className={"fw-normal"}>
+            What do you want to eat today?
+          </Typography>
+
           <Col className={"col col-lg-2"}>
             <Row>
               <MealOfferFilterSideBar

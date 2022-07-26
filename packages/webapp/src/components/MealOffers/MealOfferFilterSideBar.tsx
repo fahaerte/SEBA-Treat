@@ -1,6 +1,16 @@
-import { Button, Col, Row, SelectControlled } from "../ui";
+import {
+  Button,
+  Col,
+  Row,
+  SelectControlled,
+  TagSelectControlled,
+  TOptionValuePair,
+} from "../ui";
 import React from "react";
-import { EMealAllergen, EMealCategory } from "@treat/lib-common";
+import {
+  createAllergensOptions,
+  createCategoriesOptions,
+} from "../../utils/createMealValueArrays";
 
 const MealOfferFilterSideBar = ({
   handleChangedFilter,
@@ -13,12 +23,12 @@ const MealOfferFilterSideBar = ({
   buttonAction,
 }: {
   handleChangedFilter: (event: any) => void;
-  distance: number | undefined;
-  maxPrice: number | undefined;
-  portions: number | undefined;
-  sellerRating: number | undefined;
-  category: string | undefined;
-  allergen: string | undefined;
+  distance?: number;
+  maxPrice?: number;
+  portions?: number;
+  sellerRating?: number;
+  category?: TOptionValuePair[];
+  allergen?: TOptionValuePair[];
   buttonAction: () => void;
 }) => {
   return (
@@ -82,90 +92,31 @@ const MealOfferFilterSideBar = ({
         </SelectControlled>
       </Row>
       <Row className={"m-2"}>
-        <SelectControlled
+        <TagSelectControlled
           label={"Category"}
-          value={category as string}
+          autocompleteOptions={[
+            { value: "None", label: "none" },
+            ...createCategoriesOptions(),
+          ]}
+          value={category || []}
           onChange={handleChangedFilter}
-        >
-          <option value={"None"}>None</option>
-          <option value={EMealCategory.VEGAN}>{EMealCategory.VEGAN}</option>
-          <option value={EMealCategory.VEGETARIAN}>
-            {EMealCategory.VEGETARIAN}
-          </option>
-          <option value={EMealCategory.RAW}>{EMealCategory.RAW}</option>
-          <option value={EMealCategory.ASIAN}>{EMealCategory.ASIAN}</option>
-          <option value={EMealCategory.BEEF}>{EMealCategory.BEEF}</option>
-          <option value={EMealCategory.BAKEDGOODS}>
-            {EMealCategory.BAKEDGOODS}
-          </option>
-          <option value={EMealCategory.CHINESE}>{EMealCategory.CHINESE}</option>
-          <option value={EMealCategory.DESSERT}>{EMealCategory.DESSERT}</option>
-          <option value={EMealCategory.GERMAN}>{EMealCategory.GERMAN}</option>
-          <option value={EMealCategory.HALAL}>{EMealCategory.HALAL}</option>
-          <option value={EMealCategory.ITALIAN}>{EMealCategory.ITALIAN}</option>
-          <option value={EMealCategory.KOREAN}>{EMealCategory.KOREAN}</option>
-          <option value={EMealCategory.SWEETS}>{EMealCategory.SWEETS}</option>
-          <option value={EMealCategory.PASTA}>{EMealCategory.PASTA}</option>
-          <option value={EMealCategory.PORK}>{EMealCategory.PORK}</option>
-          <option value={EMealCategory.SUSHI}>{EMealCategory.SUSHI}</option>
-        </SelectControlled>
+        />
       </Row>
       <Row className={"m-2"}>
-        <SelectControlled
+        <TagSelectControlled
+          autocompleteOptions={[
+            { value: "None", label: "none" },
+            ...createAllergensOptions(),
+          ]}
           label={"Allergens"}
-          value={allergen as string}
+          value={allergen || []}
           onChange={handleChangedFilter}
-        >
-          <option value={"None"}>None</option>
-          <option value={EMealAllergen.GLUTEN}>{EMealAllergen.GLUTEN}</option>
-          <option value={EMealAllergen.OAT}>{EMealAllergen.OAT}</option>
-          <option value={EMealAllergen.WHEAT}>{EMealAllergen.WHEAT}</option>
-          <option value={EMealAllergen.EGG}>{EMealAllergen.EGG}</option>
-          <option value={EMealAllergen.RYE}>{EMealAllergen.RYE}</option>
-          <option value={EMealAllergen.ALMONDS}>{EMealAllergen.ALMONDS}</option>
-          <option value={EMealAllergen.BARLEY}>{EMealAllergen.BARLEY}</option>
-          <option value={EMealAllergen.CASHEWS}>{EMealAllergen.CASHEWS}</option>
-          <option value={EMealAllergen.CELERY}>{EMealAllergen.CELERY}</option>
-          <option value={EMealAllergen.CEREAL}>{EMealAllergen.CEREAL}</option>
-          <option value={EMealAllergen.GARLIC}>{EMealAllergen.GARLIC}</option>
-          <option value={EMealAllergen.HAZELNUTS}>
-            {EMealAllergen.HAZELNUTS}
-          </option>
-          <option value={EMealAllergen.LACTOSE}>{EMealAllergen.LACTOSE}</option>
-          <option value={EMealAllergen.LUPIN}>{EMealAllergen.LUPIN}</option>
-          <option value={EMealAllergen.MACADEMIAS}>
-            {EMealAllergen.MACADEMIAS}
-          </option>
-          <option value={EMealAllergen.MILK}>{EMealAllergen.MILK}</option>
-          <option value={EMealAllergen.MOLLUSCS}>
-            {EMealAllergen.MOLLUSCS}
-          </option>
-          <option value={EMealAllergen.MUSTARD}>{EMealAllergen.MUSTARD}</option>
-          <option value={EMealAllergen.PEANUT}>{EMealAllergen.PEANUT}</option>
-          <option value={EMealAllergen.PECANS}>{EMealAllergen.PECANS}</option>
-          <option value={EMealAllergen.PISTACHIOS}>
-            {EMealAllergen.PISTACHIOS}
-          </option>
-          <option value={EMealAllergen.WALNUTS}>{EMealAllergen.WALNUTS}</option>
-          <option value={EMealAllergen.SESAME}>{EMealAllergen.SESAME}</option>
-          <option value={EMealAllergen.SHELLFISH}>
-            {EMealAllergen.SHELLFISH}
-          </option>
-          <option value={EMealAllergen.SHELLFRUITS}>
-            {EMealAllergen.SHELLFRUITS}
-          </option>
-          <option value={EMealAllergen.SOY}>{EMealAllergen.SOY}</option>
-          <option value={EMealAllergen.SPELT}>{EMealAllergen.SPELT}</option>
-          <option value={EMealAllergen.SULFITES}>
-            {EMealAllergen.SULFITES}
-          </option>
-          <option value={EMealAllergen.SULPHURS}>
-            {EMealAllergen.SULPHURS}
-          </option>
-        </SelectControlled>
+        />
       </Row>
       <Row className={"m-2"}>
-        <Button onClick={buttonAction}>Reset Filters</Button>
+        <Button onClick={buttonAction} color={"secondary"}>
+          Reset Filters
+        </Button>
       </Row>
     </Col>
   );

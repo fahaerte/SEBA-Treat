@@ -1,6 +1,7 @@
 import { baseApi, baseApiAuth } from "./baseApi";
 import { EMealReservationState, IMealOffer } from "@treat/lib-common";
 import { getCookie } from "../utils/auth/CookieProvider";
+import { TOptionValuePair } from "../components";
 
 export const getMealOffer = async (mealOfferId: string) => {
   const response = await baseApi().get(`/mealOffers/${mealOfferId}`);
@@ -18,13 +19,13 @@ export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
 };
 
 export const getMealOffersByParams = async (
-  distance: number,
-  portions?: number | undefined,
-  category?: string | undefined,
-  allergen?: string | undefined,
-  sellerRating?: number | undefined,
-  price?: number | undefined,
-  search?: string | undefined
+  distance?: number,
+  portions?: number,
+  category?: TOptionValuePair[],
+  allergen?: TOptionValuePair[],
+  sellerRating?: number,
+  price?: number,
+  search?: string
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
