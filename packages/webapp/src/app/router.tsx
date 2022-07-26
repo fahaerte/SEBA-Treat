@@ -176,7 +176,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealoffers",
+      path: "mealOffers",
       element: (
         <AppLayout>
           <RequireAddressRoute>
@@ -186,7 +186,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealoffers/:mealOfferId",
+      path: "mealOffers/:mealOfferId",
       element: (
         <AppLayout>
           <RequireAddressRoute>
@@ -196,7 +196,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealoffers/:mealOfferId/edit",
+      path: "mealOffers/:mealOfferId/edit",
       element: (
         <AppLayout>
           <RequireAuthRoute>

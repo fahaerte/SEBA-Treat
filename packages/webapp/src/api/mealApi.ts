@@ -29,15 +29,22 @@ export const requestMealOffer = async ({
   return await baseApiAuth().post(`/mealOffers/${mealOfferId}/reservations`);
 };
 
-export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
+// export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
+//   return await baseApiAuth().post("/mealOffers", mealOffer);
+// };
+
+export const createMealOffer = async (mealOffer: FormData) => {
   return await baseApiAuth().post("/mealOffers", mealOffer);
 };
 
 export const updateMealOffer = async (
   mealOfferId: string,
-  { mealOffer }: CreateMealOfferArgs
+  updatedMealOffer: FormData
 ) => {
-  return await baseApiAuth().patch(`/mealOffers/${mealOfferId}`, mealOffer);
+  return await baseApiAuth().put(
+    `/mealOffers/${mealOfferId}`,
+    updatedMealOffer
+  );
 };
 
 export const getMealOffersByParams = async (

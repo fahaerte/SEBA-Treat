@@ -76,6 +76,21 @@ const CreateMeal = () => {
           },
         },
       }),
+      FormHelper.createFileInput({
+        formKey: "image",
+        label: "Upload an image for your meal",
+        props: {
+          fileType: "img/*",
+          multiple: false,
+        },
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide an image, so others can get hungry!",
+          },
+        },
+      }),
+
       // FormHelper.createFileInput({
       //   formKey: "profile-pictures",
       //   label: "Upload profile-pictures for your meal",

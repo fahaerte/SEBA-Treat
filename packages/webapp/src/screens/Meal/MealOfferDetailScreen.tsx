@@ -78,7 +78,9 @@ export const MealOfferDetailScreen = () => {
 
   function handleEditClick() {
     if (userId && userId === mealOffer.user._id) {
-      console.log("Edit click");
+      navigate(`/mealOffers/${mealOfferId}/edit`, {
+        state: { from: location },
+      });
     } else {
       dangerToast({
         message: "You can only edit your own meals.",

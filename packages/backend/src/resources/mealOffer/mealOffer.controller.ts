@@ -36,6 +36,14 @@ class MealOfferController implements Controller {
       validationMiddleware(validate.updateMealOfferBody, ValidatePart.BODY),
       this.update
     );
+    this.router.patch(
+      `${this.path}/:mealOfferId`,
+      authenticatedMiddleware,
+      mealOfferFileUpload.single("image"),
+      validationMiddleware(validate.updateMealOfferParams, ValidatePart.PARAMS),
+      validationMiddleware(validate.updateMealOfferBody, ValidatePart.BODY),
+      this.update
+    );
     this.router.get(
       `${this.path}/previews`,
       validationMiddleware(
