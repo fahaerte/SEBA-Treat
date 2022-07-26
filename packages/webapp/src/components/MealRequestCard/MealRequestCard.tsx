@@ -2,7 +2,6 @@ import React from "react";
 // import { ICard } from "../ui/Card/ICard";
 // import { SCMealRequestCard } from "./styles";
 import { Button, Card, CardBody, Col, Icon, Row, Typography } from "../";
-import { getCookie } from "../../utils/auth/CookieProvider";
 
 // TODO: replace inline styles with component styles
 

@@ -88,6 +88,7 @@ export const MealOfferScreen = () => {
     sellerRating,
     portions,
     queryClient,
+    fetchNextPage,
   ]);
 
   const handleSearch = (event: any) => {
