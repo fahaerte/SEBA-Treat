@@ -19,7 +19,32 @@ const createBody = Joi.object<Partial<IMealOffer>>({
   ),
   startDate: Joi.date().iso().required().min(Date.now()),
   endDate: Joi.date().iso().required().greater(Joi.ref("startDate")),
-  portions: Joi.number().min(0).required(),
+  portions: Joi.number().min(1).required(),
+  pickUpDetails: Joi.string().allow(""),
+  price: Joi.number().required(),
+  allergensVerified: Joi.boolean().required(),
+});
+
+const updateMealOfferParams = Joi.object({
+  mealOfferId: Joi.string()
+    .regex(/^[a-f\d]{24}$/i)
+    .required(),
+});
+
+const updateMealOfferBody = Joi.object<Partial<IMealOffer>>({
+  title: Joi.string().required(),
+  description: Joi.string().required(),
+  image: Joi.string(),
+  categories: Joi.array()
+    .required()
+    .min(1)
+    .items(Joi.string().valid(...Object.values(EMealCategory))),
+  allergens: Joi.array().items(
+    Joi.string().valid(...Object.values(EMealAllergen))
+  ),
+  startDate: Joi.date().iso().required().min(Date.now()),
+  endDate: Joi.date().iso().required().greater(Joi.ref("startDate")),
+  portions: Joi.number().min(1).required(),
   pickUpDetails: Joi.string().allow(""),
   price: Joi.number().required(),
   allergensVerified: Joi.boolean().required(),
@@ -41,6 +66,10 @@ const getMealOfferParams = Joi.object({
   mealOfferId: Joi.string().regex(/^[a-f\d]{24}$/i),
 });
 
+const getMealOfferQuery = Joi.object({
+  compareAddress: Joi.string().min(1),
+});
+
 const getMealOfferBody = Joi.object({
   compareAddress: Joi.string().min(1),
 });
@@ -56,6 +85,9 @@ const getMealOfferPreviewsQuery = Joi.object({
   search: Joi.string().min(1),
   distance: Joi.number().min(1).required(),
   address: Joi.string().min(1).required(),
+  page: Joi.number().min(1).required(),
+  pageLimit: Joi.number().min(1).required(),
+  sortingRule: Joi.string(),
 });
 
 const createMealOfferReservationParams = Joi.object({
@@ -64,9 +96,12 @@ const createMealOfferReservationParams = Joi.object({
 
 export default {
   createBody,
+  updateMealOfferBody,
+  updateMealOfferParams,
   updateReservationStateBody,
   getMealOfferPreviewsQuery,
   getMealOfferParams,
+  getMealOfferQuery,
   getMealOfferBody,
   updateReservationStateParams,
   createMealOfferReservationParams,

@@ -1,10 +1,26 @@
 import { baseApi, baseApiAuth } from "./baseApi";
-import { EMealReservationState, IMealOffer } from "@treat/lib-common";
+import {
+  EMealReservationState,
+  ESortingRules,
+  IMealOffer,
+} from "@treat/lib-common";
 import { getCookie } from "../utils/auth/CookieProvider";
 import { TOptionValuePair } from "../components";
 
-export const getMealOffer = async (mealOfferId: string) => {
-  const response = await baseApi().get(`/mealOffers/${mealOfferId}`);
+export const getMealOffer = async (
+  mealOfferId: string,
+  compareAddress?: string
+) => {
+  let response;
+  if (compareAddress) {
+    response = await baseApi().get(`/mealOffers/${mealOfferId}`, {
+      params: {
+        compareAddress: compareAddress,
+      },
+    });
+  } else {
+    response = await baseApi().get(`/mealOffers/${mealOfferId}`);
+  }
   return response.data.data;
 };
 
@@ -18,17 +34,29 @@ export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
   return await baseApiAuth().post("/mealOffers", mealOffer);
 };
 
+export const updateMealOffer = async (
+  mealOfferId: string,
+  { mealOffer }: CreateMealOfferArgs
+) => {
+  return await baseApiAuth().patch(`/mealOffers/${mealOfferId}`, mealOffer);
+};
+
 export const getMealOffersByParams = async (
-  distance?: number,
+  page: number,
+  pageLimit: number,
+  distance: number,
   portions?: number,
   category?: TOptionValuePair[],
   allergen?: TOptionValuePair[],
   sellerRating?: number,
   price?: number,
-  search?: string
+  search?: string,
+  sortingRule?: ESortingRules | undefined
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
     params: {
+      page: page,
+      pageLimit: pageLimit,
       address: getCookie("address"),
       portions: portions,
       category: category,
@@ -36,8 +64,16 @@ export const getMealOffersByParams = async (
       price: price,
       search: search,
       distance: distance,
+      sortingRule: sortingRule?.valueOf(),
     },
   });
+  return response.data;
+};
+
+export const alreadyReserved = async (mealOfferId: string) => {
+  const response = await baseApiAuth().get(
+    `/mealOffers/${mealOfferId}/reservations`
+  );
   return response.data;
 };
 

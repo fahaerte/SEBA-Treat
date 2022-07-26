@@ -4,19 +4,19 @@ import { ConfigServiceAbstract } from "@treat/lib-common";
 export const configValues = {
   BASE_URL: Joi.string(),
   API_URL: Joi.string(),
-  STRIPE_API_PUBLIC_KEY: Joi.string(),
-  BEARER: Joi.string(),
   PROFILE_PICTURES_URL: Joi.string(),
+  MEAL_IMAGES_URL: Joi.string(),
+  STRIPE_API_PUBLIC_KEY: Joi.string(),
 };
 
 export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
   constructor() {
     super(configValues, undefined, {
-      BASE_URL: process.env.BASE_URL,
       API_URL: process.env.API_URL,
-      STRIPE_API_PUBLIC_KEY: process.env.STRIPE_API_PUBLIC_KEY,
-      BEARER: process.env.BEARER,
+      BASE_URL: process.env.BASE_URL,
+      MEAL_IMAGES_URL: process.env.MEAL_IMAGES_URL,
       PROFILE_PICTURES_URL: process.env.PROFILE_PICTURES_URL,
+      STRIPE_API_PUBLIC_KEY: process.env.STRIPE_API_PUBLIC_KEY,
     });
   }
 }

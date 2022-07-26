@@ -14,9 +14,15 @@ const MealDetails = ({
   endDate: Date;
 }) => {
   const startDateAsString = new Date(startDate).toLocaleDateString();
-  const startTimeAsString = new Date(startDate).toLocaleTimeString();
+  const startTimeAsString = new Date(startDate).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   const endDateAsString = new Date(endDate).toLocaleDateString();
-  const endTimeAsString = new Date(endDate).toLocaleTimeString();
+  const endTimeAsString = new Date(endDate).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <SCMealDetails>
@@ -27,7 +33,7 @@ const MealDetails = ({
           display={"inline"}
         >
           <Icon type={"geo-alt"} size={"lg"} />
-          {distance} Dreihunderttausend Kilometer
+          {distance} km
         </Typography>
         <Typography
           className={"fw-normal mb-3"}

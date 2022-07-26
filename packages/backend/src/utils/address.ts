@@ -3,16 +3,16 @@ import { IAddress } from "@treat/lib-common/lib/interfaces/IAddress";
 import HttpException from "./exceptions/http.exception";
 import Logger, { ILogMessage } from "./logger";
 
-export const getDistanceBetweenAddressesInKm = async (
-  address1: string,
-  address2: string
-): Promise<number> => {
+export const getDistancesBetweenAddressesInKm = async (
+  originAddress: string,
+  destinations: string[]
+): Promise<number[]> => {
   const client = new Client({});
   const { GOOGLE_MAPS_API_KEY } = process.env;
   const response = await client.distancematrix({
     params: {
-      origins: [address1] as LatLngString[],
-      destinations: [address2] as LatLngString[],
+      origins: [originAddress] as LatLngString[],
+      destinations: destinations,
       key: GOOGLE_MAPS_API_KEY as string,
     },
   });
@@ -24,9 +24,19 @@ export const getDistanceBetweenAddressesInKm = async (
     } as ILogMessage);
     throw new HttpException(500, "Couldn't calculate the distance!");
   }
-  return Math.ceil(
-    Number(response.data.rows[0].elements[0].distance.value) / 1000
+  return Array.from(response.data.rows[0].elements, (element) =>
+    Math.ceil(element.distance.value / 1000)
   );
+};
+
+export const getDistanceBetweenAddressesInKm = async (
+  address1: string,
+  address2: string
+): Promise<number> => {
+  const distances = await getDistancesBetweenAddressesInKm(address1, [
+    address2,
+  ]);
+  return distances[0];
 };
 
 export const getUserAddressString = (address: IAddress): string => {

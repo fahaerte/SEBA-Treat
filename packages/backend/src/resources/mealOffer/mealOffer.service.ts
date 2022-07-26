@@ -10,10 +10,11 @@ import InvalidMealReservationStateException from "../../utils/exceptions/invalid
 import InvalidMealReservationException from "../../utils/exceptions/invalidMealReservation.exception";
 import MealReservationNotFoundException from "../../utils/exceptions/mealReservationNotFound.exception";
 import { MealReservationDocument } from "../mealReservation/mealReservation.interface";
-import { EMealReservationState } from "@treat/lib-common";
+import { EMealReservationState, ESortingRules } from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import {
   getDistanceBetweenAddressesInKm,
+  getDistancesBetweenAddressesInKm,
   getUserAddressString,
 } from "../../utils/address";
 import Logger, { ILogMessage } from "../../utils/logger";
@@ -21,6 +22,9 @@ import UserDocument from "../user/user.interface";
 import { TRANSACTION_FEE } from "@treat/lib-common/lib/constants";
 import { ObjectId } from "mongoose";
 import { MealTransactionDocument } from "../mealTransaction/mealTransaction.interface";
+import HttpException from "../../utils/exceptions/http.exception";
+import InvalidMealOfferUpdateException from "../../utils/exceptions/invalidMealOfferUpdate.exception";
+import { deleteImage } from "../../utils/imageUpload";
 
 @Service()
 class MealOfferService {
@@ -56,6 +60,68 @@ class MealOfferService {
     }
   }
 
+  public async update(
+    mealOfferId: string,
+    updatedMealOffer: MealOfferDocument,
+    user: UserDocument
+  ): Promise<void | MealOfferDocument | Error> {
+    const mealOffer = (await this.mealOffer.findById(
+      mealOfferId
+    )) as MealOfferDocument;
+    if (!mealOffer) {
+      return await this.create(updatedMealOffer, user);
+    }
+    if (!user._id.equals(mealOffer.user)) {
+      Logger.error({
+        functionName: "update",
+        message: "Could not update mealOffer",
+        details: `User ${user._id} is not owner of mealOffer ${mealOfferId}`,
+      } as ILogMessage);
+      throw new HttpException(403, "A user can only change own mealOffers");
+    }
+    if (mealOffer.reservations.length) {
+      Logger.error({
+        functionName: "update",
+        message: "Could not update mealOffer",
+        details: `MealOffer ${mealOfferId} has already reservations.`,
+      });
+      throw new InvalidMealOfferUpdateException(
+        "MealOffer already has reservations and can not be updated"
+      );
+    }
+    if (updatedMealOffer.image && mealOffer.image != updatedMealOffer.image) {
+      deleteImage("meal-images", mealOffer.image);
+      mealOffer.image = updatedMealOffer.image;
+    }
+    mealOffer.title = updatedMealOffer.title;
+    mealOffer.pickUpDetails = updatedMealOffer.pickUpDetails;
+    mealOffer.categories = updatedMealOffer.categories;
+    mealOffer.allergens = updatedMealOffer.allergens;
+    mealOffer.startDate = updatedMealOffer.startDate;
+    mealOffer.endDate = updatedMealOffer.endDate;
+    mealOffer.portions = updatedMealOffer.portions;
+    mealOffer.price = updatedMealOffer.price;
+    mealOffer.allergensVerified = updatedMealOffer.allergensVerified;
+    mealOffer.transactionFee = Math.round(
+      TRANSACTION_FEE * updatedMealOffer.price
+    );
+    try {
+      await mealOffer.save();
+      Logger.info({
+        functionName: "update",
+        message: "Updated mealOffer",
+        details: `Updated mealOffer ${mealOfferId}`,
+      } as ILogMessage);
+    } catch (error: any) {
+      Logger.error({
+        functionName: "update",
+        message: "Could not save mealOffer",
+        details: error.message,
+      } as ILogMessage);
+      throw new Error("Could not update mealOffer");
+    }
+  }
+
   public async addDistanceToMealOffer(
     mealOffer: MealOfferDocumentWithUser,
     compareAddress: string
@@ -86,14 +152,15 @@ class MealOfferService {
       } as ILogMessage);
       throw new MealOfferNotFoundException(mealOfferId);
     }
-    if (compareAddress)
+    if (compareAddress) {
       return await this.addDistanceToMealOffer(mealOfferDoc, compareAddress);
+    }
     return mealOfferDoc;
   }
 
   public async getMealOfferPreviews(
     mealOfferQuery: MealOfferQuery
-  ): Promise<MealOfferDocumentWithUser[]> {
+  ): Promise<MealOfferPreviewReturnObject> {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
       mealOfferQuery
     );
@@ -106,7 +173,43 @@ class MealOfferService {
       preview.user.address = undefined;
       preview.rating = undefined;
     });
-    return filteredPreviews;
+    filteredPreviews.sort((meal1, meal2) =>
+      this.getSortingRule(meal1, meal2, mealOfferQuery.sortingRule)
+    );
+
+    const filteredPreviewsSliced = filteredPreviews.slice(
+      (mealOfferQuery.page - 1) * mealOfferQuery.pageLimit,
+      mealOfferQuery.page * mealOfferQuery.pageLimit
+    );
+
+    return {
+      total_count: filteredPreviews.length,
+      data: filteredPreviewsSliced,
+    };
+  }
+
+  private getSortingRule(
+    meal1: MealOfferDocumentWithUser,
+    meal2: MealOfferDocumentWithUser,
+    sortingRule: string | undefined
+  ) {
+    switch (sortingRule) {
+      case ESortingRules.RATING_DESC.valueOf():
+        return (
+          (meal2.user.meanRating ? meal2.user.meanRating : 0) -
+          (meal1.user.meanRating ? meal1.user.meanRating : 0)
+        );
+      case ESortingRules.PRICE_ASC.valueOf():
+        return (
+          (meal1.price ? meal1.price : 1000) -
+          (meal2.price ? meal2.price : 1000)
+        );
+      default:
+        return (
+          (meal1.distance ? meal1.distance : 100) -
+          (meal2.distance ? meal2.distance : 100)
+        );
+    }
   }
 
   private async filterMealOfferPreviewsForDistance(
@@ -114,20 +217,20 @@ class MealOfferService {
     compareAddress: string,
     compareDistance: number
   ): Promise<MealOfferDocumentWithUser[]> {
-    const filteredMealOffers = [];
-    for (const mealOfferPreview of mealOfferPreviews) {
-      const addressString = getUserAddressString(
-        mealOfferPreview.user.address!
-      );
-      const distance = await getDistanceBetweenAddressesInKm(
-        addressString,
-        compareAddress
-      );
-      if (distance <= compareDistance) {
-        mealOfferPreview.distance = distance;
-        filteredMealOffers.push(mealOfferPreview);
+    const filteredMealOffers = [] as MealOfferDocumentWithUser[];
+    const addresses = Array.from(mealOfferPreviews, (preview) =>
+      getUserAddressString(preview.user.address!)
+    );
+    const distances = await getDistancesBetweenAddressesInKm(
+      compareAddress,
+      addresses
+    );
+    mealOfferPreviews.forEach((preview, index) => {
+      if (distances[index] <= compareDistance) {
+        preview.distance = distances[index];
+        filteredMealOffers.push(preview);
       }
-    }
+    });
     return filteredMealOffers;
   }
 
@@ -135,6 +238,23 @@ class MealOfferService {
     user: UserDocument
   ): Promise<MealOfferDocument[] | Error> {
     return await this.mealOffer.findSentMealOfferRequests(user._id as string);
+  }
+
+  public async alreadyReserved(
+    mealOfferId: string,
+    user: UserDocument
+  ): Promise<boolean | Error> {
+    const mealOfferDoc = (await this.getMealOffer(
+      mealOfferId,
+      user
+    )) as MealOfferDocumentWithUser;
+    let alreadyReserved = false;
+    mealOfferDoc.reservations.forEach((reservation) => {
+      if (user._id.equals(reservation.buyer)) {
+        alreadyReserved = true;
+      }
+    });
+    return alreadyReserved;
   }
 
   public async getReceivedMealOfferRequests(
@@ -443,6 +563,11 @@ class MealOfferService {
   public async getMealOffers(user: UserDocument): Promise<MealOfferDocument[]> {
     return await this.mealOffer.find({ user: user._id }).exec();
   }
+}
+
+interface MealOfferPreviewReturnObject {
+  total_count: number;
+  data: MealOfferDocumentWithUser[];
 }
 
 export default MealOfferService;

@@ -1,5 +1,6 @@
 import { Col, InputControlled, Row, SelectControlled } from "../ui";
 import React from "react";
+import { ESortingRules } from "@treat/lib-common/lib/enums/ESortingRules";
 
 const MealOfferFilterTop = ({
   handleSearch,
@@ -10,7 +11,7 @@ const MealOfferFilterTop = ({
   handleSearch: (event: any) => void;
   handleSort: (event: any) => void;
   currentSearchString: string | undefined;
-  currentSortingRule: string;
+  currentSortingRule: ESortingRules;
 }) => {
   return (
     <Row className={"m-2"}>
@@ -27,9 +28,15 @@ const MealOfferFilterTop = ({
           value={currentSortingRule}
           onChange={handleSort}
         >
-          <option value={"priceAsc"}>Price ascending</option>
-          <option value={"distanceAsc"}>Distance ascending</option>
-          <option value={"ratingDesc"}>Rating descending</option>
+          <option value={ESortingRules.PRICE_ASC}>
+            {ESortingRules.PRICE_ASC.valueOf()}
+          </option>
+          <option value={ESortingRules.DIST_ASC}>
+            {ESortingRules.DIST_ASC.valueOf()}
+          </option>
+          <option value={ESortingRules.RATING_DESC}>
+            {ESortingRules.RATING_DESC.valueOf()}
+          </option>
         </SelectControlled>
       </Col>
     </Row>

@@ -28,6 +28,14 @@ class MealOfferController implements Controller {
       validationMiddleware(validate.createBody),
       this.create
     );
+    this.router.put(
+      `${this.path}/:mealOfferId`,
+      authenticatedMiddleware,
+      mealOfferFileUpload.single("image"),
+      validationMiddleware(validate.updateMealOfferParams, ValidatePart.PARAMS),
+      validationMiddleware(validate.updateMealOfferBody, ValidatePart.BODY),
+      this.update
+    );
     this.router.get(
       `${this.path}/previews`,
       validationMiddleware(
@@ -44,7 +52,7 @@ class MealOfferController implements Controller {
     this.router.get(
       `${this.path}/:mealOfferId`,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
-      validationMiddleware(validate.getMealOfferBody, ValidatePart.BODY),
+      validationMiddleware(validate.getMealOfferQuery, ValidatePart.QUERY),
       this.getMealOffer
     );
     this.router.get(
@@ -66,6 +74,12 @@ class MealOfferController implements Controller {
         ValidatePart.PARAMS
       ),
       this.updateMealOfferReservation
+    );
+    this.router.get(
+      `${this.path}/:mealOfferId/reservations`,
+      authenticatedMiddleware,
+      validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
+      this.alreadyReserved
     );
     this.router.post(
       `${this.path}/:mealOfferId/reservations`,
@@ -89,12 +103,33 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const mealOfferRequest = req.body as MealOfferDocument;
+      const mealOffer = req.body as MealOfferDocument;
       const newMealOffer = await this.mealOfferService.create(
-        mealOfferRequest,
+        mealOffer,
         req.user
       );
       res.status(201).send({ data: newMealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private update = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const mealOfferId = req.params.mealOfferId;
+      const mealOffer = req.body as MealOfferDocument;
+      const user = req.user;
+      const updatedMealOffer = await this.mealOfferService.update(
+        mealOfferId,
+        mealOffer,
+        user
+      );
+      if (updatedMealOffer) res.status(201).send({ data: updatedMealOffer });
+      res.sendStatus(204);
     } catch (error: any) {
       next(error);
     }
@@ -123,10 +158,14 @@ class MealOfferController implements Controller {
           : undefined,
         price: req.query.price ? Number(req.query.price) : undefined,
         search: req.query.search as string,
+        page: Number(req.query.page),
+        pageLimit: Number(req.query.pageLimit),
+        sortingRule: req.query.sortingRule ? req.query.sortingRule : undefined,
       } as MealOfferQuery;
-      const mealOfferPreviews =
-        await this.mealOfferService.getMealOfferPreviews(mealOfferQuery);
-      res.status(200).send({ data: mealOfferPreviews });
+      const data = await this.mealOfferService.getMealOfferPreviews(
+        mealOfferQuery
+      );
+      res.status(200).send(data);
     } catch (error: any) {
       next(error);
     }
@@ -152,13 +191,28 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
-      const { compareAddress } = req.body;
       const mealOffer = await this.mealOfferService.getMealOffer(
         req.params.mealOfferId,
         req.user,
-        compareAddress as string
+        req.query.compareAddress as string
       );
       res.status(200).send({ data: mealOffer });
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  private alreadyReserved = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      const alreadyReserved = await this.mealOfferService.alreadyReserved(
+        req.params.mealOfferId,
+        req.user
+      );
+      res.status(200).send(alreadyReserved);
     } catch (error: any) {
       next(error);
     }
