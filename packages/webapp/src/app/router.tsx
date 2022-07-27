@@ -20,6 +20,9 @@ import { ProfileScreen } from "../screens/Account/ProfileScreen";
 import { ProfileOverview } from "../components/Profile/ProfileOverview";
 import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
 import { ProfileUpdateScreen } from "../screens/Account/ProfileUpdateScreen";
+import { LandingPageTabBar } from "../components/AddressInput/LandingPageTabBar";
+import { BuyMealTab } from "../components/AddressInput/BuyMealTab";
+import { OfferMealTab } from "../components/AddressInput/OfferMealTab";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -61,9 +64,33 @@ export const AppRouter = () => {
 
   const addressRoute = {
     path: "address",
-    element: <AddressInputScreen />,
+    children: [
+      {
+        path: "",
+        element: <Navigate to={"./buymeal"} replace={true} />,
+      },
+      {
+        path: "buymeal",
+        element: (
+          <AddressInputScreen>
+            <LandingPageTabBar>
+              <BuyMealTab />
+            </LandingPageTabBar>
+          </AddressInputScreen>
+        ),
+      },
+      {
+        path: "offermeal",
+        element: (
+          <AddressInputScreen>
+            <LandingPageTabBar>
+              <OfferMealTab />
+            </LandingPageTabBar>
+          </AddressInputScreen>
+        ),
+      },
+    ],
   };
-
   const profileRoutes = {
     path: "account",
     element: (
