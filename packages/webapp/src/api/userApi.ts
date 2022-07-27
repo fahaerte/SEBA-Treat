@@ -1,4 +1,4 @@
-import { baseApiAuth, baseImageApi } from "./baseApi";
+import { baseApiAuth } from "./baseApi";
 import { getCookie } from "../utils/auth/CookieProvider";
 import { IUser } from "@treat/lib-common";
 
@@ -11,13 +11,6 @@ export const getUser = async () => {
 export const getTransactions = async () => {
   const response = await baseApiAuth().get(`/mealTransactions`);
   return response.data;
-};
-
-export const getProfilePictureURL = async (userId?: string) => {
-  let path = "users/profile-picture";
-  if (userId) path += `/${userId}`;
-  const response = await baseImageApi().get(path, { responseType: "blob" });
-  return URL.createObjectURL(response.data);
 };
 
 export const updateUser = async (user: Partial<IUser>) => {

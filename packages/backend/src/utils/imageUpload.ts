@@ -26,26 +26,6 @@ const imageUploadFilter = (
   }
 };
 
-const profileFileStorage = multer.diskStorage({
-  destination: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: DestinationCallback
-  ): void => {
-    const pathName = checkPublicFolder("profile-pictures");
-    cb(null, pathName);
-  },
-  filename: (
-    req: Request,
-    file: Express.Multer.File,
-    cb: FileNameCallback
-  ): void => {
-    const fileName = saveFile("profile-pictures", file);
-    req.body.profilePicture = fileName;
-    cb(null, fileName);
-  },
-});
-
 const mealOfferStorage = multer.diskStorage({
   destination: (
     req: Request,
@@ -105,4 +85,4 @@ const deleteImage = (dirName: string, fileName: string): void => {
   }
 };
 
-export { imageUploadFilter, profileFileStorage, mealOfferStorage, deleteImage };
+export { imageUploadFilter, mealOfferStorage, deleteImage };

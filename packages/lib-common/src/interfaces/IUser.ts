@@ -8,7 +8,6 @@ export interface IUser {
   firstName: string;
   lastName: string;
   birthdate: Date;
-  profilePicture: string;
   address: IAddress;
   virtualAccount: IVirtualAccount;
   stripeCustomerId?: string;
