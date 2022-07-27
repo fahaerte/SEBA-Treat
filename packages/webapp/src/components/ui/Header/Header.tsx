@@ -1,7 +1,7 @@
 import { Col, Row } from "../Grid";
 import { Button, Icon, Link, Typography } from "../index";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getUser } from "../../../api/userApi";
 import { SCCustomForm, SCHeader } from "./styles";
 import Logo from "../../../assets/img/logo.png";
@@ -27,9 +27,12 @@ export const Header = () => {
   const address = getCookie("address");
   const userId = getCookie("userId");
 
+  const queryClient = useQueryClient();
+
   const handleAddress = (data: IStringObject) => {
     setCookie("address", data.returnedString);
     setOnAddressEdit(false);
+    queryClient.fetchQuery("getOffers");
   };
 
   useQuery(["getUser", userId], () => getUser(), {
