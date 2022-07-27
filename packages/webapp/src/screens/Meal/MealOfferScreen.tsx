@@ -25,12 +25,8 @@ export const MealOfferScreen = () => {
     undefined
   );
   const [portions, setPortions] = useState<number | undefined>(undefined);
-  const [allergen, setAllergen] = useState<TOptionValuePair[] | undefined>(
-    undefined
-  );
-  const [category, setCategory] = useState<TOptionValuePair[] | undefined>(
-    undefined
-  );
+  const [allergen, setAllergen] = useState<string | undefined>(undefined);
+  const [category, setCategory] = useState<string | undefined>(undefined);
 
   const queryClient = useQueryClient();
 
@@ -104,7 +100,6 @@ export const MealOfferScreen = () => {
   };
 
   const handleChangedFilter = (event: any) => {
-    console.log(event);
     switch (event.target.id) {
       case "max.-distance":
         setDistance(() =>
@@ -131,6 +126,17 @@ export const MealOfferScreen = () => {
             ? undefined
             : Number(event.target.value)
         );
+        break;
+      case "category":
+        setCategory(() =>
+          event.target.value === "None" ? undefined : event.target.value
+        );
+        break;
+      case "allergens":
+        setAllergen(() =>
+          event.target.value === "None" ? undefined : event.target.value
+        );
+        break;
     }
   };
 

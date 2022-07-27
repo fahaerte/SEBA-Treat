@@ -164,13 +164,12 @@ class MealOfferService {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
       mealOfferQuery
     );
-    console.log(mealOfferPreviews);
+    console.log(mealOfferPreviews[0]);
     const filteredPreviews = await this.filterMealOfferPreviewsForDistance(
       mealOfferPreviews,
       mealOfferQuery.address,
       mealOfferQuery.distance
     );
-    console.log(filteredPreviews);
     filteredPreviews.forEach((preview) => {
       preview.user.address = undefined;
       preview.rating = undefined;
@@ -184,7 +183,6 @@ class MealOfferService {
       mealOfferQuery.page * mealOfferQuery.pageLimit
     );
 
-    console.log(filteredPreviewsSliced);
     return {
       total_count: filteredPreviews.length,
       data: filteredPreviewsSliced,
@@ -224,16 +222,19 @@ class MealOfferService {
     const addresses = Array.from(mealOfferPreviews, (preview) =>
       getUserAddressString(preview.user.address!)
     );
+
     const distances = await getDistancesBetweenAddressesInKm(
       compareAddress,
       addresses
     );
+    // TODO: IMMER NUR MAX 25 DISTANCES
     mealOfferPreviews.forEach((preview, index) => {
       if (distances[index] <= compareDistance) {
         preview.distance = distances[index];
         filteredMealOffers.push(preview);
       }
     });
+
     return filteredMealOffers;
   }
 

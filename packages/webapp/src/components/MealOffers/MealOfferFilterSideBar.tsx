@@ -1,11 +1,4 @@
-import {
-  Button,
-  Col,
-  Row,
-  SelectControlled,
-  TagSelectControlled,
-  TOptionValuePair,
-} from "../ui";
+import { Button, Col, Row, SelectControlled, TagSelectControlled } from "../ui";
 import React from "react";
 import {
   createAllergensOptions,
@@ -27,8 +20,8 @@ const MealOfferFilterSideBar = ({
   maxPrice?: number;
   portions?: number;
   sellerRating?: number;
-  category?: TOptionValuePair[];
-  allergen?: TOptionValuePair[];
+  category?: string;
+  allergen?: string;
   buttonAction: () => void;
 }) => {
   return (
@@ -92,26 +85,36 @@ const MealOfferFilterSideBar = ({
         </SelectControlled>
       </Row>
       <Row className={"m-2"}>
-        <TagSelectControlled
+        <SelectControlled
+          value={category as string}
           label={"Category"}
-          autocompleteOptions={[
-            { value: "None", label: "none" },
-            ...createCategoriesOptions(),
-          ]}
-          value={category || []}
           onChange={handleChangedFilter}
-        />
+        >
+          <option value={"None"}>None</option>
+          <>
+            {createCategoriesOptions().map((category) => (
+              <option value={category.value} key={category.label}>
+                {category.label}
+              </option>
+            ))}
+          </>
+        </SelectControlled>
       </Row>
       <Row className={"m-2"}>
-        <TagSelectControlled
-          autocompleteOptions={[
-            { value: "None", label: "none" },
-            ...createAllergensOptions(),
-          ]}
+        <SelectControlled
+          value={allergen as string}
           label={"Allergens"}
-          value={allergen || []}
           onChange={handleChangedFilter}
-        />
+        >
+          <option value={"None"}>None</option>
+          <>
+            {createAllergensOptions().map((allergen) => (
+              <option value={allergen.value} key={allergen.label}>
+                {allergen.label}
+              </option>
+            ))}
+          </>
+        </SelectControlled>
       </Row>
       <Row className={"m-2"}>
         <Button onClick={buttonAction} color={"secondary"}>
