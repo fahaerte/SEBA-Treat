@@ -12,7 +12,6 @@ import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import { useTheme } from "styled-components";
 
 const TagSelectControlled = ({
-  wrapperClasses = "",
   className = "",
   color = "primary",
   disabled = false,
@@ -27,9 +26,7 @@ const TagSelectControlled = ({
   const theme = useTheme();
 
   return (
-    <SCFloatingForm
-      className={`form-floating multi-select-wrapper ${wrapperClasses}`}
-    >
+    <SCFloatingForm className={`form-floating multi-select-wrapper`}>
       <TagSelect<TOptionValuePair, true>
         id={getEncodedString(label)}
         isMulti

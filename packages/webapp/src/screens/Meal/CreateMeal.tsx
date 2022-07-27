@@ -250,7 +250,7 @@ const CreateMeal = () => {
   return (
     <>
       <PageHeading className={"mb-4"}>
-        Having Leftovers? Create an <u>Offer!</u>
+        Having leftovers? Create an <u>offer!</u>
       </PageHeading>
       <Typography>
         Did you know, that approximately <u>12 million tons of food</u> is

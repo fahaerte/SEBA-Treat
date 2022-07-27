@@ -163,7 +163,7 @@ export const ProfileUpdate = () => {
           submitButton={{
             children: (
               <>
-                <Icon type={"save"} /> Update Information
+                <Icon type={"arrow-clockwise"} /> Update Information
               </>
             ),
           }}

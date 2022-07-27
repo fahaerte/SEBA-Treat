@@ -1,9 +1,4 @@
 import { IAddress } from "@treat/lib-common";
 
-export const getStringFromIAddress = (input: IAddress) => {
-  let address = input.street;
-  address = address.concat(" ", input.houseNumber);
-  address = address.concat(" ", input.postalCode);
-  address = address.concat(" ", input.city);
-  return address;
-};
+export const getStringFromIAddress = (input: IAddress) =>
+  `${input.street} ${input.houseNumber}, ${input.postalCode} ${input.city}`;

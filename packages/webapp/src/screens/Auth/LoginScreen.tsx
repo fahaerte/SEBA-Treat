@@ -121,7 +121,7 @@ const LoginScreen = () => {
           <img
             src={image}
             alt={"Neighbors.png"}
-            width={"700px"}
+            width={"650px"}
             height={"100% "}
           />
         </Col>

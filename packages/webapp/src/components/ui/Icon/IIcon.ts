@@ -4,6 +4,7 @@ import { TBootstrapPaletteTypography } from "../Typography/ITypography";
  * Declaring array here to allow the select-control in stories
  */
 export const AIconType = [
+  "x-lg",
   "check2-circle",
   "chevronUp",
   "chevronDown",
@@ -28,7 +29,7 @@ export const AIconType = [
   "boxArrowRight",
   "exclamationCircle",
   "exclamationTriangle",
-  "arrowClockwise",
+  "arrow-clockwise",
   "coin",
   "box-arrow-right",
   "geo-alt",

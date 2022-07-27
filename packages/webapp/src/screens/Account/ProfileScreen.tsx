@@ -5,7 +5,7 @@ export const ProfileScreen = ({ children }: { children?: React.ReactNode }) => (
   <>
     <Container>
       <PageHeading>
-        My <u>Profile</u>
+        My <u>profile</u>
       </PageHeading>
       <Typography variant={"div"} className={"mt-3"}>
         This is your personal space.

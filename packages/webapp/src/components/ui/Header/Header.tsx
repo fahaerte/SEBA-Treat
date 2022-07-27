@@ -94,9 +94,14 @@ export const Header = () => {
                   elements={addressElement}
                   onSubmit={handleAddress}
                   className={"d-flex align-items-center"}
-                  submitButton={{
+                  abortButton={{
                     color: "secondary",
-                    className: "ms-2",
+                    children: <Icon type={"x-lg"} />,
+                    onClick: () => setOnAddressEdit(false),
+                  }}
+                  submitButton={{
+                    color: "primary",
+                    className: "mx-2",
                     children: (
                       <>
                         <Icon type={"geo-alt"} /> Update location

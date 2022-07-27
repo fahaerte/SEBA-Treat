@@ -1,17 +1,22 @@
 import React from "react";
 import {
+  Container,
   dangerToast,
   Form,
   FormHelper,
   IFormRow,
   successToast,
   Typography,
+  Col,
+  Row,
 } from "../../components";
 import { IUser } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { register } from "../../api/authApi";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
+import image from "../../assets/img/neighbors.png";
+
 export const RegisterScreen = () => {
   const navigate = useNavigate();
 
@@ -104,6 +109,10 @@ export const RegisterScreen = () => {
             value: true,
             message: "Please provide a name!",
           },
+          max: {
+            value: new Date().toISOString().split("T")[0],
+            message: "Born in the future? We doubt it.",
+          },
         },
       }),
     ],
@@ -124,6 +133,7 @@ export const RegisterScreen = () => {
       }),
       FormHelper.createInput({
         formKey: "address.houseNumber",
+        wrapperClasses: "col-md-4",
         label: "Housenumber",
         props: {
           type: "text",
@@ -136,6 +146,8 @@ export const RegisterScreen = () => {
         },
         defaultValue: "123",
       }),
+    ],
+    [
       FormHelper.createInput({
         formKey: "address.postalCode",
         label: "Postal Code",
@@ -186,32 +198,48 @@ export const RegisterScreen = () => {
   };
 
   return (
-    <>
-      <div>
-        <div>
-          {registerMutation.isError ? (
-            <Typography variant={"h4"} className={"fw-normal"} color={"danger"}>
-              An error occurred:{" "}
-              {registerMutation.error instanceof AxiosError &&
-              registerMutation.error.message
-                ? registerMutation.error.message
-                : "unknown"}
-            </Typography>
-          ) : null}
-        </div>
-        <Form<IUser>
-          elements={elements}
-          onSubmit={handleRegister}
-          formTitle={"Please register!"}
-          abortButton={{
-            children: "Cancel",
-            color: "secondary",
-            className: "ms-3",
-            outline: true,
-            onClick: () => navigate("/login"),
-          }}
-        />
-      </div>
-    </>
+    <Container>
+      <Row alignItems={"center"}>
+        <Col md={{ span: 6 }}>
+          <div>
+            <div>
+              {registerMutation.isError ? (
+                <Typography
+                  variant={"h4"}
+                  className={"fw-normal"}
+                  color={"danger"}
+                >
+                  An error occurred:{" "}
+                  {registerMutation.error instanceof AxiosError &&
+                  registerMutation.error.message
+                    ? registerMutation.error.message
+                    : "unknown"}
+                </Typography>
+              ) : null}
+            </div>
+            <Form<IUser>
+              elements={elements}
+              onSubmit={handleRegister}
+              formTitle={"Please register!"}
+              abortButton={{
+                children: "Cancel",
+                color: "secondary",
+                className: "ms-3",
+                outline: true,
+                onClick: () => navigate("/login"),
+              }}
+            />
+          </div>
+        </Col>
+        <Col className={"w-50 d-flex justify-content-end align-content-center"}>
+          <img
+            src={image}
+            alt={"Neighbors.png"}
+            width={"650px"}
+            height={"100% "}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 };

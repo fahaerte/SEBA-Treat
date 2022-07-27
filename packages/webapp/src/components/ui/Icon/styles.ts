@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { TBootstrapPaletteTypography } from "../Typography/ITypography";
 
 export const SCIcon = styled.svg<{ color?: TBootstrapPaletteTypography }>`
+  margin-bottom: 0.2em;
   color: ${({ theme, color }) =>
     color === "muted"
       ? theme.typography.color.secondary

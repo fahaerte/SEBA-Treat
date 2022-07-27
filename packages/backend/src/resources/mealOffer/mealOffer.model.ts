@@ -290,6 +290,7 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
         categories: 1,
         allergens: 1,
         allergensVerified: 1,
+        image: 1,
         user: {
           $arrayElemAt: ["$user", 0],
         },

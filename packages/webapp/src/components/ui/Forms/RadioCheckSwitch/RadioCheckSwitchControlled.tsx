@@ -6,7 +6,6 @@ import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 
 const RadioCheckSwitchControlled = ({
-  wrapperClasses = "",
   className = "",
   type = "checkbox",
   color = "primary",
@@ -20,7 +19,7 @@ const RadioCheckSwitchControlled = ({
   const inputId = getEncodedString(label, type);
 
   return (
-    <div className={wrapperClasses}>
+    <>
       <div className={`form-check ${type === "switch" ? "form-switch" : ""}`}>
         <label htmlFor={inputId} className={"form-check-label"}>
           {label}
@@ -37,7 +36,7 @@ const RadioCheckSwitchControlled = ({
         />
       </div>
       {isInvalid && <FormInvalidFeedback message={invalidFeedback} />}
-    </div>
+    </>
   );
 };
 

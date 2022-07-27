@@ -2,19 +2,16 @@ import React from "react";
 import {
   Card,
   Typography,
-  Button,
   Col,
   Row,
   CardImage,
   CardBody,
   Icon,
-  CardFooter,
   CardTitle,
   CardText,
   Badge,
 } from "../ui";
 import { useNavigate } from "react-router-dom";
-import PlaceholderImg from "../../assets/img/nudeln.jpg";
 
 const MealOffer = ({
   mealId,
@@ -28,6 +25,7 @@ const MealOffer = ({
   endDate,
   allergensVerified,
   categories,
+  image,
 }: {
   mealId: string;
   mealTitle: string;
@@ -40,6 +38,7 @@ const MealOffer = ({
   endDate: Date;
   allergensVerified: boolean;
   categories: string[];
+  image: string;
 }) => {
   const navigate = useNavigate();
 
@@ -47,13 +46,13 @@ const MealOffer = ({
     navigate(`/mealoffers/${mealId}`);
     return mealId;
   };
-
+  console.log(image);
   const startDateAsString = new Date(startDate).toLocaleDateString();
   const endDateAsString = new Date(endDate).toLocaleDateString();
 
   return (
-    <Card hoverable>
-      <CardImage src={PlaceholderImg} />
+    <Card hoverable onClick={handleSelect}>
+      <CardImage src={image} />
 
       <CardBody>
         <Row>
@@ -122,11 +121,6 @@ const MealOffer = ({
           </Row>
         )}
       </CardBody>
-      <CardFooter>
-        <Button onClick={handleSelect} size={"sm"}>
-          <Icon type={"cart"} /> Select Offer
-        </Button>
-      </CardFooter>
     </Card>
   );
 };

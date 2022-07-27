@@ -7,6 +7,7 @@ import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 import { ESortingRules } from "@treat/lib-common";
+import { ConfigService } from "../../utils/ConfigService";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
@@ -200,6 +201,9 @@ export const MealOfferScreen = () => {
                         startDate={mealOffer.endDate}
                         allergensVerified={mealOffer.allergensVerified}
                         categories={mealOffer.categories}
+                        image={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
+                          mealOffer.image
+                        }`}
                       />
                     </Col>
                   ));

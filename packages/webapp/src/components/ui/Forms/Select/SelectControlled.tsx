@@ -10,7 +10,6 @@ const SelectControlled = ({
   value,
   children,
   size = "md",
-  wrapperClasses = "",
   className = "",
   label,
   disabled = false,
@@ -22,11 +21,7 @@ const SelectControlled = ({
   const inputId = getEncodedString(label);
   return (
     <SCFloatingForm
-      className={[
-        "form-floating",
-        isInvalid ? "is-invalid" : "",
-        wrapperClasses,
-      ].join(" ")}
+      className={["form-floating", isInvalid ? "is-invalid" : ""].join(" ")}
     >
       <SCSelect
         value={value}
