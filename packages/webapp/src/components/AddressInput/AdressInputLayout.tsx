@@ -5,9 +5,9 @@ export const AddressInputLayout = styled.div`
   color: ${({ theme }) => theme.palette.primary.contrastText};
   text-align: center;
   width: 100%;
-  height: 100vh;
+  height: 70vh;
 
   > div {
-    height: 100vh;
+    height: 70vh;
   }
 `;
