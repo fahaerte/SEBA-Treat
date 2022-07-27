@@ -1,4 +1,4 @@
-import { baseApiAuth } from "./baseApi";
+import { baseApi, baseApiAuth } from "./baseApi";
 import { getCookie } from "../utils/auth/CookieProvider";
 import { IUser } from "@treat/lib-common";
 
@@ -6,6 +6,11 @@ export const getUser = async () => {
   const userId = getCookie("userId");
   const response = await baseApiAuth().get(`/users/${userId}`);
   return response.data;
+};
+
+export const getUserPreview = async (userId: string) => {
+  const response = await baseApi().get(`/users/${userId}/preview`);
+  return response.data.data;
 };
 
 export const getTransactions = async () => {
