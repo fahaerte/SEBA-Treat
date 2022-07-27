@@ -85,46 +85,43 @@ const MealOffer = ({
             </CardText>
           </Col>
         </Row>
-        <CardExpander>
-          <Row>
-            <Col>
-              <Typography variant={"psmall"} className={"fw-normal"}>
-                <Icon type={"calendar"} /> {startDateAsString} –{" "}
-                {endDateAsString}
+        <Row>
+          <Col>
+            <Typography variant={"psmall"} className={"fw-normal"}>
+              <Icon type={"calendar"} /> {startDateAsString} – {endDateAsString}
+            </Typography>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Typography variant={"psmall"} className={"fw-normal"}>
+              <Icon type={"geo-alt"} /> {distance} km
+            </Typography>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Typography variant={"psmall"} className={"fw-normal"}>
+              <Icon type={"people-fill"} /> {portions} Portions
+            </Typography>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Typography variant={"psmall"} className={"fw-normal"}>
+              <Icon type={"coin"} /> {price} Cr
+            </Typography>
+          </Col>
+        </Row>
+        {categories && (
+          <Row className={"d-inline"}>
+            {categories.map((category) => (
+              <Typography variant={"p"} key={category} display={"inline"}>
+                <Badge outlined>{category}</Badge>
               </Typography>
-            </Col>
+            ))}
           </Row>
-          <Row>
-            <Col>
-              <Typography variant={"psmall"} className={"fw-normal"}>
-                <Icon type={"geo-alt"} /> {distance} km
-              </Typography>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Typography variant={"psmall"} className={"fw-normal"}>
-                <Icon type={"people-fill"} /> {portions} Portions
-              </Typography>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Typography variant={"psmall"} className={"fw-normal"}>
-                <Icon type={"coin"} /> {price} Cr
-              </Typography>
-            </Col>
-          </Row>
-          {categories && (
-            <Row className={"d-inline"}>
-              {categories.map((category) => (
-                <Typography variant={"p"} key={category} display={"inline"}>
-                  <Badge outlined>{category}</Badge>
-                </Typography>
-              ))}
-            </Row>
-          )}
-        </CardExpander>
+        )}
       </CardBody>
       <CardFooter>
         <Button onClick={handleSelect} size={"sm"}>

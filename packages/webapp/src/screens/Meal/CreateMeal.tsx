@@ -8,6 +8,7 @@ import {
   IFormRow,
   successToast,
   TOptionValuePair,
+  Typography,
   useModalInfo,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -274,6 +275,11 @@ const CreateMeal = () => {
               onClick: () => navigate("/"),
             }}
           >
+            <Typography variant={"h3"} className={"fw-normal"}>
+              <Icon type={"infoCircle"} /> On top of the price you have set for
+              your meal, we will charge the buyer an additional 7% service fee
+              based on the price you have set.
+            </Typography>
             <Button
               className={"mb-3"}
               color={"warning"}

@@ -18,7 +18,7 @@ import CreateMeal from "../screens/Meal/CreateMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { ProfileScreen } from "../screens/Account/ProfileScreen";
 import { ProfileOverview } from "../components/Profile/ProfileOverview";
-import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
+// import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
 import { ProfileUpdateScreen } from "../screens/Account/ProfileUpdateScreen";
 import { LandingPageTabBar } from "../components/AddressInput/LandingPageTabBar";
 import { BuyMealTab } from "../components/AddressInput/BuyMealTab";
@@ -106,26 +106,12 @@ export const AppRouter = () => {
             <ProfileOverview />
           </ProfileScreen>
         ),
-        // children: [
-        //   {
-        //     path: "edit",
-        //     element: <ProfileScreen>hallo</ProfileScreen>,
-        //   },
-        // ],
       },
       {
         path: "edit",
         element: (
           <ProfileScreen>
             <ProfileUpdateScreen />
-          </ProfileScreen>
-        ),
-      },
-      {
-        path: "transaction-history/:userid",
-        element: (
-          <ProfileScreen>
-            <TransactionHistory />
           </ProfileScreen>
         ),
       },
