@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import {
   Button,
+  Badge,
   Col,
   dangerToast,
   MealDetails,
@@ -9,7 +10,6 @@ import {
   Row,
   SectionHeading,
   successToast,
-  Tag,
   UserPreview,
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
@@ -131,13 +131,15 @@ export const MealOfferDetailScreen = () => {
           </Container>
         ) : mealOffer ? (
           <Container className={""}>
-            <Row className={"pt-5 mr-1"}>
+            <Row className={"pt-5 me-1"}>
               <Col className={"d-flex align-items-center"}>
                 <PageHeading className={"text-nowrap"}>
                   <u>{mealOffer.title}</u>
                 </PageHeading>
                 {mealOffer.categories.map((category: string) => (
-                  <Tag key={category}>{category}</Tag>
+                  <Badge key={category} outlined>
+                    {category}
+                  </Badge>
                 ))}
               </Col>
               <Col className={"d-flex align-items-center justify-content-end"}>
@@ -215,11 +217,13 @@ export const MealOfferDetailScreen = () => {
                 </p>
                 <SectionHeading>List of Allergens</SectionHeading>
                 {mealOffer.allergens.map((allergen: string) => (
-                  <Tag key={allergen}>{allergen}</Tag>
+                  <Badge key={allergen} outlined>
+                    {allergen}
+                  </Badge>
                 ))}
               </Col>
-              {/* TODO: @Rosan why dis w-25 not working? */}
-              <Col className={"w-25"} xs>
+              {/* TODO: maxWidth: 400px*/}
+              <Col>
                 <MealRequestCard
                   productName={mealOffer.title}
                   mealPrice={mealOffer.price}

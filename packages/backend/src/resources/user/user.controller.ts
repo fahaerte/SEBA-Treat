@@ -9,7 +9,6 @@ import { Service } from "typedi";
 import { ObjectId } from "mongoose";
 import StripeService from "../stripe/stripe.service";
 
-// TODO: Update user
 @Service()
 class UserController implements Controller {
   public path = "/users";
@@ -43,8 +42,23 @@ class UserController implements Controller {
       authenticatedMiddleware,
       this.getUser
     );
+
     this.router.get(`${this.path}/:userId?/preview`, this.getUserPreview);
     this.router.post(`${this.path}/signout`, this.signout);
+
+    this.router.put(
+      `${this.path}`,
+      authenticatedMiddleware,
+      validationMiddleware(validate.updateUser),
+      this.updateUser
+    );
+
+    this.router.put(
+      `${this.path}/password`,
+      authenticatedMiddleware,
+      validationMiddleware(validate.updatePassword),
+      this.updatePassword
+    );
   }
 
   private register = async (
@@ -161,6 +175,43 @@ class UserController implements Controller {
         req.user._id as ObjectId
       );
       res.status(200).send({ accountBalance: balance });
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private updateUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    if (!req.user) {
+      return next(new HttpException(404, "No logged in user"));
+    }
+    try {
+      const newUser = await this.userService.updateUser(req.body);
+      res.status(200).send(newUser);
+    } catch (error: any) {
+      next(new HttpException(400, error.message));
+    }
+  };
+
+  private updatePassword = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    if (!req.user) {
+      return next(new HttpException(404, "No logged in user"));
+    }
+    try {
+      const { passwordOld, passwordNew, userId } = req.body;
+      const editedUser = await this.userService.updateUserPassword(
+        passwordOld as string,
+        passwordNew as string,
+        userId as string
+      );
+      res.status(200).json(editedUser);
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

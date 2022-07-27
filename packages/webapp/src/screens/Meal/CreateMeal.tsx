@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   dangerToast,
@@ -11,13 +11,22 @@ import {
   useModalInfo,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
-import { EMealAllergen, EMealCategory, IMealOffer } from "@treat/lib-common";
-import { createMealOffer, CreateMealOfferArgs } from "../../api/mealApi";
+import { IMealOffer } from "@treat/lib-common";
+import { createMealOffer } from "../../api/mealApi";
 import { useMutation } from "react-query";
 import { getCookie } from "../../utils/auth/CookieProvider";
+import {
+  createCategoriesOptions,
+  createAllergensOptions,
+} from "../../utils/createMealValueArrays";
+import { TFormFieldError } from "../../components/ui/Forms/_interfaces/TFormFieldError";
 
 interface IMealOfferForm
-  extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
+  extends Omit<
+    IMealOffer,
+    "allergens" | "categories" | "_id" | "user" | "image"
+  > {
+  image: FileList;
   allergens: TOptionValuePair[];
   categories: TOptionValuePair[];
 }
@@ -25,41 +34,15 @@ interface IMealOfferForm
 /**
  * TODO:
  * - Image upload
- * - Redirect to detail page on success
+ * - Switch for allergenVerified
  */
 const CreateMeal = () => {
   const navigate = useNavigate();
-
-  const createOfferMutation = useMutation(
-    ({ mealOffer }: CreateMealOfferArgs) => createMealOffer({ mealOffer }),
-    {
-      onSuccess: (response) => {
-        successToast({ message: "Your meal offer has been created!" });
-        const mealId = response.data._id;
-        navigate("/");
-      },
-      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
-    }
-  );
-
-  const createAllergensOptions = () => {
-    const allergenValues = Object.values(EMealAllergen);
-    const allergens: TOptionValuePair[] = [];
-    allergenValues.forEach((allergen) =>
-      allergens.push({ value: allergen, label: allergen })
-    );
-    // console.log(Object.values(EMealAllergen));
-    return allergens;
-  };
-
-  const createCategoriesOptions = () => {
-    const categoryValues = Object.values(EMealCategory);
-    const categories: TOptionValuePair[] = [];
-    categoryValues.forEach((category) =>
-      categories.push({ value: category, label: category })
-    );
-    return categories;
-  };
+  const modalAllergensInfo = useModalInfo({ close: () => undefined });
+  const userId = getCookie("userId");
+  const [formError, setFormError] = useState<
+    TFormFieldError<IMealOfferForm>[] | undefined
+  >();
 
   const elements: IFormRow<IMealOfferForm>[] = [
     [
@@ -90,21 +73,6 @@ const CreateMeal = () => {
           },
         },
       }),
-
-      // FormHelper.createFileInput({
-      //   formKey: "profile-pictures",
-      //   label: "Upload profile-pictures for your meal",
-      //   props: {
-      //     fileType: "profile-pictures/*",
-      //     multiple: true,
-      //   },
-      //   rules: {
-      //     required: {
-      //       value: true,
-      //       message: "Please provide profile-pictures, so others can can get hungry!",
-      //     },
-      //   },
-      // }),
     ],
 
     FormHelper.createTextArea({
@@ -190,6 +158,10 @@ const CreateMeal = () => {
             value: true,
             message: "Please indicate from when your offer can be picked up.",
           },
+          min: {
+            value: new Date().toISOString().split(".")[0].slice(0, -3),
+            message: "The starting day cannot be in the past.",
+          },
         },
         props: {
           type: "datetime-local",
@@ -202,6 +174,10 @@ const CreateMeal = () => {
           required: {
             value: true,
             message: "Please indicate until when your offer can be picked up.",
+          },
+          min: {
+            value: new Date().toISOString().split(".")[0].slice(0, -3),
+            message: "The end date has to be later than the the current day.",
           },
         },
         props: {
@@ -225,39 +201,53 @@ const CreateMeal = () => {
       props: {
         type: "switch",
       },
-      rules: {
-        required: {
-          value: true,
-        },
-      },
     }),
   ];
 
-  const userId = getCookie("userId");
-  const token = getCookie("token");
+  const createOfferMutation = useMutation(
+    (formData: FormData) => createMealOffer(formData),
+    {
+      onSuccess: (response) => {
+        successToast({ message: "Your meal offer has been created!" });
+        const mealId = response.data.data._id;
+        console.log(response);
+        navigate(`/mealOffers/${mealId}`);
+      },
+      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
+    }
+  );
 
-  const modalAllergensInfo = useModalInfo({ close: () => undefined });
   const handleSubmit = (data: IMealOfferForm) => {
-    if (userId && token) {
-      const { startDate, endDate, categories, allergens } = data;
-      const categoryValues: string[] = [];
-      categories.forEach((category) => categoryValues.push(category.value));
+    if (new Date(data.startDate).getTime() > new Date(data.endDate).getTime()) {
+      setFormError([
+        {
+          fieldName: "endDate",
+          error: {
+            type: "invalid",
+            message: "End Date has to be later than starting date!",
+          },
+        },
+      ]);
+    }
+    if (userId && !formError) {
+      const { categories, allergens } = data;
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("image", data.image[0]);
+      formData.append("endDate", new Date(data.endDate).toISOString());
+      formData.append("startDate", new Date(data.startDate).toISOString());
+      formData.append("price", data.price.toString());
+      formData.append("portions", data.portions.toString());
+      formData.append("allergensVerified", data.allergensVerified.toString());
+      categories.forEach((category, index) =>
+        formData.append(`categories[${index}]`, category.value)
+      );
+      allergens.forEach((allergen, index) =>
+        formData.append(`allergens[${index}]`, allergen.value)
+      );
 
-      const allergenValues: string[] = [];
-      allergens.forEach((allergen) => allergenValues.push(allergen.value));
-
-      const newOffer: Omit<
-        IMealOffer,
-        "_id" | "rating" | "transactionFee" | "reservations"
-      > = {
-        user: userId,
-        ...data,
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
-        categories: categoryValues,
-        allergens: allergenValues,
-      };
-      createOfferMutation.mutate({ mealOffer: newOffer });
+      createOfferMutation.mutate(formData);
     } else {
       dangerToast({ message: "User not authenticated!" });
       navigate("/login");
@@ -275,6 +265,7 @@ const CreateMeal = () => {
             formTitle={"Having leftovers? Create an offer!"}
             submitButton={{ children: "Publish your offer!" }}
             isLoading={createOfferMutation.isLoading}
+            formFieldErrors={formError}
             abortButton={{
               children: "Cancel",
               color: "secondary",

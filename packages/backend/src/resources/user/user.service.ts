@@ -8,6 +8,7 @@ import { IAddress, IUser, USER_STARTING_BALANCE } from "@treat/lib-common";
 import accountBalanceInsufficientException from "../../utils/exceptions/accountBalanceInsufficient.exception";
 import UserNotFoundException from "../../utils/exceptions/userNotFound.exception";
 import Logger, { ILogMessage } from "../../utils/logger";
+import bcrypt from "bcrypt";
 
 @Service()
 class UserService {
@@ -87,6 +88,28 @@ class UserService {
     return this.userModel.findById(_id);
   }
 
+  public async updateUserPassword(
+    passwordOld: string,
+    passwordNew: string,
+    userId: string
+  ): Promise<UserDocument | null> {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new UserNotFoundException(
+        "Unable to find user with that email address"
+      );
+    }
+
+    if (await user.isValidPassword(passwordOld)) {
+      const hashedPassword = await bcrypt.hash(passwordNew, 10);
+      await this.userModel.findByIdAndUpdate(
+        { _id: userId },
+        { password: hashedPassword }
+      );
+    }
+    return this.userModel.findById(userId);
+  }
+
   public async getUser(userId: string): Promise<Partial<UserDocument> | null> {
     return this.userModel
       .findById(userId)
@@ -97,7 +120,7 @@ class UserService {
         "lastName",
         "address",
         "virtualAccount",
-        "brithDate",
+        "birthdate",
         "meanRating",
         "countRatings",
         "_id",

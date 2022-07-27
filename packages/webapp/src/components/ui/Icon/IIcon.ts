@@ -4,6 +4,7 @@ import { TBootstrapPaletteTypography } from "../Typography/ITypography";
  * Declaring array here to allow the select-control in stories
  */
 export const AIconType = [
+  "check2-circle",
   "chevronUp",
   "chevronDown",
   "check-circle-fill",

@@ -124,6 +124,7 @@ MealOfferSchema.statics.findBy = async function (
     portions: 1,
     createdAt: 1,
     updatedAt: 1,
+    allergensVerified: 1,
     pickUpDetails: {
       $cond: {
         if: { $ne: ["$user", user?._id] },
@@ -288,6 +289,7 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
         portions: 1,
         categories: 1,
         allergens: 1,
+        allergensVerified: 1,
         user: {
           $arrayElemAt: ["$user", 0],
         },

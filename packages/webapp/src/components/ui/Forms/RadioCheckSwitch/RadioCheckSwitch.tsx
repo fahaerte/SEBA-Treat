@@ -24,7 +24,7 @@ const RadioCheckSwitch = <TFormValues extends FieldValues>({
   return (
     <div className={`form-check ${type === "switch" ? "form-switch" : ""}`}>
       <label htmlFor={inputId} className={"form-check-label"}>
-        {label}
+        {rules?.required?.value ? `${label} *` : label}
         {/*errors?.required?.value ? " *" : ""*/}
       </label>
       <SCCheckbox

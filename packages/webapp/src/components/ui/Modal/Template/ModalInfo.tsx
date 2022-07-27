@@ -31,7 +31,7 @@ const useModalInfo = ({
           {
             children: (
               <>
-                <Icon type={"chatLeftDots"} /> Undestood
+                <Icon type={"check"} /> Undestood
               </>
             ),
             color: "primary",

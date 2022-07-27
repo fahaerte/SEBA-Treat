@@ -15,7 +15,7 @@ import {
   Badge,
 } from "../ui";
 import { useNavigate } from "react-router-dom";
-import PlaceholderImg from "../../assets/nudeln.jpg";
+import PlaceholderImg from "../../assets/img/nudeln.jpg";
 
 const MealOffer = ({
   mealId,
@@ -58,11 +58,15 @@ const MealOffer = ({
 
       <CardBody>
         <Row>
-          <CardTitle>{mealTitle}</CardTitle>
+          <Col>
+            <CardTitle>{mealTitle}</CardTitle>
+          </Col>
           {allergensVerified && (
-            <Typography color={"info"}>
-              <Icon type={"check-circle-fill"} />
-            </Typography>
+            <Col className={"d-flex justify-content-end"}>
+              <Typography color={"info"} display={"inline"}>
+                <Icon type={"check-circle-fill"} />
+              </Typography>
+            </Col>
           )}
         </Row>
         <Row>

@@ -1,16 +1,47 @@
-import React from "react";
-import { IFormRow, FormHelper, Form } from "../ui";
+import React, { useState } from "react";
+import {
+  IFormRow,
+  FormHelper,
+  Form,
+  Icon,
+  successToast,
+  dangerToast,
+} from "../ui";
+import { updatePassword, UpdatePasswordArgs } from "../../api/userApi";
+import { getCookie } from "../../utils/auth/CookieProvider";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { TFormFieldError } from "../ui/Forms/_interfaces/TFormFieldError";
 
 type PasswordForm = {
-  oldPassword: string;
-  newPassword: string;
+  passwordOld: string;
+  passwordNew: string;
   newPasswordRepeat: string;
 };
 export const PasswordUpdate = () => {
+  const userId = getCookie("userId");
+  const navigate = useNavigate();
+  const [formError, setFormError] = useState<
+    TFormFieldError<PasswordForm>[] | undefined
+  >();
+
+  const { mutate: updateUserPassword, isLoading } = useMutation(
+    ({ passwordOld, passwordNew, userId }: UpdatePasswordArgs) =>
+      updatePassword({ passwordOld, passwordNew, userId }),
+    {
+      onSuccess: () => {
+        successToast({ message: "Your password has been updated." });
+        navigate("/account");
+      },
+      onError: () => {
+        dangerToast({ message: "Your password could not be updated, sorry." });
+      },
+    }
+  );
   const formElemements: IFormRow<PasswordForm>[] = [
     [
       FormHelper.createInput({
-        formKey: "oldPassword",
+        formKey: "passwordOld",
         label: "Old Password",
         props: {
           type: "password",
@@ -19,12 +50,15 @@ export const PasswordUpdate = () => {
           required: {
             value: true,
           },
+          minLength: {
+            value: 6,
+          },
         },
       }),
     ],
     [
       FormHelper.createInput({
-        formKey: "newPassword",
+        formKey: "passwordNew",
         label: "New Password",
         props: {
           type: "password",
@@ -32,6 +66,9 @@ export const PasswordUpdate = () => {
         rules: {
           required: {
             value: true,
+          },
+          minLength: {
+            value: 6,
           },
         },
       }),
@@ -45,20 +82,55 @@ export const PasswordUpdate = () => {
           required: {
             value: true,
           },
+          minLength: {
+            value: 6,
+          },
         },
       }),
     ],
   ];
 
   const handleSubmit = (data: PasswordForm) => {
-    console.log(data);
+    if (data.passwordNew !== data.newPasswordRepeat) {
+      setFormError([
+        {
+          fieldName: "newPasswordRepeat",
+          error: {
+            type: "invalid",
+            message:
+              "Your repeated password has to be equal to the first input!",
+          },
+        },
+      ]);
+    } else if (userId) {
+      updateUserPassword({
+        passwordOld: data.passwordOld,
+        passwordNew: data.passwordNew,
+        userId,
+      });
+    } else {
+      navigate("/");
+    }
   };
 
   return (
     <Form<PasswordForm>
       elements={formElemements}
       onSubmit={(data) => handleSubmit(data)}
-      abortButton={{ color: "secondary", children: "Cancel" }}
+      isLoading={isLoading}
+      formFieldErrors={formError}
+      submitButton={{
+        children: (
+          <>
+            <Icon type={"shield-lock"} /> Update
+          </>
+        ),
+      }}
+      abortButton={{
+        color: "secondary",
+        children: "Cancel",
+        className: "ms-3",
+      }}
     />
   );
 };

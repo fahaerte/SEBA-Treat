@@ -27,7 +27,7 @@ export const ReceivedMealReservation = ({
     (newState: EMealReservationState) =>
       updateMealReservationState(reservation._id, newState),
     {
-      onSuccess: (newState: EMealReservationState) => {
+      onSuccess: () => {
         successToast({ message: "You changed the state of your reservation" });
       },
       onError: (error: any) => {

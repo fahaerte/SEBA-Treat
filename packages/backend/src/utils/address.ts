@@ -2,18 +2,18 @@ import { Client, LatLngString } from "@googlemaps/google-maps-services-js";
 import { IAddress } from "@treat/lib-common/lib/interfaces/IAddress";
 import HttpException from "./exceptions/http.exception";
 import Logger, { ILogMessage } from "./logger";
+import { ConfigService } from "./ConfigService";
 
 export const getDistancesBetweenAddressesInKm = async (
   originAddress: string,
   destinations: string[]
 ): Promise<number[]> => {
   const client = new Client({});
-  const { GOOGLE_MAPS_API_KEY } = process.env;
   const response = await client.distancematrix({
     params: {
       origins: [originAddress] as LatLngString[],
       destinations: destinations,
-      key: GOOGLE_MAPS_API_KEY as string,
+      key: new ConfigService().get("GOOGLE_MAPS_API_KEY"),
     },
   });
   if (response.status != 200) {

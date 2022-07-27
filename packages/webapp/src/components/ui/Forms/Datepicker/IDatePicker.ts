@@ -14,6 +14,7 @@ export interface IDatePickerProps {
    * Time: hh:mm
    */
   type?: TDatePickerType;
+  // valueAsDate?: boolean;
 }
 
 export interface IFormDatePicker<TFormValues>
@@ -40,4 +41,6 @@ export interface IDatePicker<TFormValues>
    * Value of the date input
    */
   value: string;
+  min: string;
+  max: string;
 }

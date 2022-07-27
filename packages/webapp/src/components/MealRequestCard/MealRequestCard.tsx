@@ -1,10 +1,6 @@
 import React from "react";
-// import { ICard } from "../ui/Card/ICard";
-// import { SCMealRequestCard } from "./styles";
 import { Button, Card, CardBody, Col, Icon, Row, Typography } from "../";
-import { getCookie } from "../../utils/auth/CookieProvider";
-
-// TODO: replace inline styles with component styles
+import { SCMealCardInfo } from "./styles";
 
 const MealRequestCard = ({
   className = "",
@@ -29,44 +25,24 @@ const MealRequestCard = ({
         <Typography variant={"h1"} className={"mb-3"}>
           Order {productName}
         </Typography>
-        <div
-          style={{
-            padding: ".5rem .7rem",
-            marginBottom: "1rem",
-            backgroundColor: "#EFEFEF",
-            border: "1px solid #CFCFCF",
-            borderRadius: "3px",
-            color: "#454545",
-          }}
-        >
+        <SCMealCardInfo className={"px-2 py-3 mb-3"}>
           <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1rem",
-            }}
+            className={"d-flex justify-content-between align-items-center mb-3"}
           >
             <span style={{ fontWeight: "bold", width: "auto" }}>
               How to buy a meal
             </span>
             <Icon type={"infoCircle"} size={"md"} />
           </div>
-          <ol style={{ paddingLeft: "1rem" }}>
-            <li style={{ paddingLeft: ".5rem" }}>
-              Check allergens if you have any
-            </li>
-            <li style={{ paddingLeft: ".5rem" }}>
-              Make a request for the meal
-            </li>
-            <li style={{ paddingLeft: ".5rem" }}>
-              Wait until the seller accepts the request
-            </li>
-            <li style={{ paddingLeft: ".5rem" }}>
+          <ol className={"ms-2"}>
+            <li>Check allergens if you have any</li>
+            <li>Make a request for the meal</li>
+            <li>Wait until the seller accepts the request</li>
+            <li>
               Confirm the transaction (<u>only then, you are charged</u>)
             </li>
           </ol>
-        </div>
+        </SCMealCardInfo>
         <Row>
           <Col>
             <Typography>Meal Price</Typography>
@@ -102,8 +78,13 @@ const MealRequestCard = ({
               Reserve meal
             </Button>
           ) : (
-            <Typography align={"center"} color={"warning"}>
-              {disabledText}
+            <Typography
+              align={"center"}
+              color={"warning"}
+              variant={"h3"}
+              component={"div"}
+            >
+              <Icon size={"md"} type={"exclamationTriangle"} /> {disabledText}
             </Typography>
           )}
         </Row>

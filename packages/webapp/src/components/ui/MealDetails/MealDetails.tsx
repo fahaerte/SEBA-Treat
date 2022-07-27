@@ -26,7 +26,7 @@ const MealDetails = ({
 
   return (
     <SCMealDetails>
-      <Row justify={"around"} className={"fw-normal mb-3"}>
+      <Row justify={"between"} className={"fw-normal mb-3"}>
         <Typography
           className={"fw-normal mb-3"}
           variant={"div"}
@@ -40,15 +40,15 @@ const MealDetails = ({
           variant={"div"}
           display={"inline"}
         >
-          <Icon type={"infoCircle"} size={"lg"} />
-          {portions} {portions === 1 ? "portion" : "portions"}
+          <Icon type={"people-fill"} size={"lg"} />
+          {portions} {portions === 1 ? "Portion" : "Portions"}
         </Typography>
         <Typography
           className={"fw-normal mb-3"}
           variant={"div"}
           display={"inline"}
         >
-          <Icon type={"doorOpen"} size={"lg"} />
+          <Icon type={"calendar"} size={"lg"} />
           {startDateAsString}, {startTimeAsString} – {endDateAsString},{" "}
           {endTimeAsString}
         </Typography>

@@ -35,24 +35,22 @@ export const TransactionHistory = () => {
         <>
           {isSuccess ? (
             transactions.data.length > 0 ? (
-              transactions.data
-                .slice()
-                .map((transaction: IMealTransaction, index: number) => {
-                  if (transaction.transactionState === "COMPLETED") {
-                    return (
-                      <Transaction
-                        key={transaction._id}
-                        senderId={transaction.senderId}
-                        receiverId={transaction.receiverId}
-                        firstName={"Test"}
-                        lastName={"User"}
-                        timestamp={transaction.updatedAt} // TODO: UpdatedAt does not exist -> adjusted in lib-common -> correct?
-                        amount={transaction.amount}
-                        fee={transaction.transactionFee}
-                      />
-                    );
-                  }
-                })
+              transactions.data.slice().map((transaction: IMealTransaction) => {
+                if (transaction.transactionState === "COMPLETED") {
+                  return (
+                    <Transaction
+                      key={transaction._id}
+                      senderId={transaction.senderId}
+                      receiverId={transaction.receiverId}
+                      firstName={"Test"}
+                      lastName={"User"}
+                      timestamp={transaction.updatedAt} // TODO: UpdatedAt does not exist -> adjusted in lib-common -> correct?
+                      amount={transaction.amount}
+                      fee={transaction.transactionFee}
+                    />
+                  );
+                }
+              })
             ) : (
               <Typography variant={"div"}>
                 There are no prior transactions.

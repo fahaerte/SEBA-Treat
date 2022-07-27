@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { IDatePicker } from "./IDatePicker";
 import { SCFloatingForm, SCInput } from "../styles";
 import { getEncodedString } from "../../../../utils/auth/getEncodedString";
@@ -13,6 +13,8 @@ const DatepickerControlled = ({
   onChange = () => undefined,
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
+  min,
+  max,
   label,
   value,
   ...rest
@@ -33,6 +35,8 @@ const DatepickerControlled = ({
         readOnly={disabled}
         value={value}
         onChange={(event) => onChange(event)}
+        min={min}
+        max={max}
         {...rest}
       />
       <label htmlFor={inputId}>{label}</label>

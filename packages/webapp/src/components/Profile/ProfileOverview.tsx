@@ -60,7 +60,7 @@ export const ProfileOverview = () => {
         </Col>
         <Col>
           <Typography variant={"h4"} display={"inline"}>
-            Rating:{" "}
+            Birthdate:{" "}
           </Typography>
           <Typography
             isLoading={isLoading}
@@ -69,7 +69,7 @@ export const ProfileOverview = () => {
             component={"div"}
             display={"inline"}
           >
-            <Rating rating={data?.data.meanRating} />
+            {new Date(data?.data.birthdate).toLocaleDateString()}
           </Typography>
         </Col>
       </Row>
@@ -87,6 +87,20 @@ export const ProfileOverview = () => {
           >
             {data?.data.address.street} {data?.data.address.houseNumber},{" "}
             {data?.data.address.postalCode} {data?.data.address.city}
+          </Typography>
+        </Col>
+        <Col>
+          <Typography variant={"h4"} display={"inline"}>
+            Rating:{" "}
+          </Typography>
+          <Typography
+            isLoading={isLoading}
+            variant={"h4"}
+            className={"fw-normal"}
+            component={"div"}
+            display={"inline"}
+          >
+            <Rating rating={data?.data.meanRating} />
           </Typography>
         </Col>
       </Row>

@@ -4,7 +4,7 @@ import { Icon } from "../ui";
 import { IUser } from "@treat/lib-common";
 
 interface MealOfferRequestUserInfoProps {
-  user: IUser;
+  user: Partial<IUser>;
 }
 
 export const MealOfferRequestUserInfo = ({

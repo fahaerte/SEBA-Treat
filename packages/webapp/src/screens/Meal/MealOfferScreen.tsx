@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "../../components";
+import { Col, Container, Row, Typography } from "../../components";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
 import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
-import { ESortingRules } from "@treat/lib-common/lib/enums/ESortingRules";
+import { ESortingRules } from "@treat/lib-common";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
@@ -78,6 +78,7 @@ export const MealOfferScreen = () => {
     sellerRating,
     portions,
     queryClient,
+    fetchNextPage,
   ]);
 
   const handleSearch = (event: any) => {
@@ -147,6 +148,10 @@ export const MealOfferScreen = () => {
     <>
       <Container>
         <Row>
+          <Typography variant={"h1"} className={"fw-normal"}>
+            What do you want to eat today?
+          </Typography>
+
           <Col className={"col col-lg-2"}>
             <Row>
               <MealOfferFilterSideBar

@@ -13,6 +13,7 @@ import DatepickerControlled from "./DatepickerControlled";
 const Datepicker = <TFormValues extends FieldValues>({
   formKey,
   defaultValue = "",
+  // valueAsDate = false,
   label,
   rules,
   ...props
@@ -26,8 +27,17 @@ const Datepicker = <TFormValues extends FieldValues>({
     defaultValue: defaultValue as PathValue<TFormValues, Path<TFormValues>>,
   });
 
+  // const handleDateValue = () => {
+  //   if (valueAsDate) {
+  //     setValue(formKey, new Date());
+  //   } else {
+  //     setValue(formKey, field.value);
+  //   }
+  // };
   return (
     <DatepickerControlled
+      min={rules?.min?.value as string}
+      max={rules?.max?.value as string}
       value={field.value}
       onChange={field.onChange}
       label={rules?.required?.value ? `${label} *` : label}

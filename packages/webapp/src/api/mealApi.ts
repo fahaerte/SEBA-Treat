@@ -29,12 +29,8 @@ export const requestMealOffer = async ({
   return await baseApiAuth().post(`/mealOffers/${mealOfferId}/reservations`);
 };
 
-// export const createMealOffer = async ({ mealOffer }: CreateMealOfferArgs) => {
-//   return await baseApiAuth().post("/mealOffers", mealOffer);
-// };
-
-export const createMealOffer = async (mealOffer: FormData) => {
-  return await baseApiAuth().post("/mealOffers", mealOffer);
+export const createMealOffer = async (formData: FormData) => {
+  return await baseApiAuth().post("/mealOffers", formData);
 };
 
 export const updateMealOffer = async (
@@ -51,12 +47,12 @@ export const getMealOffersByParams = async (
   page: number,
   pageLimit: number,
   distance: number,
-  portions?: number | undefined,
-  category?: string | undefined,
-  allergen?: string | undefined,
-  sellerRating?: number | undefined,
-  price?: number | undefined,
-  search?: string | undefined,
+  portions?: number,
+  category?: string,
+  allergen?: string,
+  sellerRating?: number,
+  price?: number,
+  search?: string,
   sortingRule?: ESortingRules | undefined
 ) => {
   const response = await baseApi().get(`/mealOffers/previews`, {
@@ -66,6 +62,7 @@ export const getMealOffersByParams = async (
       address: getCookie("address"),
       portions: portions,
       category: category,
+      allergen: allergen,
       sellerRating: sellerRating,
       price: price,
       search: search,
