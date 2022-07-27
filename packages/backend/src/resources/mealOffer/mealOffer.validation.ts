@@ -32,22 +32,21 @@ const updateMealOfferParams = Joi.object({
 });
 
 const updateMealOfferBody = Joi.object<Partial<IMealOffer>>({
-  title: Joi.string().required(),
-  description: Joi.string().required(),
+  title: Joi.string(),
+  description: Joi.string(),
   image: Joi.string(),
-  categories: Joi.array()
-    .required()
-    .min(1)
-    .items(Joi.string().valid(...Object.values(EMealCategory))),
+  categories: Joi.array().items(
+    Joi.string().valid(...Object.values(EMealCategory))
+  ),
   allergens: Joi.array().items(
     Joi.string().valid(...Object.values(EMealAllergen))
   ),
-  startDate: Joi.date().iso().required().min(Date.now()),
-  endDate: Joi.date().iso().required().greater(Joi.ref("startDate")),
-  portions: Joi.number().min(1).required(),
+  startDate: Joi.date().iso(),
+  endDate: Joi.date().iso().greater(Joi.ref("startDate")),
+  portions: Joi.number().min(1),
   pickUpDetails: Joi.string().allow(""),
-  price: Joi.number().required(),
-  allergensVerified: Joi.boolean().required(),
+  price: Joi.number(),
+  allergensVerified: Joi.boolean(),
 });
 
 const updateReservationStateBody = Joi.object({

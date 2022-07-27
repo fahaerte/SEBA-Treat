@@ -19,9 +19,7 @@ const UserPreview = ({
     <SCUserPreview>
       <div>
         <Row>
-          <span className={"userName"}>
-            {firstName} {lastName}
-          </span>
+          <span className={"userName"}>{firstName}</span>
         </Row>
         <div className={"userRating"}>
           {countRatings > 0 ? (

@@ -1,7 +1,10 @@
 import Controller from "../../utils/interfaces/controller.interface";
 import { NextFunction, Request, Response, Router } from "express";
 import validate from "../mealOffer/mealOffer.validation";
-import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
+import {
+  authenticatedMiddleware,
+  optionalAuthenticatedMiddleware,
+} from "../../middleware/authenticated.middleware";
 import { Service } from "typedi";
 import MealOfferService from "./mealOffer.service";
 import ValidatePart from "../../utils/validation";
@@ -51,6 +54,7 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}/:mealOfferId`,
+      optionalAuthenticatedMiddleware,
       validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
       validationMiddleware(validate.getMealOfferQuery, ValidatePart.QUERY),
       this.getMealOffer
@@ -74,12 +78,6 @@ class MealOfferController implements Controller {
         ValidatePart.PARAMS
       ),
       this.updateMealOfferReservation
-    );
-    this.router.get(
-      `${this.path}/:mealOfferId/reservations`,
-      authenticatedMiddleware,
-      validationMiddleware(validate.getMealOfferParams, ValidatePart.PARAMS),
-      this.alreadyReserved
     );
     this.router.post(
       `${this.path}/:mealOfferId/reservations`,
@@ -197,22 +195,6 @@ class MealOfferController implements Controller {
         req.query.compareAddress as string
       );
       res.status(200).send({ data: mealOffer });
-    } catch (error: any) {
-      next(error);
-    }
-  };
-
-  private alreadyReserved = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      const alreadyReserved = await this.mealOfferService.alreadyReserved(
-        req.params.mealOfferId,
-        req.user
-      );
-      res.status(200).send(alreadyReserved);
     } catch (error: any) {
       next(error);
     }

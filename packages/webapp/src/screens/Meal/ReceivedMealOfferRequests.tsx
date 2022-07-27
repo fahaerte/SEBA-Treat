@@ -38,6 +38,7 @@ export const ReceivedMealOfferRequests = () => {
                 {mealOffer.reservations.slice().map((reservation, index) => {
                   const receivedMealReservation = (
                     <ReceivedMealReservation
+                      key={index}
                       mealOfferId={mealOffer._id}
                       reservation={reservation}
                       buyerRating={
