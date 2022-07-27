@@ -20,7 +20,7 @@ export const AAllTypes = [
   ATextFiles,
 ] as const;
 
-export type TAllTypes = typeof AFileTypes[number];
+export type TAllTypes = typeof AAllTypes[number];
 
 export interface IFileInputProps {
   /**
@@ -45,6 +45,6 @@ export interface IFileInputConfig<TFormValues>
 export interface IFileInput<TFormValues>
   extends IFormElementControlled,
     Omit<IFormFileInput<TFormValues>, TIFormElementOmit> {
-  value?: string | ReadonlyArray<string> | number;
+  files: FileList | null;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }

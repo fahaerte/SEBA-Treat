@@ -14,17 +14,15 @@ const FileInputControlled = ({
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
   label,
-  // value,
+  files,
   ...rest
-}: IFileInput<HTMLInputElement>) => {
+}: IFileInput<HTMLInputElement | null>) => {
   const inputId = getEncodedString(label, "file");
-  // const [files, setFiles] = React.useState<FileList | null>(null);
-  //
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setFiles(e.target.files);
-  //
-  //   onChange(e);
-  // };
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.files);
+
+    onChange(e);
+  };
   return (
     <>
       <label
@@ -36,6 +34,7 @@ const FileInputControlled = ({
       <SCInput
         id={inputId}
         type="file"
+        // files={files}
         accept={Array.isArray(fileType) ? fileType.join(",") : fileType}
         className={[
           className,
@@ -45,7 +44,7 @@ const FileInputControlled = ({
         placeholder={label}
         readOnly={disabled}
         multiple={multiple}
-        onChange={(event) => onChange(event)}
+        onChange={(event) => handleChange(event)}
         {...rest}
       />
 

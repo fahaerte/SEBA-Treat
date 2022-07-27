@@ -12,7 +12,7 @@ import {
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { IMealOffer } from "@treat/lib-common";
-import { createMealOffer, CreateMealOfferArgs } from "../../api/mealApi";
+import { createMealOffer } from "../../api/mealApi";
 import { useMutation } from "react-query";
 import { getCookie } from "../../utils/auth/CookieProvider";
 import {
@@ -21,7 +21,11 @@ import {
 } from "../../utils/createMealValueArrays";
 
 interface IMealOfferForm
-  extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
+  extends Omit<
+    IMealOffer,
+    "allergens" | "categories" | "_id" | "user" | "image"
+  > {
+  image: FileList;
   allergens: TOptionValuePair[];
   categories: TOptionValuePair[];
 }
@@ -217,29 +221,12 @@ const CreateMeal = () => {
   const handleSubmit = (data: IMealOfferForm) => {
     if (userId) {
       const { categories, allergens } = data;
-      // const categoryValues: string[] = [];
-      // categories.forEach((category) => categoryValues.push(category.value));
-      //
-      //
-      // const allergenValues: string[] = [];
-      // allergens.forEach((allergen) => allergenValues.push(allergen.value));
-
-      // const newOffer: Omit<
-      //   IMealOffer,
-      //   "_id" | "rating" | "transactionFee" | "reservations"
-      // > = {
-      //   user: userId,
-      //   ...data,
-      //   startDate,
-      //   endDate,
-      //   categories: categoryValues,
-      //   allergens: allergenValues,
-      // };
+      console.log(data.image);
 
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
-      formData.append("image", data.image);
+      formData.append("image", data.image[0]);
       formData.append("endDate", new Date(data.endDate).toISOString());
       formData.append("startDate", new Date(data.startDate).toISOString());
       formData.append("price", data.price.toString());
