@@ -26,7 +26,7 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const pageLimit = 10;
+  const pageLimit = 12;
 
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery(
