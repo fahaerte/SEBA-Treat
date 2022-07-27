@@ -44,6 +44,7 @@ class UserController implements Controller {
     );
 
     this.router.get(`${this.path}/:userId?/preview`, this.getUserPreview);
+
     this.router.post(`${this.path}/signout`, this.signout);
 
     this.router.put(

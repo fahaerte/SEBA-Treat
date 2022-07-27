@@ -8,18 +8,15 @@ import { Transaction } from "../ui";
 import { Navigate } from "react-router-dom";
 
 export const TransactionHistory = () => {
-  // const [transactionHist, setTransactionHist] = useState([]);
-
   const userId = getCookie("userId");
 
   const {
     data: transactions,
     isLoading: transactionsAreLoading,
-    isSuccess,
+    isSuccess: transactionsLoaded,
   } = useQuery(["getTransactions", userId], () => getTransactions(), {
     onSuccess: (response) => {
       console.log(response.data);
-      // setTransactionHist(response.data);
     },
     onError: () => {
       dangerToast({ message: "Could not get transaction history" });
@@ -33,7 +30,7 @@ export const TransactionHistory = () => {
         "Loading..."
       ) : (
         <>
-          {isSuccess ? (
+          {transactionsLoaded ? (
             transactions.data.length > 0 ? (
               transactions.data.slice().map((transaction: IMealTransaction) => {
                 if (transaction.transactionState === "COMPLETED") {
@@ -42,9 +39,7 @@ export const TransactionHistory = () => {
                       key={transaction._id}
                       senderId={transaction.senderId}
                       receiverId={transaction.receiverId}
-                      firstName={"Test"}
-                      lastName={"User"}
-                      timestamp={transaction.updatedAt} // TODO: UpdatedAt does not exist -> adjusted in lib-common -> correct?
+                      timestamp={transaction.updatedAt}
                       amount={transaction.amount}
                       fee={transaction.transactionFee}
                     />
