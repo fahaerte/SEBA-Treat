@@ -13,6 +13,8 @@ export const configValues = {
   STRIPE_API_SECRET_KEY: Joi.string(),
   STRIPE_CHECKOUT: Joi.string(),
   GOOGLE_MAPS_API_KEY: Joi.string(),
+  EMAIL: Joi.string(),
+  PASSWORD: Joi.string(),
 };
 
 export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
