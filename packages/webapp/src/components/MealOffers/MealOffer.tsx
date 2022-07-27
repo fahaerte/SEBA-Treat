@@ -11,7 +11,6 @@ import {
   CardFooter,
   CardTitle,
   CardText,
-  CardExpander,
   Badge,
 } from "../ui";
 import { useNavigate } from "react-router-dom";

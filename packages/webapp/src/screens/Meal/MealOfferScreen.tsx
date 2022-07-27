@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Typography } from "../../components";
+import { Col, Container, PageHeading, Row, Typography } from "../../components";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
@@ -149,9 +149,9 @@ export const MealOfferScreen = () => {
     <>
       <Container>
         <Row>
-          <Typography variant={"h1"} className={"fw-normal"}>
-            What do you want to eat today?
-          </Typography>
+          <PageHeading className={"mb-3"}>
+            To what do you <u>TREAT</u> yourself today?
+          </PageHeading>
 
           <Col className={"col col-lg-2"}>
             <Row>

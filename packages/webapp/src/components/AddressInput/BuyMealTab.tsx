@@ -1,7 +1,7 @@
 import { Col, Typography } from "../ui";
-import BuyMeal_Location from "../../assets/BuyMeal_Location.png";
-import BuyMeal_Meal from "../../assets/BuyMeal_Meal.png";
-import BuyMeal_Money from "../../assets/BuyMeal_Money.png";
+import BuyMeal_Location from "../../assets/img/BuyMeal_Location.png";
+import BuyMeal_Meal from "../../assets/img/BuyMeal_Meal.png";
+import BuyMeal_Money from "../../assets/img/BuyMeal_Money.png";
 import React from "react";
 
 export const BuyMealTab = () => {

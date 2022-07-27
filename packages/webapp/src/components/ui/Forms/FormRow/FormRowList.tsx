@@ -23,7 +23,10 @@ const FormRowList = <TFormValue extends FieldValues>({
           {Array.isArray(row) ? (
             // iterate group of form elements within current form row
             row.map((groupItem) => (
-              <div className="col" key={groupItem.config.formKey}>
+              <div
+                className={`col ${groupItem.config.wrapperClasses || ""}`}
+                key={groupItem.config.formKey}
+              >
                 <FormRowElement formConfig={groupItem} errors={errors} />
               </div>
             ))

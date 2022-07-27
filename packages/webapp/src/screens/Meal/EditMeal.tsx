@@ -34,10 +34,6 @@ interface IMealOfferForm
  */
 const EditMeal = () => {
   const userId = getCookie("userId");
-  const token = getCookie("token");
-
-  const { mealOfferId } = useParams();
-  const navigate = useNavigate();
 
   return (
     <>

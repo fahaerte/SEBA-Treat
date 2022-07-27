@@ -20,7 +20,7 @@ const MealRequestCard = ({
   buttonAction: () => void;
 }) => {
   return (
-    <Card className={`${className} mb-3`}>
+    <Card className={`${className} mb-3`} onClick={buttonAction}>
       <CardBody className={"my-3"}>
         <Typography variant={"h1"} className={"mb-3"}>
           Order {productName}
@@ -74,9 +74,7 @@ const MealRequestCard = ({
         </Row>
         <Row className={"mt-3"}>
           {!disableButton ? (
-            <Button className="px-3" onClick={buttonAction}>
-              Reserve meal
-            </Button>
+            ""
           ) : (
             <Typography
               align={"center"}

@@ -1,7 +1,7 @@
 import { Col, Typography } from "../ui";
-import OfferMeal_Meal from "../../assets/OfferMeal_Meal.png";
-import OfferMeal_Credits from "../../assets/OfferMeal_Credits.png";
-import OfferMeal_Reduce from "../../assets/OfferMeal_Reduce.png";
+import OfferMeal_Meal from "../../assets/img/OfferMeal_Meal.png";
+import OfferMeal_Credits from "../../assets/img/OfferMeal_Credits.png";
+import OfferMeal_Reduce from "../../assets/img/OfferMeal_Reduce.png";
 import React from "react";
 
 export const OfferMealTab = () => {

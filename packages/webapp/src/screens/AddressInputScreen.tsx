@@ -4,7 +4,7 @@ import { IStringObject } from "@treat/lib-common";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addressElement } from "../components/AddressInput/AddressInput";
 import { setCookie } from "../utils/auth/CookieProvider";
-import { CardImage, Col, Container, Icon, Typography } from "../components";
+import { Container, Icon, Typography } from "../components";
 import { AddressInputLayout } from "../components/AddressInput/AdressInputLayout";
 import { Header } from "../components/ui/Header/Header";
 
@@ -42,7 +42,7 @@ export const AddressInputScreen = ({
               TIME TO EXCHANGE LEFTOVERS!
             </Typography>
             <Typography variant={"h3"} color={"secondary"}>
-              Find Offers in your neighbourhood or provide your leftovers to
+              Find meals in your neighbourhood or provide your leftovers to
               others!
             </Typography>
             <br />
@@ -64,7 +64,7 @@ export const AddressInputScreen = ({
         </div>
         <div>
           <hr />
-          <Container>
+          <Container className={"pb-3"}>
             <Typography variant={"h1"} color={"secondary"}>
               How Treat works
             </Typography>
@@ -80,6 +80,9 @@ export const AddressInputScreen = ({
             />
             <Typography variant={"h4"} color={"secondary"}>
               Legal Disclaimer{" "}
+            </Typography>
+            <Typography variant={"psmall"} className={"color-dark"}>
+              We do not care if you die
             </Typography>
           </Container>
         </div>

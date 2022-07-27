@@ -208,6 +208,7 @@ export const RegisterScreen = () => {
             color: "secondary",
             className: "ms-3",
             outline: true,
+            onClick: () => navigate("/login"),
           }}
         />
       </div>

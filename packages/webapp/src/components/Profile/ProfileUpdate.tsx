@@ -48,12 +48,6 @@ export const ProfileUpdate = () => {
             props: {
               type: "email",
             },
-            rules: {
-              min: {
-                value: 5,
-                message: "Your email needs at least 5 characters!",
-              },
-            },
             defaultValue: user.email,
           }),
         ],
@@ -109,12 +103,6 @@ export const ProfileUpdate = () => {
             props: {
               type: "text",
             },
-            rules: {
-              required: {
-                value: true,
-                message: "Please provide your house number!",
-              },
-            },
             defaultValue: user.address.houseNumber,
           }),
           FormHelper.createInput({
@@ -122,12 +110,6 @@ export const ProfileUpdate = () => {
             label: "Postal Code",
             props: {
               type: "text",
-            },
-            rules: {
-              required: {
-                value: true,
-                message: "Please provide a postal code!",
-              },
             },
             defaultValue: user.address.postalCode,
           }),
@@ -137,12 +119,6 @@ export const ProfileUpdate = () => {
             props: {
               type: "text",
             },
-            rules: {
-              required: {
-                value: true,
-                message: "Please provide your city!",
-              },
-            },
             defaultValue: user.address.city,
           }),
           FormHelper.createInput({
@@ -150,12 +126,6 @@ export const ProfileUpdate = () => {
             label: "Country",
             props: {
               type: "text",
-            },
-            rules: {
-              required: {
-                value: true,
-                message: "Please provide your country!",
-              },
             },
             defaultValue: user.address.country,
           }),
@@ -171,8 +141,11 @@ export const ProfileUpdate = () => {
 
   const handleSubmit = (data: IUser) => {
     if (userId) {
-      console.log({ ...data, _id: userId });
-      updateUserMutation({ ...data, _id: userId });
+      const dataToSend = Object.values(data).filter(
+        (userAttribut) => userAttribut !== ""
+      );
+      console.log({ ...dataToSend, _id: userId });
+      // updateUserMutation({ ...data, _id: userId });
     } else {
       dangerToast({
         message: "User does not seem to be authenticated. Please login.",

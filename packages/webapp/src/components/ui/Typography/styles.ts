@@ -11,6 +11,9 @@ export const SCTypography = styled.div<ITypography>`
       ? theme.palette[color].main
       : "inherit"};
 
+  u {
+    text-decoration-color: ${({ theme }) => theme.palette.primary.main};
+  }
   &.typography {
     &--mb-0 {
       margin-bottom: 0;
