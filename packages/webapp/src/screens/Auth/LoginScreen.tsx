@@ -29,16 +29,15 @@ const LoginScreen = () => {
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState?.from || "/";
+  const from = locationState?.from || "/mealoffers";
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
       const { userId, address } = response.data;
       setCookie("userId", userId as string);
       setCookie("address", getStringFromIAddress(address as IAddress));
-      // successToast({ message: "Welcome!" });
-      if (from.pathname === "/address") {
-        from.pathname = "/";
+      if (from.pathname.includes("address")) {
+        from.pathname = "/mealoffers";
       }
       navigate(from, { replace: true });
     },
