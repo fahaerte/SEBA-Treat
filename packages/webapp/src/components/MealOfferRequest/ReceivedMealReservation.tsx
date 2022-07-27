@@ -61,7 +61,7 @@ export const ReceivedMealReservation = ({
     } else if (reservationState == EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
-          mealOfferId={mealOfferId}
+          // mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
           existingRating={buyerRating ? buyerRating : undefined}
         />

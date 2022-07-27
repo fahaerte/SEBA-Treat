@@ -20,16 +20,7 @@ import {
   createAllergensOptions,
 } from "../../utils/createMealValueArrays";
 import { TFormFieldError } from "../../components/ui/Forms/_interfaces/TFormFieldError";
-
-interface IMealOfferForm
-  extends Omit<
-    IMealOffer,
-    "allergens" | "categories" | "_id" | "user" | "image"
-  > {
-  image: FileList;
-  allergens: TOptionValuePair[];
-  categories: TOptionValuePair[];
-}
+import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
 
 /**
  * TODO:

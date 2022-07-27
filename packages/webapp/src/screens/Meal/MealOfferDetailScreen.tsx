@@ -13,11 +13,7 @@ import {
   UserPreview,
 } from "../../components";
 import { useMutation, useQuery } from "react-query";
-import {
-  getMealOffer,
-  requestMealOffer,
-  alreadyReserved,
-} from "../../api/mealApi";
+import { getMealOffer, requestMealOffer } from "../../api/mealApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
 import { AxiosError } from "axios";
@@ -57,39 +53,19 @@ export const MealOfferDetailScreen = () => {
         if (userId === response.user._id) {
           setReservationText("You cannot reserve your own meal.");
           setEnableReservation(false);
+        } else if (userId && response.reservations.length) {
+          setReservationText("You have already reserved this meal.");
+          setEnableReservation(false);
         }
       },
     }
   );
 
-  const { data: isAlreadyReserved, isLoading: isAlreadyReservedIsLoading } =
-    useQuery(
-      ["getAlreadyReserved", mealOffer],
-      () => alreadyReserved(mealOfferId as string),
-      {
-        onSuccess: (response) => {
-          if (response) {
-            setReservationText("You have already reserved this meal.");
-            setEnableReservation(false);
-          }
-        },
-      }
-    );
-
-  // useEffect(() => {
-  //   console.log(mealOffer);
-  //   const nowDate = new Date();
-  //   const endDate = new Date(mealOffer.endDate);
-  //   console.log("nowDate: ", nowDate);
-  //   console.log("still valid: ", endDate > nowDate);
-  //   if (userId !== mealOffer.user._id) {
-  //     setEnableReservation(true);
-  //   }
-  // }, [mealOffer]);
-
   function handleEditClick() {
     if (userId && userId === mealOffer.user._id) {
-      console.log("Edit click");
+      navigate(`/mealOffers/${mealOfferId}/edit`, {
+        state: { from: location },
+      });
     } else {
       dangerToast({
         message: "You can only edit your own meals.",

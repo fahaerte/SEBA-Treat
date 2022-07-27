@@ -72,7 +72,7 @@ const MealRequestCard = ({
             </Typography>
           </Col>
         </Row>
-        <Row className="mt-3">
+        <Row className={"mt-3"}>
           {!disableButton ? (
             <Button className="px-3" onClick={buttonAction}>
               Reserve meal

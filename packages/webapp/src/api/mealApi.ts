@@ -12,13 +12,13 @@ export const getMealOffer = async (
 ) => {
   let response;
   if (compareAddress) {
-    response = await baseApi().get(`/mealOffers/${mealOfferId}`, {
+    response = await baseApiAuth().get(`/mealOffers/${mealOfferId}`, {
       params: {
         compareAddress: compareAddress,
       },
     });
   } else {
-    response = await baseApi().get(`/mealOffers/${mealOfferId}`);
+    response = await baseApiAuth().get(`/mealOffers/${mealOfferId}`);
   }
   return response.data.data;
 };
@@ -35,9 +35,12 @@ export const createMealOffer = async (formData: FormData) => {
 
 export const updateMealOffer = async (
   mealOfferId: string,
-  { mealOffer }: CreateMealOfferArgs
+  updatedMealOffer: FormData
 ) => {
-  return await baseApiAuth().patch(`/mealOffers/${mealOfferId}`, mealOffer);
+  return await baseApiAuth().put(
+    `/mealOffers/${mealOfferId}`,
+    updatedMealOffer
+  );
 };
 
 export const getMealOffersByParams = async (
@@ -70,12 +73,12 @@ export const getMealOffersByParams = async (
   return response.data;
 };
 
-export const alreadyReserved = async (mealOfferId: string) => {
-  const response = await baseApiAuth().get(
-    `/mealOffers/${mealOfferId}/reservations`
-  );
-  return response.data;
-};
+// export const alreadyReserved = async (mealOfferId: string) => {
+//   const response = await baseApiAuth().get(
+//     `/mealOffers/${mealOfferId}/reservations`
+//   );
+//   return response.data;
+// };
 
 export const getSentMealOfferRequests = async () => {
   const response = await baseApiAuth().get("/mealOffers/reservations/sent");
