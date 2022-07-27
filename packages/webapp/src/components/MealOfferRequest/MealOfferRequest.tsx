@@ -5,6 +5,7 @@ import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { getFormattedDateFromString } from "../../utils/getFormattedDate";
 import { Typography } from "../ui";
+import { ConfigService } from "../../utils/ConfigService";
 
 interface MealOfferProps {
   mealOffer: MealOffer;
@@ -30,7 +31,11 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
   <Container className={"p-0"}>
     <Row>
       <Col className={"col-sm-auto"}>
-        <MealOfferImage src={""} />
+        <MealOfferImage
+          src={`url(${new ConfigService().get("MEAL_IMAGES_URL")}/${
+            mealOffer.image
+          }`}
+        />
       </Col>
       <Col className={""}>
         <Row>

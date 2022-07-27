@@ -215,6 +215,7 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
       endDate: 1,
       price: 1,
       title: 1,
+      image: 1,
       rating: 1,
       reservations: {
         $filter: {
