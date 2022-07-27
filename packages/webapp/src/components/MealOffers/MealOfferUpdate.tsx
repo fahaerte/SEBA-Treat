@@ -21,10 +21,8 @@ import {
   getMealOffer,
   updateMealOffer,
 } from "../../api/mealApi";
-
-// TODO: danger toast and redirect if meal already has reservations
-// TODO: what todo with start date (forbid edit if meal has already started?)
-// TODO: fix image upload
+import { time } from "faker";
+import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
 
 export const MealOfferUpdate = () => {
   const userId = getCookie("userId");
@@ -40,22 +38,18 @@ export const MealOfferUpdate = () => {
   } = useQuery("getMealOffer", () => getMealOffer(mealOfferId as string), {
     onSuccess: (response) => {
       console.log(response);
+      if (response.reservations.length) {
+        dangerToast({
+          message:
+            "You can't edit this meal anymore because someone already reserved it.",
+        });
+        navigate(`/mealOffers/${mealOfferId}`);
+      }
     },
     onError: () => {
-      dangerToast({ message: "Could not get meal information" });
+      dangerToast({ message: "Could not get meal information." });
     },
   });
-
-  // TODO: put into @lib-common ?
-  interface IMealOfferForm
-    extends Omit<
-      IMealOffer,
-      "allergens" | "categories" | "_id" | "user" | "image"
-    > {
-    image: FileList;
-    allergens: TOptionValuePair[];
-    categories: TOptionValuePair[];
-  }
 
   const [formElements, setFormElements] = useState<IFormRow<IMealOfferForm>[]>(
     []
