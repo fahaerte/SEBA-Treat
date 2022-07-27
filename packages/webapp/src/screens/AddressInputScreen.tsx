@@ -30,8 +30,6 @@ export const AddressInputScreen = ({
     navigate(from, { replace: true });
   };
 
-  // TODO:  Address-Input schmaler machen
-  //TODO: Space between TabBar and tabs
   return (
     <>
       <Header />
@@ -42,7 +40,7 @@ export const AddressInputScreen = ({
               TIME TO EXCHANGE LEFTOVERS!
             </Typography>
             <Typography variant={"h3"} color={"secondary"}>
-              Find Offers in your neighbourhood or provide your leftovers to
+              Find meals in the neighbourhood or provide your leftovers to
               others!
             </Typography>
             <br />
@@ -69,7 +67,11 @@ export const AddressInputScreen = ({
               How Treat works
             </Typography>
             <Typography variant={"h3"} color={"secondary"}>
-              Treat is a platform to exchange blablabla
+              Treat is a platform to exchange leftovers of private households.
+            </Typography>
+            <Typography variant={"h4"} color={"secondary"}>
+              By participating you help to reduce food waste, save money, and
+              you get access to a variety of self-made meals!
             </Typography>
             {children}
             <hr
@@ -79,7 +81,10 @@ export const AddressInputScreen = ({
               }}
             />
             <Typography variant={"h4"} color={"secondary"}>
-              Legal Disclaimer{" "}
+              TREAT does not assume liability for adverse reactions to foods
+              consumed, or items one may come into contact with. TREAT acts only
+              as broker and cannot guarantee that any of the products are safe
+              to consume.
             </Typography>
           </Container>
         </div>
