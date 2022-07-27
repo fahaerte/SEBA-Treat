@@ -77,6 +77,7 @@ export const MealOfferScreen = () => {
     category,
     sellerRating,
     portions,
+    sortingRule,
     queryClient,
     fetchNextPage,
   ]);
