@@ -49,7 +49,7 @@ class MealOfferController implements Controller {
     );
     this.router.get(
       `${this.path}`,
-      optionalAuthenticatedMiddleware,
+      authenticatedMiddleware,
       this.getMealOffers
     );
     this.router.get(

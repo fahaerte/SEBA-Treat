@@ -28,7 +28,6 @@ import {
 
 export const MealOfferUpdate = () => {
   const userId = getCookie("userId");
-  const token = getCookie("token");
 
   const { mealOfferId } = useParams();
   const navigate = useNavigate();
@@ -113,12 +112,6 @@ export const MealOfferUpdate = () => {
             props: {
               type: "text",
             },
-            rules: {
-              required: {
-                value: true,
-                message: "You need to provide a title for your meal.",
-              },
-            },
           }),
           FormHelper.createFileInput({
             formKey: "image",
@@ -139,10 +132,6 @@ export const MealOfferUpdate = () => {
             sendWithNewLines: true,
           },
           rules: {
-            required: {
-              value: true,
-              message: "Please add a short description!",
-            },
             maxLength: {
               value: 1000,
             },
@@ -197,13 +186,6 @@ export const MealOfferUpdate = () => {
             formKey: "categories",
             label: "Category Labels",
             defaultValue: createDefaultCategoriesOptions(mealOffer.categories),
-            rules: {
-              required: {
-                value: true,
-                message:
-                  "You have to indicate at least one category for your offer.",
-              },
-            },
             props: {
               autocompleteOptions: createCategoriesOptions(),
             },
@@ -215,13 +197,6 @@ export const MealOfferUpdate = () => {
             formKey: "startDate",
             label: "Starting date of your offer",
             defaultValue: mealOffer.startDate.slice(0, -8),
-            rules: {
-              required: {
-                value: true,
-                message:
-                  "Please indicate from when your offer can be picked up.",
-              },
-            },
             props: {
               type: "datetime-local",
             },
@@ -230,13 +205,6 @@ export const MealOfferUpdate = () => {
             formKey: "endDate",
             label: "End date of your offer",
             defaultValue: mealOffer.endDate.slice(0, -8),
-            rules: {
-              required: {
-                value: true,
-                message:
-                  "Please indicate until when your offer can be picked up.",
-              },
-            },
             props: {
               type: "datetime-local",
             },
@@ -256,7 +224,7 @@ export const MealOfferUpdate = () => {
         FormHelper.createRadioCheckSwitch({
           formKey: "allergensVerified",
           label: "Have you checked your meal for allergens?",
-          defaultValue: false,
+          defaultValue: mealOffer.allergensVerified as boolean,
           props: {
             type: "switch",
           },
@@ -276,7 +244,7 @@ export const MealOfferUpdate = () => {
         updateMealOffer(mealOfferId as unknown as string, updatedMealOffer),
       {
         onSuccess: (response) => {
-          successToast({ message: "Your meal offer has been created!" });
+          successToast({ message: "Your meal offer has been updated!" });
           navigate(`/mealOffers/${mealOfferId}`);
         },
         onError: () => dangerToast({ message: "Sorry, something went wrong." }),
@@ -289,23 +257,54 @@ export const MealOfferUpdate = () => {
       const { categories, allergens } = data;
 
       const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("image", data.image[0]);
-      console.log("---image:");
-      console.log(data.image[0]);
-      console.log("--------");
-      formData.append("endDate", new Date(data.endDate).toISOString());
-      formData.append("startDate", new Date(data.startDate).toISOString());
-      formData.append("price", data.price.toString());
-      formData.append("portions", data.portions.toString());
+      if (data.title) {
+        formData.append("title", data.title);
+      } else {
+        formData.append("title", mealOffer.title);
+      }
+      if (data.description) {
+        formData.append("description", data.description);
+      } else {
+        formData.append("description", mealOffer.description);
+      }
+      if (data.image) {
+        formData.append("image", data.image[0]);
+      }
+      if (data.endDate) {
+        formData.append("endDate", new Date(data.endDate).toISOString());
+      } else {
+        formData.append("endDate", mealOffer.endDate.slice(0, -8));
+      }
+      if (data.startDate) {
+        formData.append("startDate", new Date(data.startDate).toISOString());
+      } else {
+        formData.append("startDate", mealOffer.startDate);
+      }
+      if (data.price) {
+        formData.append("price", data.price.toString());
+      } else {
+        formData.append("price", mealOffer.price);
+      }
+      if (data.portions) {
+        formData.append("portions", data.portions.toString());
+      } else {
+        formData.append("portions", mealOffer.portions);
+      }
       formData.append("allergensVerified", data.allergensVerified.toString());
-      categories.forEach((category, index) =>
-        formData.append(`categories[${index}]`, category.value)
-      );
-      allergens.forEach((allergen, index) =>
-        formData.append(`allergens[${index}]`, allergen.value)
-      );
+      if (categories) {
+        categories.forEach((category, index) =>
+          formData.append(`categories[${index}]`, category.value)
+        );
+      } else {
+        formData.append("categories", mealOffer.categories);
+      }
+      if (allergens) {
+        allergens.forEach((allergen, index) =>
+          formData.append(`allergens[${index}]`, allergen.value)
+        );
+      } else {
+        formData.append("categories", mealOffer.categories);
+      }
 
       updateMealMutation(formData);
     } else {
