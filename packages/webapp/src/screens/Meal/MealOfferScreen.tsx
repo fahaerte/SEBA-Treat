@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Col,
-  Container,
-  Row,
-  TOptionValuePair,
-  Typography,
-} from "../../components";
+import { Col, Container, Row, Typography } from "../../components";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";

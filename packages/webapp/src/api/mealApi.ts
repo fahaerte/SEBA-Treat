@@ -5,7 +5,6 @@ import {
   IMealOffer,
 } from "@treat/lib-common";
 import { getCookie } from "../utils/auth/CookieProvider";
-import { TOptionValuePair } from "../components";
 
 export const getMealOffer = async (
   mealOfferId: string,

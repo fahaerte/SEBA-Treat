@@ -62,8 +62,8 @@ export interface MealTransactionModel extends Model<MealTransactionDocument> {
 
 MealTransactionSchema.statics.findBy = async function (
   this: Model<MealTransactionDocument>,
-  mealOfferId: string,
-  user?: UserDocument
+  mealOfferId: string
+  // user?: UserDocument
 ) {
   const projection: Record<string, any> = {
     _id: 1,

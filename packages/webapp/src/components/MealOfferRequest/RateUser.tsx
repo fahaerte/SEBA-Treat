@@ -5,13 +5,13 @@ import { useMutation } from "react-query";
 import { rateUser as rateUserCall } from "../../api/ratingApi";
 
 interface RateUserProps {
-  mealOfferId: string;
+  // mealOfferId: string;
   mealReservationId: string;
   existingRating?: number;
 }
 
 export const RateUser = ({
-  mealOfferId,
+  // mealOfferId,
   mealReservationId,
   existingRating,
 }: RateUserProps) => {

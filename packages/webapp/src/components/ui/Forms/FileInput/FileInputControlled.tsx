@@ -14,15 +14,9 @@ const FileInputControlled = ({
   isInvalid = false,
   invalidFeedback = EDefaultErrorMessages.GENERAL,
   label,
-  files,
   ...rest
 }: IFileInput<HTMLInputElement | null>) => {
   const inputId = getEncodedString(label, "file");
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
-
-    onChange(e);
-  };
   return (
     <>
       <label
@@ -44,7 +38,7 @@ const FileInputControlled = ({
         placeholder={label}
         readOnly={disabled}
         multiple={multiple}
-        onChange={(event) => handleChange(event)}
+        onChange={(event) => onChange(event)}
         {...rest}
       />
 

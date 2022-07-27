@@ -1,4 +1,4 @@
-import { Button, Col, Row, SelectControlled, TagSelectControlled } from "../ui";
+import { Button, Col, Row, SelectControlled } from "../ui";
 import React from "react";
 import {
   createAllergensOptions,

@@ -1,4 +1,4 @@
-import { CallbackError, model, Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import UserDocument from "./user.interface";
 import { AddressSchema } from "../address/address.model";
