@@ -46,18 +46,20 @@ export const AddressInputScreen = ({
               others!
             </Typography>
             <br />
-            <Form<IStringObject>
-              elements={addressElement}
-              onSubmit={handleAddress}
-              submitButton={{
-                color: "secondary",
-                children: (
-                  <>
-                    <Icon type={"geo-alt"} /> Set your location
-                  </>
-                ),
-              }}
-            />
+            <Container className={"w-50 justify-content-center"}>
+              <Form<IStringObject>
+                elements={addressElement}
+                onSubmit={handleAddress}
+                submitButton={{
+                  color: "secondary",
+                  children: (
+                    <>
+                      <Icon type={"geo-alt"} /> Set your location
+                    </>
+                  ),
+                }}
+              />
+            </Container>
           </Container>
         </div>
         <div>
@@ -69,9 +71,13 @@ export const AddressInputScreen = ({
             <Typography variant={"h3"} color={"secondary"}>
               Treat is a platform to exchange blablabla
             </Typography>
-            <br />
             {children}
-            <br />
+            <hr
+              style={{
+                borderColor: "black",
+                height: "3px",
+              }}
+            />
             <Typography variant={"h4"} color={"secondary"}>
               Legal Disclaimer{" "}
             </Typography>

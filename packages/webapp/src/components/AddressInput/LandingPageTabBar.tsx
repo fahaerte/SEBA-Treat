@@ -22,7 +22,6 @@ export const LandingPageTabBar = ({
           },
         ]}
       />
-      <br />
       {children}
     </Row>
   </Container>
