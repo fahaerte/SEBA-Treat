@@ -41,9 +41,6 @@ export const Header = () => {
       setFirstName(response.data.firstName);
     },
     onError: () => {
-      dangerToast({
-        message: "Authorization error. You'll be logged out automatically.",
-      });
       signoutMutation.mutate();
     },
     enabled: !!userId,
