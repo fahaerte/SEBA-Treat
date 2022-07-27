@@ -10,6 +10,7 @@ export default interface MealOffer {
   categories: string[];
   allergens: string[];
   startDate: Date;
+  image: string;
   endDate: Date;
   portions: number;
   pickUpDetails: string;

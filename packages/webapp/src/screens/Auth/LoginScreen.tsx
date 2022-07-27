@@ -32,9 +32,9 @@ const LoginScreen = () => {
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
       const { userId, address } = response.data;
-      setCookie("userId", userId);
+      setCookie("userId", userId as string);
       setCookie("address", getStringFromIAddress(address as IAddress));
-      successToast({ message: "Welcome!" });
+      // successToast({ message: "Welcome!" });
       if (from.pathname === "/address") {
         from.pathname = "/";
       }
