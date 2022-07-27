@@ -164,7 +164,6 @@ class MealOfferService {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
       mealOfferQuery
     );
-    console.log(mealOfferPreviews[0]);
     const filteredPreviews = await this.filterMealOfferPreviewsForDistance(
       mealOfferPreviews,
       mealOfferQuery.address,
