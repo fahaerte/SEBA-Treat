@@ -10,15 +10,19 @@ export const getMealOffer = async (
   mealOfferId: string,
   compareAddress?: string
 ) => {
+  const token = getCookie("userId");
+  console.log(token);
+  let api = baseApi();
+  if (token) api = baseApiAuth();
   let response;
   if (compareAddress) {
-    response = await baseApi().get(`/mealOffers/${mealOfferId}`, {
+    response = await api.get(`/mealOffers/${mealOfferId}`, {
       params: {
         compareAddress: compareAddress,
       },
     });
   } else {
-    response = await baseApi().get(`/mealOffers/${mealOfferId}`);
+    response = await api.get(`/mealOffers/${mealOfferId}`);
   }
   return response.data.data;
 };
@@ -73,12 +77,12 @@ export const getMealOffersByParams = async (
   return response.data;
 };
 
-export const alreadyReserved = async (mealOfferId: string) => {
-  const response = await baseApiAuth().get(
-    `/mealOffers/${mealOfferId}/reservations`
-  );
-  return response.data;
-};
+// export const alreadyReserved = async (mealOfferId: string) => {
+//   const response = await baseApiAuth().get(
+//     `/mealOffers/${mealOfferId}/reservations`
+//   );
+//   return response.data;
+// };
 
 export const getSentMealOfferRequests = async () => {
   const response = await baseApiAuth().get("/mealOffers/reservations/sent");

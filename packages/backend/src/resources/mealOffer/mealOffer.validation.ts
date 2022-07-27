@@ -42,7 +42,7 @@ const updateMealOfferBody = Joi.object<Partial<IMealOffer>>({
   allergens: Joi.array().items(
     Joi.string().valid(...Object.values(EMealAllergen))
   ),
-  startDate: Joi.date().iso().required().min(Date.now()),
+  startDate: Joi.date().iso().required(),
   endDate: Joi.date().iso().required().greater(Joi.ref("startDate")),
   portions: Joi.number().min(1).required(),
   pickUpDetails: Joi.string().allow(""),

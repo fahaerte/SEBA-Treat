@@ -47,8 +47,13 @@ export const MealOfferUpdate = () => {
     },
   });
 
+  // TODO: put into @lib-common ?
   interface IMealOfferForm
-    extends Omit<IMealOffer, "allergens" | "categories" | "_id" | "user"> {
+    extends Omit<
+      IMealOffer,
+      "allergens" | "categories" | "_id" | "user" | "image"
+    > {
+    image: FileList;
     allergens: TOptionValuePair[];
     categories: TOptionValuePair[];
   }
@@ -278,29 +283,23 @@ export const MealOfferUpdate = () => {
       }
     );
 
-  const handleSubmit = (updatedMealOffer: IMealOfferForm) => {
-    console.log(updatedMealOffer);
+  const handleSubmit = (data: IMealOfferForm) => {
+    console.log(data);
     if (userId) {
-      const { categories, allergens } = updatedMealOffer;
+      const { categories, allergens } = data;
 
       const formData = new FormData();
-      formData.append("title", updatedMealOffer.title);
-      formData.append("description", updatedMealOffer.description);
-      formData.append("image", updatedMealOffer.image);
-      formData.append(
-        "endDate",
-        new Date(updatedMealOffer.endDate).toISOString()
-      );
-      formData.append(
-        "startDate",
-        new Date(updatedMealOffer.startDate).toISOString()
-      );
-      formData.append("price", updatedMealOffer.price.toString());
-      formData.append("portions", updatedMealOffer.portions.toString());
-      formData.append(
-        "allergensVerified",
-        updatedMealOffer.allergensVerified.toString()
-      );
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("image", data.image[0]);
+      console.log("---image:");
+      console.log(data.image[0]);
+      console.log("--------");
+      formData.append("endDate", new Date(data.endDate).toISOString());
+      formData.append("startDate", new Date(data.startDate).toISOString());
+      formData.append("price", data.price.toString());
+      formData.append("portions", data.portions.toString());
+      formData.append("allergensVerified", data.allergensVerified.toString());
       categories.forEach((category, index) =>
         formData.append(`categories[${index}]`, category.value)
       );
