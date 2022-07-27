@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   dangerToast,
@@ -19,6 +19,7 @@ import {
   createCategoriesOptions,
   createAllergensOptions,
 } from "../../utils/createMealValueArrays";
+import { TFormFieldError } from "../../components/ui/Forms/_interfaces/TFormFieldError";
 
 interface IMealOfferForm
   extends Omit<
@@ -39,6 +40,9 @@ const CreateMeal = () => {
   const navigate = useNavigate();
   const modalAllergensInfo = useModalInfo({ close: () => undefined });
   const userId = getCookie("userId");
+  const [formError, setFormError] = useState<
+    TFormFieldError<IMealOfferForm>[] | undefined
+  >();
 
   const elements: IFormRow<IMealOfferForm>[] = [
     [
@@ -173,7 +177,7 @@ const CreateMeal = () => {
           },
           min: {
             value: new Date().toISOString().split(".")[0].slice(0, -3),
-            message: "The end date has to be later than the starting day.",
+            message: "The end date has to be later than the the current day.",
           },
         },
         props: {
@@ -197,11 +201,6 @@ const CreateMeal = () => {
       props: {
         type: "switch",
       },
-      rules: {
-        required: {
-          value: true,
-        },
-      },
     }),
   ];
 
@@ -219,10 +218,19 @@ const CreateMeal = () => {
   );
 
   const handleSubmit = (data: IMealOfferForm) => {
-    if (userId) {
+    if (new Date(data.startDate).getTime() > new Date(data.endDate).getTime()) {
+      setFormError([
+        {
+          fieldName: "endDate",
+          error: {
+            type: "invalid",
+            message: "End Date has to be later than starting date!",
+          },
+        },
+      ]);
+    }
+    if (userId && !formError) {
       const { categories, allergens } = data;
-      console.log(data.image);
-
       const formData = new FormData();
       formData.append("title", data.title);
       formData.append("description", data.description);
@@ -257,6 +265,7 @@ const CreateMeal = () => {
             formTitle={"Having leftovers? Create an offer!"}
             submitButton={{ children: "Publish your offer!" }}
             isLoading={createOfferMutation.isLoading}
+            formFieldErrors={formError}
             abortButton={{
               children: "Cancel",
               color: "secondary",

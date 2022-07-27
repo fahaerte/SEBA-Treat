@@ -141,6 +141,7 @@ class MealOfferController implements Controller {
     next: NextFunction
   ): Promise<Response | void> => {
     try {
+      console.log("Schafft es hier rein");
       const mealOfferQuery = {
         distance: Number(req.query.distance),
         address: req.query.address,

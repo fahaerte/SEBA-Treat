@@ -164,11 +164,13 @@ class MealOfferService {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
       mealOfferQuery
     );
+    console.log(mealOfferPreviews);
     const filteredPreviews = await this.filterMealOfferPreviewsForDistance(
       mealOfferPreviews,
       mealOfferQuery.address,
       mealOfferQuery.distance
     );
+    console.log(filteredPreviews);
     filteredPreviews.forEach((preview) => {
       preview.user.address = undefined;
       preview.rating = undefined;
@@ -182,6 +184,7 @@ class MealOfferService {
       mealOfferQuery.page * mealOfferQuery.pageLimit
     );
 
+    console.log(filteredPreviewsSliced);
     return {
       total_count: filteredPreviews.length,
       data: filteredPreviewsSliced,

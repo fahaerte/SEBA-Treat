@@ -60,6 +60,7 @@ export const getMealOffersByParams = async (
       address: getCookie("address"),
       portions: portions,
       category: category,
+      allergen: allergen,
       sellerRating: sellerRating,
       price: price,
       search: search,

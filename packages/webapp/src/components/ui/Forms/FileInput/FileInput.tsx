@@ -15,10 +15,10 @@ const FileInput = <TFormValues extends FieldValues>({
   fileType = ["text/*", "application/*", "video/*", "audio/*", "image/*"],
   multiple = true,
   disabled = false,
+  defaultValue,
   ...props
 }: IFormFileInput<TFormValues>) => {
   const { control, setValue } = useFormContext<TFormValues>();
-  const plc = "" as string;
 
   const { fieldState } = useController<TFormValues>({
     control,
@@ -49,7 +49,7 @@ const FileInput = <TFormValues extends FieldValues>({
       <SCInput
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        defaultValue={plc}
+        defaultValue={defaultValue}
         id={getEncodedString(label, "file")}
         type="file"
         accept={Array.isArray(fileType) ? fileType.join(",") : fileType}
