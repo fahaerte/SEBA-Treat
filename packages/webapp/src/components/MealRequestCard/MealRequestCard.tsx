@@ -56,10 +56,6 @@ const MealRequestCard = ({
       });
     },
     onError: (error) => {
-      if (!userId) {
-        warningToast({ message: "Please log in to reserve this meal." });
-        navigate("/login", { state: { from: location } });
-      }
       if (error instanceof AxiosError && error.response) {
         dangerToast({
           message: error.response.data.message,
@@ -73,9 +69,14 @@ const MealRequestCard = ({
   });
 
   function handleRequestClick() {
-    void requestMealMutation.mutate({
-      mealOfferId: mealOfferId,
-    });
+    if (!userId) {
+      warningToast({ message: "Please log in to reserve this meal." });
+      navigate("/login", { state: { from: location } });
+    } else {
+      void requestMealMutation.mutate({
+        mealOfferId: mealOfferId,
+      });
+    }
   }
 
   return (

@@ -45,6 +45,7 @@ class MealOfferController implements Controller {
         validate.getMealOfferPreviewsQuery,
         ValidatePart.QUERY
       ),
+      optionalAuthenticatedMiddleware,
       this.getMealOfferPreviews
     );
     this.router.get(
@@ -143,7 +144,7 @@ class MealOfferController implements Controller {
         distance: Number(req.query.distance),
         address: req.query.address,
         category: req.query.category,
-        allergen: req.query.allergen,
+        excludedAllergens: req.query.allergen,
         portions: req.query.portions ? Number(req.query.portions) : undefined,
         sellerRating: req.query.sellerRating
           ? Number(req.query.sellerRating)
@@ -160,11 +161,14 @@ class MealOfferController implements Controller {
         pageLimit: Number(req.query.pageLimit),
         sortingRule: req.query.sortingRule ? req.query.sortingRule : undefined,
       } as MealOfferQuery;
+      console.log(mealOfferQuery);
       const data = await this.mealOfferService.getMealOfferPreviews(
-        mealOfferQuery
+        mealOfferQuery,
+        req.user
       );
       res.status(200).send(data);
     } catch (error: any) {
+      console.log(error);
       next(error);
     }
   };

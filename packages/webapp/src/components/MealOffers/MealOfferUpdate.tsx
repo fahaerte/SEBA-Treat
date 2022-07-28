@@ -284,15 +284,20 @@ export const MealOfferUpdate = () => {
       if (data.image) {
         formData.append("image", data.image[0]);
       }
+      if (data.startDate) {
+        formData.append("startDate", new Date(data.startDate).toISOString());
+      } else {
+        formData.append("startDate", mealOffer.startDate);
+      }
       if (data.endDate) {
         formData.append("endDate", new Date(data.endDate).toISOString());
       } else {
         formData.append("endDate", mealOffer.endDate.slice(0, -8));
       }
-      if (data.startDate) {
-        formData.append("startDate", new Date(data.startDate).toISOString());
+      if (data.pickUpDetails) {
+        formData.append("pickUpDetails", data.pickUpDetails);
       } else {
-        formData.append("startDate", mealOffer.startDate);
+        formData.append("pickUpDetails", mealOffer.pickUpDetails);
       }
       if (data.price) {
         formData.append("price", data.price.toString());
