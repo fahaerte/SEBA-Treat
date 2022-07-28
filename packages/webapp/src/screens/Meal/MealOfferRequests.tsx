@@ -23,11 +23,11 @@ export const MealOfferRequests = ({
         tabs={[
           {
             to: "/mealOfferRequests/sent",
-            children: "Your requests",
+            children: "Your reservations",
           },
           {
             to: "/mealOfferRequests/received",
-            children: "Received requests",
+            children: "Received reservations",
           },
         ]}
       />

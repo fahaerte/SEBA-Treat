@@ -96,8 +96,8 @@ const MealRequestCard = ({
           </div>
           <ol className={"ms-2"}>
             <li>Check allergens if you have any</li>
-            <li>Make a request for the meal</li>
-            <li>Wait until the seller accepts the request</li>
+            <li>Reserve the meal</li>
+            <li>Wait until the seller accepts the reservation</li>
             <li>
               Confirm the transaction (<u>only then, you are charged</u>)
             </li>
