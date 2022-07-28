@@ -4,7 +4,8 @@ import HttpException from "../utils/exceptions/http.exception";
 function errorMiddleware(
   error: HttpException,
   req: Request,
-  res: Response
+  res: Response,
+  _next: NextFunction
 ): void {
   const errorName = error.name;
   let status = error.status || 500;

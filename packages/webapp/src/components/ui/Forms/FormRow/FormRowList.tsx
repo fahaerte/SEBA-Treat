@@ -6,9 +6,11 @@ import { IFormRow } from "../_interfaces/IFormElementConfig";
 const FormRowList = <TFormValue extends FieldValues>({
   rows,
   errors,
+  className = "",
 }: {
   rows: IFormRow<TFormValue>[];
   errors: FieldErrors;
+  className?: string;
 }) => (
   <>
     {
@@ -18,12 +20,15 @@ const FormRowList = <TFormValue extends FieldValues>({
           key={`form-row-${
             Array.isArray(row) ? row[0].config.formKey : row.config.formKey
           }`}
-          className="row mb-lg"
+          className={`row mb-lg ${className}`}
         >
           {Array.isArray(row) ? (
             // iterate group of form elements within current form row
             row.map((groupItem) => (
-              <div className="col" key={groupItem.config.formKey}>
+              <div
+                className={`col ${groupItem.config.wrapperClasses || ""}`}
+                key={groupItem.config.formKey}
+              >
                 <FormRowElement formConfig={groupItem} errors={errors} />
               </div>
             ))

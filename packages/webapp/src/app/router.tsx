@@ -15,11 +15,15 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { MealOfferDetailScreen } from "../screens/Meal/MealOfferDetailScreen";
 import AppLayout from "../components/AppLayout";
 import CreateMeal from "../screens/Meal/CreateMeal";
+import EditMeal from "../screens/Meal/EditMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { ProfileScreen } from "../screens/Account/ProfileScreen";
 import { ProfileOverview } from "../components/Profile/ProfileOverview";
-import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
+// import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
 import { ProfileUpdateScreen } from "../screens/Account/ProfileUpdateScreen";
+import { LandingPageTabBar } from "../components/AddressInput/LandingPageTabBar";
+import { BuyMealTab } from "../components/AddressInput/BuyMealTab";
+import { OfferMealTab } from "../components/AddressInput/OfferMealTab";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -61,53 +65,47 @@ export const AppRouter = () => {
 
   const addressRoute = {
     path: "address",
-    element: <AddressInputScreen />,
-  };
-
-  const profileRoutes = {
-    path: "account",
-    element: (
-      <RequireAuthRoute>
-        <AppLayout />
-      </RequireAuthRoute>
-    ),
     children: [
       {
         path: "",
-        element: (
-          <ProfileScreen>
-            <ProfileOverview />
-          </ProfileScreen>
-        ),
-        // children: [
-        //   {
-        //     path: "edit",
-        //     element: <ProfileScreen>hallo</ProfileScreen>,
-        //   },
-        // ],
+        element: <Navigate to={"./buymeal"} replace={true} />,
       },
       {
-        path: "edit",
+        path: "buymeal",
         element: (
-          <ProfileScreen>
-            <ProfileUpdateScreen />
-          </ProfileScreen>
+          <AddressInputScreen>
+            <LandingPageTabBar>
+              <BuyMealTab />
+            </LandingPageTabBar>
+          </AddressInputScreen>
         ),
       },
       {
-        path: "transaction-history/:userid",
+        path: "offermeal",
         element: (
-          <ProfileScreen>
-            <TransactionHistory />
-          </ProfileScreen>
+          <AddressInputScreen>
+            <LandingPageTabBar>
+              <OfferMealTab />
+            </LandingPageTabBar>
+          </AddressInputScreen>
         ),
       },
     ],
   };
+  const profileRoutes = {
+    path: "account",
+    element: (
+      <RequireAuthRoute>
+        <AppLayout>
+          <ProfileScreen />
+        </AppLayout>
+      </RequireAuthRoute>
+    ),
+  };
 
   const purchaseCreditRoutes = [
     {
-      path: "/purchase-credits/:userId/:token",
+      path: "/purchase-credits/:userId/",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -127,7 +125,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/success/:priceId/:customerId/:token/:userId",
+      path: "/success/:priceId/:customerId//:userId",
       element: <PaymentSuccess />,
     },
   ];
@@ -175,7 +173,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealoffers",
+      path: "mealOffers",
       element: (
         <AppLayout>
           <RequireAddressRoute>
@@ -185,12 +183,22 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealoffers/:mealOfferId",
+      path: "mealOffers/:mealOfferId",
       element: (
         <AppLayout>
           <RequireAddressRoute>
             <MealOfferDetailScreen />
           </RequireAddressRoute>
+        </AppLayout>
+      ),
+    },
+    {
+      path: "mealOffers/:mealOfferId/edit",
+      element: (
+        <AppLayout>
+          <RequireAuthRoute>
+            <EditMeal />
+          </RequireAuthRoute>
         </AppLayout>
       ),
     },

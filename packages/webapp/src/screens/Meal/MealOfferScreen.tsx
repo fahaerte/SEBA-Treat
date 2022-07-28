@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Typography } from "../../components";
+import { Col, Container, PageHeading, Row, Typography } from "../../components";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
@@ -7,6 +7,7 @@ import MealOffer from "../../components/MealOffers/MealOffer";
 import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTopBar";
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 import { ESortingRules } from "@treat/lib-common";
+import { ConfigService } from "../../utils/ConfigService";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
@@ -26,7 +27,7 @@ export const MealOfferScreen = () => {
 
   const queryKey = "getOffers";
 
-  const pageLimit = 10;
+  const pageLimit = 12;
 
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery(
@@ -77,6 +78,7 @@ export const MealOfferScreen = () => {
     category,
     sellerRating,
     portions,
+    sortingRule,
     queryClient,
     fetchNextPage,
   ]);
@@ -148,9 +150,9 @@ export const MealOfferScreen = () => {
     <>
       <Container>
         <Row>
-          <Typography variant={"h1"} className={"fw-normal"}>
-            What do you want to eat today?
-          </Typography>
+          <PageHeading className={"mb-3"}>
+            To what do you <u>TREAT</u> yourself today?
+          </PageHeading>
 
           <Col className={"col col-lg-2"}>
             <Row>
@@ -199,6 +201,9 @@ export const MealOfferScreen = () => {
                         startDate={mealOffer.endDate}
                         allergensVerified={mealOffer.allergensVerified}
                         categories={mealOffer.categories}
+                        image={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
+                          mealOffer.image
+                        }`}
                       />
                     </Col>
                   ));

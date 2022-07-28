@@ -27,9 +27,6 @@ export const CustomDropdown = ({
       <DropdownItem onClick={handleReservationNavigation}>
         Meal Reservations
       </DropdownItem>
-      <Link route to={"/reservations"} className={"dropdown-item"}>
-        My Offers
-      </Link>
       <Link route to={"/account"} className={"dropdown-item"}>
         My Profile
       </Link>

@@ -50,4 +50,5 @@ export interface IForm<TFormValues> extends Pick<IComponentBase, "className"> {
    * e.g. server side validation error messages
    */
   formFieldErrors?: TFormFieldError<TFormValues>[];
+  rowClasses?: string;
 }

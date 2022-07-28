@@ -6,12 +6,13 @@ import {
   FormHelper,
   Icon,
   IFormRow,
+  PageHeading,
   successToast,
-  TOptionValuePair,
+  Typography,
   useModalInfo,
+  warningToast,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
-import { IMealOffer } from "@treat/lib-common";
 import { createMealOffer } from "../../api/mealApi";
 import { useMutation } from "react-query";
 import { getCookie } from "../../utils/auth/CookieProvider";
@@ -20,16 +21,8 @@ import {
   createAllergensOptions,
 } from "../../utils/createMealValueArrays";
 import { TFormFieldError } from "../../components/ui/Forms/_interfaces/TFormFieldError";
-
-interface IMealOfferForm
-  extends Omit<
-    IMealOffer,
-    "allergens" | "categories" | "_id" | "user" | "image"
-  > {
-  image: FileList;
-  allergens: TOptionValuePair[];
-  categories: TOptionValuePair[];
-}
+import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
+import { AxiosError } from "axios";
 
 /**
  * TODO:
@@ -134,6 +127,18 @@ const CreateMeal = () => {
           autocompleteOptions: createAllergensOptions(),
         },
       }),
+      FormHelper.createRadioCheckSwitch({
+        formKey: "allergensVerified",
+        label: "Have you checked your meal for allergens?",
+        wrapperClasses: "align-items-end d-flex",
+
+        defaultValue: false,
+        props: {
+          type: "switch",
+        },
+      }),
+    ],
+    [
       FormHelper.createTagSelect({
         formKey: "categories",
         label: "Category Labels",
@@ -146,6 +151,13 @@ const CreateMeal = () => {
         },
         props: {
           autocompleteOptions: createCategoriesOptions(),
+        },
+      }),
+      FormHelper.createTextArea({
+        formKey: "pickUpDetails",
+        label: "Add pick up details if necessary, e.g. which floor or c/o",
+        props: {
+          sendWithNewLines: true,
         },
       }),
     ],
@@ -185,23 +197,6 @@ const CreateMeal = () => {
         },
       }),
     ],
-    FormHelper.createTextArea({
-      formKey: "pickUpDetails",
-      label: "Add pick up details if necessary, e.g. which floor or c/o",
-      props: {
-        sendWithNewLines: true,
-        rows: 2,
-      },
-    }),
-
-    FormHelper.createRadioCheckSwitch({
-      formKey: "allergensVerified",
-      label: "Have you checked your meal for allergens?",
-      defaultValue: false,
-      props: {
-        type: "switch",
-      },
-    }),
   ];
 
   const createOfferMutation = useMutation(
@@ -213,7 +208,18 @@ const CreateMeal = () => {
         console.log(response);
         navigate(`/mealOffers/${mealId}`);
       },
-      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message: "Unexpected server error. The meal could not be created.",
+          });
+        }
+        navigate(`/mealOffers`);
+      },
     }
   );
 
@@ -256,13 +262,22 @@ const CreateMeal = () => {
 
   return (
     <>
+      <PageHeading className={"mb-4"}>
+        Having leftovers? Create an <u>offer!</u>
+      </PageHeading>
+      <Typography>
+        Did you know, that approximately <u>12 million tons of food</u> is
+        thrown away every year in Germany?
+      </Typography>
+      <Typography color={"secondary"} variant={"h3"} className={"mb-4"}>
+        Be part of tomorrow`&apos;`s change and offer your meals on <u>TREAT</u>
+      </Typography>
       {userId ? (
         <>
           {modalAllergensInfo.markup}
           <Form<IMealOfferForm>
             elements={elements}
             onSubmit={handleSubmit}
-            formTitle={"Having leftovers? Create an offer!"}
             submitButton={{ children: "Publish your offer!" }}
             isLoading={createOfferMutation.isLoading}
             formFieldErrors={formError}
@@ -274,6 +289,11 @@ const CreateMeal = () => {
               onClick: () => navigate("/"),
             }}
           >
+            <Typography variant={"h3"} className={"fw-normal"}>
+              <Icon type={"infoCircle"} /> On top of the price you have set for
+              your meal, we will charge the buyer an additional 7% service fee
+              based on the price you have set.
+            </Typography>
             <Button
               className={"mb-3"}
               color={"warning"}

@@ -6,7 +6,6 @@ import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 
 const TextAreaControlled = ({
-  wrapperClasses = "",
   className = "",
   disabled = false,
   rows = 1,
@@ -20,7 +19,7 @@ const TextAreaControlled = ({
   const inputId = getEncodedString(label);
 
   return (
-    <SCFloatingForm className={["form-floating", wrapperClasses].join(" ")}>
+    <SCFloatingForm className={["form-floating"].join(" ")}>
       <SCTextArea
         className={[
           "form-control",

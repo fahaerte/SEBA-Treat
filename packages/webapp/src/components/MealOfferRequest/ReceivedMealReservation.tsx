@@ -7,6 +7,7 @@ import { RateUser } from "./RateUser";
 import { EMealReservationState } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
+import { AxiosError } from "axios";
 
 interface ReceivedMealReservationProps {
   mealOfferId: string;
@@ -28,10 +29,19 @@ export const ReceivedMealReservation = ({
       updateMealReservationState(reservation._id, newState),
     {
       onSuccess: () => {
-        successToast({ message: "You changed the state of your reservation" });
+        successToast({ message: "You changed the state of your reservation." });
       },
-      onError: (error: any) => {
-        dangerToast({ message: error.response.data.message });
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message:
+              "Unexpected server error. The state of your reservation could not be updated.",
+          });
+        }
       },
     }
   );
@@ -61,7 +71,7 @@ export const ReceivedMealReservation = ({
     } else if (reservationState == EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
-          mealOfferId={mealOfferId}
+          // mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
           existingRating={buyerRating ? buyerRating : undefined}
         />

@@ -26,6 +26,8 @@ export const StyledDropdown = styled(UncontrolledDropdown)`
     --bs-btn-active-bg: ${({ theme }) => theme.palette.primary.active};
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: ${({ theme }) => theme.palette.primary.hover};
+    border-top-left-radius: ${({ theme }) => theme.general.border.radius};
+    border-bottom-left-radius: ${({ theme }) => theme.general.border.radius};
 
     a {
       color: white;
@@ -36,6 +38,8 @@ export const StyledDropdown = styled(UncontrolledDropdown)`
     color: ${({ theme }) => theme.palette.primary.contrastText};
     //box-shadow: none;
     border-color: ${({ theme }) => theme.palette.primary.main};
+    border-top-right-radius: ${({ theme }) => theme.general.border.radius};
+    border-bottom-right-radius: ${({ theme }) => theme.general.border.radius};
     // border-radius: ${({ theme }) => theme.general.border.radius};
     &:hover,
     &:active {
@@ -68,11 +72,5 @@ export const StyledDropdown = styled(UncontrolledDropdown)`
       background-color: ${({ theme }) => theme.palette.primary.active};
       text-decoration: none;
     }
-  }
-`;
-
-export const SCCustomForm = styled(Form)`
-  > .mb-lg {
-    margin-bottom: 0;
   }
 `;

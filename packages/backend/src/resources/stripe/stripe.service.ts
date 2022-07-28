@@ -24,7 +24,7 @@ class StripeService {
   public async createCheckoutSession(
     priceId: string,
     customerId: string,
-    token: string,
+    // token: string,
     userId: string,
     couponId?: string
   ) {
@@ -42,10 +42,10 @@ class StripeService {
         discounts: couponId ? [{ coupon: couponId }] : undefined,
         success_url: `${this.configService.get(
           "CLIENT_URL"
-        )}/success/${priceId}/${customerId}/${token}/${userId}`,
+        )}/success/${priceId}/${customerId}/${userId}`,
         cancel_url: `${this.configService.get(
           "CLIENT_URL"
-        )}/credit-account/${userId}/${token}`,
+        )}/purchase-credits/${userId}`,
         automatic_tax: { enabled: true },
       });
     } catch (error: any) {

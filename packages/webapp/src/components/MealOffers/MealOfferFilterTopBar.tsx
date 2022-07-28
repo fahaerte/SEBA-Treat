@@ -17,6 +17,7 @@ const MealOfferFilterTop = ({
     <Row className={"m-2"}>
       <Col className={"m-2"}>
         <InputControlled
+          type={"search"}
           value={currentSearchString as string}
           label={"search"}
           onChange={handleSearch}

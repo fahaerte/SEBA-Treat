@@ -6,7 +6,6 @@ import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 
 const InputControlled = ({
-  wrapperClasses = "",
   className = "",
   disabled = false,
   onChange = () => undefined,
@@ -21,7 +20,7 @@ const InputControlled = ({
   const inputId = getEncodedString(label, type as string);
 
   return (
-    <SCFloatingForm className={["form-floating", wrapperClasses].join(" ")}>
+    <SCFloatingForm className={["form-floating"].join(" ")}>
       <SCInput
         value={value}
         disabled={disabled}

@@ -9,18 +9,12 @@ import {
   PageHeading,
   Row,
   SectionHeading,
-  successToast,
   UserPreview,
 } from "../../components";
-import { useMutation, useQuery } from "react-query";
-import {
-  getMealOffer,
-  requestMealOffer,
-  alreadyReserved,
-} from "../../api/mealApi";
+import { useQuery } from "react-query";
+import { getMealOffer } from "../../api/mealApi";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import MealRequestCard from "../../components/MealRequestCard/MealRequestCard";
-import { AxiosError } from "axios";
 import { getCookie } from "../../utils/auth/CookieProvider";
 import { ConfigService } from "../../utils/ConfigService";
 
@@ -32,99 +26,38 @@ export const MealOfferDetailScreen = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [enableReservation, setEnableReservation] = useState(true);
-  const [reservationText, setReservationText] = useState("Reserve meal");
+  const [disabledText, setDisabledText] = useState("");
 
   const { data: mealOffer, isLoading: mealOfferIsLoading } = useQuery(
     "getMealOffer",
-    () => getMealOffer(mealOfferId as string, address),
+    () => getMealOffer(mealOfferId as string, address as string),
     {
       onSuccess: (response) => {
-        console.log(response);
-
         const nowDate = new Date();
-        const startDate = new Date(response.startDate);
-        const endDate = new Date(response.endDate);
+        const startDate = new Date(response.startDate as string);
+        const endDate = new Date(response.endDate as string);
 
-        if (startDate > nowDate) {
-          setReservationText("The offer has not started yet.");
-          setEnableReservation(false);
-        }
-        if (endDate < nowDate) {
-          setReservationText("The offer has expired.");
-          setEnableReservation(false);
-        }
+        if (startDate > nowDate)
+          setDisabledText("The offer has not started yet.");
+        if (endDate < nowDate) setDisabledText("The offer has expired.");
         if (userId === response.user._id) {
-          setReservationText("You cannot reserve your own meal.");
-          setEnableReservation(false);
-        }
+          setDisabledText("You cannot reserve your own meal.");
+        } else if (userId && response.reservations.length)
+          setDisabledText("You have already reserved this meal.");
       },
     }
   );
 
-  const { data: isAlreadyReserved, isLoading: isAlreadyReservedIsLoading } =
-    useQuery(
-      ["getAlreadyReserved", mealOffer],
-      () => alreadyReserved(mealOfferId as string),
-      {
-        onSuccess: (response) => {
-          if (response) {
-            setReservationText("You have already reserved this meal.");
-            setEnableReservation(false);
-          }
-        },
-      }
-    );
-
-  // useEffect(() => {
-  //   console.log(mealOffer);
-  //   const nowDate = new Date();
-  //   const endDate = new Date(mealOffer.endDate);
-  //   console.log("nowDate: ", nowDate);
-  //   console.log("still valid: ", endDate > nowDate);
-  //   if (userId !== mealOffer.user._id) {
-  //     setEnableReservation(true);
-  //   }
-  // }, [mealOffer]);
-
   function handleEditClick() {
     if (userId && userId === mealOffer.user._id) {
-      console.log("Edit click");
+      navigate(`/mealOffers/${mealOfferId}/edit`, {
+        state: { from: location },
+      });
     } else {
       dangerToast({
         message: "You can only edit your own meals.",
       });
     }
-  }
-
-  const requestMealMutation = useMutation(requestMealOffer, {
-    onSuccess: () => {
-      successToast({
-        message:
-          "The meal has been reserved for you. Now, the chef can accept it.",
-      });
-    },
-    onError: (error) => {
-      console.log("onError:");
-      if (error instanceof AxiosError && error.response) {
-        dangerToast({
-          message: error.response.data.message,
-        });
-      } else {
-        dangerToast({
-          message: "Unexpected server error. The meal could not be reserved.",
-        });
-      }
-      if (!userId) {
-        navigate("/login", { state: { from: location } });
-      }
-    },
-  });
-
-  function handleRequestClick() {
-    void requestMealMutation.mutate({
-      mealOfferId: mealOfferId as string,
-    });
   }
 
   return (
@@ -160,7 +93,7 @@ export const MealOfferDetailScreen = () => {
               </Col>
             </Row>
             <UserPreview
-              img={"undefined"} // TODO: add image url
+              img={"undefined"}
               firstName={mealOffer.user.firstName}
               lastName={mealOffer.user.lastName}
               meanRating={mealOffer.user.meanRating}
@@ -170,19 +103,18 @@ export const MealOfferDetailScreen = () => {
               {/* TODO: make component for image gallery */}
               <Col>
                 <div
+                  className={"d-inline-block"}
                   style={{
                     height: "400px",
                     width: "100%",
                     position: "relative",
-                    display: "inline-block",
                     overflow: "hidden",
                   }}
                 >
                   <div
+                    className={"w-100 h-100"}
                     style={{
                       position: "absolute",
-                      width: "100%",
-                      height: "100%",
                       backgroundImage: `url(${new ConfigService().get(
                         "MEAL_IMAGES_URL"
                       )}/${mealOffer.image})`,
@@ -191,17 +123,17 @@ export const MealOfferDetailScreen = () => {
                       backgroundRepeat: "no-repeat",
                       opacity: "0.3",
                     }}
-                  ></div>
+                  />
                   <img
                     src={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
                       mealOffer.image
                     }`}
+                    alt={`Image for ${mealOffer.title}`}
+                    className={"h-100 d-block"}
                     style={{
-                      display: "block",
                       position: "absolute",
                       top: "50%",
                       left: "50%",
-                      height: "100%",
                       transform: "translate(-50%, -50%)",
                     }}
                   />
@@ -234,18 +166,18 @@ export const MealOfferDetailScreen = () => {
               {/* TODO: maxWidth: 400px*/}
               <Col>
                 <MealRequestCard
+                  mealOfferId={mealOffer._id}
+                  userId={userId}
                   productName={mealOffer.title}
                   mealPrice={mealOffer.price}
                   transactionFee={mealOffer.transactionFee}
-                  disableButton={!enableReservation}
-                  disabledText={reservationText}
-                  buttonAction={() => handleRequestClick()}
+                  disabledText={disabledText}
                 />
               </Col>
             </Row>
           </Container>
         ) : (
-          <Container className={""}>
+          <Container>
             <Row className={"pt-5"}>
               <PageHeading>
                 Meal <u>not found</u>

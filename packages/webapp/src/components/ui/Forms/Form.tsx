@@ -27,6 +27,7 @@ const Form = <TFormValues extends FieldValues>({
   elements,
   feedback,
   children = "",
+  rowClasses = "",
   ...props
 }: IForm<TFormValues>) => {
   const { handleSubmit, formState, reset, setError, ...rest } =
@@ -38,7 +39,7 @@ const Form = <TFormValues extends FieldValues>({
     for (const error of formFieldErrors) {
       setError(error.fieldName, error.error);
     }
-  }, [formFieldErrors, setError]);
+  }, [formFieldErrors, setError, formState]);
 
   const submitHandler: SubmitHandler<TFormValues> = (data) => {
     if (resetOnSubmit) {
@@ -67,7 +68,11 @@ const Form = <TFormValues extends FieldValues>({
         noValidate
         {...props}
       >
-        <FormRowList rows={elements} errors={formState.errors} />
+        <FormRowList
+          rows={elements}
+          errors={formState.errors}
+          className={rowClasses}
+        />
         {feedback ? (
           <Typography variant="h4" component="p" color={feedback.color}>
             {feedback.message}

@@ -63,4 +63,5 @@ export interface ITypography extends IComponentBase {
    * Color of the typography
    */
   color?: TBootstrapPaletteTypography;
+  verticalMiddle?: boolean;
 }

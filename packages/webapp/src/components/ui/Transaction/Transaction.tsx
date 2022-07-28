@@ -1,26 +1,49 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { Row, Col, UserPreview } from "../";
+import { Row, Col, UserPreview, dangerToast, Typography } from "../";
 import { getCookie } from "../../../utils/auth/CookieProvider";
+import { useQuery } from "react-query";
+import { getUserPreview } from "../../../api/userApi";
 
 const Transaction = ({
   senderId,
   receiverId,
-  firstName,
-  lastName,
   timestamp,
   amount,
   fee,
 }: {
   senderId: string;
   receiverId: string;
-  firstName: string;
-  lastName: string;
   timestamp: Date;
   amount: number;
   fee: number;
 }) => {
   const userId = getCookie("userId");
+
+  let userPreviewId = "";
+  if (userId === senderId) {
+    userPreviewId = receiverId;
+  } else if (userId === receiverId) {
+    userPreviewId = senderId;
+  } else {
+    dangerToast({
+      message:
+        "Something went wrong. You have not been involved in this transaction.",
+    });
+  }
+
+  const {
+    data: userPreview,
+    isLoading: userPreviewIsLoading,
+    isSuccess: userPreviewLoaded,
+  } = useQuery("getUserPreview", () => getUserPreview(userPreviewId), {
+    onSuccess: (response) => {
+      console.log(response);
+    },
+    onError: () => {
+      dangerToast({ message: "Could not get user" });
+    },
+  });
 
   const timestampAsString = new Date(timestamp).toLocaleDateString();
 
@@ -33,13 +56,27 @@ const Transaction = ({
         <Container className={"p-0"}>
           <Row justify={"between"} alignItems={"center"}>
             <Col>
-              <UserPreview
-                firstName={"Test"}
-                lastName={"User"}
-                countRatings={99}
-                meanRating={2}
-                img={"test"}
-              />
+              {userPreviewIsLoading ? (
+                <>
+                  <Typography>User is loading...</Typography>
+                </>
+              ) : (
+                <>
+                  {userPreviewLoaded ? (
+                    <>
+                      <UserPreview
+                        firstName={userPreview.firstName}
+                        lastName={userPreview.lastName}
+                        countRatings={userPreview.countRatings}
+                        meanRating={userPreview.meanRating}
+                        img={"test"}
+                      />
+                    </>
+                  ) : (
+                    <Typography>Could not load user</Typography>
+                  )}
+                </>
+              )}
             </Col>
             <Col>
               <div style={{ textAlign: "center" }}>

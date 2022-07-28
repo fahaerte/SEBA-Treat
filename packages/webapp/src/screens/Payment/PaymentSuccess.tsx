@@ -13,18 +13,12 @@ import { verifyPayment } from "../../api/stripeApi";
 import { setCookie } from "../../utils/auth/CookieProvider";
 
 const PaymentSuccess = () => {
-  const { priceId, customerId, token, userId } = useParams();
+  const { priceId, customerId, userId } = useParams();
 
   const { isLoading, isSuccess, isError } = useQuery("verifyPayment", () => {
     setCookie("userId", userId as string);
-    console.log({
-      customerId,
-      priceId,
-      userId,
-      token,
-    });
 
-    if (customerId && userId && priceId && token) {
+    if (customerId && userId && priceId) {
       return verifyPayment({
         customerId,
         priceId,

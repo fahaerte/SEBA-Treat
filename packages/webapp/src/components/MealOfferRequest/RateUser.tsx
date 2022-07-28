@@ -3,6 +3,7 @@ import { Button, Col, dangerToast, Icon, Row, successToast } from "../ui";
 import { sum } from "lodash";
 import { useMutation } from "react-query";
 import { rateUser as rateUserCall } from "../../api/ratingApi";
+import { AxiosError } from "axios";
 
 interface RateUserProps {
   // mealOfferId: string;
@@ -32,11 +33,19 @@ export const RateUser = ({
     () => rateUserCall(mealReservationId, sum(rating)),
     {
       onSuccess: () => {
-        successToast({ message: "You rated the user" });
+        successToast({ message: "You rated the user." });
         setFinalRating(sum(rating));
       },
-      onError: (error: any) => {
-        dangerToast({ message: error.response.data.message });
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message: "Unexpected server error. The user could not be rated.",
+          });
+        }
       },
     }
   );

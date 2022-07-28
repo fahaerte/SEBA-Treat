@@ -1,9 +1,9 @@
 import { Col, Row } from "../Grid";
-import { Button, Icon, Link, Typography } from "../index";
+import { Button, Icon, Link, Typography, Form } from "../index";
 import React, { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { SCCustomForm, SCHeader } from "./styles";
+import { SCHeader } from "./styles";
 import Logo from "../../../assets/img/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -12,10 +12,11 @@ import {
   setCookie,
 } from "../../../utils/auth/CookieProvider";
 import { signout } from "../../../api/authApi";
-import { dangerToast, successToast } from "../Toast";
+import { dangerToast } from "../Toast";
 import { CustomDropdown } from "./UserDropdown";
 import { IStringObject } from "@treat/lib-common";
 import { addressElement } from "../../AddressInput/AddressInput";
+import { AxiosError } from "axios";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -27,20 +28,20 @@ export const Header = () => {
   const address = getCookie("address");
   const userId = getCookie("userId");
 
+  const queryClient = useQueryClient();
+
   const handleAddress = (data: IStringObject) => {
     setCookie("address", data.returnedString);
     setOnAddressEdit(false);
+    queryClient.fetchQuery("getOffers");
   };
 
   useQuery(["getUser", userId], () => getUser(), {
     onSuccess: (response) => {
-      setBalance(response.data.virtualAccount.balance);
-      setFirstName(response.data.firstName);
+      setBalance(response.data.virtualAccount.balance as number);
+      setFirstName(response.data.firstName as string);
     },
     onError: () => {
-      dangerToast({
-        message: "Authorization error. You'll be logged out automatically.",
-      });
       signoutMutation.mutate();
     },
     enabled: !!userId,
@@ -49,12 +50,19 @@ export const Header = () => {
   const signoutMutation = useMutation("signout", signout, {
     onSuccess: () => {
       removeCookies();
-      successToast({ message: "Successfully signed out." });
       navigate("/");
     },
-    onError: () => {
+    onError: (error) => {
       removeCookies();
-      dangerToast({ message: "Signout unsuccessful. Please try again!" });
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message: "Unexpected server error. Please try again.",
+        });
+      }
     },
   });
 
@@ -90,13 +98,19 @@ export const Header = () => {
           {address && (
             <Col className={"col-sm-auto my-auto"}>
               {onAddressEdit ? (
-                <SCCustomForm<IStringObject>
+                <Form<IStringObject>
                   elements={addressElement}
-                  onSubmit={handleAddress}
+                  onSubmit={(data) => handleAddress(data)}
                   className={"d-flex align-items-center"}
-                  submitButton={{
+                  rowClasses={"mb-0"}
+                  abortButton={{
                     color: "secondary",
-                    className: "ms-2",
+                    children: <Icon type={"x-lg"} />,
+                    onClick: () => setOnAddressEdit(false),
+                  }}
+                  submitButton={{
+                    color: "primary",
+                    className: "mx-2",
                     children: (
                       <>
                         <Icon type={"geo-alt"} /> Update location

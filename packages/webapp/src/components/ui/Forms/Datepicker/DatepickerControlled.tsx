@@ -6,7 +6,6 @@ import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
 
 const DatepickerControlled = ({
-  wrapperClasses = "",
   className = "",
   type = "date",
   disabled = false,
@@ -22,7 +21,7 @@ const DatepickerControlled = ({
   const inputId = getEncodedString(label, type);
 
   return (
-    <SCFloatingForm className={["form-floating", wrapperClasses].join(" ")}>
+    <SCFloatingForm className={["form-floating"].join(" ")}>
       <SCInput
         id={inputId}
         type={type}
@@ -32,7 +31,7 @@ const DatepickerControlled = ({
           "form-control",
         ].join(" ")}
         placeholder={label}
-        readOnly={disabled}
+        disabled={disabled}
         value={value}
         onChange={(event) => onChange(event)}
         min={min}

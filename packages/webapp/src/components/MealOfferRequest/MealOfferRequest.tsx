@@ -4,18 +4,38 @@ import { Col, Row } from "../ui/Grid";
 import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { getFormattedDateFromString } from "../../utils/getFormattedDate";
-import { Typography } from "../ui";
+import { Link, Typography } from "../ui";
+import { ConfigService } from "../../utils/ConfigService";
 
 interface MealOfferProps {
   mealOffer: MealOffer;
   children: React.ReactNode;
 }
 
-const MealOfferImage = styled.img`
+const MealOfferImage = styled.div`
+  position: relative;
   width: 160px;
   height: 160px;
-  border-radius: 25px;
-  border: 1px solid red;
+
+  > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+  }
+
+  > img {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+  }
 `;
 
 const MainDivider = styled.hr`
@@ -30,7 +50,21 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
   <Container className={"p-0"}>
     <Row>
       <Col className={"col-sm-auto"}>
-        <MealOfferImage src={""} />
+        <MealOfferImage>
+          <div
+            style={{
+              backgroundImage: `url(${new ConfigService().get(
+                "MEAL_IMAGES_URL"
+              )}/${mealOffer.image})`,
+            }}
+          ></div>
+          <img
+            src={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
+              mealOffer.image
+            }`}
+            alt={`Image for meal ${mealOffer.title}`}
+          />
+        </MealOfferImage>
       </Col>
       <Col className={""}>
         <Row>
@@ -62,9 +96,11 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
                 </Typography>
               </Col>
               <Col className={"col-sm-auto my-auto"}>
-                <Typography variant={"p"} className={"mb-0"}>
-                  Go to offer
-                </Typography>
+                <Link to={`/mealOffers/${mealOffer._id}`} display={"text"}>
+                  <Typography variant={"p"} className={"mb-0"}>
+                    Go to offer
+                  </Typography>
+                </Link>
               </Col>
             </Row>
           </Col>

@@ -44,6 +44,7 @@ class UserController implements Controller {
     );
 
     this.router.get(`${this.path}/:userId?/preview`, this.getUserPreview);
+
     this.router.post(`${this.path}/signout`, this.signout);
 
     this.router.put(
@@ -190,7 +191,7 @@ class UserController implements Controller {
     }
     try {
       const newUser = await this.userService.updateUser(req.body);
-      res.status(200).send(newUser);
+      res.status(200).send({ data: newUser });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

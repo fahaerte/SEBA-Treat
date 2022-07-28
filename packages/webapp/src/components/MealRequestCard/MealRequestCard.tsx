@@ -1,24 +1,84 @@
-import React from "react";
-import { Button, Card, CardBody, Col, Icon, Row, Typography } from "../";
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  dangerToast,
+  Icon,
+  Row,
+  successToast,
+  Typography,
+  warningToast,
+} from "../";
 import { SCMealCardInfo } from "./styles";
+import { useMutation } from "react-query";
+import { requestMealOffer } from "../../api/mealApi";
+import { AxiosError } from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+import ReactTooltip from "react-tooltip";
 
 const MealRequestCard = ({
+  mealOfferId,
+  userId,
   className = "",
   productName,
   mealPrice,
   transactionFee,
-  disableButton,
   disabledText = "",
-  buttonAction,
 }: {
+  mealOfferId: string;
+  userId: string;
   className?: string;
   productName: string;
   mealPrice: number;
   transactionFee: number;
-  disableButton: boolean;
   disabledText?: string;
-  buttonAction: () => void;
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [reservationLoading, setReservationLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(disabledText.length > 0);
+  const [tooltipText, setTooltipText] = useState(disabledText);
+
+  const requestMealMutation = useMutation(requestMealOffer, {
+    onMutate: () => {
+      setReservationLoading(true);
+    },
+    onSuccess: () => {
+      setReservationLoading(false);
+      setDisableButton(true);
+      setTooltipText("You have just reserved this meal.");
+      successToast({
+        message:
+          "The meal has been reserved for you. Now, the chef can accept it.",
+      });
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message: "Unexpected server error. The meal could not be reserved.",
+        });
+      }
+    },
+  });
+
+  function handleRequestClick() {
+    if (!userId) {
+      warningToast({ message: "Please log in to reserve this meal." });
+      navigate("/login", { state: { from: location } });
+    } else {
+      void requestMealMutation.mutate({
+        mealOfferId: mealOfferId,
+      });
+    }
+  }
+
   return (
     <Card className={`${className} mb-3`}>
       <CardBody className={"my-3"}>
@@ -72,21 +132,23 @@ const MealRequestCard = ({
             </Typography>
           </Col>
         </Row>
-        <Row className="mt-3">
-          {!disableButton ? (
-            <Button className="px-3" onClick={buttonAction}>
+        <Row className={"mt-3"}>
+          <span data-tip={tooltipText} style={{ margin: "0 0 0 auto" }}>
+            <Button
+              className="px-3 reserve-meal"
+              onClick={handleRequestClick}
+              disabled={disableButton}
+              isLoading={reservationLoading}
+            >
               Reserve meal
             </Button>
-          ) : (
-            <Typography
-              align={"center"}
-              color={"warning"}
-              variant={"h3"}
-              component={"div"}
-            >
-              <Icon size={"md"} type={"exclamationTriangle"} /> {disabledText}
-            </Typography>
-          )}
+          </span>
+          <ReactTooltip
+            className={"tooltip"}
+            effect={"solid"}
+            backgroundColor={"#ffc107"}
+            textColor={"black"}
+          />
         </Row>
       </CardBody>
     </Card>
