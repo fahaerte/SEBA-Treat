@@ -89,27 +89,25 @@ export const Header = () => {
           {address && (
             <Col className={"col-sm-auto my-auto"}>
               {onAddressEdit ? (
-                <>
-                  {/*<SCCustomForm<IStringObject>*/}
-                  {/*  elements={addressElement}*/}
-                  {/*  onSubmit={handleAddress}*/}
-                  {/*  className={"d-flex align-items-center"}*/}
-                  {/*  abortButton={{*/}
-                  {/*    color: "secondary",*/}
-                  {/*    children: <Icon type={"x-lg"} />,*/}
-                  {/*    onClick: () => setOnAddressEdit(false),*/}
-                  {/*  }}*/}
-                  {/*  submitButton={{*/}
-                  {/*    color: "primary",*/}
-                  {/*    className: "mx-2",*/}
-                  {/*    children: (*/}
-                  {/*      <>*/}
-                  {/*        <Icon type={"geo-alt"} /> Update location*/}
-                  {/*      </>*/}
-                  {/*    ),*/}
-                  {/*  }}*/}
-                  {/*/>*/}
-                </>
+                <SCCustomForm<IStringObject>
+                  elements={addressElement}
+                  onSubmit={handleAddress}
+                  className={"d-flex align-items-center"}
+                  abortButton={{
+                    color: "secondary",
+                    children: <Icon type={"x-lg"} />,
+                    onClick: () => setOnAddressEdit(false),
+                  }}
+                  submitButton={{
+                    color: "primary",
+                    className: "mx-2",
+                    children: (
+                      <>
+                        <Icon type={"geo-alt"} /> Update location
+                      </>
+                    ),
+                  }}
+                />
               ) : (
                 <div className={"d-flex flex-row align-items-center"}>
                   <Typography variant={"h4"} className={"fw-normal"}>
