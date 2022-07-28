@@ -17,6 +17,14 @@ const SCFilterBar = styled.div`
       padding-right: 0.5rem;
       max-width: 160px;
     }
+
+    > div:last-child {
+      margin-left: auto;
+      width: min-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 `;
 
@@ -111,7 +119,8 @@ const MealOfferFilterBar = ({
               <>
                 {createCategoriesOptions().map((category) => (
                   <option value={category.value} key={category.label}>
-                    {category.label}
+                    {category.label.charAt(0).toUpperCase() +
+                      category.label.slice(1)}
                   </option>
                 ))}
               </>
@@ -127,21 +136,14 @@ const MealOfferFilterBar = ({
               <>
                 {createAllergensOptions().map((allergen) => (
                   <option value={allergen.value} key={allergen.label}>
-                    {allergen.label}
+                    {allergen.label.charAt(0).toUpperCase() +
+                      allergen.label.slice(1)}
                   </option>
                 ))}
               </>
             </SelectControlledRound>
           </Col>
-          <div
-            style={{
-              marginLeft: "auto",
-              width: "min-content",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div>
             <Button
               onClick={buttonAction}
               color={"primary"}
@@ -150,23 +152,6 @@ const MealOfferFilterBar = ({
               <Icon type={"x-lg"} />
             </Button>
           </div>
-          {/*<Col>*/}
-          {/*  <SelectControlledRound*/}
-          {/*    label={"Sort by"}*/}
-          {/*    value={currentSortingRule}*/}
-          {/*    onChange={handleSort}*/}
-          {/*  >*/}
-          {/*    <option value={ESortingRules.PRICE_ASC}>*/}
-          {/*      {ESortingRules.PRICE_ASC.valueOf()}*/}
-          {/*    </option>*/}
-          {/*    <option value={ESortingRules.DIST_ASC}>*/}
-          {/*      {ESortingRules.DIST_ASC.valueOf()}*/}
-          {/*    </option>*/}
-          {/*    <option value={ESortingRules.RATING_DESC}>*/}
-          {/*      {ESortingRules.RATING_DESC.valueOf()}*/}
-          {/*    </option>*/}
-          {/*  </SelectControlledRound>*/}
-          {/*</Col>*/}
         </Row>
       </SCFilterBar>
     </>
