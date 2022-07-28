@@ -262,8 +262,8 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
   }
   if (mealOfferQuery.category)
     match["categories"] = { $eq: mealOfferQuery.category };
-  if (mealOfferQuery.allergen)
-    match["allergens"] = { $eq: mealOfferQuery.allergen };
+  if (mealOfferQuery.excludedAllergens)
+    match["allergens"] = { $nin: mealOfferQuery.excludedAllergens };
   if (mealOfferQuery.portions)
     match["portions"] = { $eq: Number(mealOfferQuery.portions) };
   if (mealOfferQuery.startDate)
