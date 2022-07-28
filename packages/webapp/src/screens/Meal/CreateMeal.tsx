@@ -287,7 +287,7 @@ const CreateMeal = () => {
           >
             <Typography variant={"h3"} className={"fw-normal"}>
               <Icon type={"infoCircle"} /> On top of the price you have set for
-              your meal, we will charge the buyer an additional 7% service fee
+              your meal, we will charge the buyer an additional 8% service fee
               based on the price you have set.
             </Typography>
             <Button
