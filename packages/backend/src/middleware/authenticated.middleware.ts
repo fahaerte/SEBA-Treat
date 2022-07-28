@@ -12,7 +12,6 @@ async function optionalAuthenticatedMiddleware(
   next: NextFunction
 ): Promise<Response | void> {
   const token = req.cookies["Authorization"];
-
   if (token) {
     return addUserToRequest(req, res, next, token as string);
   }
@@ -25,7 +24,6 @@ async function authenticatedMiddleware(
   next: NextFunction
 ): Promise<Response | void> {
   const token = req.cookies["Authorization"];
-
   if (!token) {
     return next(new HttpException(401, "Unauthorised"));
   }
