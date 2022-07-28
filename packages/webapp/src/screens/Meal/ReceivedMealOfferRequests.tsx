@@ -5,6 +5,7 @@ import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 import { getReceivedMealOfferRequests } from "../../api/mealApi";
+import { IMealOffer } from "@treat/lib-common";
 
 // TODO: use theme or maybe even create a component
 const MainDivider = styled.hr`
@@ -31,7 +32,7 @@ export const ReceivedMealOfferRequests = () => {
   return (
     <div className={"mt-4"}>
       {requests &&
-        requests.data.slice().map((mealOffer: MealOffer, index: number) => {
+        requests.data.slice().map((mealOffer: IMealOffer, index: number) => {
           return (
             <div key={index}>
               <MealOfferRequest mealOffer={mealOffer}>

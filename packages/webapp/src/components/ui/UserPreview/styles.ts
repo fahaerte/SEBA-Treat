@@ -7,6 +7,9 @@ export const SCUserPreview = styled.div`
   margin-top: 1em;
   margin-bottom: 2em;
 
+  svg {
+    vertical-align: initial;
+  }
   & > div {
     margin-left: 1em;
 
@@ -20,12 +23,4 @@ export const SCUserPreview = styled.div`
       margin-right: 0.2em;
     }
   }
-`;
-
-export const SCUserPreviewImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  background: grey;
-  display: inline-block;
 `;

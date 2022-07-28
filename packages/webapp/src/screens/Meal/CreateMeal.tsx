@@ -10,10 +10,9 @@ import {
   successToast,
   Typography,
   useModalInfo,
-  warningToast,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
-import { createMealOffer } from "../../api/mealApi";
+import { createMealOffer, IMealOfferForm } from "../../api/mealApi";
 import { useMutation } from "react-query";
 import { getCookie } from "../../utils/auth/CookieProvider";
 import {
@@ -21,14 +20,8 @@ import {
   createAllergensOptions,
 } from "../../utils/createMealValueArrays";
 import { TFormFieldError } from "../../components/ui/Forms/_interfaces/TFormFieldError";
-import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
 import { AxiosError } from "axios";
 
-/**
- * TODO:
- * - Image upload
- * - Switch for allergenVerified
- */
 const CreateMeal = () => {
   const navigate = useNavigate();
   const modalAllergensInfo = useModalInfo({ close: () => undefined });

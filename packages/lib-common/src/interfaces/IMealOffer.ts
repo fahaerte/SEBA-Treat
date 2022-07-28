@@ -4,7 +4,7 @@ import { IMealOfferCard } from "./IMealOfferCard";
 
 export interface IMealOffer
   extends Omit<IMealOfferCard, "rating" | "image" | "distance"> {
-  image: File;
+  image: string;
   description: string;
   pickUpDetails?: string;
   transactionFee: number;

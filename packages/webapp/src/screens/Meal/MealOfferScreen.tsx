@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, PageHeading, Row, Typography } from "../../components";
+import {
+  Col,
+  Container,
+  PageHeading,
+  Row,
+  TOptionValuePair,
+} from "../../components";
 import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getMealOffersByParams } from "../../api/mealApi";
 import { IMealOfferCard } from "@treat/lib-common";
@@ -20,7 +26,9 @@ export const MealOfferScreen = () => {
     undefined
   );
   const [portions, setPortions] = useState<number | undefined>(undefined);
-  const [allergen, setAllergen] = useState<string | undefined>(undefined);
+  const [allergen, setAllergen] = useState<TOptionValuePair[] | undefined>(
+    undefined
+  );
   const [category, setCategory] = useState<string | undefined>(undefined);
 
   const queryClient = useQueryClient();
@@ -32,19 +40,24 @@ export const MealOfferScreen = () => {
   const { data, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery(
       queryKey,
-      ({ pageParam = 1 }) =>
-        getMealOffersByParams(
+      ({ pageParam = 1 }) => {
+        const allergensQuery: string[] | undefined = allergen?.map(
+          (allerg) => allerg.value
+        );
+
+        return getMealOffersByParams(
           pageParam,
           pageLimit,
           distance,
           portions,
           category,
-          allergen,
+          allergensQuery,
           sellerRating,
           price,
           search,
           sortingRule
-        ),
+        );
+      },
       {
         getNextPageParam: (lastPage, allPages) => {
           const maxPages = Math.ceil(lastPage.total_count / pageLimit);
@@ -96,43 +109,42 @@ export const MealOfferScreen = () => {
   };
 
   const handleChangedFilter = (event: any) => {
-    switch (event.target.id) {
-      case "max.-distance":
-        setDistance(() =>
-          Number(event.target.value) === 0 ? 5 : Number(event.target.value)
-        );
-        break;
-      case "max.-price":
-        setPrice(() =>
-          Number(event.target.value) === 0
-            ? undefined
-            : Number(event.target.value)
-        );
-        break;
-      case "portions":
-        setPortions(() =>
-          Number(event.target.value) === 0
-            ? undefined
-            : Number(event.target.value)
-        );
-        break;
-      case "min.-seller-rating":
-        setSellerRating(() =>
-          Number(event.target.value) === 0
-            ? undefined
-            : Number(event.target.value)
-        );
-        break;
-      case "category":
-        setCategory(() =>
-          event.target.value === "None" ? undefined : event.target.value
-        );
-        break;
-      case "allergens":
-        setAllergen(() =>
-          event.target.value === "None" ? undefined : event.target.value
-        );
-        break;
+    if (event.target) {
+      switch (event.target.id) {
+        case "max.-distance":
+          setDistance(() =>
+            Number(event.target.value) === 0 ? 5 : Number(event.target.value)
+          );
+          break;
+        case "max.-price":
+          setPrice(() =>
+            Number(event.target.value) === 0
+              ? undefined
+              : Number(event.target.value)
+          );
+          break;
+        case "portions":
+          setPortions(() =>
+            Number(event.target.value) === 0
+              ? undefined
+              : Number(event.target.value)
+          );
+          break;
+        case "min.-seller-rating":
+          setSellerRating(() =>
+            Number(event.target.value) === 0
+              ? undefined
+              : Number(event.target.value)
+          );
+          break;
+        case "category":
+          setCategory(() =>
+            event.target.value === "None" ? undefined : event.target.value
+          );
+          break;
+      }
+    } else {
+      setAllergen(event);
     }
   };
 

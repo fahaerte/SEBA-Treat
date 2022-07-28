@@ -1,14 +1,15 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../ui/Grid";
-import MealOffer from "../../types/interfaces/mealOffer.interface";
+// import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { getFormattedDateFromString } from "../../utils/getFormattedDate";
 import { Link, Typography } from "../ui";
 import { ConfigService } from "../../utils/ConfigService";
+import { IMealOffer } from "@treat/lib-common";
 
 interface MealOfferProps {
-  mealOffer: MealOffer;
+  mealOffer: IMealOffer;
   children: React.ReactNode;
 }
 

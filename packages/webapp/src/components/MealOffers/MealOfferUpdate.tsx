@@ -4,25 +4,24 @@ import {
   IFormRow,
   Form,
   dangerToast,
-  Icon,
   SkeletonSquare,
   TOptionValuePair,
   successToast,
   Typography,
 } from "../ui";
-import { EMealAllergen, EMealCategory, IMealOffer } from "@treat/lib-common";
+import { EMealAllergen, EMealCategory } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
 import { useMutation, useQuery } from "react-query";
-import { getUser } from "../../api/userApi";
+// import { getUser } from "../../api/userApi";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  createMealOffer,
-  CreateMealOfferArgs,
+  // createMealOffer,
+  // CreateMealOfferArgs,
   getMealOffer,
   updateMealOffer,
+  IMealOfferForm,
 } from "../../api/mealApi";
-import { time } from "faker";
-import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
+// import { time } from "faker";
 import { AxiosError } from "axios";
 
 export const MealOfferUpdate = () => {
