@@ -159,10 +159,12 @@ class MealOfferService {
   }
 
   public async getMealOfferPreviews(
-    mealOfferQuery: MealOfferQuery
+    mealOfferQuery: MealOfferQuery,
+    user?: UserDocument
   ): Promise<MealOfferPreviewReturnObject> {
     const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
-      mealOfferQuery
+      mealOfferQuery,
+      user
     );
     const filteredPreviews = await this.filterMealOfferPreviewsForDistance(
       mealOfferPreviews,

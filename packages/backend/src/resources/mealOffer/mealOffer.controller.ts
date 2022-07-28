@@ -45,6 +45,7 @@ class MealOfferController implements Controller {
         validate.getMealOfferPreviewsQuery,
         ValidatePart.QUERY
       ),
+      optionalAuthenticatedMiddleware,
       this.getMealOfferPreviews
     );
     this.router.get(
@@ -161,7 +162,8 @@ class MealOfferController implements Controller {
         sortingRule: req.query.sortingRule ? req.query.sortingRule : undefined,
       } as MealOfferQuery;
       const data = await this.mealOfferService.getMealOfferPreviews(
-        mealOfferQuery
+        mealOfferQuery,
+        req.user
       );
       res.status(200).send(data);
     } catch (error: any) {

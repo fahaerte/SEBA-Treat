@@ -99,7 +99,7 @@ export interface MealOfferModel extends Model<MealOfferDocument> {
   findReceivedMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
 
   aggregateMealOfferPreviews(
-    match: Record<string, any>
+    match: Record<string, any>, user?: UserDocument
   ): Promise<MealOfferDocumentWithUser[]>;
 }
 
@@ -236,11 +236,14 @@ MealOfferSchema.statics.findSentMealOfferRequests = async function (
 
 MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
   this: Model<MealOfferDocument>,
-  mealOfferQuery: MealOfferQuery
+  mealOfferQuery: MealOfferQuery,
+  user?: UserDocument
 ) {
   const match: Record<string, any> = {
     endDate: { $gte: new Date() },
   };
+  if (user)
+    match["user"] = { $ne: user._id}
   if (mealOfferQuery.search !== undefined) {
     match["$or"] = [
       {
