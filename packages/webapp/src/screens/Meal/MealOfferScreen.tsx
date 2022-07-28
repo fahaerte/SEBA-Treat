@@ -68,6 +68,7 @@ export const MealOfferScreen = () => {
     );
 
   useEffect(() => {
+    console.log("im useEffect");
     queryClient.fetchQuery(queryKey);
     let fetching = false;
     const onScroll = async (event: any) => {

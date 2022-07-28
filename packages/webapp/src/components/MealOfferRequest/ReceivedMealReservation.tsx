@@ -4,7 +4,7 @@ import { Button, dangerToast, successToast } from "../ui";
 // import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
-import { EMealReservationState, IMealReservation } from "@treat/lib-common";
+import { EMealReservationState } from "@treat/lib-common";
 import { useMutation } from "react-query";
 import {
   updateMealReservationState,

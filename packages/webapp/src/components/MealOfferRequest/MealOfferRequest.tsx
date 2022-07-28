@@ -9,7 +9,7 @@ import { ConfigService } from "../../utils/ConfigService";
 import { IMealOffer } from "@treat/lib-common";
 
 interface MealOfferProps {
-  mealOffer: IMealOffer;
+  mealOffer: Omit<IMealOffer, "reservations">;
   children: React.ReactNode;
 }
 

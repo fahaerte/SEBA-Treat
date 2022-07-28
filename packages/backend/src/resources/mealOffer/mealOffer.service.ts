@@ -267,8 +267,6 @@ class MealOfferService {
     )) as MealOfferDocumentWithUser;
     if (user._id.equals(mealOfferDoc.user)) {
       await this.mealOffer.findByIdAndDelete(mealOfferId);
-    } else {
-      console.log();
     }
   }
 

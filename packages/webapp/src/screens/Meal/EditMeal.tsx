@@ -1,9 +1,5 @@
 import React from "react";
-import { PageHeading, TOptionValuePair } from "../../components";
-import { Navigate } from "react-router-dom";
-import { IMealOffer } from "@treat/lib-common";
-
-import { getCookie } from "../../utils/auth/CookieProvider";
+import { PageHeading } from "../../components";
 import { MealOfferUpdate } from "../../components/MealOffers/MealOfferUpdate";
 
 const EditMeal = () => {

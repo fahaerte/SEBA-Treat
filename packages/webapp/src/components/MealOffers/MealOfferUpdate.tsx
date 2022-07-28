@@ -37,7 +37,6 @@ export const MealOfferUpdate = () => {
     isError: mealOfferError,
   } = useQuery("getMealOffer", () => getMealOffer(mealOfferId as string), {
     onSuccess: (response) => {
-      console.log(response);
       if (response.reservations.length) {
         dangerToast({
           message:

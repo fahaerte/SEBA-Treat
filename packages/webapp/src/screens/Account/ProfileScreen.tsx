@@ -33,7 +33,7 @@ export const ProfileScreen = () => {
         receivedRatings: data.data.countRatings,
       });
     }
-  }, [isSuccess, setUserRating]);
+  }, [isSuccess, setUserRating, data]);
 
   return (
     <>
