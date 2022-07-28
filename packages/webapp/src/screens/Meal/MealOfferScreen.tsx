@@ -14,6 +14,7 @@ import MealOfferFilterTopBar from "../../components/MealOffers/MealOfferFilterTo
 import MealOfferFilterSideBar from "../../components/MealOffers/MealOfferFilterSideBar";
 import { ESortingRules } from "@treat/lib-common";
 import { ConfigService } from "../../utils/ConfigService";
+import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
 
 export const MealOfferScreen = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
@@ -190,38 +191,43 @@ export const MealOfferScreen = () => {
                 currentSortingRule={sortingRule}
               />
             </Row>
-            <Row className={"m-2 row justify-content-center"}>
-              {isFetching || isFetchingNextPage ? "Loading data..." : ""}
-            </Row>
-            <Row className={"m-2 row justify-content-center"}>
-              {data ? data.pages[0].total_count : "No "} Offers found
-            </Row>
-            <Row className={"row-cols-2 row-cols-md-3 g-4"}>
-              {data &&
-                data.pages.map((page) => {
-                  return page.data.map((mealOffer: IMealOfferCard) => (
-                    <Col key={`${mealOffer._id}-container`}>
-                      <MealOffer
-                        key={mealOffer._id}
-                        mealId={mealOffer._id}
-                        price={mealOffer.price}
-                        distance={mealOffer.distance}
-                        mealTitle={mealOffer.title}
-                        portions={mealOffer.portions}
-                        sellerRating={mealOffer.user.meanRating}
-                        endDate={mealOffer.endDate}
-                        sellerName={mealOffer.user.firstName}
-                        startDate={mealOffer.endDate}
-                        allergensVerified={mealOffer.allergensVerified}
-                        categories={mealOffer.categories}
-                        image={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
-                          mealOffer.image
-                        }`}
-                      />
-                    </Col>
-                  ));
-                })}
-            </Row>
+            {isFetching || isFetchingNextPage ? (
+              <Row>
+                <LoadingPackages />
+              </Row>
+            ) : (
+              <>
+                <Row className={"m-2 row justify-content-center"}>
+                  {data ? data.pages[0].total_count : "No "} Offers found
+                </Row>
+                <Row className={"row-cols-2 row-cols-md-3 g-4"}>
+                  {data &&
+                    data.pages.map((page) => {
+                      return page.data.map((mealOffer: IMealOfferCard) => (
+                        <Col key={`${mealOffer._id}-container`}>
+                          <MealOffer
+                            key={mealOffer._id}
+                            mealId={mealOffer._id}
+                            price={mealOffer.price}
+                            distance={mealOffer.distance}
+                            mealTitle={mealOffer.title}
+                            portions={mealOffer.portions}
+                            sellerRating={mealOffer.user.meanRating}
+                            endDate={mealOffer.endDate}
+                            sellerName={mealOffer.user.firstName}
+                            startDate={mealOffer.endDate}
+                            allergensVerified={mealOffer.allergensVerified}
+                            categories={mealOffer.categories}
+                            image={`${new ConfigService().get(
+                              "MEAL_IMAGES_URL"
+                            )}/${mealOffer.image}`}
+                          />
+                        </Col>
+                      ));
+                    })}
+                </Row>
+              </>
+            )}
           </Col>
         </Row>
       </Container>
