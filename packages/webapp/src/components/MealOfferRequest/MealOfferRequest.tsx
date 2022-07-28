@@ -1,14 +1,15 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { Col, Row } from "../ui/Grid";
-import MealOffer from "../../types/interfaces/mealOffer.interface";
+// import MealOffer from "../../types/interfaces/mealOffer.interface";
 import styled from "styled-components";
 import { getFormattedDateFromString } from "../../utils/getFormattedDate";
 import { Link, Typography } from "../ui";
 import { ConfigService } from "../../utils/ConfigService";
+import { IMealOffer } from "@treat/lib-common";
 
 interface MealOfferProps {
-  mealOffer: MealOffer;
+  mealOffer: Omit<IMealOffer, "reservations">;
   children: React.ReactNode;
 }
 
@@ -98,7 +99,7 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
               <Col className={"col-sm-auto my-auto"}>
                 <Link to={`/mealOffers/${mealOffer._id}`} display={"text"}>
                   <Typography variant={"p"} className={"mb-0"}>
-                    Go to offer
+                    Go to meal offer
                   </Typography>
                 </Link>
               </Col>

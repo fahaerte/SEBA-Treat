@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import { Button, dangerToast, successToast } from "../ui";
-import MealReservation from "../../types/interfaces/mealReservation.interface";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
 import { RateUser } from "./RateUser";
-import { EMealReservationState } from "@treat/lib-common";
-import User from "../../types/interfaces/user.interface";
+import {
+  EMealReservationState,
+  IMealReservation,
+  IUser,
+} from "@treat/lib-common";
 import { useMutation } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
 import { AxiosError } from "axios";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
-  seller: User;
-  reservation: MealReservation;
+  seller: Partial<IUser>;
+  reservation: IMealReservation;
   sellerRating: number | undefined;
 }
 
 export const SentMealReservation = ({
-  mealOfferId,
+  // mealOfferId,
   seller,
   reservation,
   sellerRating,

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { SCInput } from "../styles";
 import { getEncodedString } from "../../../../utils/auth/getEncodedString";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";

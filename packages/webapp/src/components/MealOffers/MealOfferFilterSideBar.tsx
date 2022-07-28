@@ -1,4 +1,11 @@
-import { Button, Col, Row, SelectControlled } from "../ui";
+import {
+  Button,
+  Col,
+  Row,
+  SelectControlled,
+  TagSelectControlled,
+  TOptionValuePair,
+} from "../ui";
 import React from "react";
 import {
   createAllergensOptions,
@@ -21,7 +28,7 @@ const MealOfferFilterSideBar = ({
   portions?: number;
   sellerRating?: number;
   category?: string;
-  allergen?: string;
+  allergen?: TOptionValuePair[];
   buttonAction: () => void;
 }) => {
   return (
@@ -81,7 +88,6 @@ const MealOfferFilterSideBar = ({
           <option value={2}>2 Stars</option>
           <option value={3}>3 Stars</option>
           <option value={4}>4 Stars</option>
-          <option value={5}>5 Stars</option>
         </SelectControlled>
       </Row>
       <Row className={"m-2"}>
@@ -101,20 +107,15 @@ const MealOfferFilterSideBar = ({
         </SelectControlled>
       </Row>
       <Row className={"m-2"}>
-        <SelectControlled
-          value={allergen as string}
+        <TagSelectControlled
+          autocompleteOptions={[
+            { value: "None", label: "none" },
+            ...createAllergensOptions(),
+          ]}
           label={"Allergens"}
+          value={allergen || []}
           onChange={handleChangedFilter}
-        >
-          <option value={"None"}>None</option>
-          <>
-            {createAllergensOptions().map((allergen) => (
-              <option value={allergen.value} key={allergen.label}>
-                {allergen.label}
-              </option>
-            ))}
-          </>
-        </SelectControlled>
+        />
       </Row>
       <Row className={"m-2"}>
         <Button onClick={buttonAction} color={"secondary"}>

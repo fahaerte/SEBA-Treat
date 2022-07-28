@@ -57,7 +57,7 @@ export const RegisterScreen = () => {
             message: "Your email needs at least 5 characters!",
           },
         },
-        defaultValue: "max@mustermann.de",
+        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "password",
@@ -91,7 +91,7 @@ export const RegisterScreen = () => {
             message: "Please provide a name!",
           },
         },
-        defaultValue: "Max",
+        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "lastName",
@@ -105,7 +105,7 @@ export const RegisterScreen = () => {
             message: "Please provide a name!",
           },
         },
-        defaultValue: "Mustermann",
+        defaultValue: "",
       }),
       FormHelper.createDatePicker({
         formKey: "birthdate",
@@ -138,7 +138,7 @@ export const RegisterScreen = () => {
             message: "Please provide a street!",
           },
         },
-        defaultValue: "Musterstrasse",
+        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "address.houseNumber",
@@ -153,7 +153,7 @@ export const RegisterScreen = () => {
             message: "Please provide your house number!",
           },
         },
-        defaultValue: "123",
+        defaultValue: "",
       }),
     ],
     [
@@ -169,7 +169,7 @@ export const RegisterScreen = () => {
             message: "Please provide a postal code!",
           },
         },
-        defaultValue: "80335",
+        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "address.city",
@@ -183,7 +183,7 @@ export const RegisterScreen = () => {
             message: "Please provide your city!",
           },
         },
-        defaultValue: "Munich",
+        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "address.country",
@@ -197,7 +197,7 @@ export const RegisterScreen = () => {
             message: "Please provide your country!",
           },
         },
-        defaultValue: "Germany",
+        defaultValue: "",
       }),
     ],
   ];

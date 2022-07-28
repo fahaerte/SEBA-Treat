@@ -3,8 +3,31 @@ import {
   EMealReservationState,
   ESortingRules,
   IMealOffer,
+  IMealReservation,
+  IUser,
 } from "@treat/lib-common";
 import { getCookie } from "../utils/auth/CookieProvider";
+import { TOptionValuePair } from "../components";
+
+export interface IMealOfferForm
+  extends Omit<
+    IMealOffer,
+    | "allergens"
+    | "categories"
+    | "_id"
+    | "user"
+    | "reservations"
+    | "transactionFee"
+    | "image"
+  > {
+  image: FileList;
+  allergens: TOptionValuePair[];
+  categories: TOptionValuePair[];
+}
+
+export interface PopulatedReservations extends Omit<IMealReservation, "buyer"> {
+  buyer: Partial<IUser>;
+}
 
 export const getMealOffer = async (
   mealOfferId: string,
@@ -49,7 +72,7 @@ export const getMealOffersByParams = async (
   distance: number,
   portions?: number,
   category?: string,
-  allergen?: string,
+  allergen?: string[],
   sellerRating?: number,
   price?: number,
   search?: string,
@@ -62,12 +85,12 @@ export const getMealOffersByParams = async (
       address: getCookie("address"),
       portions: portions,
       category: category,
-      allergen: allergen,
       sellerRating: sellerRating,
       price: price,
       search: search,
       distance: distance,
       sortingRule: sortingRule?.valueOf(),
+      allergen: allergen,
     },
   });
   return response.data;

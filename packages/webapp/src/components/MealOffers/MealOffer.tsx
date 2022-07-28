@@ -46,7 +46,6 @@ const MealOffer = ({
     navigate(`/mealoffers/${mealId}`);
     return mealId;
   };
-  console.log(image);
   const startDateAsString = new Date(startDate).toLocaleDateString();
   const endDateAsString = new Date(endDate).toLocaleDateString();
 

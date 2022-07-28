@@ -12,6 +12,6 @@ export interface IMealOfferCard {
   price: number;
   rating: number;
   distance: number;
-  image?: File;
+  image: string;
   allergensVerified: boolean;
 }

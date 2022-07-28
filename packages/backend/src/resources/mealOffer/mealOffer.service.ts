@@ -159,31 +159,37 @@ class MealOfferService {
   }
 
   public async getMealOfferPreviews(
-    mealOfferQuery: MealOfferQuery
+    mealOfferQuery: MealOfferQuery,
+    user?: UserDocument
   ): Promise<MealOfferPreviewReturnObject> {
-    const mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
-      mealOfferQuery
+    if (typeof mealOfferQuery.excludedAllergens === "string")
+      mealOfferQuery.excludedAllergens = [mealOfferQuery.excludedAllergens];
+    let mealOfferPreviews = await this.mealOffer.aggregateMealOfferPreviews(
+      mealOfferQuery,
+      user
     );
-    const filteredPreviews = await this.filterMealOfferPreviewsForDistance(
-      mealOfferPreviews,
-      mealOfferQuery.address,
-      mealOfferQuery.distance
-    );
-    filteredPreviews.forEach((preview) => {
+    if (mealOfferPreviews.length) {
+      mealOfferPreviews = await this.filterMealOfferPreviewsForDistance(
+        mealOfferPreviews,
+        mealOfferQuery.address,
+        mealOfferQuery.distance
+      );
+    }
+    mealOfferPreviews.forEach((preview) => {
       preview.user.address = undefined;
       preview.rating = undefined;
     });
-    filteredPreviews.sort((meal1, meal2) =>
+    mealOfferPreviews.sort((meal1, meal2) =>
       this.getSortingRule(meal1, meal2, mealOfferQuery.sortingRule)
     );
 
-    const filteredPreviewsSliced = filteredPreviews.slice(
+    const filteredPreviewsSliced = mealOfferPreviews.slice(
       (mealOfferQuery.page - 1) * mealOfferQuery.pageLimit,
       mealOfferQuery.page * mealOfferQuery.pageLimit
     );
 
     return {
-      total_count: filteredPreviews.length,
+      total_count: mealOfferPreviews.length,
       data: filteredPreviewsSliced,
     };
   }
@@ -261,8 +267,6 @@ class MealOfferService {
     )) as MealOfferDocumentWithUser;
     if (user._id.equals(mealOfferDoc.user)) {
       await this.mealOffer.findByIdAndDelete(mealOfferId);
-    } else {
-      console.log();
     }
   }
 

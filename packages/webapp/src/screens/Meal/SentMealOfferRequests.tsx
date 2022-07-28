@@ -1,9 +1,10 @@
 import React from "react";
 import { MealOfferRequest } from "../../components/MealOfferRequest/MealOfferRequest";
 import { SentMealReservation } from "../../components/MealOfferRequest/SentMealReservation";
-import MealOffer from "../../types/interfaces/mealOffer.interface";
+// import MealOffer from "../../types/interfaces/mealOffer.interface";
 import { useQuery } from "react-query";
 import { getSentMealOfferRequests } from "../../api/mealApi";
+import { IMealOffer } from "@treat/lib-common";
 
 export const SentMealOfferRequests = () => {
   const queryKey = "sentMealOfferRequests";
@@ -15,7 +16,7 @@ export const SentMealOfferRequests = () => {
   return (
     <div className={"mt-4"}>
       {requests &&
-        requests.data.slice().map((mealOffer: MealOffer, index: number) => {
+        requests.data.slice().map((mealOffer: IMealOffer, index: number) => {
           return (
             <div key={index}>
               <MealOfferRequest mealOffer={mealOffer}>

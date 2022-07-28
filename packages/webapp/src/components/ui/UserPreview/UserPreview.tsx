@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Row, Col } from "../index";
+import { Typography } from "../index";
 import { Rating } from "../../Profile/Rating";
 import { SCUserPreview } from "./styles";
 
