@@ -19,8 +19,8 @@ export const baseApiAuth = () => {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      withCredentials: true,
     },
+    withCredentials: true,
   });
 };
 

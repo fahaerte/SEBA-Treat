@@ -18,7 +18,6 @@ import CreateMeal from "../screens/Meal/CreateMeal";
 import EditMeal from "../screens/Meal/EditMeal";
 import { RequireAddressRoute } from "../utils/auth/RequireAddressRoute";
 import { ProfileScreen } from "../screens/Account/ProfileScreen";
-// import { TransactionHistory } from "../components/TransactionHistory/TransactionHistory";
 import { LandingPageTabBar } from "../components/AddressInput/LandingPageTabBar";
 import { BuyMealTab } from "../components/AddressInput/BuyMealTab";
 import { OfferMealTab } from "../components/AddressInput/OfferMealTab";
@@ -93,11 +92,11 @@ export const AppRouter = () => {
   const profileRoutes = {
     path: "account",
     element: (
-      <RequireAuthRoute>
-        <AppLayout>
+      <AppLayout>
+        <RequireAuthRoute>
           <ProfileScreen />
-        </AppLayout>
-      </RequireAuthRoute>
+        </RequireAuthRoute>
+      </AppLayout>
     ),
   };
 
@@ -208,7 +207,6 @@ export const AppRouter = () => {
     addressRoute,
     profileRoutes,
     mealOfferRequestsRoute,
-    // ...redirectRoutes,
     ...purchaseCreditRoutes,
     ...mealRoutes,
   ]);
