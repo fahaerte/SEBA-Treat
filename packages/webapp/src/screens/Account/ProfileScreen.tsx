@@ -39,7 +39,7 @@ export const ProfileScreen = () => {
     <>
       <Container>
         <PageHeading>
-          My <u>profile</u>
+          Your <u>profile</u>
         </PageHeading>
         <Typography variant={"div"} className={"mt-3"}>
           This is your personal space.

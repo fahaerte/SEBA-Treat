@@ -58,7 +58,7 @@ export const SentMealReservation = ({
 
   function getActionElement() {
     if (reservationState == EMealReservationState.PENDING) {
-      return <span>Wait for the seller to respond to your request</span>;
+      return <span>Wait for the seller to respond to your reservation</span>;
     } else if (reservationState === EMealReservationState.SELLER_ACCEPTED) {
       return (
         <Button
@@ -66,13 +66,13 @@ export const SentMealReservation = ({
             updateReservationState(EMealReservationState.BUYER_CONFIRMED)
           }
         >
-          Confirm Request
+          Confirm reservation
         </Button>
       );
     } else if (reservationState === EMealReservationState.SELLER_REJECTED) {
-      return <span>The seller rejected your request</span>;
+      return <span>The seller rejected your reservation</span>;
     } else if (reservationState === EMealReservationState.BUYER_REJECTED) {
-      return <span>You cancelled your request</span>;
+      return <span>You cancelled your reservation</span>;
     } else if (reservationState === EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
@@ -105,7 +105,7 @@ export const SentMealReservation = ({
                 updateReservationState(EMealReservationState.BUYER_REJECTED)
               }
             >
-              Cancel Request
+              Cancel reservation
             </Button>
           </Col>
           <Col className={"col-sm-auto align-items-center d-flex"}>

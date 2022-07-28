@@ -5,7 +5,7 @@ import { MealOfferUpdate } from "../../components/MealOffers/MealOfferUpdate";
 const EditMeal = () => {
   return (
     <>
-      <PageHeading className={"pt-5"}>
+      <PageHeading>
         <u>Edit</u> your meal
       </PageHeading>
       <MealOfferUpdate />

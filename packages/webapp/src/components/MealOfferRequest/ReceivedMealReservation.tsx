@@ -66,11 +66,11 @@ export const ReceivedMealReservation = ({
         </Button>
       );
     } else if (reservationState == EMealReservationState.SELLER_ACCEPTED) {
-      return <span>You accepted the request, wait for buyer</span>;
+      return <span>You accepted the reservation, wait for buyer</span>;
     } else if (reservationState == EMealReservationState.SELLER_REJECTED) {
-      return <span>You rejected the request</span>;
+      return <span>You rejected the reservation</span>;
     } else if (reservationState == EMealReservationState.BUYER_REJECTED) {
-      return <span>The buyer cancelled the request</span>;
+      return <span>The buyer cancelled the reservation</span>;
     } else if (reservationState == EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
