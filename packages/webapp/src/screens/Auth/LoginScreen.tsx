@@ -42,16 +42,10 @@ const LoginScreen = () => {
       }
       navigate(from, { replace: true });
     },
-    onError: (error) => {
-      if (error instanceof AxiosError && error.response) {
-        dangerToast({
-          message: error.response.data.message,
-        });
-      } else {
-        dangerToast({
-          message: "Unexpected server error. Please try again.",
-        });
-      }
+    onError: () => {
+      dangerToast({
+        message: "Wrong credentials. Please try again.",
+      });
     },
   });
 

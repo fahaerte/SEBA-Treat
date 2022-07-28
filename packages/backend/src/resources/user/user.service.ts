@@ -19,9 +19,7 @@ class UserService {
   /**
    * Register a new user
    */
-  public async register(
-    newUser: IUser
-  ): Promise<{ userId: string; token: string; address: IAddress }> {
+  public async register(newUser: IUser): Promise<{ userId: string }> {
     try {
       newUser.virtualAccount = this.virtualAccountService.createAccount(
         USER_STARTING_BALANCE
@@ -32,8 +30,6 @@ class UserService {
       });
       return {
         userId: user.id,
-        token: token.createToken(user),
-        address: user.address,
       };
     } catch (error: any) {
       Logger.error({

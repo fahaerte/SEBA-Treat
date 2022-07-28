@@ -6,7 +6,6 @@ import {
   FormHelper,
   IFormRow,
   successToast,
-  Typography,
   Col,
   Row,
 } from "../../components";
@@ -27,9 +26,15 @@ export const RegisterScreen = () => {
     },
     onError: (error) => {
       if (error instanceof AxiosError && error.response) {
-        dangerToast({
-          message: error.response.data.message,
-        });
+        if (error.response.data.message.includes("duplicate key error")) {
+          dangerToast({
+            message: "Email already in use!",
+          });
+        } else {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        }
       } else {
         dangerToast({
           message:
@@ -52,12 +57,7 @@ export const RegisterScreen = () => {
             value: true,
             message: "Please provide an email!",
           },
-          min: {
-            value: 5,
-            message: "Your email needs at least 5 characters!",
-          },
         },
-        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "password",
@@ -75,7 +75,6 @@ export const RegisterScreen = () => {
             message: "Your password needs at least 6 characters!",
           },
         },
-        defaultValue: "",
       }),
     ],
     [
@@ -90,8 +89,11 @@ export const RegisterScreen = () => {
             value: true,
             message: "Please provide a name!",
           },
+          min: {
+            value: 2,
+            message: "Your first name needs at least 2 characters!",
+          },
         },
-        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "lastName",
@@ -104,8 +106,11 @@ export const RegisterScreen = () => {
             value: true,
             message: "Please provide a name!",
           },
+          min: {
+            value: 2,
+            message: "Your first name needs at least 2 characters!",
+          },
         },
-        defaultValue: "",
       }),
       FormHelper.createDatePicker({
         formKey: "birthdate",
@@ -138,7 +143,6 @@ export const RegisterScreen = () => {
             message: "Please provide a street!",
           },
         },
-        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "address.houseNumber",
@@ -153,7 +157,6 @@ export const RegisterScreen = () => {
             message: "Please provide your house number!",
           },
         },
-        defaultValue: "",
       }),
     ],
     [
@@ -168,8 +171,15 @@ export const RegisterScreen = () => {
             value: true,
             message: "Please provide a postal code!",
           },
+          min: {
+            value: 5,
+            message: "Your postal code needs exactly 5 digits!",
+          },
+          max: {
+            value: 5,
+            message: "Your postal code needs exactly 5 digits!",
+          },
         },
-        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "address.city",
@@ -183,7 +193,6 @@ export const RegisterScreen = () => {
             message: "Please provide your city!",
           },
         },
-        defaultValue: "",
       }),
       FormHelper.createInput({
         formKey: "address.country",
@@ -197,7 +206,6 @@ export const RegisterScreen = () => {
             message: "Please provide your country!",
           },
         },
-        defaultValue: "",
       }),
     ],
   ];
@@ -211,21 +219,6 @@ export const RegisterScreen = () => {
       <Row alignItems={"center"}>
         <Col md={{ span: 6 }}>
           <div>
-            <div>
-              {registerMutation.isError ? (
-                <Typography
-                  variant={"h4"}
-                  className={"fw-normal"}
-                  color={"danger"}
-                >
-                  An error occurred:{" "}
-                  {registerMutation.error instanceof AxiosError &&
-                  registerMutation.error.message
-                    ? registerMutation.error.message
-                    : "unknown"}
-                </Typography>
-              ) : null}
-            </div>
             <Form<IUser>
               elements={elements}
               onSubmit={handleRegister}
