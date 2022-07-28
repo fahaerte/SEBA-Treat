@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CustomThemeProvider from "./assets/theme/CustomThemeProvider";
 import { AppRouter } from "./app/router";
 import { BrowserRouter } from "react-router-dom";
+import "./assets/styles.css";
 
 class Root extends Component {
   render() {

@@ -12,7 +12,7 @@ import {
   setCookie,
 } from "../../../utils/auth/CookieProvider";
 import { signout } from "../../../api/authApi";
-import { dangerToast, successToast } from "../Toast";
+import { dangerToast } from "../Toast";
 import { CustomDropdown } from "./UserDropdown";
 import { IStringObject } from "@treat/lib-common";
 import { addressElement } from "../../AddressInput/AddressInput";
@@ -37,8 +37,8 @@ export const Header = () => {
 
   useQuery(["getUser", userId], () => getUser(), {
     onSuccess: (response) => {
-      setBalance(response.data.virtualAccount.balance);
-      setFirstName(response.data.firstName);
+      setBalance(response.data.virtualAccount.balance as number);
+      setFirstName(response.data.firstName as string);
     },
     onError: () => {
       signoutMutation.mutate();
@@ -49,7 +49,6 @@ export const Header = () => {
   const signoutMutation = useMutation("signout", signout, {
     onSuccess: () => {
       removeCookies();
-      successToast({ message: "Successfully signed out." });
       navigate("/");
     },
     onError: () => {
@@ -90,25 +89,27 @@ export const Header = () => {
           {address && (
             <Col className={"col-sm-auto my-auto"}>
               {onAddressEdit ? (
-                <SCCustomForm<IStringObject>
-                  elements={addressElement}
-                  onSubmit={handleAddress}
-                  className={"d-flex align-items-center"}
-                  abortButton={{
-                    color: "secondary",
-                    children: <Icon type={"x-lg"} />,
-                    onClick: () => setOnAddressEdit(false),
-                  }}
-                  submitButton={{
-                    color: "primary",
-                    className: "mx-2",
-                    children: (
-                      <>
-                        <Icon type={"geo-alt"} /> Update location
-                      </>
-                    ),
-                  }}
-                />
+                <>
+                  {/*<SCCustomForm<IStringObject>*/}
+                  {/*  elements={addressElement}*/}
+                  {/*  onSubmit={handleAddress}*/}
+                  {/*  className={"d-flex align-items-center"}*/}
+                  {/*  abortButton={{*/}
+                  {/*    color: "secondary",*/}
+                  {/*    children: <Icon type={"x-lg"} />,*/}
+                  {/*    onClick: () => setOnAddressEdit(false),*/}
+                  {/*  }}*/}
+                  {/*  submitButton={{*/}
+                  {/*    color: "primary",*/}
+                  {/*    className: "mx-2",*/}
+                  {/*    children: (*/}
+                  {/*      <>*/}
+                  {/*        <Icon type={"geo-alt"} /> Update location*/}
+                  {/*      </>*/}
+                  {/*    ),*/}
+                  {/*  }}*/}
+                  {/*/>*/}
+                </>
               ) : (
                 <div className={"d-flex flex-row align-items-center"}>
                   <Typography variant={"h4"} className={"fw-normal"}>
