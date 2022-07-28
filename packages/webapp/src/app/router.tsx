@@ -96,32 +96,16 @@ export const AppRouter = () => {
     path: "account",
     element: (
       <RequireAuthRoute>
-        <AppLayout />
+        <AppLayout>
+          <ProfileScreen />
+        </AppLayout>
       </RequireAuthRoute>
     ),
-    children: [
-      {
-        path: "",
-        element: (
-          <ProfileScreen>
-            <ProfileOverview />
-          </ProfileScreen>
-        ),
-      },
-      {
-        path: "edit",
-        element: (
-          <ProfileScreen>
-            <ProfileUpdateScreen />
-          </ProfileScreen>
-        ),
-      },
-    ],
   };
 
   const purchaseCreditRoutes = [
     {
-      path: "/purchase-credits/:userId/:token",
+      path: "/purchase-credits/:userId/",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -141,7 +125,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/success/:priceId/:customerId/:token/:userId",
+      path: "/success/:priceId/:customerId//:userId",
       element: <PaymentSuccess />,
     },
   ];

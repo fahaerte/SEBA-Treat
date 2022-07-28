@@ -116,7 +116,7 @@ class StripeController implements Controller {
       const session = await this.stripeService.createCheckoutSession(
         priceId as string,
         stripeCustomerId as string,
-        token as string,
+        // token as string,
         userId as string,
         req.body.couponId ? req.body.couponId : undefined
       );

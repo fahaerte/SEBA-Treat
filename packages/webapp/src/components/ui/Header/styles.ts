@@ -74,9 +74,3 @@ export const StyledDropdown = styled(UncontrolledDropdown)`
     }
   }
 `;
-
-export const SCCustomForm = styled(Form)`
-  > .mb-lg {
-    margin-bottom: 0;
-  }
-`;

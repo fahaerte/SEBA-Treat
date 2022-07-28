@@ -33,8 +33,6 @@ export const MealOfferDetailScreen = () => {
     () => getMealOffer(mealOfferId as string, address as string),
     {
       onSuccess: (response) => {
-        console.log(response);
-
         const nowDate = new Date();
         const startDate = new Date(response.startDate as string);
         const endDate = new Date(response.endDate as string);
@@ -105,19 +103,18 @@ export const MealOfferDetailScreen = () => {
               {/* TODO: make component for image gallery */}
               <Col>
                 <div
+                  className={"d-inline-block"}
                   style={{
                     height: "400px",
                     width: "100%",
                     position: "relative",
-                    display: "inline-block",
                     overflow: "hidden",
                   }}
                 >
                   <div
+                    className={"w-100 h-100"}
                     style={{
                       position: "absolute",
-                      width: "100%",
-                      height: "100%",
                       backgroundImage: `url(${new ConfigService().get(
                         "MEAL_IMAGES_URL"
                       )}/${mealOffer.image})`,
@@ -126,18 +123,17 @@ export const MealOfferDetailScreen = () => {
                       backgroundRepeat: "no-repeat",
                       opacity: "0.3",
                     }}
-                  ></div>
+                  />
                   <img
                     src={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
                       mealOffer.image
                     }`}
                     alt={`Image for ${mealOffer.title}`}
+                    className={"h-100 d-block"}
                     style={{
-                      display: "block",
                       position: "absolute",
                       top: "50%",
                       left: "50%",
-                      height: "100%",
                       transform: "translate(-50%, -50%)",
                     }}
                   />
@@ -181,7 +177,7 @@ export const MealOfferDetailScreen = () => {
             </Row>
           </Container>
         ) : (
-          <Container className={""}>
+          <Container>
             <Row className={"pt-5"}>
               <PageHeading>
                 Meal <u>not found</u>

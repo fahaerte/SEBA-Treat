@@ -191,7 +191,7 @@ class UserController implements Controller {
     }
     try {
       const newUser = await this.userService.updateUser(req.body);
-      res.status(200).send(newUser);
+      res.status(200).send({ data: newUser });
     } catch (error: any) {
       next(new HttpException(400, error.message));
     }

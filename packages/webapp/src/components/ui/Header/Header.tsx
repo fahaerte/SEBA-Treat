@@ -1,9 +1,9 @@
 import { Col, Row } from "../Grid";
-import { Button, Icon, Link, Typography } from "../index";
+import { Button, Icon, Link, Typography, Form } from "../index";
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getUser } from "../../../api/userApi";
-import { SCCustomForm, SCHeader } from "./styles";
+import { SCHeader } from "./styles";
 import Logo from "../../../assets/img/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -98,10 +98,11 @@ export const Header = () => {
           {address && (
             <Col className={"col-sm-auto my-auto"}>
               {onAddressEdit ? (
-                <SCCustomForm<IStringObject>
+                <Form<IStringObject>
                   elements={addressElement}
-                  onSubmit={handleAddress}
+                  onSubmit={(data) => handleAddress(data)}
                   className={"d-flex align-items-center"}
+                  rowClasses={"mb-0"}
                   abortButton={{
                     color: "secondary",
                     children: <Icon type={"x-lg"} />,

@@ -31,7 +31,7 @@ const DatepickerControlled = ({
           "form-control",
         ].join(" ")}
         placeholder={label}
-        readOnly={disabled}
+        disabled={disabled}
         value={value}
         onChange={(event) => onChange(event)}
         min={min}

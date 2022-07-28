@@ -51,8 +51,8 @@ const MealOffer = ({
   const endDateAsString = new Date(endDate).toLocaleDateString();
 
   return (
-    <Card hoverable onClick={handleSelect}>
-      <CardImage src={image} />
+    <Card hoverable onClick={handleSelect} className={"h-100"}>
+      <CardImage src={image} className={"h-100"} />
 
       <CardBody>
         <Row>
@@ -60,7 +60,7 @@ const MealOffer = ({
             <CardTitle>{mealTitle}</CardTitle>
           </Col>
           {allergensVerified && (
-            <Col className={"d-flex justify-content-end"}>
+            <Col md={{ span: 3 }} className={"d-flex justify-content-end"}>
               <Typography color={"info"} display={"inline"}>
                 <Icon type={"check-circle-fill"} />
               </Typography>
@@ -77,7 +77,7 @@ const MealOffer = ({
               <Icon type={"person"} /> {sellerName}
             </Typography>
           </Col>
-          <Col className={"d-flex justify-content-end"}>
+          <Col md={{ span: 3 }} className={"d-flex justify-content-end"}>
             <CardText>
               {sellerRating} <Icon type={"star-fill"} />
             </CardText>

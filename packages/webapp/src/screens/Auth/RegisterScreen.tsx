@@ -230,6 +230,7 @@ export const RegisterScreen = () => {
               elements={elements}
               onSubmit={handleRegister}
               formTitle={"Please register!"}
+              submitButton={{ children: "Register Now!" }}
               abortButton={{
                 children: "Cancel",
                 color: "secondary",
