@@ -4,7 +4,7 @@ import { OnChangeValue } from "react-select";
 import makeAnimated from "react-select/animated";
 import { ITagSelect } from "./ITagSelect";
 import { customStyles } from "./styles";
-import { SCFloatingForm } from "../styles";
+import { SCFloatingTagFormRound } from "../styles";
 import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
@@ -26,7 +26,7 @@ const TagSelectControlled = ({
   const theme = useTheme();
 
   return (
-    <SCFloatingForm className={`form-floating multi-select-wrapper`}>
+    <SCFloatingTagFormRound className={`form-floating multi-select-wrapper`}>
       <TagSelect<TOptionValuePair, true>
         id={getEncodedString(label)}
         isMulti
@@ -44,7 +44,7 @@ const TagSelectControlled = ({
         isClearable={false}
       />
       {isInvalid && <FormInvalidFeedback message={invalidFeedback} />}
-    </SCFloatingForm>
+    </SCFloatingTagFormRound>
   );
 };
 export default TagSelectControlled;

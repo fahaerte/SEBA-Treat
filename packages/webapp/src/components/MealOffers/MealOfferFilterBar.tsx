@@ -1,4 +1,11 @@
-import { Button, Col, Icon, Row } from "../ui";
+import {
+  Button,
+  Col,
+  Icon,
+  Row,
+  TagSelectControlled,
+  TOptionValuePair,
+} from "../ui";
 import React from "react";
 import {
   createAllergensOptions,
@@ -13,13 +20,21 @@ const SCFilterBar = styled.div`
     flex-direction: row;
 
     > div {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
       padding-left: 0.5rem;
       padding-right: 0.5rem;
       max-width: 160px;
+      min-width: 140px;
+    }
+
+    > div.allergen-select {
+      max-width: 240px;
     }
 
     > div:last-child {
       margin-left: auto;
+      min-width: min-content;
       width: min-content;
       display: flex;
       align-items: center;
@@ -44,7 +59,7 @@ const MealOfferFilterBar = ({
   portions?: number;
   sellerRating?: number;
   category?: string;
-  allergen?: string;
+  allergen?: TOptionValuePair[];
   buttonAction: () => void;
 }) => {
   return (
@@ -126,22 +141,31 @@ const MealOfferFilterBar = ({
               </>
             </SelectControlledRound>
           </Col>
-          <Col>
-            <SelectControlledRound
-              value={allergen as string}
+          <Col className={"allergen-select"}>
+            <TagSelectControlled
+              autocompleteOptions={[
+                { value: "None", label: "none" },
+                ...createAllergensOptions(),
+              ]}
               label={"Allergens"}
+              value={allergen || []}
               onChange={handleChangedFilter}
-            >
-              <option value={"None"}>None</option>
-              <>
-                {createAllergensOptions().map((allergen) => (
-                  <option value={allergen.value} key={allergen.label}>
-                    {allergen.label.charAt(0).toUpperCase() +
-                      allergen.label.slice(1)}
-                  </option>
-                ))}
-              </>
-            </SelectControlledRound>
+            />
+            {/*<SelectControlledRound*/}
+            {/*  value={allergen as string}*/}
+            {/*  label={"Allergens"}*/}
+            {/*  onChange={handleChangedFilter}*/}
+            {/*>*/}
+            {/*  <option value={"None"}>None</option>*/}
+            {/*  <>*/}
+            {/*    {createAllergensOptions().map((allergen) => (*/}
+            {/*      <option value={allergen.value} key={allergen.label}>*/}
+            {/*        {allergen.label.charAt(0).toUpperCase() +*/}
+            {/*          allergen.label.slice(1)}*/}
+            {/*      </option>*/}
+            {/*    ))}*/}
+            {/*  </>*/}
+            {/*</SelectControlledRound>*/}
           </Col>
           <div>
             <Button
