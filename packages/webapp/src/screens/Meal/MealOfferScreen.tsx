@@ -181,7 +181,7 @@ export const MealOfferScreen = () => {
               {isFetching || isFetchingNextPage ? "Loading data..." : ""}
             </Row>
             <Row className={"m-2 row justify-content-center"}>
-              {data ? data.pages[0].total_count : "No "} Offers found
+              {data ? data.pages[0].total_count : "No "} Meals found
             </Row>
             <Row className={"row-cols-2 row-cols-md-3 g-4"}>
               {data &&

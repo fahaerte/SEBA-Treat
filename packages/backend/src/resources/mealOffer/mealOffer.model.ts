@@ -99,7 +99,8 @@ export interface MealOfferModel extends Model<MealOfferDocument> {
   findReceivedMealOfferRequests(userId: string): Promise<MealOfferDocument[]>;
 
   aggregateMealOfferPreviews(
-    match: Record<string, any>, user?: UserDocument
+    match: Record<string, any>,
+    user?: UserDocument
   ): Promise<MealOfferDocumentWithUser[]>;
 }
 
@@ -242,8 +243,7 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
   const match: Record<string, any> = {
     endDate: { $gte: new Date() },
   };
-  if (user)
-    match["user._id"] = { $ne: user._id}
+  if (user) match["user._id"] = { $ne: user._id };
   if (mealOfferQuery.search !== undefined) {
     match["$or"] = [
       {
@@ -270,8 +270,7 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
     match["startDate"] = { $gte: mealOfferQuery.startDate };
   if (mealOfferQuery.endDate)
     match["startDate"] = { $lte: mealOfferQuery.endDate };
-  if (mealOfferQuery.price)
-    match["price"] = { $lte: mealOfferQuery.price };
+  if (mealOfferQuery.price) match["price"] = { $lte: mealOfferQuery.price };
   if (mealOfferQuery.sellerRating)
     match["user.meanRating"] = { $gte: mealOfferQuery.sellerRating };
   return await this.aggregate([

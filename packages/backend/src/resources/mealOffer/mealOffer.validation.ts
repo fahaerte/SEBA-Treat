@@ -76,8 +76,8 @@ const getMealOfferBody = Joi.object({
 const getMealOfferPreviewsQuery = Joi.object({
   category: Joi.string().valid(...Object.values(EMealCategory)),
   allergen: Joi.alternatives().try(
-      Joi.array().items(Joi.string().valid(...Object.values(EMealAllergen))),
-      Joi.string().valid(...Object.values(EMealAllergen))
+    Joi.array().items(Joi.string().valid(...Object.values(EMealAllergen))),
+    Joi.string().valid(...Object.values(EMealAllergen))
   ),
   portions: Joi.number().min(1),
   sellerRating: Joi.number(),

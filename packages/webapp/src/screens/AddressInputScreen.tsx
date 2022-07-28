@@ -64,10 +64,10 @@ export const AddressInputScreen = ({
           <hr />
           <Container className={"pb-3"}>
             <Typography variant={"h1"} color={"secondary"}>
-              How Treat works
+              How TREAT works
             </Typography>
             <Typography variant={"h3"} color={"secondary"}>
-              Treat is a platform to exchange leftovers of private households.
+              TREAT is a platform to exchange leftovers of private households.
             </Typography>
             <Typography variant={"h4"} color={"secondary"}>
               By participating you help to reduce food waste, save money, and
