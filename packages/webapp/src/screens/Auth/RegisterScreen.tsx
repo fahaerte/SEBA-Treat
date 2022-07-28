@@ -25,8 +25,17 @@ export const RegisterScreen = () => {
       successToast({ message: "Registration successful!" });
       navigate("/");
     },
-    onError: () => {
-      dangerToast({ message: "Something went wrong!" });
+    onError: (error) => {
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message:
+            "Unexpected server error. Your account could not be created.",
+        });
+      }
     },
   });
 

@@ -23,6 +23,7 @@ import {
 } from "../../api/mealApi";
 import { time } from "faker";
 import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
+import { AxiosError } from "axios";
 
 export const MealOfferUpdate = () => {
   const userId = getCookie("userId");
@@ -46,8 +47,16 @@ export const MealOfferUpdate = () => {
         navigate(`/mealOffers/${mealOfferId}`);
       }
     },
-    onError: () => {
-      dangerToast({ message: "Could not get meal information." });
+    onError: (error) => {
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message: "Unexpected server error. The meal could not be loaded.",
+        });
+      }
     },
   });
 
@@ -241,7 +250,19 @@ export const MealOfferUpdate = () => {
           successToast({ message: "Your meal offer has been updated!" });
           navigate(`/mealOffers/${mealOfferId}`);
         },
-        onError: () => dangerToast({ message: "Sorry, something went wrong." }),
+        onError: (error) => {
+          if (error instanceof AxiosError && error.response) {
+            dangerToast({
+              message: error.response.data.message,
+            });
+          } else {
+            dangerToast({
+              message:
+                "Unexpected server error. The meal could not be updated.",
+            });
+          }
+          navigate(`/mealOffers/${mealOfferId}`);
+        },
       }
     );
 

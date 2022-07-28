@@ -10,6 +10,7 @@ import {
   successToast,
   Typography,
   useModalInfo,
+  warningToast,
 } from "../../components";
 import { Navigate, useNavigate } from "react-router-dom";
 import { createMealOffer } from "../../api/mealApi";
@@ -21,6 +22,7 @@ import {
 } from "../../utils/createMealValueArrays";
 import { TFormFieldError } from "../../components/ui/Forms/_interfaces/TFormFieldError";
 import IMealOfferForm from "../../types/interfaces/mealOfferForm.interface";
+import { AxiosError } from "axios";
 
 /**
  * TODO:
@@ -206,7 +208,18 @@ const CreateMeal = () => {
         console.log(response);
         navigate(`/mealOffers/${mealId}`);
       },
-      onError: () => dangerToast({ message: "Sorry, something went wrong." }),
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message: "Unexpected server error. The meal could not be created.",
+          });
+        }
+        navigate(`/mealOffers`);
+      },
     }
   );
 

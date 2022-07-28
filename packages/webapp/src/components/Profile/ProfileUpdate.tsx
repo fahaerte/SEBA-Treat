@@ -13,6 +13,7 @@ import { getCookie } from "../../utils/auth/CookieProvider";
 import { useMutation, useQuery } from "react-query";
 import { getUser, updateUser } from "../../api/userApi";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 export const ProfileUpdate = () => {
   const userId = getCookie("userId");
@@ -30,8 +31,17 @@ export const ProfileUpdate = () => {
         successToast({ message: "Successfully updated ur information!" });
         navigate("/account");
       },
-      onError: () => {
-        dangerToast({ message: "Sorry, something went wrong." });
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message:
+              "Unexpected server error. Your profile could not be updated.",
+          });
+        }
       },
     }
   );

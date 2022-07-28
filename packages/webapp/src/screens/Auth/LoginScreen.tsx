@@ -17,6 +17,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
 import { setCookie } from "../../utils/auth/CookieProvider";
 import image from "../../assets/img/neighbors.png";
+import { AxiosError } from "axios";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -41,8 +42,16 @@ const LoginScreen = () => {
       }
       navigate(from, { replace: true });
     },
-    onError: () => {
-      dangerToast({ message: "Wrong credentials. Please try again!" });
+    onError: (error) => {
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message: "Unexpected server error. Please try again.",
+        });
+      }
     },
   });
 
