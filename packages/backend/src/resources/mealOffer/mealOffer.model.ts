@@ -243,7 +243,7 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
     endDate: { $gte: new Date() },
   };
   if (user)
-    match["user"] = { $ne: user._id}
+    match["user._id"] = { $ne: user._id}
   if (mealOfferQuery.search !== undefined) {
     match["$or"] = [
       {
@@ -260,19 +260,19 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
       },
     ];
   }
-  if (mealOfferQuery.category !== undefined)
+  if (mealOfferQuery.category)
     match["categories"] = { $eq: mealOfferQuery.category };
-  if (mealOfferQuery.allergen !== undefined)
+  if (mealOfferQuery.allergen)
     match["allergens"] = { $eq: mealOfferQuery.allergen };
-  if (mealOfferQuery.portions !== undefined)
+  if (mealOfferQuery.portions)
     match["portions"] = { $eq: Number(mealOfferQuery.portions) };
-  if (mealOfferQuery.startDate !== undefined)
+  if (mealOfferQuery.startDate)
     match["startDate"] = { $gte: mealOfferQuery.startDate };
-  if (mealOfferQuery.endDate !== undefined)
+  if (mealOfferQuery.endDate)
     match["startDate"] = { $lte: mealOfferQuery.endDate };
-  if (mealOfferQuery.price !== undefined)
+  if (mealOfferQuery.price)
     match["price"] = { $lte: mealOfferQuery.price };
-  if (mealOfferQuery.sellerRating !== undefined)
+  if (mealOfferQuery.sellerRating)
     match["user.meanRating"] = { $gte: mealOfferQuery.sellerRating };
   return await this.aggregate([
     {
