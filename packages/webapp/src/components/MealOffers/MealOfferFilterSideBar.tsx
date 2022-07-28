@@ -88,7 +88,6 @@ const MealOfferFilterSideBar = ({
           <option value={2}>2 Stars</option>
           <option value={3}>3 Stars</option>
           <option value={4}>4 Stars</option>
-          <option value={5}>5 Stars</option>
         </SelectControlled>
       </Row>
       <Row className={"m-2"}>

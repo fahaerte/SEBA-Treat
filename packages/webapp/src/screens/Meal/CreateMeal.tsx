@@ -34,7 +34,7 @@ const CreateMeal = () => {
     [
       FormHelper.createInput({
         formKey: "title",
-        label: "Title of your offer",
+        label: "Title of your meal",
         props: {
           type: "text",
         },
@@ -63,7 +63,7 @@ const CreateMeal = () => {
 
     FormHelper.createTextArea({
       formKey: "description",
-      label: "Describe your offer.",
+      label: "Describe your meal.",
       props: {
         rows: 3,
         sendWithNewLines: true,
@@ -105,7 +105,7 @@ const CreateMeal = () => {
         },
         rules: {
           max: {
-            value: 200,
+            value: 1000,
             message:
               "Even if you added caviar and truffles, please make it affordable.",
           },
@@ -139,7 +139,7 @@ const CreateMeal = () => {
           required: {
             value: true,
             message:
-              "You have to indicate at least one category for your offer.",
+              "You have to indicate at least one category for your meal.",
           },
         },
         props: {
@@ -148,7 +148,7 @@ const CreateMeal = () => {
       }),
       FormHelper.createTextArea({
         formKey: "pickUpDetails",
-        label: "Add pick up details if necessary, e.g. which floor or c/o",
+        label: "Add pick up details if necessary, e.g. floor or c/o",
         props: {
           sendWithNewLines: true,
         },
@@ -157,11 +157,12 @@ const CreateMeal = () => {
     [
       FormHelper.createDatePicker({
         formKey: "startDate",
-        label: "Starting date of your offer",
+        label: "Starting date of your meal offer",
         rules: {
           required: {
             value: true,
-            message: "Please indicate from when your offer can be picked up.",
+            message:
+              "Please indicate from when your meal offer can be picked up.",
           },
           min: {
             value: new Date().toISOString().split(".")[0].slice(0, -3),
@@ -174,11 +175,12 @@ const CreateMeal = () => {
       }),
       FormHelper.createDatePicker({
         formKey: "endDate",
-        label: "End date of your offer",
+        label: "End date of your meal offer",
         rules: {
           required: {
             value: true,
-            message: "Please indicate until when your offer can be picked up.",
+            message:
+              "Please indicate until when your meal offer can be picked up.",
           },
           min: {
             value: new Date().toISOString().split(".")[0].slice(0, -3),
@@ -208,7 +210,8 @@ const CreateMeal = () => {
           });
         } else {
           dangerToast({
-            message: "Unexpected server error. The meal could not be created.",
+            message:
+              "Unexpected server error. The meal offer could not be created.",
           });
         }
         navigate(`/mealOffers`);
@@ -259,11 +262,11 @@ const CreateMeal = () => {
         Having leftovers? Create an <u>offer!</u>
       </PageHeading>
       <Typography>
-        Did you know, that approximately <u>12 million tons of food</u> is
+        Did you know, that approximately <u>12 million tons of food</u> are
         thrown away every year in Germany?
       </Typography>
       <Typography color={"secondary"} variant={"h3"} className={"mb-4"}>
-        Be part of tomorrow`&apos;`s change and offer your meals on <u>TREAT</u>
+        Be part of tomorrow&apos;s change and offer your meals on <u>TREAT</u>
       </Typography>
       {userId ? (
         <>
@@ -271,7 +274,7 @@ const CreateMeal = () => {
           <Form<IMealOfferForm>
             elements={elements}
             onSubmit={handleSubmit}
-            submitButton={{ children: "Publish your offer!" }}
+            submitButton={{ children: "Publish your meal!" }}
             isLoading={createOfferMutation.isLoading}
             formFieldErrors={formError}
             abortButton={{

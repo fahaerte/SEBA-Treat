@@ -99,7 +99,7 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
               <Col className={"col-sm-auto my-auto"}>
                 <Link to={`/mealOffers/${mealOffer._id}`} display={"text"}>
                   <Typography variant={"p"} className={"mb-0"}>
-                    Go to offer
+                    Go to meal offer
                   </Typography>
                 </Link>
               </Col>
