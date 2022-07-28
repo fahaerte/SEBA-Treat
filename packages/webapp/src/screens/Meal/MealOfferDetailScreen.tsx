@@ -36,8 +36,6 @@ export const MealOfferDetailScreen = () => {
     () => getMealOffer(mealOfferId as string, address),
     {
       onSuccess: (response) => {
-        console.log(response);
-
         const nowDate = new Date();
         const startDate = new Date(response.startDate);
         const endDate = new Date(response.endDate);
@@ -136,9 +134,9 @@ export const MealOfferDetailScreen = () => {
               </Col>
             </Row>
             <UserPreview
-              img={"undefined"} // TODO: add image url
+              // img={"undefined"} // TODO: add image url
               firstName={mealOffer.user.firstName}
-              lastName={mealOffer.user.lastName}
+              // lastName={mealOffer.user.lastName}
               meanRating={mealOffer.user.meanRating}
               countRatings={mealOffer.user.countRatings}
             />
@@ -146,19 +144,18 @@ export const MealOfferDetailScreen = () => {
               {/* TODO: make component for image gallery */}
               <Col>
                 <div
+                  className={"d-inline-block"}
                   style={{
                     height: "400px",
                     width: "100%",
                     position: "relative",
-                    display: "inline-block",
                     overflow: "hidden",
                   }}
                 >
                   <div
+                    className={"w-100 h-100"}
                     style={{
                       position: "absolute",
-                      width: "100%",
-                      height: "100%",
                       backgroundImage: `url(${new ConfigService().get(
                         "MEAL_IMAGES_URL"
                       )}/${mealOffer.image})`,
@@ -167,17 +164,16 @@ export const MealOfferDetailScreen = () => {
                       backgroundRepeat: "no-repeat",
                       opacity: "0.3",
                     }}
-                  ></div>
+                  />
                   <img
                     src={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
                       mealOffer.image
                     }`}
+                    className={"h-100 d-block"}
                     style={{
-                      display: "block",
                       position: "absolute",
                       top: "50%",
                       left: "50%",
-                      height: "100%",
                       transform: "translate(-50%, -50%)",
                     }}
                   />
@@ -221,7 +217,7 @@ export const MealOfferDetailScreen = () => {
             </Row>
           </Container>
         ) : (
-          <Container className={""}>
+          <Container>
             <Row className={"pt-5"}>
               <PageHeading>
                 Meal <u>not found</u>

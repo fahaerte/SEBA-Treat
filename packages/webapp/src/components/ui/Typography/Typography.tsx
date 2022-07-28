@@ -15,6 +15,7 @@ const Typography = ({
   isLoading = false,
   skeletonProps = { color: "secondary" },
   color,
+  verticalMiddle = false,
   ...props
 }: ITypography) => (
   <>
@@ -23,6 +24,7 @@ const Typography = ({
     ) : (
       <SCTypography
         color={color}
+        verticalMiddle={verticalMiddle}
         className={[
           "typography",
           `d-${display}`,

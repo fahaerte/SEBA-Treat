@@ -84,7 +84,20 @@ class UserService {
     user: { _id: string } & Partial<IUser>
   ): Promise<UserDocument | null> {
     const { _id, ...updatedUser } = user;
-    await this.userModel.findByIdAndUpdate({ _id }, updatedUser);
+    const updatedAddress = user.address;
+    const addressQuery: { [key: string]: string } = {};
+    if (updatedAddress) {
+      const addressKeys = Object.keys(updatedAddress);
+      addressKeys.forEach((key) => {
+        const addressKey = key as keyof IAddress;
+        addressQuery[`address.${key}`] = updatedAddress[addressKey];
+      });
+    }
+    delete updatedUser["address"];
+    await this.userModel.findByIdAndUpdate(
+      { _id },
+      { $set: { ...updatedUser, ...addressQuery } }
+    );
     return this.userModel.findById(_id);
   }
 

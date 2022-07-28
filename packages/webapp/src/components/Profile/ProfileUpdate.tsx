@@ -8,7 +8,7 @@ import {
   SkeletonSquare,
   successToast,
 } from "../ui";
-import { IUser } from "@treat/lib-common";
+import { IAddress, IUser } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
 import { useMutation, useQuery } from "react-query";
 import { getUser, updateUser } from "../../api/userApi";
@@ -17,18 +17,33 @@ import { useNavigate } from "react-router-dom";
 export const ProfileUpdate = () => {
   const userId = getCookie("userId");
   const navigate = useNavigate();
-  const { data, isSuccess, isError } = useQuery(["getUser", userId], () =>
-    getUser()
+  const [user, setUser] = useState<IUser | undefined>();
+  const [componentLoading, setComponentLoading] = useState<boolean>(true);
+  const { isSuccess, isError } = useQuery(
+    ["getUser", userId],
+    () => getUser(),
+    {
+      onSuccess: (response) => {
+        setUser(response.data as IUser);
+      },
+    }
   );
 
-  const [formElements, setFormElements] = useState<IFormRow<IUser>[]>([]);
-
-  const { mutate: updateUserMutation, isLoading } = useMutation(
+  const {
+    mutate: updateUserMutation,
+    // isLoading,
+    // isSuccess: isUpdateSuccess,
+    // data: updatedData,
+  } = useMutation(
     (user: Partial<IUser>) => updateUser({ _id: userId, ...user }),
     {
-      onSuccess: () => {
+      onMutate: () => {
+        setComponentLoading(true);
+        setUser(undefined);
+      },
+      onSuccess: (response) => {
+        setUser(response.data as IUser);
         successToast({ message: "Successfully updated ur information!" });
-        navigate("/account");
       },
       onError: () => {
         dangerToast({ message: "Sorry, something went wrong." });
@@ -36,116 +51,140 @@ export const ProfileUpdate = () => {
     }
   );
 
-  useEffect(() => {
-    if (isSuccess) {
-      const user = data.data;
-      const userEditElements: IFormRow<IUser>[] = [
-        [
-          FormHelper.createInput({
-            formKey: "email",
-            label: "Email",
-            disabled: true,
-            props: {
-              type: "email",
-            },
-            defaultValue: user.email,
-          }),
-        ],
-        [
-          FormHelper.createInput({
-            formKey: "firstName",
-            label: "First Name",
-            props: {
-              type: "text",
-            },
-            defaultValue: user.firstName,
-          }),
-          FormHelper.createInput({
-            formKey: "lastName",
-            label: "Last Name",
-            props: {
-              type: "text",
-            },
-            defaultValue: user.lastName,
-          }),
-          FormHelper.createDatePicker({
-            formKey: "birthdate",
-            label: "Birthdate",
-            disabled: true,
-            props: {
-              type: "date",
-            },
-            defaultValue: user.birthdate.split("T")[0],
-          }),
-        ],
-        [
-          FormHelper.createInput({
-            formKey: "address.street",
-            label: "Street",
-            props: {
-              type: "text",
-            },
-            rules: {
-              minLength: {
-                value: 3,
-                message: "Please provide a street!",
-              },
-              maxLength: {
-                value: 100,
-                message: "Please provide a street!",
-              },
-            },
-            defaultValue: user.address.street,
-          }),
-          FormHelper.createInput({
-            formKey: "address.houseNumber",
-            label: "Housenumber",
-            props: {
-              type: "text",
-            },
-            defaultValue: user.address.houseNumber,
-          }),
-          FormHelper.createInput({
-            formKey: "address.postalCode",
-            label: "Postal Code",
-            props: {
-              type: "text",
-            },
-            defaultValue: user.address.postalCode,
-          }),
-          FormHelper.createInput({
-            formKey: "address.city",
-            label: "City",
-            props: {
-              type: "text",
-            },
-            defaultValue: user.address.city,
-          }),
-          FormHelper.createInput({
-            formKey: "address.country",
-            label: "Country",
-            props: {
-              type: "text",
-            },
-            defaultValue: user.address.country,
-          }),
-        ],
-      ];
+  const generateFormElements = (userElement: IUser): IFormRow<IUser>[] => [
+    [
+      FormHelper.createInput({
+        formKey: "email",
+        label: "Email",
+        disabled: true,
+        props: {
+          type: "email",
+        },
+        defaultValue: userElement.email,
+      }),
+    ],
+    [
+      FormHelper.createInput({
+        formKey: "firstName",
+        label: "First Name",
+        props: {
+          type: "text",
+        },
+        defaultValue: userElement.firstName,
+      }),
+      FormHelper.createInput({
+        formKey: "lastName",
+        label: "Last Name",
+        props: {
+          type: "text",
+        },
+        defaultValue: userElement.lastName,
+      }),
+      FormHelper.createDatePicker({
+        formKey: "birthdate",
+        label: "Birthdate",
+        disabled: true,
+        props: {
+          type: "date",
+        },
+        defaultValue: new Date(userElement.birthdate)
+          .toISOString()
+          .split("T")[0],
+      }),
+    ],
+    [
+      FormHelper.createInput({
+        formKey: "address.street",
+        label: "Street",
+        props: {
+          type: "text",
+        },
+        rules: {
+          minLength: {
+            value: 3,
+            message: "Please provide a street!",
+          },
+          maxLength: {
+            value: 100,
+            message: "Please provide a street!",
+          },
+        },
+        defaultValue: userElement.address.street,
+      }),
+      FormHelper.createInput({
+        formKey: "address.houseNumber",
+        label: "Housenumber",
+        props: {
+          type: "text",
+        },
+        defaultValue: userElement.address.houseNumber,
+      }),
+      FormHelper.createInput({
+        formKey: "address.postalCode",
+        label: "Postal Code",
+        props: {
+          type: "text",
+        },
+        defaultValue: userElement.address.postalCode,
+      }),
+      FormHelper.createInput({
+        formKey: "address.city",
+        label: "City",
+        props: {
+          type: "text",
+        },
+        defaultValue: userElement.address.city,
+      }),
+      FormHelper.createInput({
+        formKey: "address.country",
+        label: "Country",
+        props: {
+          type: "text",
+        },
+        defaultValue: userElement.address.country,
+      }),
+    ],
+  ];
 
-      setFormElements(userEditElements);
+  useEffect(() => {
+    if (user) {
+      setComponentLoading(false);
+      console.log("im Use Effect");
+      console.log(user);
     } else if (isError) {
       dangerToast({ message: "Could not get user data!" });
       navigate("/account");
     }
-  }, [data, setFormElements, isError, isSuccess, navigate]);
+  }, [
+    user,
+    componentLoading,
+    // setFormElements,
+    // setUser,
+    setComponentLoading,
+    // isUpdateSuccess,
+    isError,
+    isSuccess,
+    navigate,
+  ]);
 
   const handleSubmit = (data: IUser) => {
     if (userId) {
-      const dataToSend = Object.values(data).filter(
-        (userAttribut) => userAttribut !== ""
-      );
-      console.log({ ...dataToSend, _id: userId });
-      // updateUserMutation({ ...data, _id: userId });
+      const userKeys = Object.keys(data);
+      const addressKeys = Object.keys(data.address);
+      userKeys.forEach((key) => {
+        const keyFromInterface = key as keyof IUser;
+        if (data[keyFromInterface] === "" && keyFromInterface !== "address") {
+          delete data[keyFromInterface];
+        }
+      });
+      addressKeys.forEach((key) => {
+        const keyFromInterface = key as keyof IAddress;
+        if (data.address[keyFromInterface] === "") {
+          delete data.address[keyFromInterface];
+        }
+      });
+
+      updateUserMutation({ ...data, _id: userId });
     } else {
       dangerToast({
         message: "User does not seem to be authenticated. Please login.",
@@ -156,9 +195,10 @@ export const ProfileUpdate = () => {
 
   return (
     <>
-      {isSuccess && formElements.length > 0 ? (
+      {!componentLoading && user ? (
         <Form<IUser>
-          elements={formElements}
+          resetOnSubmit
+          elements={generateFormElements(user)}
           onSubmit={(data) => handleSubmit(data)}
           submitButton={{
             children: (
@@ -167,7 +207,6 @@ export const ProfileUpdate = () => {
               </>
             ),
           }}
-          isLoading={isLoading}
         />
       ) : (
         <SkeletonSquare rows={3} />
