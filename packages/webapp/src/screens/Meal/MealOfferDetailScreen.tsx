@@ -64,18 +64,18 @@ export const MealOfferDetailScreen = () => {
     <>
       <div>
         {mealOfferIsLoading ? (
-          <Container className={""}>
-            <Row className={"pt-5"}>
+          <Container>
+            <Row>
               <PageHeading>
                 Meal <u>is loading...</u>
               </PageHeading>
             </Row>
           </Container>
         ) : mealOffer ? (
-          <Container className={""}>
-            <Row className={"pt-5 me-1"}>
+          <Container>
+            <Row>
               <Col className={"d-flex align-items-center"}>
-                <PageHeading className={"text-nowrap"}>
+                <PageHeading className={"text-nowrap me-3"}>
                   <u>{mealOffer.title}</u>
                 </PageHeading>
                 {mealOffer.categories.map((category: string) => (
@@ -93,9 +93,9 @@ export const MealOfferDetailScreen = () => {
               </Col>
             </Row>
             <UserPreview
-              img={"undefined"}
+              // img={"undefined"}
               firstName={mealOffer.user.firstName}
-              lastName={mealOffer.user.lastName}
+              // lastName={mealOffer.user.lastName}
               meanRating={mealOffer.user.meanRating}
               countRatings={mealOffer.user.countRatings}
             />

@@ -6,7 +6,7 @@ import { Header } from "./ui/Header/Header";
 const AppLayout = ({ children }: { children?: React.ReactNode }) => (
   <div className={"mb-5"}>
     <Header />
-    <main className="p-3">
+    <main className="p-3 pt-5">
       <div>
         <Container>{children || <Outlet />}</Container>
       </div>

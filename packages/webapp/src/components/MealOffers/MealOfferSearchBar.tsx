@@ -45,7 +45,6 @@ const MealOfferSearchBar = ({
       <SCSearchBar className={"mt-5 mb-5"}>
         <div className={"inner-search-bar"}>
           <InputControlledSearch
-            className={"search-input"}
             type={"search"}
             value={currentSearchString as string}
             label={"Search meals in your neighborhood"}
@@ -59,13 +58,16 @@ const MealOfferSearchBar = ({
             size={"sm"}
           >
             <option value={ESortingRules.PRICE_ASC}>
-              {ESortingRules.PRICE_ASC.valueOf()}
+              {ESortingRules.PRICE_ASC.valueOf().charAt(0).toUpperCase() +
+                ESortingRules.PRICE_ASC.valueOf().slice(1)}
             </option>
             <option value={ESortingRules.DIST_ASC}>
-              {ESortingRules.DIST_ASC.valueOf()}
+              {ESortingRules.DIST_ASC.valueOf().charAt(0).toUpperCase() +
+                ESortingRules.DIST_ASC.valueOf().slice(1)}
             </option>
             <option value={ESortingRules.RATING_DESC}>
-              {ESortingRules.RATING_DESC.valueOf()}
+              {ESortingRules.RATING_DESC.valueOf().charAt(0).toUpperCase() +
+                ESortingRules.RATING_DESC.valueOf().slice(1)}
             </option>
           </SelectControlledRound>
         </div>
