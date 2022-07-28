@@ -5,6 +5,7 @@ import {
   Row,
   PageHeading,
   SectionHeading,
+  dangerToast,
 } from "../../components";
 import { IStripeProduct } from "@treat/lib-common";
 import CreditPackage from "../../components/CreditProducts/CreditPackage";
@@ -22,6 +23,7 @@ import { getUser } from "../../api/userApi";
 import { useParams } from "react-router-dom";
 import { TransactionHistory } from "../../components/TransactionHistory/TransactionHistory";
 import { getCookie, setCookie } from "../../utils/auth/CookieProvider";
+import { AxiosError } from "axios";
 
 export const CreditScreen = () => {
   const { userId: userIdParam, token: userTokenParam } = useParams();

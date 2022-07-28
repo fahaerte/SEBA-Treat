@@ -12,6 +12,7 @@ import { getCookie } from "../../utils/auth/CookieProvider";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { TFormFieldError } from "../ui/Forms/_interfaces/TFormFieldError";
+import { AxiosError } from "axios";
 
 type PasswordForm = {
   passwordOld: string;
@@ -33,8 +34,17 @@ export const PasswordUpdate = () => {
         successToast({ message: "Your password has been updated." });
         navigate("/account");
       },
-      onError: () => {
-        dangerToast({ message: "Your password could not be updated, sorry." });
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message:
+              "Unexpected server error. Your password could not be updated.",
+          });
+        }
       },
     }
   );

@@ -8,6 +8,7 @@ import { EMealReservationState } from "@treat/lib-common";
 import User from "../../types/interfaces/user.interface";
 import { useMutation } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
+import { AxiosError } from "axios";
 
 interface SentMealOfferRequestBottomProps {
   mealOfferId: string;
@@ -31,10 +32,19 @@ export const SentMealReservation = ({
       updateMealReservationState(reservation._id, newState),
     {
       onSuccess: () => {
-        successToast({ message: "You changed the state of your reservation" });
+        successToast({ message: "You changed the state of your reservation." });
       },
-      onError: (error: any) => {
-        dangerToast({ message: error.response.data.message });
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message:
+              "Unexpected server error. The state of your reservation could not be updated.",
+          });
+        }
       },
     }
   );

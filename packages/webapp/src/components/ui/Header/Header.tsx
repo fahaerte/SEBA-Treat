@@ -12,10 +12,11 @@ import {
   setCookie,
 } from "../../../utils/auth/CookieProvider";
 import { signout } from "../../../api/authApi";
-import { dangerToast, successToast } from "../Toast";
+import { dangerToast } from "../Toast";
 import { CustomDropdown } from "./UserDropdown";
 import { IStringObject } from "@treat/lib-common";
 import { addressElement } from "../../AddressInput/AddressInput";
+import { AxiosError } from "axios";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -37,8 +38,8 @@ export const Header = () => {
 
   useQuery(["getUser", userId], () => getUser(), {
     onSuccess: (response) => {
-      setBalance(response.data.virtualAccount.balance);
-      setFirstName(response.data.firstName);
+      setBalance(response.data.virtualAccount.balance as number);
+      setFirstName(response.data.firstName as string);
     },
     onError: () => {
       signoutMutation.mutate();
@@ -49,12 +50,19 @@ export const Header = () => {
   const signoutMutation = useMutation("signout", signout, {
     onSuccess: () => {
       removeCookies();
-      successToast({ message: "Successfully signed out." });
       navigate("/");
     },
-    onError: () => {
+    onError: (error) => {
       removeCookies();
-      dangerToast({ message: "Signout unsuccessful. Please try again!" });
+      if (error instanceof AxiosError && error.response) {
+        dangerToast({
+          message: error.response.data.message,
+        });
+      } else {
+        dangerToast({
+          message: "Unexpected server error. Please try again.",
+        });
+      }
     },
   });
 
