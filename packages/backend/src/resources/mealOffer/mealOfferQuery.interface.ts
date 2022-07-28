@@ -5,7 +5,7 @@ export interface MealOfferQuery {
   distance: number;
   address: string;
   category?: EMealCategory[];
-  allergen?: EMealAllergen[];
+  excludedAllergens?: EMealAllergen[] | EMealAllergen;
   portions?: number;
   sellerRating?: number;
   startDate?: Date;
