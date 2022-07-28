@@ -98,6 +98,7 @@ export const MealOfferDetailScreen = () => {
               // lastName={mealOffer.user.lastName}
               meanRating={mealOffer.user.meanRating}
               countRatings={mealOffer.user.countRatings}
+              offeredBy={true}
             />
             <Row>
               {/* TODO: make component for image gallery */}

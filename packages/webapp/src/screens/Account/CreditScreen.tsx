@@ -90,8 +90,8 @@ export const CreditScreen = () => {
 
   return (
     <>
-      <Container className={""}>
-        <PageHeading className={"pt-5"}>
+      <Container>
+        <PageHeading>
           Your <u>account</u>
         </PageHeading>
         <CreditAccountOverview />

@@ -7,15 +7,18 @@ const UserPreview = ({
   firstName,
   meanRating,
   countRatings,
+  offeredBy = false,
 }: {
   firstName: string;
   meanRating: number;
   countRatings: number;
+  offeredBy?: boolean;
 }) => {
   return (
     <SCUserPreview>
       <span className={"userName"}>
-        Offered by: <div className={"fw-bold d-inline"}>{firstName}</div>
+        {offeredBy && "Offered by: "}
+        <div className={"fw-bold d-inline"}>{firstName}</div>
       </span>
       <div className={"userRating"}>
         {countRatings > 0 ? (
