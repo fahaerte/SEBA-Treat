@@ -161,7 +161,6 @@ class MealOfferController implements Controller {
         pageLimit: Number(req.query.pageLimit),
         sortingRule: req.query.sortingRule ? req.query.sortingRule : undefined,
       } as MealOfferQuery;
-      console.log(mealOfferQuery);
       const data = await this.mealOfferService.getMealOfferPreviews(
         mealOfferQuery,
         req.user
