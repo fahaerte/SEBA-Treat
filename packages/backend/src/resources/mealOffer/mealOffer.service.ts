@@ -620,7 +620,18 @@ class MealOfferService {
   }
 
   public async getMealOffers(user: UserDocument): Promise<MealOfferDocument[]> {
-    return await this.mealOffer.find({ user: user._id }).exec();
+    return await this.mealOffer
+      .find({
+        user: user._id,
+        reservations: {
+          $not: {
+            $elemMatch: {
+              reservationState: EMealReservationState.BUYER_CONFIRMED,
+            },
+          },
+        },
+      })
+      .exec();
   }
 }
 
