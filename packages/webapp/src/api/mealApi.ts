@@ -46,6 +46,11 @@ export const getMealOffer = async (
   return response.data.data;
 };
 
+export const getOwnMealOffers = async () => {
+  const response = await baseApiAuth().get(`/mealOffers`);
+  return response.data.data;
+};
+
 export const requestMealOffer = async ({
   mealOfferId,
 }: requestMealOfferArgs) => {

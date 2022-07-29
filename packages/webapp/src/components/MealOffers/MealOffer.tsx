@@ -43,7 +43,7 @@ const MealOffer = ({
   const navigate = useNavigate();
 
   const handleSelect = () => {
-    navigate(`/mealoffers/${mealId}`);
+    navigate(`/meals/${mealId}`);
     return mealId;
   };
   const startDateAsString = new Date(startDate).toLocaleDateString();

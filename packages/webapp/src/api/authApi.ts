@@ -10,5 +10,5 @@ export const register = async (user: IUser) => {
 };
 
 export const signout = async () => {
-  return await baseApi().post("users/signout");
+  return await baseApi().post("users/sign-out");
 };
