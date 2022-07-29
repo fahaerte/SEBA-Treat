@@ -22,7 +22,7 @@ export const TransactionHistory = () => {
 
   return (
     <>
-      <SectionHeading>Your transaction history</SectionHeading>
+      <SectionHeading>Your meal transaction history</SectionHeading>
       {transactionsAreLoading ? (
         "Loading..."
       ) : (
