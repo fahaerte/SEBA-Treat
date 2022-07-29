@@ -180,9 +180,9 @@ class MailService {
     const heading = `Welcome, ${user.firstName}!`;
     const content = `Thanks for signing up to TREAT. Get started, and grab your first meal <a href="${this.configService.get(
       "CLIENT_URL"
-    )}/meals" style="color: white">here</a>. Enjoy! :)<br /><br />Do you have leftovers? Offer your first meal <a href="${this.configService.get(
+    )}/meals">here</a>. Enjoy! :)<br /><br />Do you have leftovers? Offer your first meal <a href="${this.configService.get(
       "CLIENT_URL"
-    )}/meals/create" style="color: white">here</a>.`;
+    )}/meals/create">here</a>.`;
     const mailText = this.getTemplate(heading, content);
     this.sendMail(user.email, subject, mailText);
   }

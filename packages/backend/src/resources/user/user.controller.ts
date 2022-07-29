@@ -62,12 +62,6 @@ class UserController implements Controller {
       validationMiddleware(validate.updatePassword),
       this.updatePassword
     );
-    this.router.delete(
-      `${this.path}/:userId`,
-      authenticatedMiddleware,
-      validationMiddleware(validate.deleteUserParams, ValidatePart.PARAMS),
-      this.deleteUser
-    );
   }
 
   private register = async (
@@ -223,20 +217,6 @@ class UserController implements Controller {
       res.status(200).json(editedUser);
     } catch (error: any) {
       next(new HttpException(400, error.message));
-    }
-  };
-
-  private deleteUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<Response | void> => {
-    try {
-      await this.userService.deleteUser(req.params.userId, req.user);
-      res.clearCookie("Authorization");
-      res.sendStatus(200);
-    } catch (error: any) {
-      next(error);
     }
   };
 }

@@ -11,8 +11,6 @@ import Logger, { ILogMessage } from "../../utils/logger";
 import bcrypt from "bcrypt";
 import MailService from "../../utils/EmailService";
 import InvalidRegisterException from "../../utils/exceptions/invalidRegister.exception";
-import HttpException from "../../utils/exceptions/http.exception";
-import MealOfferService from "../mealOffer/mealOffer.service";
 
 @Service()
 class UserService {
@@ -20,8 +18,7 @@ class UserService {
 
   constructor(
     private readonly virtualAccountService: VirtualAccountService,
-    private readonly mailService: MailService,
-    private readonly mealOfferService: MealOfferService
+    private readonly mailService: MailService // private readonly mealOfferService: MealOfferService
   ) {}
 
   /**
@@ -129,33 +126,6 @@ class UserService {
       );
     }
     return this.userModel.findById(userId);
-  }
-
-  public async deleteUser(userId: string, user: UserDocument): Promise<void> {
-    if (userId !== user._id.toString()) {
-      Logger.error({
-        functionName: "deleteUser",
-        message: "Could not delete User",
-        details: `User ${user._id} can only delete own user`,
-      } as ILogMessage);
-      throw new HttpException(403, "Not allowed to delete user");
-    }
-    await this.mealOfferService.deleteMealOffersForUser(user);
-    try {
-      await this.userModel.deleteOne({ _id: userId });
-      Logger.info({
-        functionName: "deleteUser",
-        message: "Deleted user",
-        details: `UserId ${userId}`,
-      } as ILogMessage);
-    } catch (error: any) {
-      Logger.error({
-        functionName: "deleteUser",
-        message: "Could not delete user",
-        details: error.message,
-      } as ILogMessage);
-      throw new Error(error.message);
-    }
   }
 
   public async getUser(userId: string): Promise<Partial<UserDocument> | null> {
