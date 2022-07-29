@@ -149,17 +149,17 @@ export const MealOfferDetailScreen = () => {
               <Col className={"pe-5"}>
                 <SectionHeading>Description</SectionHeading>
                 <p>{mealOffer.description}</p>
-                <SectionHeading>
-                  {mealOffer.pickUpDetails ? "Pickup Details" : "Location"}
-                </SectionHeading>
-                {mealOffer.pickUpDetails ? (
-                  <p>{mealOffer.pickUpDetails}</p>
-                ) : (
-                  <p>
-                    {mealOffer.user.firstName} is {mealOffer.distance}{" "}
-                    kilometers away from you. You will get the exact location
-                    via email after the seller accepted your reservation.
-                  </p>
+                <SectionHeading>Location</SectionHeading>
+                <p>
+                  {mealOffer.user.firstName} is {mealOffer.distance} kilometers
+                  away from you. You will get the exact location via email after
+                  the seller accepted your reservation.
+                </p>
+                {mealOffer.pickUpDetails && (
+                  <>
+                    <SectionHeading>Pickup Details</SectionHeading>
+                    <p>{mealOffer.pickUpDetails}</p>
+                  </>
                 )}
                 <SectionHeading>List of Allergens</SectionHeading>
                 {mealOffer.allergens.map((allergen: string) => (
