@@ -126,7 +126,7 @@ class MailService {
   ): void {
     const subject = `TREAT | You confirmed your reservation for ${mealOffer.title}`;
     const heading = `Enjoy your meal, ${buyer.firstName}!`;
-    const content = `Thanks for confirming your reservation for ${mealOffer.title}.<br /><br /><b>Please contact ${seller.firstName} to pick up the meal: <a href="mailto:${seller.email}">${seller.email}</a></b>`;
+    const content = `Thanks for confirming your reservation for ${mealOffer.title}.<br /><br />Here are the pickup details: ${mealOffer.pickUpDetails}<br /><br /><b>Please contact ${seller.firstName} to pick up the meal: <a href="mailto:${seller.email}">${seller.email}</a></b>`;
     const mailText = this.getTemplate(heading, content);
     this.sendMail(buyer.email, subject, mailText);
   }
