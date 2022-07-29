@@ -16,4 +16,3 @@ export interface ICreditPackage2 {
   credits: number;
   price: number;
 }
-

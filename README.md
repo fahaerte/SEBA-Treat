@@ -23,15 +23,13 @@ The first step is to get your node sources and build all dependency libraries.
 
 1. `yarn install`
 2. `yarn build:lib`
+3. Go into ./packages/backend, create file `.env`, and insert content of `.env.example`.
+4. Go into ./packages/webapp, create file `.env`, and insert content of `.env.example`.
 
-### Backend
+### Start application
 
-### Frontend
-
-See further instructions [webapp README](packages/webapp/README.md)
-
-1. all steps from backend-development
-2. run yarn to start react node app
+1. Go to root directory `treating`
+2. Run `yarn start:all` to start both backend and webapp
 
 ## Further Scripts
 

@@ -20,7 +20,6 @@ interface SentMealOfferRequestBottomProps {
 }
 
 export const SentMealReservation = ({
-  // mealOfferId,
   seller,
   reservation,
   sellerRating,
@@ -37,6 +36,7 @@ export const SentMealReservation = ({
     {
       onSuccess: () => {
         successToast({ message: "You changed the state of your reservation." });
+        queryClient.fetchQuery("getUser");
       },
       onError: (error) => {
         if (error instanceof AxiosError && error.response) {
@@ -54,11 +54,8 @@ export const SentMealReservation = ({
   );
 
   const updateReservationState = (newState: EMealReservationState) => {
-    updateReservationStateMutation.mutate(newState);
     setReservationState(newState);
-    if (newState === EMealReservationState.BUYER_CONFIRMED) {
-      queryClient.fetchQuery("getOffers");
-    }
+    updateReservationStateMutation.mutate(newState);
   };
 
   function getActionElement() {
