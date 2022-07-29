@@ -6,13 +6,11 @@ import { rateUser as rateUserCall } from "../../api/ratingApi";
 import { AxiosError } from "axios";
 
 interface RateUserProps {
-  // mealOfferId: string;
   mealReservationId: string;
   existingRating?: number;
 }
 
 export const RateUser = ({
-  // mealOfferId,
   mealReservationId,
   existingRating,
 }: RateUserProps) => {
