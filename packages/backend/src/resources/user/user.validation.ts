@@ -29,8 +29,8 @@ const updateUser = Joi.object<Partial<IUser>>({
 });
 
 const getUserParams = Joi.object({
-  userId:Joi.string().regex(/^[a-f\d]{24}$/i)
-})
+  userId: Joi.string().regex(/^[a-f\d]{24}$/i),
+});
 
 const updatePassword = Joi.object({
   userId: Joi.string()
@@ -42,15 +42,16 @@ const updatePassword = Joi.object({
 
 const deleteUserParams = Joi.object({
   userId: Joi.string()
-    .regex(/^[a-f\d]{24}$/i).required(),
-})
+    .regex(/^[a-f\d]{24}$/i)
+    .required(),
+});
 export default {
   registerBody,
   loginBody,
   updateUser,
   updatePassword,
   getUserParams,
-  deleteUserParams
+  deleteUserParams,
 };
 
 export const User = {

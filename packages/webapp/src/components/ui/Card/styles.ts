@@ -33,8 +33,25 @@ export const SCCardHeader = styled.div`
   background-color: transparent;
   border: none;
 `;
+//
+// export const SCCardImage = styled.img`
+//   border-top-left-radius: 20px;
+//   border-top-right-radius: 20px;
+// `;
 
-export const SCCardImage = styled.img`
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+export const SCCardImage = styled.div`
+  position: relative;
+  width: 100%;
+  height: 200px;
+
+  > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+  }
 `;
