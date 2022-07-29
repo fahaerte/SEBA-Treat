@@ -11,3 +11,9 @@ export interface ICreditPackage {
 export interface IStripeProduct extends Stripe.Product {
   default_price: Stripe.Price;
 }
+
+export interface ICreditPackage2 {
+  credits: number;
+  price: number;
+}
+
