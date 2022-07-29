@@ -42,10 +42,15 @@ class MailService {
     mealOffer: MealOfferDocumentWithUser,
     buyer: UserDocument
   ): void {
-    const heading = `You created a reservation for ${mealOffer.user.firstName}'s offer ${mealOffer.title}`;
-    const content = `Thanks for your reservation ${buyer.firstName}! Now ${mealOffer.user.firstName} has the chance to accept your reservation. You will get notified if there are any news! :)`;
+    const subject = `TREAT | You reserved ${mealOffer.title} from ${mealOffer.user.firstName}`;
+    const heading = `Thanks for your reservation, ${buyer.firstName}!`;
+    const content = `Now, ${
+      mealOffer.user.firstName
+    } can accept your reservation. You can check the status of your reservations <a href="${this.configService.get(
+      "CLIENT_URL"
+    )}/meal-reservations/sent">here</a>. Don't worry, we will also notify you if there are any updates! :)`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(buyer.email, heading, mailText);
+    this.sendMail(buyer.email, subject, mailText);
   }
 
   private sendCreateReservationMailForSeller(
@@ -53,10 +58,15 @@ class MailService {
     buyer: UserDocument,
     seller: UserDocument
   ): void {
-    const heading = `You received a new reservation for your offer ${mealOffer.title}`;
-    const content = `You got a new reservation from ${buyer.firstName}. Now you can accept or reject the reservation request`;
+    const subject = `TREAT | ${buyer.firstName} reserved ${mealOffer.title}`;
+    const heading = `You received a new reservation for ${mealOffer.title}`;
+    const content = `${buyer.firstName} reserved your meal ${
+      mealOffer.title
+    }. Now, you can accept or reject the reservation <a href="${this.configService.get(
+      "CLIENT_URL"
+    )}/meal-reservations/received">here</a>.`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(seller.email, heading, mailText);
+    this.sendMail(seller.email, subject, mailText);
   }
 
   public sendUpdateReservationToSellerAcceptedMail(
@@ -64,24 +74,32 @@ class MailService {
     buyer: UserDocument,
     seller: UserDocument
   ): void {
-    const heading = `${seller.firstName} accepted your reservation for the offer ${mealOffer.title}!`;
-    const content = `Your reservation got accepted. Now you can confirm your request. Only after your confirmation ${
+    const subject = `TREAT | ${seller.firstName} accepted your reservation for ${mealOffer.title}`;
+    const heading = `${buyer.firstName}, you are one step away from getting ${mealOffer.title}!`;
+    const content = `Your reservation got accepted. Now you can confirm your request <a href="${this.configService.get(
+      "CLIENT_URL"
+    )}/meal-reservations/sent">here</a>. Only after your confirmation, the price of ${
       mealOffer.price + mealOffer.transactionFee
-    } credits will be deducted from your account. This prices includes ${
+    } credits will be deducted from your account (including ${
       mealOffer.transactionFee
-    } credits transaction fee.`;
+    } credits transaction fee).`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(buyer.email, heading, mailText);
+    this.sendMail(buyer.email, subject, mailText);
   }
 
   public sendUpdateReservationToSellerRejectedMail(
     mealOffer: MealOfferDocument,
     buyer: UserDocument
   ): void {
-    const heading = `Your reservation for the offer ${mealOffer.title} got rejected`;
-    const content = `Unfortunately your reservation for the offer ${mealOffer.title} got rejected! Heads up you will get the next one.`;
+    const subject = `TREAT | Your reservation for ${mealOffer.title} got cancelled`;
+    const heading = `Next time, ${buyer.firstName}!`;
+    const content = `Unfortunately, the seller rejected your reservation for ${
+      mealOffer.title
+    }. Heads up, go to <a href="${this.configService.get(
+      "CLIENT_URL"
+    )}">www.treat.de</a> and reserve another meal! :)`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(buyer.email, heading, mailText);
+    this.sendMail(buyer.email, subject, mailText);
   }
 
   public sendUpdateReservationToBuyerConfirmedMails(
@@ -106,10 +124,11 @@ class MailService {
     buyer: UserDocument,
     seller: UserDocument
   ): void {
-    const heading = `You confirmed your request for the offer ${mealOffer.title}`;
-    const content = `Thanks for confirming your request for the offer ${mealOffer.title}. Now you can get in contact with ${seller.firstName}. The email address is ${seller.email}`;
+    const subject = `TREAT | You confirmed your reservation for ${mealOffer.title}`;
+    const heading = `Enjoy your meal, ${buyer.firstName}!`;
+    const content = `Thanks for confirming your reservation for ${mealOffer.title}.<br /><br /><b>Please contact ${seller.firstName} to pick up the meal: <a href="mailto:${seller.email}">${seller.email}</a></b>`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(buyer.email, heading, mailText);
+    this.sendMail(buyer.email, subject, mailText);
   }
 
   private sendUpdateReservationToBuyerConfirmedForSeller(
@@ -117,10 +136,11 @@ class MailService {
     buyer: UserDocument,
     seller: UserDocument
   ): void {
-    const heading = `${buyer.firstName} confirmed the request for your offer ${mealOffer.title}`;
-    const content = `${buyer.firstName} confirmed the request. ${buyer.firstName} just received your email address and will get in contact with you to clarify everything regarding the pickup`;
+    const subject = `TREAT | Reservation for ${mealOffer.title} has been confirmed`;
+    const heading = `Congrats, ${buyer.firstName} has confirmed the reservation for ${mealOffer.title}`;
+    const content = `${buyer.firstName} decided to pick up your meal. ${buyer.firstName} received your email address to contact you for clarifying everything regarding the pickup.`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(seller.email, heading, mailText);
+    this.sendMail(seller.email, subject, mailText);
   }
 
   public sendUpdateReservationToBuyerRejectedMail(
@@ -128,21 +148,43 @@ class MailService {
     buyer: UserDocument,
     seller: UserDocument
   ): void {
-    const heading = `${buyer.firstName} cancelled the request for your offer ${mealOffer.title}`;
-    const content = `${buyer.firstName} cancelled the request for your offer. Don't be sad some else will come and get it`;
+    const subject = `TREAT | Reservation for ${mealOffer.title} has been cancelled`;
+    const heading = `Next time, ${buyer.firstName}!`;
+    const content = `${buyer.firstName} cancelled the request for your offer ${mealOffer.title}. Don't worry, someone else will come and get it! :)`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(seller.email, heading, mailText);
+    this.sendMail(seller.email, subject, mailText);
   }
 
   private getTemplate(heading: string, content: string) {
-    return `<h1>${heading}</h1><p>${content}</p><br><p>Best, your Treat Team</p>`;
+    return `<div style="display: block; width: 100%; height: 100%">
+                <div style="display: block; max-width: 600px; margin: 2em auto; background-color: rgb(239, 239, 239);">
+                    <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100px; background-color: #BFD0CD; text-align: center">
+                        <div style="text-decoration: underline; text-decoration-color: white; color: black; font-size: 3em;">TREAT</div>
+                    </div>
+                    <div style="display: block; width: 100%; padding: 1em; box-sizing: border-box">
+                      <h1>${heading}</h1>
+                      <p>${content}</p>
+                      <p>Best, your TREAT Team</p>
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 50px; background-color: #8A8A8A; text-align: center">
+                        <div><a href="${this.configService.get(
+                          "CLIENT_URL"
+                        )}" style="color: white">www.treat.de</a></span>
+                    </div>
+                </div>
+            </div>`;
   }
 
   public sendRegisterMail(user: UserDocument): void {
-    const heading = `Welcome ${user.firstName}`;
-    const content = `Thanks for signing up on Treat`;
+    const subject = `Welcome to TREAT, ${user.firstName}`;
+    const heading = `Welcome, ${user.firstName}!`;
+    const content = `Thanks for signing up to TREAT. Get started, and grab your first meal <a href="${this.configService.get(
+      "CLIENT_URL"
+    )}/meals" style="color: white">here</a>. Enjoy! :)<br /><br />Do you have leftovers? Offer your first meal <a href="${this.configService.get(
+      "CLIENT_URL"
+    )}/meals/create" style="color: white">here</a>.`;
     const mailText = this.getTemplate(heading, content);
-    this.sendMail(user.email, heading, mailText);
+    this.sendMail(user.email, subject, mailText);
   }
 
   private sendMail(to: string, subject: string, text: string): void | Error {
