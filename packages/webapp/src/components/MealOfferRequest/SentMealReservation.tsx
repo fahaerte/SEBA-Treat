@@ -8,7 +8,7 @@ import {
   IMealReservation,
   IUser,
 } from "@treat/lib-common";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { updateMealReservationState } from "../../api/mealApi";
 import { AxiosError } from "axios";
 
@@ -25,6 +25,8 @@ export const SentMealReservation = ({
   reservation,
   sellerRating,
 }: SentMealOfferRequestBottomProps) => {
+  const queryClient = useQueryClient();
+
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
@@ -54,6 +56,9 @@ export const SentMealReservation = ({
   const updateReservationState = (newState: EMealReservationState) => {
     updateReservationStateMutation.mutate(newState);
     setReservationState(newState);
+    if (newState === EMealReservationState.BUYER_CONFIRMED) {
+      queryClient.fetchQuery("getOffers");
+    }
   };
 
   function getActionElement() {

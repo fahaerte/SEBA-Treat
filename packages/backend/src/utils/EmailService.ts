@@ -139,7 +139,7 @@ class MailService {
     seller: UserDocument
   ): void {
     const subject = `TREAT | Reservation for ${mealOffer.title} has been confirmed`;
-    const heading = `Congrats, ${buyer.firstName} has confirmed the reservation for ${mealOffer.title}`;
+    const heading = `Congrats, ${buyer.firstName} purchased ${mealOffer.title}`;
     const content = `${buyer.firstName} decided to pick up your meal. ${buyer.firstName} received your email address to contact you for clarifying everything regarding the pickup.`;
     const mailText = this.getTemplate(heading, content);
     this.sendMail(seller.email, subject, mailText);
@@ -151,7 +151,7 @@ class MailService {
     seller: UserDocument
   ): void {
     const subject = `TREAT | Reservation for ${mealOffer.title} has been cancelled`;
-    const heading = `Next time, ${buyer.firstName}!`;
+    const heading = `Next time, ${seller.firstName}!`;
     const content = `${buyer.firstName} cancelled the request for your offer ${mealOffer.title}. Don't worry, someone else will come and get it! :)`;
     const mailText = this.getTemplate(heading, content);
     this.sendMail(seller.email, subject, mailText);
