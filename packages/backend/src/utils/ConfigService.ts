@@ -32,7 +32,7 @@ export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
       STRIPE_CHECKOUT: process.env.STRIPE_CHECKOUT,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
       EMAIL: process.env.EMAIL,
-      EMAIL_PASSWORD: process.env.EMAIL_PASSWORD
+      EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     });
   }
 }
