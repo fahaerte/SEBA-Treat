@@ -184,6 +184,8 @@ MealOfferSchema.statics.findByReservationId = async function (
   return this.findOne(filter, {
     _id: 1,
     user: 1,
+    title: 1,
+    pickUpDetails: 1,
     reservations: 1,
     rating: 1,
     price: 1,
