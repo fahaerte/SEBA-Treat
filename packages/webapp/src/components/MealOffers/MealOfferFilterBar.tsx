@@ -143,10 +143,8 @@ const MealOfferFilterBar = ({
           </Col>
           <Col className={"allergen-select"}>
             <TagSelectControlled
-              autocompleteOptions={[
-                { value: "None", label: "none" },
-                ...createAllergensOptions(),
-              ]}
+              filterSelect
+              autocompleteOptions={[...createAllergensOptions()]}
               label={"Allergens"}
               value={allergen || []}
               onChange={handleChangedFilter}

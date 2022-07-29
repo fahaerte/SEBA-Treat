@@ -13,14 +13,7 @@ export interface ITagSelectProps
    * This is shown in the dropdown, when there are no prefilled options
    */
   noOptionsMessage?: string;
-  /**
-   * This is shown in the dropdown, while the options are loading
-   */
-  // loadingMessage?: string;
-  /**
-   * Passed loading state
-   */
-  // isLoading?: boolean;
+  filterSelect?: boolean;
 }
 
 export interface IFormTagSelect<TFormValues>

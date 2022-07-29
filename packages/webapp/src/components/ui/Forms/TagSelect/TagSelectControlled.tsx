@@ -4,7 +4,7 @@ import { OnChangeValue } from "react-select";
 import makeAnimated from "react-select/animated";
 import { ITagSelect } from "./ITagSelect";
 import { customStyles } from "./styles";
-import { SCFloatingTagFormRound } from "../styles";
+import { SCFloatingForm } from "../styles";
 import { TOptionValuePair } from "../_interfaces/TOptionValuePair";
 import { FormInvalidFeedback } from "../_utils/FormInvalidFeedback";
 import { EDefaultErrorMessages } from "../_interfaces/EDefaultErrorMessages";
@@ -22,11 +22,15 @@ const TagSelectControlled = ({
   label,
   value,
   autocompleteOptions,
+  wrapperClasses = "",
+  filterSelect = false,
 }: ITagSelect<HTMLDivElement>) => {
   const theme = useTheme();
 
   return (
-    <SCFloatingTagFormRound className={`form-floating multi-select-wrapper`}>
+    <SCFloatingForm
+      className={`form-floating multi-select-wrapper ${wrapperClasses}`}
+    >
       <TagSelect<TOptionValuePair, true>
         id={getEncodedString(label)}
         isMulti
@@ -34,7 +38,7 @@ const TagSelectControlled = ({
           onChange(newValue as TOptionValuePair[])
         }
         options={autocompleteOptions}
-        styles={customStyles(color, isInvalid, theme)}
+        styles={customStyles(color, isInvalid, theme, filterSelect)}
         className={className}
         isDisabled={disabled}
         noOptionsMessage={() => noOptionsMessage}
@@ -44,7 +48,7 @@ const TagSelectControlled = ({
         isClearable={false}
       />
       {isInvalid && <FormInvalidFeedback message={invalidFeedback} />}
-    </SCFloatingTagFormRound>
+    </SCFloatingForm>
   );
 };
 export default TagSelectControlled;

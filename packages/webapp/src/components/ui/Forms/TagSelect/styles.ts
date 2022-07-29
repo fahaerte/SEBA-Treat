@@ -5,11 +5,13 @@ import { DefaultTheme } from "styled-components";
 export const customStyles: (
   color: string,
   isInvalid: boolean,
-  theme: DefaultTheme
+  theme: DefaultTheme,
+  filterSelect?: boolean
 ) => StylesConfig<TOptionValuePair, boolean, GroupBase<TOptionValuePair>> = (
   color,
   isInvalid,
-  theme
+  theme,
+  filterSelect = false
 ) => {
   return {
     option: (provided, state) => ({
@@ -30,8 +32,18 @@ export const customStyles: (
         color: theme.palette[color].contrastText,
       },
     }),
+    dropdownIndicator: (provided, state) => ({
+      ...provided,
+      color: "black",
+    }),
     control: (provided, state) => ({
       ...provided,
+      fontSize: `${filterSelect ? "0.8rem" : ""}`,
+      borderRadius: `${
+        filterSelect
+          ? theme.general.border.radius
+          : theme.form.control.border.radius
+      }`,
       borderColor: `${
         isInvalid
           ? theme.palette.danger.main
@@ -39,7 +51,9 @@ export const customStyles: (
           ? theme.palette[color].main
           : theme.general.border.color.secondary
       }`,
-      minHeight: theme.form.control.height,
+      minHeight: `${
+        filterSelect ? "calc(3.5rem + 2px)" : theme.form.control.height
+      }`,
       fontFamily: theme.typography.body.family,
       boxShadow: `${
         isInvalid
