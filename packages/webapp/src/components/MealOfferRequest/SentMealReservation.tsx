@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row } from "../ui/Grid";
 import { Button, dangerToast, successToast } from "../ui";
 import { MealOfferRequestUserInfo } from "./MealOfferRequestUserInfo";
@@ -29,15 +29,16 @@ export const SentMealReservation = ({
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
-  const [newState, setNewState] = useState(reservation.reservationState);
+
+  const [newState, setNewState] = useState();
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
       updateMealReservationState(reservation._id, newState),
     {
       onSuccess: () => {
-        successToast({ message: "You changed the state of your reservation." });
         setReservationState(newState);
+        successToast({ message: "You changed the state of your reservation." });
         queryClient.fetchQuery("getUser");
       },
       onError: (error) => {
@@ -55,9 +56,12 @@ export const SentMealReservation = ({
     }
   );
 
+  useEffect(() => {
+    updateReservationStateMutation.mutate(newState)
+  }, [newState])
+
   const updateReservationState = (updatedState: EMealReservationState) => {
     setNewState(updatedState);
-    updateReservationStateMutation.mutate(updatedState);
   };
 
   function getActionElement() {
@@ -80,7 +84,6 @@ export const SentMealReservation = ({
     } else if (reservationState === EMealReservationState.BUYER_CONFIRMED) {
       return (
         <RateUser
-          // mealOfferId={mealOfferId}
           mealReservationId={reservation._id}
           existingRating={sellerRating ? sellerRating : undefined}
         />
