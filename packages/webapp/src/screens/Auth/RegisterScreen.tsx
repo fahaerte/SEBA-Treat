@@ -26,7 +26,6 @@ export const RegisterScreen = () => {
     },
     onError: (error) => {
       if (error instanceof AxiosError && error.response) {
-        console.log(error);
         if (error.response.data.message) {
           dangerToast({
             message: "Email already in use!",
@@ -47,38 +46,6 @@ export const RegisterScreen = () => {
   });
 
   const elements: IFormRow<IUser>[] = [
-    [
-      FormHelper.createInput({
-        formKey: "email",
-        label: "Email",
-        props: {
-          type: "email",
-        },
-        rules: {
-          required: {
-            value: true,
-            message: "Please provide an email!",
-          },
-        },
-      }),
-      FormHelper.createInput({
-        formKey: "password",
-        label: "Password",
-        props: {
-          type: "password",
-        },
-        rules: {
-          required: {
-            value: true,
-            message: "Please provide a password!",
-          },
-          min: {
-            value: 6,
-            message: "Your password needs at least 6 characters!",
-          },
-        },
-      }),
-    ],
     [
       FormHelper.createInput({
         formKey: "firstName",
@@ -206,6 +173,38 @@ export const RegisterScreen = () => {
           required: {
             value: true,
             message: "Please provide your country!",
+          },
+        },
+      }),
+    ],
+    [
+      FormHelper.createInput({
+        formKey: "email",
+        label: "Email",
+        props: {
+          type: "email",
+        },
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide an email!",
+          },
+        },
+      }),
+      FormHelper.createInput({
+        formKey: "password",
+        label: "Password",
+        props: {
+          type: "password",
+        },
+        rules: {
+          required: {
+            value: true,
+            message: "Please provide a password!",
+          },
+          min: {
+            value: 6,
+            message: "Your password needs at least 6 characters!",
           },
         },
       }),

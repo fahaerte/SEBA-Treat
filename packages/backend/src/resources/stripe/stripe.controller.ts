@@ -4,6 +4,7 @@ import StripeService from "./stripe.service";
 import Controller from "../../utils/interfaces/controller.interface";
 import HttpException from "../../utils/exceptions/http.exception";
 import UserService from "../user/user.service";
+import { authenticatedMiddleware } from "../../middleware/authenticated.middleware";
 
 @Service()
 class StripeController implements Controller {
@@ -18,17 +19,27 @@ class StripeController implements Controller {
   }
 
   private initializeRoutes(): void {
-    this.router.get(`${this.path}/products`, this.getCreditPackages);
+    this.router.get(
+      `${this.path}/products`,
+      authenticatedMiddleware,
+      this.getCreditPackages
+    );
 
-    this.router.get(`${this.path}/discounts`, this.getCreditDiscounts);
+    this.router.get(
+      `${this.path}/discounts`,
+      authenticatedMiddleware,
+      this.getCreditDiscounts
+    );
 
     this.router.post(
       `${this.path}/get-latest-payment`,
+      authenticatedMiddleware,
       this.verifyLatestPayment
     );
 
     this.router.post(
       `${this.path}/create-checkout-session`,
+      authenticatedMiddleware,
       this.createCheckoutSession
     );
   }
