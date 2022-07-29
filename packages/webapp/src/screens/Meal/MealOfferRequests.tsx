@@ -9,24 +9,22 @@ export const MealOfferRequests = ({
   children?: React.ReactNode;
 }) => (
   <Container>
-    <Row className={"pt-5"}>
-      <PageHeading>
-        Your{" "}
-        <u>
-          {useLocation().pathname.includes("sent") ? "pending" : "received"}{" "}
-          reservations
-        </u>
-      </PageHeading>
-    </Row>
-    <Row className={"pt-3"}>
+    <PageHeading>
+      Your{" "}
+      <u>
+        {useLocation().pathname.includes("sent") ? "pending" : "received"}{" "}
+        reservations
+      </u>
+    </PageHeading>
+    <Row className={"mt-5"}>
       <TabBar
         tabs={[
           {
-            to: "/mealOfferRequests/sent",
+            to: "/meal-reservations/sent",
             children: "Your reservations",
           },
           {
-            to: "/mealOfferRequests/received",
+            to: "/meal-reservations/received",
             children: "Received reservations",
           },
         ]}

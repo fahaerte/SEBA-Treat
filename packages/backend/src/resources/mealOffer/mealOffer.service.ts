@@ -81,7 +81,7 @@ class MealOfferService {
         message: "Could not update mealOffer",
         details: `User ${user._id} is not owner of mealOffer ${mealOfferId}`,
       } as ILogMessage);
-      throw new HttpException(403, "A user can only change own mealOffers");
+      throw new HttpException(403, "A user can only change own meal offers");
     }
     if (mealOffer.reservations.length) {
       Logger.error({

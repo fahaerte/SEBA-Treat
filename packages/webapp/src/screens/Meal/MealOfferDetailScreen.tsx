@@ -50,7 +50,7 @@ export const MealOfferDetailScreen = () => {
 
   function handleEditClick() {
     if (userId && userId === mealOffer.user._id) {
-      navigate(`/mealOffers/${mealOfferId}/edit`, {
+      navigate(`/meals/${mealOfferId}/edit`, {
         state: { from: location },
       });
     } else {

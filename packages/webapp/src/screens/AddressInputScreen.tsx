@@ -23,7 +23,7 @@ export const AddressInputScreen = ({
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState?.from || "/mealoffers";
+  const from = locationState?.from || "/meals";
 
   const handleAddress = (data: IStringObject) => {
     setCookie("address", data.returnedString);

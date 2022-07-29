@@ -68,7 +68,7 @@ export const Header = () => {
 
   const handleReservationsButton = () => {
     if (getCookie("userId")) {
-      navigate("/mealOfferRequests");
+      navigate("/meal-reservations");
     } else {
       navigate("/login", { state: { from: location } });
     }
@@ -135,9 +135,9 @@ export const Header = () => {
             </Col>
           )}
           <Col className={"justify-content-end d-flex align-items-center"}>
-            {location.pathname !== "/createMeal" && (
+            {location.pathname !== "/meals/create" && (
               <Link
-                to={"/createMeal"}
+                to={"/meals/create"}
                 display={"button"}
                 className={"me-3"}
                 color={"secondary"}

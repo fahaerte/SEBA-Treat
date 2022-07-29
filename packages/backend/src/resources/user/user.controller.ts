@@ -45,7 +45,7 @@ class UserController implements Controller {
 
     this.router.get(`${this.path}/:userId?/preview`, this.getUserPreview);
 
-    this.router.post(`${this.path}/signout`, this.signout);
+    this.router.post(`${this.path}/sign-out`, this.signout);
 
     this.router.put(
       `${this.path}`,
@@ -90,7 +90,7 @@ class UserController implements Controller {
 
       res.status(200).json("Registered successfully!");
     } catch (error: any) {
-      next(new HttpException(400, error.message));
+      next(error);
     }
   };
 

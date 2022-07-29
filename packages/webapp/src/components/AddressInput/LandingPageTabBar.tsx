@@ -13,11 +13,11 @@ export const LandingPageTabBar = ({
         className={"justify-content-center"}
         tabs={[
           {
-            to: "/address/buymeal",
+            to: "/address/buy-meal",
             children: "Buy Food",
           },
           {
-            to: "/address/offermeal",
+            to: "/address/offer-meal",
             children: "Offer Food",
           },
         ]}

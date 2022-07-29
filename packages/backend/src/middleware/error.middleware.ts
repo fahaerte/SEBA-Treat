@@ -7,13 +7,8 @@ function errorMiddleware(
   res: Response,
   _next: NextFunction
 ): void {
-  const errorName = error.name;
-  let status = error.status || 500;
+  const status = error.status || 500;
   const message = error.message || "Something went wrong";
-
-  if (errorName === "BSONTypeError") {
-    status = 400;
-  }
 
   res.status(status).send({
     status,
