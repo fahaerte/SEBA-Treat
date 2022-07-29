@@ -281,6 +281,12 @@ class MealOfferService {
         );
       }
       await this.mealOffer.findByIdAndDelete(mealOfferId);
+      deleteImage("meal-images", mealOfferDoc.image);
+      Logger.error({
+        functionName: "deleteMealOffer",
+        message: "Deleted mealOffer",
+        details: `Deleted mealOffer ${mealOfferId}`,
+      } as ILogMessage);
     }
     Logger.error({
       functionName: "deleteMealOffer",
