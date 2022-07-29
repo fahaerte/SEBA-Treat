@@ -21,6 +21,7 @@ import { ProfileScreen } from "../screens/Account/ProfileScreen";
 import { LandingPageTabBar } from "../components/AddressInput/LandingPageTabBar";
 import { BuyMealTab } from "../components/AddressInput/BuyMealTab";
 import { OfferMealTab } from "../components/AddressInput/OfferMealTab";
+import { MyMealOfferScreen } from "../screens/Meal/MyMealOfferScreen";
 
 export const AppRouter = () => {
   const reactQueryClient = new QueryClient();
@@ -55,7 +56,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "alreadyLoggedIn",
+      path: "already-logged-in",
       element: <Typography>User already logged in</Typography>,
     },
   ];
@@ -65,10 +66,10 @@ export const AppRouter = () => {
     children: [
       {
         path: "",
-        element: <Navigate to={"./buymeal"} replace={true} />,
+        element: <Navigate to={"./buy-meal"} replace={true} />,
       },
       {
-        path: "buymeal",
+        path: "buy-meal",
         element: (
           <AddressInputScreen>
             <LandingPageTabBar>
@@ -78,7 +79,7 @@ export const AppRouter = () => {
         ),
       },
       {
-        path: "offermeal",
+        path: "offer-meal",
         element: (
           <AddressInputScreen>
             <LandingPageTabBar>
@@ -90,7 +91,7 @@ export const AppRouter = () => {
     ],
   };
   const profileRoutes = {
-    path: "account",
+    path: "profile",
     element: (
       <AppLayout>
         <RequireAuthRoute>
@@ -100,9 +101,9 @@ export const AppRouter = () => {
     ),
   };
 
-  const purchaseCreditRoutes = [
+  const accountRoutes = [
     {
-      path: "/purchase-credits/:userId/",
+      path: "/account/:userId/",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -112,7 +113,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "/purchase-credits",
+      path: "/account",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -127,8 +128,8 @@ export const AppRouter = () => {
     },
   ];
 
-  const mealOfferRequestsRoute = {
-    path: "mealOfferRequests",
+  const mealReservationsRoutes = {
+    path: "meal-reservations",
     element: (
       <RequireAuthRoute>
         <AppLayout />
@@ -160,17 +161,7 @@ export const AppRouter = () => {
 
   const mealRoutes = [
     {
-      path: "createMeal",
-      element: (
-        <AppLayout>
-          <RequireAuthRoute>
-            <CreateMeal />
-          </RequireAuthRoute>
-        </AppLayout>
-      ),
-    },
-    {
-      path: "mealOffers",
+      path: "meals",
       element: (
         <AppLayout>
           <RequireAddressRoute>
@@ -180,7 +171,27 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealOffers/:mealOfferId",
+      path: "meals/create",
+      element: (
+        <AppLayout>
+          <RequireAuthRoute>
+            <CreateMeal />
+          </RequireAuthRoute>
+        </AppLayout>
+      ),
+    },
+    {
+      path: "meals/my-offers",
+      element: (
+        <AppLayout>
+          <RequireAuthRoute>
+            <MyMealOfferScreen />
+          </RequireAuthRoute>
+        </AppLayout>
+      ),
+    },
+    {
+      path: "meals/:mealOfferId",
       element: (
         <AppLayout>
           <RequireAddressRoute>
@@ -190,7 +201,7 @@ export const AppRouter = () => {
       ),
     },
     {
-      path: "mealOffers/:mealOfferId/edit",
+      path: "meals/:mealOfferId/edit",
       element: (
         <AppLayout>
           <RequireAuthRoute>
@@ -206,8 +217,8 @@ export const AppRouter = () => {
     ...authRoutes,
     addressRoute,
     profileRoutes,
-    mealOfferRequestsRoute,
-    ...purchaseCreditRoutes,
+    mealReservationsRoutes,
+    ...accountRoutes,
     ...mealRoutes,
   ]);
 

@@ -42,7 +42,7 @@ export const MealOfferUpdate = () => {
           message:
             "You can't edit this meal anymore because someone already reserved it.",
         });
-        navigate(`/mealOffers/${mealOfferId}`);
+        navigate(`/meals/${mealOfferId}`);
       }
     },
     onError: (error) => {
@@ -235,7 +235,7 @@ export const MealOfferUpdate = () => {
       setFormElements(elements);
     } else if (mealOfferError) {
       dangerToast({ message: "Could not get meal data" });
-      navigate(`/mealOffers/${mealOfferId}`);
+      navigate(`/meals/${mealOfferId}`);
     }
   }, [mealOffer, setFormElements]);
 
@@ -246,7 +246,7 @@ export const MealOfferUpdate = () => {
       {
         onSuccess: (response) => {
           successToast({ message: "Your meal offer has been updated!" });
-          navigate(`/mealOffers/${mealOfferId}`);
+          navigate(`/meals/${mealOfferId}`);
         },
         onError: (error) => {
           if (error instanceof AxiosError && error.response) {
@@ -259,7 +259,7 @@ export const MealOfferUpdate = () => {
                 "Unexpected server error. The meal could not be updated.",
             });
           }
-          navigate(`/mealOffers/${mealOfferId}`);
+          navigate(`/meals/${mealOfferId}`);
         },
       }
     );

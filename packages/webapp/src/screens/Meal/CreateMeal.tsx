@@ -201,7 +201,7 @@ const CreateMeal = () => {
         successToast({ message: "Your meal offer has been created!" });
         const mealId = response.data.data._id;
         console.log(response);
-        navigate(`/mealOffers/${mealId}`);
+        navigate(`/meals/${mealId}`);
       },
       onError: (error) => {
         if (error instanceof AxiosError && error.response) {
@@ -214,7 +214,7 @@ const CreateMeal = () => {
               "Unexpected server error. The meal offer could not be created.",
           });
         }
-        navigate(`/mealOffers`);
+        navigate(`/meals`);
       },
     }
   );

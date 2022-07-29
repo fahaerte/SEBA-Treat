@@ -22,11 +22,11 @@ export const MealOfferRequests = ({
       <TabBar
         tabs={[
           {
-            to: "/mealOfferRequests/sent",
+            to: "/meal-reservations/sent",
             children: "Your reservations",
           },
           {
-            to: "/mealOfferRequests/received",
+            to: "/meal-reservations/received",
             children: "Received reservations",
           },
         ]}

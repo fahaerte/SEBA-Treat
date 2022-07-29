@@ -30,7 +30,7 @@ const LoginScreen = () => {
   };
 
   const locationState = location.state as LocationState;
-  const from = locationState?.from || "/mealoffers";
+  const from = locationState?.from || "/meals";
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
@@ -38,7 +38,7 @@ const LoginScreen = () => {
       setCookie("userId", userId as string);
       setCookie("address", getStringFromIAddress(address as IAddress));
       if (from.pathname.includes("address")) {
-        from.pathname = "/mealoffers";
+        from.pathname = "/meals";
       }
       navigate(from, { replace: true });
     },
@@ -101,7 +101,7 @@ const LoginScreen = () => {
                 color: "secondary",
                 className: "ms-3",
                 outline: true,
-                onClick: () => navigate("/address/buymeal"),
+                onClick: () => navigate("/address/buy-meal"),
               }}
             />
           </div>

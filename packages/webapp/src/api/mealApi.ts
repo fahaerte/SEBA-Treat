@@ -35,13 +35,28 @@ export const getMealOffer = async (
 ) => {
   let response;
   if (compareAddress) {
-    response = await baseApiAuth().get(`/mealOffers/${mealOfferId}`, {
+    response = await baseApiAuth().get(`/meals/${mealOfferId}`, {
       params: {
         compareAddress: compareAddress,
       },
     });
   } else {
-    response = await baseApiAuth().get(`/mealOffers/${mealOfferId}`);
+    response = await baseApiAuth().get(`/meals/${mealOfferId}`);
+  }
+  return response.data.data;
+};
+
+export const getOwnMealOffers = async (compareAddress?: string) => {
+  console.log("test");
+  let response;
+  if (compareAddress) {
+    response = await baseApiAuth().get(`/meals`, {
+      params: {
+        compareAddress: compareAddress,
+      },
+    });
+  } else {
+    response = await baseApiAuth().get(`/meals`);
   }
   return response.data.data;
 };
@@ -49,21 +64,18 @@ export const getMealOffer = async (
 export const requestMealOffer = async ({
   mealOfferId,
 }: requestMealOfferArgs) => {
-  return await baseApiAuth().post(`/mealOffers/${mealOfferId}/reservations`);
+  return await baseApiAuth().post(`/meals/${mealOfferId}/reservations`);
 };
 
 export const createMealOffer = async (formData: FormData) => {
-  return await baseApiAuth().post("/mealOffers", formData);
+  return await baseApiAuth().post("/meals", formData);
 };
 
 export const updateMealOffer = async (
   mealOfferId: string,
   updatedMealOffer: FormData
 ) => {
-  return await baseApiAuth().put(
-    `/mealOffers/${mealOfferId}`,
-    updatedMealOffer
-  );
+  return await baseApiAuth().put(`/meals/${mealOfferId}`, updatedMealOffer);
 };
 
 export const getMealOffersByParams = async (
@@ -78,7 +90,7 @@ export const getMealOffersByParams = async (
   search?: string,
   sortingRule?: ESortingRules | undefined
 ) => {
-  const response = await baseApi().get(`/mealOffers/previews`, {
+  const response = await baseApi().get(`/meals/previews`, {
     params: {
       page: page,
       pageLimit: pageLimit,
@@ -98,18 +110,18 @@ export const getMealOffersByParams = async (
 
 // export const alreadyReserved = async (mealOfferId: string) => {
 //   const response = await baseApiAuth().get(
-//     `/mealOffers/${mealOfferId}/reservations`
+//     `/meals/${mealOfferId}/reservations`
 //   );
 //   return response.data;
 // };
 
 export const getSentMealOfferRequests = async () => {
-  const response = await baseApiAuth().get("/mealOffers/reservations/sent");
+  const response = await baseApiAuth().get("/meals/reservations/sent");
   return response.data;
 };
 
 export const getReceivedMealOfferRequests = async () => {
-  const response = await baseApiAuth().get("/mealOffers/reservations/received");
+  const response = await baseApiAuth().get("/meals/reservations/received");
   return response.data;
 };
 
@@ -121,7 +133,7 @@ export const updateMealReservationState = async (
     reservationState: newReservationState,
   };
   const response = await baseApiAuth().patch(
-    `/mealOffers/reservations/${mealOfferReservationId}`,
+    `/meals/reservations/${mealOfferReservationId}`,
     newStateObject
   );
   return response.data;
