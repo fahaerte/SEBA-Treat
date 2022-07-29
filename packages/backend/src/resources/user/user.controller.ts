@@ -8,6 +8,7 @@ import UserService from "../../resources/user/user.service";
 import { Service } from "typedi";
 import { ObjectId } from "mongoose";
 import StripeService from "../stripe/stripe.service";
+import ValidatePart from "../../utils/validation";
 
 @Service()
 class UserController implements Controller {
@@ -39,6 +40,7 @@ class UserController implements Controller {
     );
     this.router.get(
       `${this.path}/:userId?`,
+      validationMiddleware(validate.getUserParams, ValidatePart.PARAMS),
       authenticatedMiddleware,
       this.getUser
     );
@@ -59,6 +61,12 @@ class UserController implements Controller {
       authenticatedMiddleware,
       validationMiddleware(validate.updatePassword),
       this.updatePassword
+    );
+    this.router.delete(
+      `${this.path}/:userId`,
+      authenticatedMiddleware,
+      validationMiddleware(validate.deleteUserParams, ValidatePart.PARAMS),
+      this.deleteUser
     );
   }
 
@@ -215,6 +223,20 @@ class UserController implements Controller {
       res.status(200).json(editedUser);
     } catch (error: any) {
       next(new HttpException(400, error.message));
+    }
+  };
+
+  private deleteUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    try {
+      await this.userService.deleteUser(req.params.userId, req.user);
+      res.clearCookie("Authorization");
+      res.sendStatus(200);
+    } catch (error: any) {
+      next(error);
     }
   };
 }

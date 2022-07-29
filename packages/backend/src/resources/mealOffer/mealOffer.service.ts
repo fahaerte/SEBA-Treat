@@ -236,7 +236,6 @@ class MealOfferService {
       compareAddress,
       addresses
     );
-    // TODO: IMMER NUR MAX 25 DISTANCES
     mealOfferPreviews.forEach((preview, index) => {
       if (distances[index] <= compareDistance) {
         preview.distance = distances[index];
@@ -259,6 +258,41 @@ class MealOfferService {
     return await this.mealOffer.findReceivedMealOfferRequests(
       user._id as string
     );
+  }
+
+  public async deleteMealOffersForUser(
+    user: UserDocument
+  ): Promise<void | Error> {
+    const mealOffers = await this.getMealOffers(user);
+    mealOffers.forEach((offer) => {
+      if (offer.reservations.length) {
+        Logger.error({
+          functionName: "deleteMealOffersForUser",
+          message: "Could not delete mealOffers",
+          details: `MealOffer ${offer._id} has already reservations`,
+        } as ILogMessage);
+        throw new HttpException(
+          403,
+          "MealOffers with existing reservations can not be deleted"
+        );
+      }
+    });
+    const mealOfferIds = Array.from(mealOffers, (offer) => offer._id);
+    try {
+      await this.mealOffer.deleteMany({ _id: { $in: mealOfferIds } });
+      Logger.info({
+        functionName: "deleteMealOffersForUser",
+        message: "Deleted mealOffers for user",
+        details: `Deleted mealOffers ${mealOfferIds} of user ${user._id}`,
+      } as ILogMessage);
+    } catch (error: any) {
+      Logger.error({
+        functionName: "deleteMealOffersForUser",
+        message: "Could not delete mealOffers",
+        details: error.message,
+      } as ILogMessage);
+      throw new Error(error.message);
+    }
   }
 
   public async deleteMealOffer(
