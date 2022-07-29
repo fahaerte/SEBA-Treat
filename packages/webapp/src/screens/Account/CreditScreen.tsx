@@ -84,16 +84,16 @@ export const CreditScreen = () => {
 
   const redirectToCheckout = (
     priceId: string,
-    price: string,
+    price?: string,
     couponId?: string
   ) => {
     try {
-      const amountCredits = Number(price.split(" ")[0]);
+      const amountCredits = price? Number(price.split(" ")[0]) : undefined;
       createCheckout.mutate({
         priceId: priceId,
         stripeCustomerId: user.data.stripeCustomerId,
         couponId: couponId || undefined,
-        amountCredits: amountCredits,
+        amountCredits: amountCredits || undefined,
       });
     } catch {
       return <div>Stripe Instance not available, 401</div>;
@@ -117,6 +117,7 @@ export const CreditScreen = () => {
             onClick={() =>
               redirectToCheckout(
                 discountedProduct?.default_price.id || "",
+                  discountedProduct?.name,
                 discount.id
               )
             }

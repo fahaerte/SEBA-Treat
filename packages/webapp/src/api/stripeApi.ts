@@ -15,7 +15,7 @@ export interface CreateCheckoutSessionApiArg {
   couponId?: string;
   priceId: string;
   stripeCustomerId: string;
-  amountCredits: number;
+  amountCredits?: number;
 }
 
 export interface VerifyPaymentApiArg {
