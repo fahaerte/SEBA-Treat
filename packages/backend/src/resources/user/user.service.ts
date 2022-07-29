@@ -154,7 +154,7 @@ class UserService {
   }
 
   public async sendTransaction(
-    userId: ObjectId,
+    userId: string,
     amount: number
   ): Promise<number | Error> {
     const user = (await this.userModel.findById(userId)) as UserDocument;
@@ -163,15 +163,13 @@ class UserService {
       user.virtualAccount.balance -= amount;
       await user.save();
     } else {
-      throw new accountBalanceInsufficientException(
-        userId as unknown as string
-      );
+      throw new accountBalanceInsufficientException(userId);
     }
     return user.virtualAccount.balance;
   }
 
   public async receiveTransaction(
-    userId: ObjectId,
+    userId: string,
     amount: number
   ): Promise<number | Error> {
     const user = (await this.userModel.findById(userId)) as UserDocument;

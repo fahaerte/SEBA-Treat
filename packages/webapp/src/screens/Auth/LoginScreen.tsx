@@ -94,7 +94,7 @@ const LoginScreen = () => {
               elements={elements}
               onSubmit={handleSignIn}
               formTitle={"Please sign in!"}
-              resetOnSubmit
+              resetOnSubmit={false}
               submitButton={{ children: "Log In" }}
               abortButton={{
                 children: "Cancel",

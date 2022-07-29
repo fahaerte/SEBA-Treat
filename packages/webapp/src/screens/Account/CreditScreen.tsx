@@ -38,11 +38,17 @@ export const CreditScreen = () => {
   );
 
   const createCheckout = useMutation(
-    ({ priceId, stripeCustomerId, couponId }: CreateCheckoutSessionApiArg) => {
+    ({
+      priceId,
+      stripeCustomerId,
+      couponId,
+      amountCredits,
+    }: CreateCheckoutSessionApiArg) => {
       return createCheckoutSession({
         priceId,
         stripeCustomerId,
         couponId,
+        amountCredits,
       });
     },
     {
@@ -76,12 +82,18 @@ export const CreditScreen = () => {
     }
   }, [discount, products, createCheckout, userId, userTokenParam, userIdParam]);
 
-  const redirectToCheckout = (priceId: string, couponId?: string) => {
+  const redirectToCheckout = (
+    priceId: string,
+    price: string,
+    couponId?: string
+  ) => {
     try {
+      const amountCredits = Number(price.split(" ")[0]);
       createCheckout.mutate({
         priceId: priceId,
         stripeCustomerId: user.data.stripeCustomerId,
         couponId: couponId || undefined,
+        amountCredits: amountCredits,
       });
     } catch {
       return <div>Stripe Instance not available, 401</div>;
@@ -144,7 +156,10 @@ export const CreditScreen = () => {
                           productName={creditPackage.name}
                           price={creditPackage.default_price.unit_amount || 0}
                           buttonAction={() =>
-                            redirectToCheckout(creditPackage.default_price.id)
+                            redirectToCheckout(
+                              creditPackage.default_price.id,
+                              creditPackage.name
+                            )
                           }
                         />
                       </Col>

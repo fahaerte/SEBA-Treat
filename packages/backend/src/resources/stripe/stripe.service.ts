@@ -4,6 +4,8 @@ import { StripeError } from "../../utils/exceptions/stripe.errors";
 import { Service } from "typedi";
 import StripeUsersService from "./stripe.users.service";
 import { ConfigService } from "../../utils/ConfigService";
+import UserService from "../user/user.service";
+import { ObjectId } from "mongoose";
 
 @Service()
 class StripeService {
@@ -11,7 +13,7 @@ class StripeService {
   public stripeUsers: StripeUsersService;
   private configService = new ConfigService();
 
-  constructor() {
+  constructor(private readonly userService: UserService) {
     this.stripe = new Stripe(
       `${this.configService.get("STRIPE_API_SECRET_KEY")}`,
       {
@@ -24,12 +26,14 @@ class StripeService {
   public async createCheckoutSession(
     priceId: string,
     customerId: string,
-    // token: string,
     userId: string,
+    amountCredits: number,
     couponId?: string
   ) {
+    console.log("hallooooo");
+    console.log(customerId);
     try {
-      return await this.stripe.checkout.sessions.create({
+      const res = await this.stripe.checkout.sessions.create({
         line_items: [
           {
             price: priceId,
@@ -48,7 +52,16 @@ class StripeService {
         )}/purchase-credits/${userId}`,
         automatic_tax: { enabled: true },
       });
+      // console.log(res);
+      const newBalance = this.userService.receiveTransaction(
+        userId,
+        amountCredits
+      );
+      console.log(newBalance);
+      return res;
     } catch (error: any) {
+      // console.log("error in stripe service");
+      // console.log(error);
       if (error?.code === StripeError.CardExpired) {
         throw new HttpException(406, "Credit card expired");
       }

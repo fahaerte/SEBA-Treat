@@ -15,6 +15,7 @@ export interface CreateCheckoutSessionApiArg {
   couponId?: string;
   priceId: string;
   stripeCustomerId: string;
+  amountCredits: number;
 }
 
 export interface VerifyPaymentApiArg {
@@ -41,6 +42,7 @@ export const createCheckoutSession = async ({
   priceId,
   stripeCustomerId,
   couponId,
+  amountCredits,
 }: CreateCheckoutSessionApiArg) => {
   const userId = getCookie("userId");
   const response = await baseApiAuth().post(
@@ -50,6 +52,7 @@ export const createCheckoutSession = async ({
       stripeCustomerId,
       couponId,
       userId,
+      amountCredits,
     }
   );
   return response.data;
