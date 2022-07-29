@@ -5,7 +5,6 @@ import { Service } from "typedi";
 import StripeUsersService from "./stripe.users.service";
 import { ConfigService } from "../../utils/ConfigService";
 import UserService from "../user/user.service";
-import { ObjectId } from "mongoose";
 
 @Service()
 class StripeService {
@@ -30,8 +29,6 @@ class StripeService {
     amountCredits: number,
     couponId?: string
   ) {
-    console.log("hallooooo");
-    console.log(customerId);
     try {
       const res = await this.stripe.checkout.sessions.create({
         line_items: [
@@ -52,16 +49,12 @@ class StripeService {
         )}/purchase-credits/${userId}`,
         automatic_tax: { enabled: true },
       });
-      // console.log(res);
       const newBalance = this.userService.receiveTransaction(
         userId,
         amountCredits
       );
-      console.log(newBalance);
       return res;
     } catch (error: any) {
-      // console.log("error in stripe service");
-      // console.log(error);
       if (error?.code === StripeError.CardExpired) {
         throw new HttpException(406, "Credit card expired");
       }
@@ -99,7 +92,6 @@ class StripeService {
     }
   }
 
-  // GETTER OF PRODUCTS, CUSTOMER, DISCOUNTS
   public async getCreditPackages(withPrice = false) {
     try {
       if (withPrice) {
