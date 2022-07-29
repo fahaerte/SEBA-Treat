@@ -171,11 +171,11 @@ export const RegisterScreen = () => {
             value: true,
             message: "Please provide a postal code!",
           },
-          min: {
+          minLength: {
             value: 5,
             message: "Your postal code needs exactly 5 digits!",
           },
-          max: {
+          maxLength: {
             value: 5,
             message: "Your postal code needs exactly 5 digits!",
           },
