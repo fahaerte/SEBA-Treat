@@ -90,7 +90,7 @@ class UserController implements Controller {
 
       res.status(200).json("Registered successfully!");
     } catch (error: any) {
-      next(new HttpException(400, error.message));
+      next(error);
     }
   };
 
