@@ -103,49 +103,6 @@ export const SCFormControl = styled.input`
   }
 `;
 
-export const SCFloatingTagFormRound = styled.div`
-  padding: 0;
-  height: 100%;
-
-  > div {
-    height: inherit;
-
-    > div {
-      height: inherit;
-      border-radius: 40px;
-      font-size: 0.8em;
-      padding: 0.5rem;
-    }
-  }
-
-  > .form-select {
-    padding: 0;
-  }
-
-  > .form-control,
-  > .form-select {
-    border: ${({ theme }) => theme.general.border.width} solid
-      ${({ theme }) => theme.general.border.color.primary};
-    color: black;
-    font-size: 0.8em;
-    border-radius: 100px;
-    padding-top: 1rem;
-    padding-left: 1rem;
-  }
-
-  > label {
-    color: ${({ theme }) => theme.form.label.color};
-    padding-top: 0.5rem;
-    padding-left: 1rem;
-    font-size: 0.8rem;
-    transform: scale(1) translateY(0) translateX(0) !important;
-  }
-
-  .is-invalid {
-    border-color: ${({ theme }) => theme.palette.danger.main};
-  }
-`;
-
 export const SCInput = styled(SCFormControl)``;
 
 export const SCCheckbox = styled.input<IRadioCheckSwitchProps>`
