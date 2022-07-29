@@ -13,6 +13,8 @@ export const configValues = {
   STRIPE_API_SECRET_KEY: Joi.string(),
   STRIPE_CHECKOUT: Joi.string(),
   GOOGLE_MAPS_API_KEY: Joi.string(),
+  EMAIL: Joi.string(),
+  EMAIL_PASSWORD: Joi.string(),
 };
 
 export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
@@ -29,6 +31,8 @@ export class ConfigService extends ConfigServiceAbstract<typeof configValues> {
       CENTRAL_BANK_ID: process.env.CENTRAL_BANK_ID,
       STRIPE_CHECKOUT: process.env.STRIPE_CHECKOUT,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+      EMAIL: process.env.EMAIL,
+      EMAIL_PASSWORD: process.env.EMAIL_PASSWORD
     });
   }
 }

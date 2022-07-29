@@ -25,13 +25,17 @@ import { MealTransactionDocument } from "../mealTransaction/mealTransaction.inte
 import HttpException from "../../utils/exceptions/http.exception";
 import InvalidMealOfferUpdateException from "../../utils/exceptions/invalidMealOfferUpdate.exception";
 import { deleteImage } from "../../utils/imageUpload";
+import MailService from "../../utils/EmailService";
+import UserService from "../user/user.service";
 
 @Service()
 class MealOfferService {
   private mealOffer = MealOfferSchema;
 
   constructor(
-    private readonly mealTransactionService: MealTransactionService
+    private readonly mealTransactionService: MealTransactionService,
+    private readonly mailService: MailService,
+    private readonly userService: UserService
   ) {}
 
   public async create(
@@ -321,6 +325,10 @@ class MealOfferService {
           functionName: "createMealOfferReservation",
           message: `Created MealOffer Reservation`,
         } as ILogMessage);
+        const seller = (await this.userService.getUser(
+          mealOfferDoc.user._id.toString()
+        )) as UserDocument;
+        this.mailService.sendCreateReservationMails(mealOfferDoc, user, seller);
         return newReservation;
       } catch (error: any) {
         Logger.error({
@@ -442,6 +450,14 @@ class MealOfferService {
       mealReservation,
       EMealReservationState.SELLER_ACCEPTED
     );
+    const buyer = (await this.userService.getUser(
+      mealReservation.buyer.toString()
+    )) as UserDocument;
+    this.mailService.sendUpdateReservationToSellerAcceptedMail(
+      mealOfferDoc,
+      buyer,
+      seller
+    );
   }
 
   private async updateMealOfferReservationToBuyerConfirmed(
@@ -471,13 +487,25 @@ class MealOfferService {
     mealOfferDoc = (await this.mealOffer.findById(
       mealOfferDoc._id
     )) as MealOfferDocument;
-    mealOfferDoc.reservations.forEach(
-      (reservation) =>
-        (reservation.reservationState =
-          reservation._id.toString() === mealReservation._id.toString()
-            ? EMealReservationState.BUYER_CONFIRMED
-            : EMealReservationState.SELLER_REJECTED)
-    );
+    const seller = (await this.userService.getUser(
+      mealOfferDoc.user.toString()
+    )) as UserDocument;
+    for (const reservation of mealOfferDoc.reservations) {
+      if (reservation._id.toString() === mealReservation._id.toString()) {
+        this.mailService.sendUpdateReservationToBuyerConfirmedMails(
+          mealOfferDoc,
+          buyer,
+          seller
+        );
+        reservation.reservationState = EMealReservationState.BUYER_CONFIRMED;
+      } else {
+        this.mailService.sendUpdateReservationToSellerRejectedMail(
+          mealOfferDoc,
+          buyer
+        );
+        reservation.reservationState = EMealReservationState.SELLER_REJECTED;
+      }
+    }
     await this.updateAndSaveMealReservationState(
       mealOfferDoc,
       mealReservation,
@@ -503,6 +531,13 @@ class MealOfferService {
       mealReservation,
       EMealReservationState.SELLER_REJECTED
     );
+    const buyer = (await this.userService.getUser(
+      mealReservation.buyer.toString()
+    )) as UserDocument;
+    this.mailService.sendUpdateReservationToSellerRejectedMail(
+      mealOfferDoc,
+      buyer
+    );
   }
 
   private async updateMealOfferReservationToBuyerRejected(
@@ -523,6 +558,14 @@ class MealOfferService {
       mealOfferDoc,
       mealReservation,
       EMealReservationState.BUYER_REJECTED
+    );
+    const seller = (await this.userService.getUser(
+      mealOfferDoc.user.toString()
+    )) as UserDocument;
+    this.mailService.sendUpdateReservationToBuyerRejectedMail(
+      mealOfferDoc,
+      buyer,
+      seller
     );
   }
 
