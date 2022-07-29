@@ -20,9 +20,6 @@ import { getUser } from "../../api/userApi";
 import LoadingPackages from "../../components/CreditProducts/LoadingPackages";
 
 export const MyMealOfferScreen = () => {
-  const userId = getCookie("userId");
-  const address = getCookie("address");
-
   const queryClient = useQueryClient();
 
   const queryKey = "getOwnMeals";
@@ -33,16 +30,13 @@ export const MyMealOfferScreen = () => {
     useInfiniteQuery(
       queryKey,
       ({ pageParam = 1 }) => {
-        return getOwnMealOffers(address);
+        return getOwnMealOffers();
       },
       {
         getNextPageParam: (lastPage, allPages) => {
           const maxPages = Math.ceil(lastPage.total_count / pageLimit);
           const nextPage = allPages.length + 1;
           return nextPage <= maxPages ? nextPage : undefined;
-        },
-        onSuccess: () => {
-          console.log(data);
         },
       }
     );
@@ -68,7 +62,9 @@ export const MyMealOfferScreen = () => {
   return (
     <>
       <Container>
-        <PageHeading>Your meal offers</PageHeading>
+        <PageHeading>
+          Your <u>meal offers</u>
+        </PageHeading>
         <Row className={"mb-3 justify-content-center"}>
           {isFetching || isFetchingNextPage ? (
             "Loading meals..."
@@ -76,8 +72,8 @@ export const MyMealOfferScreen = () => {
             <>
               {isFetched && data ? (
                 <>
-                  {data.pages[0].total_count} meal
-                  {data.pages[0].total_count != 1 && "s"} found
+                  {data.pages[0].length} meal
+                  {data.pages[0].length != 1 && "s"} found
                 </>
               ) : (
                 <>
@@ -89,31 +85,30 @@ export const MyMealOfferScreen = () => {
           )}
         </Row>
         <Row className={"row-cols-2 row-cols-md-3 g-4"}>
-          {/*{data &&*/}
-          {/*  data.pages.map((page) => {*/}
-          {/*    return page.data.map((mealOffer: IMealOfferCard) => (*/}
-          {/*      <Col key={`${mealOffer._id}-container`}>*/}
-          {/*        <MealOffer*/}
-          {/*          key={mealOffer._id}*/}
-          {/*          mealId={mealOffer._id}*/}
-          {/*          price={mealOffer.price}*/}
-          {/*          distance={mealOffer.distance}*/}
-          {/*          mealTitle={mealOffer.title}*/}
-          {/*          portions={mealOffer.portions}*/}
-          {/*          sellerRating={mealOffer.user.meanRating}*/}
-          {/*          endDate={mealOffer.endDate}*/}
-          {/*          sellerName={mealOffer.user.firstName}*/}
-          {/*          startDate={mealOffer.endDate}*/}
-          {/*          allergensVerified={mealOffer.allergensVerified}*/}
-          {/*          categories={mealOffer.categories}*/}
-          {/*          image={`${new ConfigService().get("MEAL_IMAGES_URL")}/${*/}
-          {/*            mealOffer.image*/}
-          {/*          }`}*/}
-          {/*        />*/}
-          {/*      </Col>*/}
-          {/*    ));*/}
-          {/*  })}*/}
-          {data && "Test"}
+          {data &&
+            data.pages.map((page) => {
+              return page.map((mealOffer: IMealOfferCard) => (
+                <Col key={`${mealOffer._id}-container`}>
+                  <MealOffer
+                    key={mealOffer._id}
+                    mealId={mealOffer._id}
+                    price={mealOffer.price}
+                    distance={mealOffer.distance}
+                    mealTitle={mealOffer.title}
+                    portions={mealOffer.portions}
+                    sellerRating={mealOffer.user.meanRating}
+                    endDate={mealOffer.endDate}
+                    sellerName={mealOffer.user.firstName}
+                    startDate={mealOffer.endDate}
+                    allergensVerified={mealOffer.allergensVerified}
+                    categories={mealOffer.categories}
+                    image={`${new ConfigService().get("MEAL_IMAGES_URL")}/${
+                      mealOffer.image
+                    }`}
+                  />
+                </Col>
+              ));
+            })}
         </Row>
       </Container>
     </>

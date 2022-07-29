@@ -46,18 +46,8 @@ export const getMealOffer = async (
   return response.data.data;
 };
 
-export const getOwnMealOffers = async (compareAddress?: string) => {
-  console.log("test");
-  let response;
-  if (compareAddress) {
-    response = await baseApiAuth().get(`/meals`, {
-      params: {
-        compareAddress: compareAddress,
-      },
-    });
-  } else {
-    response = await baseApiAuth().get(`/meals`);
-  }
+export const getOwnMealOffers = async () => {
+  const response = await baseApiAuth().get(`/meals`);
   return response.data.data;
 };
 

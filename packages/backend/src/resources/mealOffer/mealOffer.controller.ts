@@ -177,7 +177,6 @@ class MealOfferController implements Controller {
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
-    console.log("backend check");
     try {
       const user = req.user;
       const mealOffers = await this.mealOfferService.getMealOffers(user);
