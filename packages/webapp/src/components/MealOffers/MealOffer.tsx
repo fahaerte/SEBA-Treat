@@ -91,13 +91,15 @@ const MealOffer = ({
             </Typography>
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <Typography variant={"psmall"} className={"fw-normal"}>
-              <Icon type={"geo-alt"} /> {distance} km
-            </Typography>
-          </Col>
-        </Row>
+        {distance && (
+          <Row>
+            <Col>
+              <Typography variant={"psmall"} className={"fw-normal"}>
+                <Icon type={"geo-alt"} /> {distance} km
+              </Typography>
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
             <Typography variant={"psmall"} className={"fw-normal"}>
