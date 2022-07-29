@@ -65,7 +65,7 @@ export const ProfileScreen = () => {
                   <Typography variant="h3" display={"inline"}>
                     {userRating.receivedRatings > 0 ? (
                       <>
-                        You have in total
+                        You have in total{" "}
                         <u>{userRating.receivedRatings} Ratings</u>
                       </>
                     ) : (

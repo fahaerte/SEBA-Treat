@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
-  FormHelper,
-  IFormRow,
-  Form,
   dangerToast,
+  Form,
+  FormHelper,
   Icon,
+  IFormRow,
   SkeletonSquare,
   successToast,
 } from "../ui";
 import { IAddress, IUser } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getUser, updateUser } from "../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
@@ -19,6 +19,7 @@ export const ProfileUpdate = () => {
   const userId = getCookie("userId");
   const navigate = useNavigate();
   const [user, setUser] = useState<IUser | undefined>();
+  const queryClient = useQueryClient();
   const [componentLoading, setComponentLoading] = useState<boolean>(true);
   const { isSuccess, isError } = useQuery(
     ["getUser", userId],
@@ -30,12 +31,7 @@ export const ProfileUpdate = () => {
     }
   );
 
-  const {
-    mutate: updateUserMutation,
-    // isLoading,
-    // isSuccess: isUpdateSuccess,
-    // data: updatedData,
-  } = useMutation(
+  const { mutate: updateUserMutation } = useMutation(
     (user: Partial<IUser>) => updateUser({ _id: userId, ...user }),
     {
       onMutate: () => {
@@ -44,7 +40,8 @@ export const ProfileUpdate = () => {
       },
       onSuccess: (response) => {
         setUser(response.data as IUser);
-        successToast({ message: "Successfully updated ur information!" });
+        successToast({ message: "Successfully updated your information!" });
+        queryClient.fetchQuery("getUser");
       },
       onError: (error) => {
         if (error instanceof AxiosError && error.response) {
