@@ -68,11 +68,14 @@ class MealTransactionService {
       const fee = mealTransaction.transactionFee;
 
       // update sender account
-      await this.userService.sendTransaction(mealTransaction.senderId, price);
+      await this.userService.sendTransaction(
+        mealTransaction.senderId.toString(),
+        price
+      );
 
       // update receiver account
       await this.userService.receiveTransaction(
-        mealTransaction.receiverId,
+        mealTransaction.receiverId.toString(),
         price
       );
 
