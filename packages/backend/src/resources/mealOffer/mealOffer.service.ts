@@ -270,8 +270,28 @@ class MealOfferService {
       user
     )) as MealOfferDocumentWithUser;
     if (user._id.equals(mealOfferDoc.user)) {
+      if (mealOfferDoc.reservations.length) {
+        Logger.error({
+          functionName: "deleteMealOffer",
+          message: "Can not delete mealOffer",
+          details: `MealOffer ${mealOfferId} can not be deleted, because it already has reservations`,
+        } as ILogMessage);
+        throw new HttpException(
+          403,
+          "MealOffer can not be deleted due to open reservations"
+        );
+      }
       await this.mealOffer.findByIdAndDelete(mealOfferId);
     }
+    Logger.error({
+      functionName: "deleteMealOffer",
+      message: "Can not delete mealOffer",
+      details: `MealOffer ${mealOfferId} can only be deleted from its owner`,
+    } as ILogMessage);
+    throw new HttpException(
+      403,
+      "You are not allowed to delete that mealOffer"
+    );
   }
 
   public async createMealOfferReservation(
