@@ -5,7 +5,11 @@ import {
 } from "./mealOffer.interface";
 import { MealReservationSchema } from "../mealReservation/mealReservation.model";
 import { RatingSchema } from "../rating/rating.model";
-import { EMealAllergen, EMealCategory } from "@treat/lib-common";
+import {
+  EMealAllergen,
+  EMealCategory,
+  EMealReservationState,
+} from "@treat/lib-common";
 import { MealOfferQuery } from "./mealOfferQuery.interface";
 import UserDocument from "../user/user.interface";
 
@@ -244,6 +248,13 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
 ) {
   const match: Record<string, any> = {
     endDate: { $gte: new Date() },
+    reservations: {
+      $not: {
+        $elemMatch: {
+          reservationState: EMealReservationState.BUYER_CONFIRMED,
+        },
+      },
+    },
   };
   if (user) match["user._id"] = { $ne: user._id };
   if (mealOfferQuery.search !== undefined) {
@@ -285,6 +296,9 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
       },
     },
     {
+      $match: match,
+    },
+    {
       $project: {
         title: 1,
         startDate: 1,
@@ -299,9 +313,6 @@ MealOfferSchema.statics.aggregateMealOfferPreviews = async function (
           $arrayElemAt: ["$user", 0],
         },
       },
-    },
-    {
-      $match: match,
     },
     {
       $project: {

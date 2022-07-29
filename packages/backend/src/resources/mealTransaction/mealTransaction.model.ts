@@ -11,12 +11,10 @@ const MealTransactionSchema = new Schema<MealTransactionDocument>(
     mealOfferId: {
       type: Types.ObjectId,
       required: true,
-      unique: true,
     },
     mealReservationId: {
       type: Types.ObjectId,
       required: true,
-      unique: true,
     },
     senderId: {
       type: Types.ObjectId,
@@ -63,7 +61,6 @@ export interface MealTransactionModel extends Model<MealTransactionDocument> {
 MealTransactionSchema.statics.findBy = async function (
   this: Model<MealTransactionDocument>,
   mealOfferId: string
-  // user?: UserDocument
 ) {
   const projection: Record<string, any> = {
     _id: 1,

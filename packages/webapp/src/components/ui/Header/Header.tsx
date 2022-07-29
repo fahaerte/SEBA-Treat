@@ -1,6 +1,6 @@
 import { Col, Row } from "../Grid";
 import { Button, Form, Icon, Link, Typography } from "../index";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getUser } from "../../../api/userApi";
 import { SCHeader } from "./styles";
@@ -86,10 +86,6 @@ export const Header = () => {
     signoutMutation.mutate();
   };
 
-  useEffect(() => {
-    console.log("Balance updated ", balance);
-  }, [balance]);
-
   return (
     <SCHeader>
       <div className={"px-3 h-100 w-100"}>
@@ -138,7 +134,6 @@ export const Header = () => {
               )}
             </Col>
           )}
-          <Col>{balance}</Col>
           <Col className={"justify-content-end d-flex align-items-center"}>
             {location.pathname !== "/meals/create" && (
               <Link

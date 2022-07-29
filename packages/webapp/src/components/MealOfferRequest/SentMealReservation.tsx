@@ -29,6 +29,7 @@ export const SentMealReservation = ({
   const [reservationState, setReservationState] = useState(
     reservation.reservationState
   );
+  const [newState, setNewState] = useState(reservation.reservationState);
 
   const updateReservationStateMutation = useMutation(
     (newState: EMealReservationState) =>
@@ -37,6 +38,7 @@ export const SentMealReservation = ({
       onSuccess: () => {
         successToast({ message: "You changed the state of your reservation." });
         queryClient.fetchQuery("getUser");
+        setReservationState(newState);
       },
       onError: (error) => {
         if (error instanceof AxiosError && error.response) {
@@ -53,9 +55,9 @@ export const SentMealReservation = ({
     }
   );
 
-  const updateReservationState = (newState: EMealReservationState) => {
-    setReservationState(newState);
-    updateReservationStateMutation.mutate(newState);
+  const updateReservationState = (updatedState: EMealReservationState) => {
+    setNewState(updatedState)
+    updateReservationStateMutation.mutate(updatedState);
   };
 
   function getActionElement() {
