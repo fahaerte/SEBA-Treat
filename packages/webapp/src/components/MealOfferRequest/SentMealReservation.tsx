@@ -56,7 +56,7 @@ export const SentMealReservation = ({
   );
 
   const updateReservationState = (updatedState: EMealReservationState) => {
-    setNewState(updatedState)
+    setNewState(updatedState);
     updateReservationStateMutation.mutate(updatedState);
   };
 
