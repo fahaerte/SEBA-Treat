@@ -10,6 +10,7 @@ import UserNotFoundException from "../../utils/exceptions/userNotFound.exception
 import Logger, { ILogMessage } from "../../utils/logger";
 import bcrypt from "bcrypt";
 import MailService from "../../utils/EmailService";
+import InvalidRegisterException from "../../utils/exceptions/invalidRegister.exception";
 
 @Service()
 class UserService {
@@ -42,6 +43,8 @@ class UserService {
         message: "Could not create user",
         details: error.message,
       } as ILogMessage);
+      if (error.name === "MongoError" && error.code === 11000)
+        throw new InvalidRegisterException("Email is already in use");
       throw new Error(error.message as string);
     }
   }
