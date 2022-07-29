@@ -91,6 +91,7 @@ class MealOfferController implements Controller {
     );
     this.router.delete(
       `${this.path}/:mealOfferId`,
+      validationMiddleware(validate.deleteMealOfferParams, ValidatePart.PARAMS),
       authenticatedMiddleware,
       this.deleteMealOffer
     );

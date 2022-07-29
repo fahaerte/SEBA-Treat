@@ -96,6 +96,10 @@ const createMealOfferReservationParams = Joi.object({
   mealOfferId: Joi.string().regex(/^[a-f\d]{24}$/i),
 });
 
+const deleteMealOfferParams = Joi.object({
+  mealOfferId: Joi.string().regex(/^[a-f\d]{24}$/i),
+})
+
 export default {
   createBody,
   updateMealOfferBody,
@@ -107,4 +111,5 @@ export default {
   getMealOfferBody,
   updateReservationStateParams,
   createMealOfferReservationParams,
+  deleteMealOfferParams,
 };
