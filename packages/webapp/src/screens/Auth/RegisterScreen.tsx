@@ -26,13 +26,15 @@ export const RegisterScreen = () => {
     },
     onError: (error) => {
       if (error instanceof AxiosError && error.response) {
-        if (error.response.data.message.includes("duplicate key error")) {
+        console.log(error);
+        if (error.response.data.message) {
           dangerToast({
             message: "Email already in use!",
           });
         } else {
+          const errorMessage = error.response.data["errors"][0] as string;
           dangerToast({
-            message: error.response.data.message,
+            message: errorMessage,
           });
         }
       } else {
@@ -231,6 +233,7 @@ export const RegisterScreen = () => {
                 outline: true,
                 onClick: () => navigate("/login"),
               }}
+              resetOnSubmit={false}
             />
           </div>
         </Col>

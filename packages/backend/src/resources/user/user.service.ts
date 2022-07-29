@@ -43,7 +43,7 @@ class UserService {
         message: "Could not create user",
         details: error.message,
       } as ILogMessage);
-      if (error.name === "MongoError" && error.code === 11000)
+      if (error.name === "MongoServerError" && error.code === 11000)
         throw new InvalidRegisterException("Email is already in use");
       throw new Error(error.message as string);
     }
