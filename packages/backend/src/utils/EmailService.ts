@@ -139,7 +139,7 @@ class MailService {
     seller: UserDocument
   ): void {
     const subject = `TREAT | Reservation for ${mealOffer.title} has been confirmed`;
-    const heading = `Congrats, ${buyer.firstName} purchased ${mealOffer.title}`;
+    const heading = `Congrats, ${buyer.firstName} purchased ${mealOffer.title}!`;
     const content = `${buyer.firstName} decided to pick up your meal. ${buyer.firstName} received your email address to contact you for clarifying everything regarding the pickup.`;
     const mailText = this.getTemplate(heading, content);
     this.sendMail(seller.email, subject, mailText);

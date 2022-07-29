@@ -66,10 +66,10 @@ const Transaction = ({
                     <>
                       <UserPreview
                         firstName={userPreview.firstName}
-                        lastName={userPreview.lastName}
+                        // lastName={userPreview.lastName}
                         countRatings={userPreview.countRatings}
                         meanRating={userPreview.meanRating}
-                        img={"test"}
+                        // img={""}
                       />
                     </>
                   ) : (
@@ -86,15 +86,14 @@ const Transaction = ({
             <Col>
               <div
                 style={{
-                  // fontSize: "1.2rem",
                   fontWeight: "bold",
                   textAlign: "right",
                 }}
               >
                 {userId === senderId ? (
-                  <p>- {senderAmount} €</p>
+                  <p>- {senderAmount} Credits</p>
                 ) : (
-                  <p>+ {receiverAmount} €</p>
+                  <p>+ {receiverAmount} Credits</p>
                 )}
               </div>
             </Col>
