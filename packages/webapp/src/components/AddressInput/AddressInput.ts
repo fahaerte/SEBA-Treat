@@ -1,5 +1,8 @@
 import { FormHelper, IFormRow } from "../ui";
 import { IStringObject } from "@treat/lib-common";
+import { getCookie } from "../../utils/auth/CookieProvider";
+
+const address = getCookie("address");
 
 export const addressElement: IFormRow<IStringObject>[] = [
   FormHelper.createInput({
@@ -12,6 +15,6 @@ export const addressElement: IFormRow<IStringObject>[] = [
     rules: {
       required: { value: true },
     },
-    defaultValue: "Arcisstrasse 10, 80333 Munich",
+    defaultValue: address,
   }),
 ];
