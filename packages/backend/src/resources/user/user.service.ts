@@ -18,9 +18,8 @@ class UserService {
 
   constructor(
     private readonly virtualAccountService: VirtualAccountService,
-    private readonly mailService: MailService
-  ) // private readonly mealOfferService: MealOfferService
-  {}
+    private readonly mailService: MailService // private readonly mealOfferService: MealOfferService
+  ) {}
 
   /**
    * Register a new user
