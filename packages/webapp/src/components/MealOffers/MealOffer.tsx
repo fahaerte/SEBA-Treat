@@ -66,8 +66,8 @@ const MealOffer = ({
             </Col>
           )}
         </Row>
-        <Row>
-          {sellerName.length > 0 && (
+        {sellerName.length > 0 && (
+          <Row>
             <Col>
               <Typography
                 variant={"h4"}
@@ -77,13 +77,13 @@ const MealOffer = ({
                 <Icon type={"person"} /> {sellerName}
               </Typography>
             </Col>
-          )}
-          <Col md={{ span: 3 }} className={"d-flex justify-content-end"}>
-            <CardText>
-              {sellerRating} <Icon type={"star-fill"} />
-            </CardText>
-          </Col>
-        </Row>
+            <Col md={{ span: 3 }} className={"d-flex justify-content-end"}>
+              <CardText>
+                {sellerRating} <Icon type={"star-fill"} />
+              </CardText>
+            </Col>
+          </Row>
+        )}
         <Row>
           <Col>
             <Typography variant={"psmall"} className={"fw-normal"}>
