@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 import {
-  Button,
   Badge,
+  Button,
   Col,
   dangerToast,
   MealDetails,
@@ -34,11 +34,8 @@ export const MealOfferDetailScreen = () => {
     {
       onSuccess: (response) => {
         const nowDate = new Date();
-        const startDate = new Date(response.startDate as string);
         const endDate = new Date(response.endDate as string);
 
-        if (startDate > nowDate)
-          setDisabledText("The offer has not started yet.");
         if (endDate < nowDate) setDisabledText("The offer has expired.");
         if (userId === response.user._id) {
           setDisabledText("You cannot reserve your own meal.");
