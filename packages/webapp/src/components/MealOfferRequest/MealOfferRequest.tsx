@@ -13,7 +13,7 @@ interface MealOfferProps {
   children: React.ReactNode;
 }
 
-const MealOfferImage = styled.div`
+const SCMealOfferImage = styled.div`
   position: relative;
   width: 160px;
   height: 160px;
@@ -51,7 +51,7 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
   <Container className={"p-0"}>
     <Row>
       <Col className={"col-sm-auto"}>
-        <MealOfferImage>
+        <SCMealOfferImage>
           <div
             style={{
               backgroundImage: `url(${new ConfigService().get(
@@ -65,7 +65,7 @@ export const MealOfferRequest = ({ mealOffer, children }: MealOfferProps) => (
             }`}
             alt={`Image for meal ${mealOffer.title}`}
           />
-        </MealOfferImage>
+        </SCMealOfferImage>
       </Col>
       <Col className={""}>
         <Row>
