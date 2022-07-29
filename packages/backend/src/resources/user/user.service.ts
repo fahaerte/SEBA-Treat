@@ -9,12 +9,16 @@ import accountBalanceInsufficientException from "../../utils/exceptions/accountB
 import UserNotFoundException from "../../utils/exceptions/userNotFound.exception";
 import Logger, { ILogMessage } from "../../utils/logger";
 import bcrypt from "bcrypt";
+import MailService from "../../utils/EmailService";
 
 @Service()
 class UserService {
   private userModel = UserModel;
 
-  constructor(private readonly virtualAccountService: VirtualAccountService) {}
+  constructor(
+    private readonly virtualAccountService: VirtualAccountService,
+    private readonly mailService: MailService
+  ) {}
 
   /**
    * Register a new user
@@ -30,6 +34,7 @@ class UserService {
         ...newUser,
         stripeCustomerId: "",
       });
+      this.mailService.sendRegisterMail(user);
       return {
         userId: user.id,
         token: token.createToken(user),
