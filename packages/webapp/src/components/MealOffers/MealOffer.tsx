@@ -20,7 +20,7 @@ const MealOffer = ({
   sellerRating,
   distance,
   portions,
-  sellerName,
+  sellerName = "",
   startDate,
   endDate,
   allergensVerified,
@@ -33,7 +33,7 @@ const MealOffer = ({
   sellerRating: number;
   distance: number;
   portions: number;
-  sellerName: string;
+  sellerName?: string;
   startDate: Date;
   endDate: Date;
   allergensVerified: boolean;
@@ -67,15 +67,17 @@ const MealOffer = ({
           )}
         </Row>
         <Row>
-          <Col>
-            <Typography
-              variant={"h4"}
-              component={"div"}
-              className={"fw-normal"}
-            >
-              <Icon type={"person"} /> {sellerName}
-            </Typography>
-          </Col>
+          {sellerName.length > 0 && (
+            <Col>
+              <Typography
+                variant={"h4"}
+                component={"div"}
+                className={"fw-normal"}
+              >
+                <Icon type={"person"} /> {sellerName}
+              </Typography>
+            </Col>
+          )}
           <Col md={{ span: 3 }} className={"d-flex justify-content-end"}>
             <CardText>
               {sellerRating} <Icon type={"star-fill"} />

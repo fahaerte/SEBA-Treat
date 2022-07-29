@@ -98,7 +98,6 @@ export const MyMealOfferScreen = () => {
                     portions={mealOffer.portions}
                     sellerRating={mealOffer.user.meanRating}
                     endDate={mealOffer.endDate}
-                    sellerName={mealOffer.user.firstName}
                     startDate={mealOffer.endDate}
                     allergensVerified={mealOffer.allergensVerified}
                     categories={mealOffer.categories}
