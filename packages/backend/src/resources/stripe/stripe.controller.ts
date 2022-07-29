@@ -18,55 +18,10 @@ class StripeController implements Controller {
   }
 
   private initializeRoutes(): void {
-    /**
-     * @swagger
-     * /api/payment/products:
-     *  get:
-     *    tags:
-     *    - Stripe
-     *    summary: Get all credit packages including the price
-     *    produces:
-     *    - application/json
-     *    responses:
-     *      404:
-     *        description: Not user logged in
-     *      400:
-     *        description: Any other error
-     */
     this.router.get(`${this.path}/products`, this.getCreditPackages);
 
-    /**
-     * @swagger
-     * /api/payment/discounts:
-     *  get:
-     *    tags:
-     *    - Stripe
-     *    summary: Get all active discounts
-     *    produces:
-     *    - application/json
-     *    responses:
-     *      404:
-     *        description: Not user logged in
-     *      400:
-     *        description: Any other error
-     */
     this.router.get(`${this.path}/discounts`, this.getCreditDiscounts);
 
-    /**
-     * @swagger
-     * /api/payment/get-latest-payment:
-     *  get:
-     *    tags:
-     *    - Stripe
-     *    summary: Get all credit packages including the price
-     *    produces:
-     *    - application/json
-     *    responses:
-     *      404:
-     *        description: Not user logged in
-     *      400:
-     *        description: Any other error
-     */
     this.router.post(
       `${this.path}/get-latest-payment`,
       this.verifyLatestPayment
@@ -111,7 +66,6 @@ class StripeController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { priceId, stripeCustomerId, userId, amountCredits } = req.body;
-      console.log(req.body);
       const session = await this.stripeService.createCheckoutSession(
         priceId as string,
         stripeCustomerId as string,
