@@ -9,8 +9,7 @@ export const SCTabBar = styled.div<ITabBar>`
 
 export const SCTab = styled(NavLink)`
   text-decoration: none;
-  font-weight: ${({ theme }) => theme.typography.body.weights.bold};
-  font-size: ${({ theme }) => theme.typography.size.md};
+  font-size: ${({ theme }) => theme.typography.size.lg};
   color: ${({ theme }) => theme.typography.color.primary};
   overflow: hidden;
   position: relative;
@@ -24,6 +23,7 @@ export const SCTab = styled(NavLink)`
   &.active {
     border-bottom: ${({ theme }) => theme.general.border.width} solid
       ${({ theme }) => theme.palette.primary.main};
+    font-weight: ${({ theme }) => theme.typography.body.weights.bold};
   }
 `;
 

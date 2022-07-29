@@ -15,9 +15,6 @@ export const TransactionHistory = () => {
     isLoading: transactionsAreLoading,
     isSuccess: transactionsLoaded,
   } = useQuery(["getTransactions", userId], () => getTransactions(), {
-    onSuccess: (response) => {
-      console.log(response.data);
-    },
     onError: () => {
       dangerToast({ message: "Could not get transaction history" });
     },

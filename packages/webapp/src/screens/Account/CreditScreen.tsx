@@ -152,7 +152,6 @@ export const CreditScreen = () => {
               </>
             )}
           </Row>
-          {/*<ProfileOverview />*/}
         </Container>
         <TransactionHistory />
       </Container>

@@ -41,15 +41,7 @@ export const ProfileScreen = () => {
         <PageHeading>
           Your <u>profile</u>
         </PageHeading>
-        <Typography variant={"div"} className={"mt-3"}>
-          This is your personal space.
-          <br />
-          Here, you can access all of your transactions and edit your personal
-          information.
-        </Typography>
-        <SectionHeading>
-          <Icon type={"star"} /> My rating score
-        </SectionHeading>
+        <SectionHeading>Your rating score</SectionHeading>
         {isLoading ? (
           <SkeletonSquare rows={3} />
         ) : (
@@ -85,7 +77,7 @@ export const ProfileScreen = () => {
             )}
             <Row>
               <Typography variant={"h4"} color={"info"}>
-                <Icon type={"infoCircle"} /> How Ratings work:
+                <Icon type={"infoCircle"} /> How ratings work:
               </Typography>
               <Typography variant={"div"}>
                 The displayed rating is the average rating you have received
@@ -105,13 +97,9 @@ export const ProfileScreen = () => {
             </Row>
           </>
         )}
-        <SectionHeading>
-          <Icon type={"person"} /> Edit Personal Information
-        </SectionHeading>
+        <SectionHeading>Edit your personal information</SectionHeading>
         <ProfileUpdate />
-        <SectionHeading>
-          <Icon type={"shield-lock"} /> Update Password
-        </SectionHeading>
+        <SectionHeading>Update your password</SectionHeading>
         <PasswordUpdate />
       </Container>
     </>

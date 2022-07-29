@@ -9,16 +9,14 @@ export const MealOfferRequests = ({
   children?: React.ReactNode;
 }) => (
   <Container>
-    <Row className={"pt-5"}>
-      <PageHeading>
-        Your{" "}
-        <u>
-          {useLocation().pathname.includes("sent") ? "pending" : "received"}{" "}
-          reservations
-        </u>
-      </PageHeading>
-    </Row>
-    <Row className={"pt-3"}>
+    <PageHeading>
+      Your{" "}
+      <u>
+        {useLocation().pathname.includes("sent") ? "pending" : "received"}{" "}
+        reservations
+      </u>
+    </PageHeading>
+    <Row className={"mt-5"}>
       <TabBar
         tabs={[
           {

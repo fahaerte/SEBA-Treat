@@ -16,7 +16,7 @@ import { mealOfferFileUpload } from "../../middleware/upload.middleware";
 
 @Service()
 class MealOfferController implements Controller {
-  public path = "/meals";
+  public path = "/mealOffers";
   public router = Router();
 
   constructor(private readonly mealOfferService: MealOfferService) {

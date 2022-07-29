@@ -25,13 +25,13 @@ export const CustomDropdown = ({
     </DropdownToggle>
     <DropdownMenu end={true}>
       <Link route to={"/meals/my-offers"} className={"dropdown-item"}>
-        My Offers
+        My offers
       </Link>
       <DropdownItem onClick={handleReservationNavigation}>
-        My Reservations
+        My reservations
       </DropdownItem>
       <Link route to={"/profile"} className={"dropdown-item"}>
-        My Profile
+        My profile
       </Link>
       <DropdownItem divider />
       <DropdownItem onClick={handleLogout}>
