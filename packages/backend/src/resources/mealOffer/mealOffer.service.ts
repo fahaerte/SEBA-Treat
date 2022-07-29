@@ -268,7 +268,7 @@ class MealOfferService {
       mealOfferId,
       user
     )) as MealOfferDocumentWithUser;
-    if (user._id.equals(mealOfferDoc.user)) {
+    if (user._id.equals(mealOfferDoc.user._id)) {
       if (mealOfferDoc.reservations.length) {
         Logger.error({
           functionName: "deleteMealOffer",

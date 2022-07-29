@@ -62,7 +62,6 @@ const LoginScreen = () => {
           message: "Please provide an email!",
         },
       },
-      defaultValue: "fabian.haertel@tum.de",
     }),
 
     FormHelper.createInput({
@@ -77,7 +76,6 @@ const LoginScreen = () => {
           message: "Please provide a password!",
         },
       },
-      defaultValue: "123456",
     }),
   ];
 

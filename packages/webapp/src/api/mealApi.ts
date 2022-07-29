@@ -71,6 +71,10 @@ export const updateMealOffer = async (
   );
 };
 
+export const deleteMealOffer = async (mealOfferId: string) => {
+  return await baseApiAuth().delete(`/mealOffers/${mealOfferId}`);
+};
+
 export const getMealOffersByParams = async (
   page: number,
   pageLimit: number,

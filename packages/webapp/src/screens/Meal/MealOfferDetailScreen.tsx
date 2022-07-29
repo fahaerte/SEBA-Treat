@@ -33,6 +33,7 @@ export const MealOfferDetailScreen = () => {
     () => getMealOffer(mealOfferId as string, address as string),
     {
       onSuccess: (response) => {
+        console.log(response);
         const nowDate = new Date();
         const endDate = new Date(response.endDate as string);
 
@@ -151,9 +152,15 @@ export const MealOfferDetailScreen = () => {
                 <SectionHeading>Location</SectionHeading>
                 <p>
                   {mealOffer.user.firstName} is {mealOffer.distance} kilometers
-                  away from you. You will see the exact location once the seller
-                  accepted your reservation.
+                  away from you. You will get the exact location via email after
+                  the seller accepted your reservation.
                 </p>
+                {mealOffer.pickUpDetails && (
+                  <>
+                    <SectionHeading>Pickup Details</SectionHeading>
+                    <p>{mealOffer.pickUpDetails}</p>
+                  </>
+                )}
                 <SectionHeading>List of Allergens</SectionHeading>
                 {mealOffer.allergens.map((allergen: string) => (
                   <Badge key={allergen} outlined>

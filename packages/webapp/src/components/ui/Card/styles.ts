@@ -42,7 +42,7 @@ export const SCCardHeader = styled.div`
 export const SCCardImage = styled.div`
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 250px;
 
   > div {
     position: absolute;

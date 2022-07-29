@@ -99,7 +99,6 @@ const CreateMeal = () => {
       FormHelper.createInput({
         formKey: "price",
         label: "Price in virtual credits",
-        defaultValue: 15,
         props: {
           type: "number",
         },

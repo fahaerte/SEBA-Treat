@@ -1,7 +1,6 @@
 import React from "react";
 import { Container, PageHeading, Row } from "../../components/ui";
 import TabBar from "../../components/ui/TabBar/TabBar";
-import { useLocation } from "react-router-dom";
 
 export const MealOfferRequests = ({
   children,
@@ -10,11 +9,7 @@ export const MealOfferRequests = ({
 }) => (
   <Container>
     <PageHeading>
-      Your{" "}
-      <u>
-        {useLocation().pathname.includes("sent") ? "pending" : "received"}{" "}
-        reservations
-      </u>
+      Your <u>reservations</u>
     </PageHeading>
     <Row className={"mt-5"}>
       <TabBar

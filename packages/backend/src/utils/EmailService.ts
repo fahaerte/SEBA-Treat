@@ -82,7 +82,9 @@ class MailService {
       mealOffer.price + mealOffer.transactionFee
     } credits will be deducted from your account (including ${
       mealOffer.transactionFee
-    } credits transaction fee).`;
+    } credits transaction fee).<br /><br />Here are the details for when you pick up the meal: ${
+      mealOffer.pickUpDetails
+    }`;
     const mailText = this.getTemplate(heading, content);
     this.sendMail(buyer.email, subject, mailText);
   }
