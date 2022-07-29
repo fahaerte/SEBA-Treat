@@ -37,8 +37,8 @@ export const SentMealReservation = ({
     {
       onSuccess: () => {
         successToast({ message: "You changed the state of your reservation." });
-        queryClient.fetchQuery("getUser");
         setReservationState(newState);
+        queryClient.fetchQuery("getUser");
       },
       onError: (error) => {
         if (error instanceof AxiosError && error.response) {
