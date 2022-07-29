@@ -155,7 +155,7 @@ export const MealOfferDetailScreen = () => {
                   away from you. You will get the exact location via email after
                   the seller accepted your reservation.
                 </p>
-                {mealOffer.pickUpDetails && (
+                {mealOffer.pickUpDetails && mealOffer.pickUpDetails.length && (
                   <>
                     <SectionHeading>Pickup Details</SectionHeading>
                     <p>{mealOffer.pickUpDetails}</p>

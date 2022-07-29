@@ -297,7 +297,9 @@ export const MealOfferUpdate = () => {
       if (data.pickUpDetails) {
         formData.append("pickUpDetails", data.pickUpDetails);
       } else {
-        formData.append("pickUpDetails", mealOffer.pickUpDetails);
+        if (mealOffer.pickUpDetails) {
+          formData.append("pickUpDetails", mealOffer.pickUpDetails);
+        }
       }
       if (data.price) {
         formData.append("price", data.price.toString());
