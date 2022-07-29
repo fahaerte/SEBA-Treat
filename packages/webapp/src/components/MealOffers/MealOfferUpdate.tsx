@@ -8,6 +8,7 @@ import {
   TOptionValuePair,
   successToast,
   Typography,
+  Button,
 } from "../ui";
 import { EMealAllergen, EMealCategory } from "@treat/lib-common";
 import { getCookie } from "../../utils/auth/CookieProvider";
@@ -19,6 +20,7 @@ import {
   // CreateMealOfferArgs,
   getMealOffer,
   updateMealOffer,
+  deleteMealOffer,
   IMealOfferForm,
 } from "../../api/mealApi";
 // import { time } from "faker";
@@ -245,7 +247,7 @@ export const MealOfferUpdate = () => {
         updateMealOffer(mealOfferId as unknown as string, updatedMealOffer),
       {
         onSuccess: (response) => {
-          successToast({ message: "Your meal offer has been updated!" });
+          successToast({ message: "Your meal offer has been updated." });
           navigate(`/meals/${mealOfferId}`);
         },
         onError: (error) => {
@@ -265,7 +267,6 @@ export const MealOfferUpdate = () => {
     );
 
   const handleSubmit = (data: IMealOfferForm) => {
-    console.log(data);
     if (userId) {
       const { categories, allergens } = data;
 
@@ -333,6 +334,30 @@ export const MealOfferUpdate = () => {
     }
   };
 
+  const { mutate: deleteMealMutation, isLoading: deleteMealMutationIsLoading } =
+    useMutation(() => deleteMealOffer(mealOfferId as unknown as string), {
+      onSuccess: (response) => {
+        successToast({ message: "Your meal offer has been deleted." });
+        navigate(`/meals/my-offers`);
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response) {
+          dangerToast({
+            message: error.response.data.message,
+          });
+        } else {
+          dangerToast({
+            message: "Unexpected server error. The meal could not be deleted.",
+          });
+        }
+        navigate(`/meals/${mealOfferId}`);
+      },
+    });
+
+  const handleDeleteClick = () => {
+    deleteMealMutation();
+  };
+
   return (
     <>
       {mealOfferIsLoading ? (
@@ -340,20 +365,29 @@ export const MealOfferUpdate = () => {
       ) : (
         <>
           {mealOfferLoaded && formElements.length > 0 ? (
-            <Form<IMealOfferForm>
-              className={"mt-5"}
-              elements={formElements}
-              onSubmit={(data) => handleSubmit(data)}
-              submitButton={{ children: "Update meal" }}
-              isLoading={updateMealMutationIsLoading}
-              abortButton={{
-                children: "Cancel",
-                color: "secondary",
-                className: "ms-3",
-                outline: true,
-                onClick: () => navigate("/"),
-              }}
-            />
+            <>
+              <Form<IMealOfferForm>
+                className={"mt-5"}
+                elements={formElements}
+                onSubmit={(data) => handleSubmit(data)}
+                submitButton={{ children: "Update meal" }}
+                isLoading={updateMealMutationIsLoading}
+                abortButton={{
+                  children: "Cancel",
+                  color: "secondary",
+                  className: "ms-3",
+                  outline: true,
+                  onClick: () => navigate("/"),
+                }}
+              />
+              <Button
+                className={"px-3 mt-3"}
+                onClick={handleDeleteClick}
+                color={"danger"}
+              >
+                Delete meal
+              </Button>
+            </>
           ) : (
             <>
               <SkeletonSquare />
