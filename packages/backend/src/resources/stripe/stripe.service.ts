@@ -30,6 +30,8 @@ class StripeService {
     amountCredits: number,
     couponId?: string
   ) {
+    console.log("hallooooo");
+    console.log(customerId);
     try {
       const res = await this.stripe.checkout.sessions.create({
         line_items: [
@@ -50,6 +52,7 @@ class StripeService {
         )}/purchase-credits/${userId}`,
         automatic_tax: { enabled: true },
       });
+      // console.log(res);
       const newBalance = this.userService.receiveTransaction(
         userId,
         amountCredits
@@ -57,6 +60,8 @@ class StripeService {
       console.log(newBalance);
       return res;
     } catch (error: any) {
+      // console.log("error in stripe service");
+      // console.log(error);
       if (error?.code === StripeError.CardExpired) {
         throw new HttpException(406, "Credit card expired");
       }

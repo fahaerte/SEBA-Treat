@@ -111,6 +111,7 @@ class StripeController implements Controller {
   ): Promise<Response | void> => {
     try {
       const { priceId, stripeCustomerId, userId, amountCredits } = req.body;
+      console.log(req.body);
       const session = await this.stripeService.createCheckoutSession(
         priceId as string,
         stripeCustomerId as string,
